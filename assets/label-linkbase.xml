@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================================================
+  Label Linkbase (vendor neutral scaffold)
+  ============================================================================
+
+  Purpose
+  .......
+  Demonstrates a minimal, schema valid XBRL 2.1 label linkbase that can be
+  consumed by any conforming XBRL processor (Arelle, ESEF / ESMA tooling,
+  EDGAR / SEC, FRC / Companies House, Dutch SBR / KvK / AFM, EDINET, MCA,
+  EIOPA, EBA, etc.). Concepts are placeholders defined in the sibling
+  extension schema (extension-schema.xsd).
+
+  References (verified for this scaffold)
+  .......................................
+  . XBRL 2.1 Recommendation, section 5.2.2 (Label Linkbase)
+      https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/
+        XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html
+  . XBRL Label Role Registry (LRR)
+      https://www.xbrl.org/lrr/lrr.xml
+  . LRR negated label roles schema
+      http://www.xbrl.org/lrr/role/negated-2009-12-16.xsd
+  . Linkbase namespace                   http://www.xbrl.org/2003/linkbase
+  . XLink namespace                      http://www.w3.org/1999/xlink
+  . BCP 47 (xml:lang)                    https://www.rfc-editor.org/rfc/bcp/bcp47.txt
+
+  Standard label roles (XBRL 2.1, all under http://www.xbrl.org/2003/role/)
+  ........................................................................
+    label                  Standard label (default; required by FR-NL-1.01,
+                           ESEF, EFM, etc.)
+    terseLabel             Short label (omits parent context words)
+    verboseLabel           Long label (includes more context words)
+    positiveLabel          Label used when value is positive
+    positiveTerseLabel
+    positiveVerboseLabel
+    negativeLabel          Label used when value is negative
+    negativeTerseLabel
+    negativeVerboseLabel
+    zeroLabel              Label used when value is zero
+    zeroTerseLabel
+    zeroVerboseLabel
+    totalLabel             Label for a total / subtotal row
+    periodStartLabel       Label for opening balance of an instant concept
+                           presented at start of duration period
+    periodEndLabel         Label for closing balance
+    documentation          Human readable definition / guidance
+    definitionGuidance
+    disclosureGuidance
+    presentationGuidance
+    measurementGuidance
+    commentaryGuidance
+    exampleGuidance
+
+  LRR roles used in this scaffold
+  ...............................
+  This scaffold uses exactly ONE LRR role: negatedLabel. The corresponding
+  roleRef points at the authoritative schema. The other LRR negated.* roles
+  (negatedTerseLabel, negatedTotalLabel, negatedNetLabel,
+  negatedPeriodStartLabel, negatedPeriodEndLabel) and netLabel are documented
+  in the Label Role Registry and may be added in real filings; each one used
+  MUST get its own roleRef.
+
+  Why xml:lang matters
+  ....................
+  Regulators require labels in their official language(s). Examples:
+    * SEC EDGAR (EFM): English (en, or en-US).
+    * ESMA ESEF: at least one official EU language of the home Member State
+      (e.g. nl, fr, de, it, es, ...). en is permitted in addition.
+    * UK FRC / Companies House: en.
+    * Dutch SBR / KvK / AFM: nl (Nederlandse Taxonomie label sets are nl).
+    * EDINET (Japan): ja.
+  Always provide labels in the regulator's required language. xml:lang values
+  must be valid BCP 47 language tags (e.g. "en", "en-US", "nl", "nl-NL",
+  "fr-BE", "ja", "zh-Hant").
+
+  Resource type vs locator type, arcrole
+  ......................................
+  . <link:loc xlink:type="locator">  points at a concept in a schema (href).
+  . <link:label xlink:type="resource"> is the actual human readable string;
+    it carries xlink:label (the local id used by the arc), xlink:role (the
+    label role, e.g. /2003/role/label), and xml:lang (BCP 47).
+  . <link:labelArc xlink:type="arc"
+                   xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label"
+                   xlink:from="locator label"
+                   xlink:to="resource label"/>
+    binds a concept to a label resource.
+
+  Standard extended link role
+  ...........................
+  The standard extended link role  http://www.xbrl.org/2003/role/link  is a
+  built-in role defined by the linkbase schema itself. It does NOT need to be
+  declared with <link:roleRef>. Custom (extension) extended link roles, and
+  every LRR or extension *resource* role, DO require a <link:roleRef>.
+
+  Authoring note: this file deliberately omits the id attribute on every
+  link:label resource for consistency. Filers may add ids on every resource
+  if their tooling requires them, but mixing some-with-id and some-without
+  on the same surface confuses diffs and review.
+  ============================================================================
+-->
+<link:linkbase
+    xmlns:link="http://www.xbrl.org/2003/linkbase"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.xbrl.org/2003/linkbase
+                        http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd">
+
+  <!--
+    roleRef declarations
+    ....................
+    Required for every non built-in role URI used as xlink:role inside this
+    linkbase. The standard extended link role
+    "http://www.xbrl.org/2003/role/link" is built-in and is NOT declared here.
+    All standard /2003/role/* LABEL roles (label, terseLabel, verboseLabel,
+    documentation, totalLabel, periodStartLabel, periodEndLabel, ...) are
+    also built-in and do NOT need a roleRef.
+
+    The 2009 LRR negatedLabel role IS custom and MUST be declared.
+  -->
+  <link:roleRef
+      roleURI="http://www.xbrl.org/2009/role/negatedLabel"
+      xlink:type="simple"
+      xlink:href="http://www.xbrl.org/lrr/role/negated-2009-12-16.xsd#negatedLabel"/>
+
+  <!--
+    Single labelLink extended link.
+    The xlink:role here is the extended link role (built-in standard link
+    role).
+  -->
+  <link:labelLink
+      xlink:type="extended"
+      xlink:role="http://www.xbrl.org/2003/role/link">
+
+    <!-- =====================================================================
+         Locators: one per concept being labelled. href points at a concept
+         declaration in the extension schema.
+         ===================================================================== -->
+    <link:loc
+        xlink:type="locator"
+        xlink:href="extension-schema.xsd#ext_ExampleMonetaryConceptInstant"
+        xlink:label="loc_ExampleMonetary"/>
+
+    <link:loc
+        xlink:type="locator"
+        xlink:href="extension-schema.xsd#ext_ExampleHypercube"
+        xlink:label="loc_ExampleHypercube"/>
+
+    <link:loc
+        xlink:type="locator"
+        xlink:href="extension-schema.xsd#ext_GeographyAxis"
+        xlink:label="loc_ExampleDimension"/>
+
+    <!-- =====================================================================
+         Concept 1: ext:ExampleMonetaryConceptInstant
+         Demonstrates the full set of standard label roles plus one LRR role
+         and a second language standard label.
+         ===================================================================== -->
+
+    <!-- Standard label, English (BCP 47: en) -->
+    <link:label
+        xlink:type="resource"
+        xlink:label="lab_ExampleMonetary"
+        xlink:role="http://www.xbrl.org/2003/role/label"
+        xml:lang="en">Example Monetary Item</link:label>
+
+    <!-- Standard label, second language (BCP 47: nl) -->
+    <link:label
+        xlink:type="resource"
+        xlink:label="lab_ExampleMonetary"
+        xlink:role="http://www.xbrl.org/2003/role/label"
+        xml:lang="nl">Voorbeeld monetaire post</link:label>
+
+    <!-- Terse label, English -->
+    <link:label
+        xlink:type="resource"
+        xlink:label="lab_ExampleMonetary_terse"
+        xlink:role="http://www.xbrl.org/2003/role/terseLabel"
+        xml:lang="en">Monetary Item</link:label>
+
+    <!-- Verbose label, English -->
+    <link:label
+        xlink:type="resource"
+        xlink:label="lab_ExampleMonetary_verbose"
+        xlink:role="http://www.xbrl.org/2003/role/verboseLabel"
+        xml:lang="en">Example Monetary Item, in functional currency, presented gross</link:label>
+
+    <!-- Documentation (definition / guidance), English -->
+    <link:label
+        xlink:type="resource"
+        xlink:label="lab_ExampleMonetary_doc"
+        xlink:role="http://www.xbrl.org/2003/role/documentation"
+        xml:lang="en">Illustrative monetary concept used to demonstrate label
+        linkbase structure. Replace with the real definition sourced from the
+        applicable financial reporting framework (IFRS, US-GAAP, BW Titel 9,
+        etc.).</link:label>
+
+    <!-- Total label, English (used for subtotal/total presentation rows) -->
+    <link:label
+        xlink:type="resource"
+        xlink:label="lab_ExampleMonetary_total"
+        xlink:role="http://www.xbrl.org/2003/role/totalLabel"
+        xml:lang="en">Total Example Monetary Item</link:label>
+
+    <!-- Period start label, English (opening balance of an instant concept) -->
+    <link:label
+        xlink:type="resource"
+        xlink:label="lab_ExampleMonetary_periodStart"
+        xlink:role="http://www.xbrl.org/2003/role/periodStartLabel"
+        xml:lang="en">Example Monetary Item at beginning of period</link:label>
+
+    <!-- Period end label, English (closing balance) -->
+    <link:label
+        xlink:type="resource"
+        xlink:label="lab_ExampleMonetary_periodEnd"
+        xlink:role="http://www.xbrl.org/2003/role/periodEndLabel"
+        xml:lang="en">Example Monetary Item at end of period</link:label>
+
+    <!-- LRR negated label, English -->
+    <link:label
+        xlink:type="resource"
+        xlink:label="lab_ExampleMonetary_negated"
+        xlink:role="http://www.xbrl.org/2009/role/negatedLabel"
+        xml:lang="en">Example Monetary Item (sign reversed for presentation)</link:label>
+
+    <!-- Arcs binding ExampleMonetary locator to each label resource. -->
+    <link:labelArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label"
+        xlink:from="loc_ExampleMonetary"
+        xlink:to="lab_ExampleMonetary"/>
+    <link:labelArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label"
+        xlink:from="loc_ExampleMonetary"
+        xlink:to="lab_ExampleMonetary_terse"/>
+    <link:labelArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label"
+        xlink:from="loc_ExampleMonetary"
+        xlink:to="lab_ExampleMonetary_verbose"/>
+    <link:labelArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label"
+        xlink:from="loc_ExampleMonetary"
+        xlink:to="lab_ExampleMonetary_doc"/>
+    <link:labelArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label"
+        xlink:from="loc_ExampleMonetary"
+        xlink:to="lab_ExampleMonetary_total"/>
+    <link:labelArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label"
+        xlink:from="loc_ExampleMonetary"
+        xlink:to="lab_ExampleMonetary_periodStart"/>
+    <link:labelArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label"
+        xlink:from="loc_ExampleMonetary"
+        xlink:to="lab_ExampleMonetary_periodEnd"/>
+    <link:labelArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label"
+        xlink:from="loc_ExampleMonetary"
+        xlink:to="lab_ExampleMonetary_negated"/>
+
+    <!-- =====================================================================
+         Concept 2: ext:ExampleHypercube
+         Standard label + documentation only.
+         ===================================================================== -->
+    <link:label
+        xlink:type="resource"
+        xlink:label="lab_ExampleHypercube"
+        xlink:role="http://www.xbrl.org/2003/role/label"
+        xml:lang="en">Example Hypercube</link:label>
+
+    <link:label
+        xlink:type="resource"
+        xlink:label="lab_ExampleHypercube_doc"
+        xlink:role="http://www.xbrl.org/2003/role/documentation"
+        xml:lang="en">Illustrative hypercube (xbrldt:hypercubeItem) used to
+        demonstrate label assignment to a dimensional construct.</link:label>
+
+    <link:labelArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label"
+        xlink:from="loc_ExampleHypercube"
+        xlink:to="lab_ExampleHypercube"/>
+    <link:labelArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label"
+        xlink:from="loc_ExampleHypercube"
+        xlink:to="lab_ExampleHypercube_doc"/>
+
+    <!-- =====================================================================
+         Concept 3: ext:GeographyAxis (an explicit dimension)
+         Standard label + documentation only.
+         ===================================================================== -->
+    <link:label
+        xlink:type="resource"
+        xlink:label="lab_ExampleDimension"
+        xlink:role="http://www.xbrl.org/2003/role/label"
+        xml:lang="en">Geography</link:label>
+
+    <link:label
+        xlink:type="resource"
+        xlink:label="lab_ExampleDimension_doc"
+        xlink:role="http://www.xbrl.org/2003/role/documentation"
+        xml:lang="en">Illustrative explicit dimension (xbrldt:dimensionItem)
+        used to demonstrate label assignment to a dimension concept.</link:label>
+
+    <link:labelArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label"
+        xlink:from="loc_ExampleDimension"
+        xlink:to="lab_ExampleDimension"/>
+    <link:labelArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-label"
+        xlink:from="loc_ExampleDimension"
+        xlink:to="lab_ExampleDimension_doc"/>
+
+  </link:labelLink>
+</link:linkbase>

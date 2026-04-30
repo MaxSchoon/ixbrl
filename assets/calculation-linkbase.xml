@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================================================
+  XBRL Calculation Linkbase  (Calc 1.0 scaffold, with Calc 1.1 notes)
+  ============================================================================
+
+  PURPOSE
+
+  Vendor-neutral, regulator-neutral scaffold for a minimal but valid
+  calculation linkbase. Replace the `ext:` concepts and the schema href
+  with the actual extension namespace and schema filename.
+
+  AUTHORITATIVE REFERENCES
+
+  * XBRL 2.1 Recommendation (2003-12-31, errata-corrected 2013-02-20)
+      Section 5.2.5  "The calculation linkbase"
+      https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/
+        XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html
+  * XBRL Calculations 1.1 Recommendation (2023-02-22)
+      https://www.xbrl.org/Specification/calculation-1.1/REC-2023-02-22/
+        calculation-1.1-REC-2023-02-22.html
+
+  ============================================================================
+  CALC 1.0  (XBRL 2.1, summation-item)
+  ============================================================================
+
+  * arcrole (verbatim, http, NOT https):
+      http://www.xbrl.org/2003/arcrole/summation-item
+  * Semantics: a parent fact equals the SIGNED sum (weight x child fact)
+    of its child facts that share the SAME contextRef, SAME unitRef, and
+    therefore the same period and entity. Facts in different contexts do
+    NOT participate in the same summation.
+  * Weight attribute is xs:decimal. Canonical values are +1 and -1; values
+    other than +/- 1 are permitted by the spec but rare and discouraged.
+    Use -1 to subtract a child from the parent (e.g. cost-of-sales from
+    revenue to derive gross profit).
+  * Decimals/precision interaction: Calc 1.0 inconsistencies are evaluated
+    by deriving an INTERVAL from each fact's @decimals or @precision (the
+    open interval around the reported value within which the true value
+    must lie) and checking whether the parent's interval contains the
+    weighted summation interval of its children. A reported parent value
+    within the children's combined interval is consistent. (XBRL 2.1
+    sec. 5.2.5.2.) The "least precise child" heuristic that some legacy
+    tooling uses is an approximation; the normative rule is the interval
+    test.
+  * Duplicate-fact gotcha. Distinguish two cases.
+      P-equal duplicates: facts for the same concept that share BOTH
+        contextRef and unitRef and report the SAME value (subject to
+        decimals/precision compatibility). These are legal under XBRL
+        2.1 sec. 4.10 and do not break calc.
+      V-inconsistent duplicates: same concept, same context/unit, but
+        DIFFERENT values (or values whose decimals intervals do not
+        overlap). These cause the consuming calc network to report an
+        inconsistency on every summation that touches the concept, and
+        must be eliminated before validation.
+  * Regulator support:
+      SEC EDGAR (EFM):                 Calc 1.0 only.
+      ESMA ESEF:                       Calc 1.0 (Calc 1.1 not yet mandated).
+      UK FRC / Companies House / HMRC: Calc 1.0.
+      Dutch SBR / KvK / AFM:           Calc 1.0.
+    Always confirm with the regulator's current Filer Manual or Reporting
+    Manual before adopting Calc 1.1 in production filings.
+
+  ============================================================================
+  CALC 1.1  (Calculations 1.1, REC 2023-02-22)
+  ============================================================================
+
+  * Spec namespace (informational, used in roleType / arcroleType decls):
+      https://xbrl.org/2023/calculation-1.1
+  * NEW arcrole introduced by Calc 1.1 (verbatim, https):
+      https://xbrl.org/2023/arcrole/summation-item
+    NOTE: This is a DIFFERENT arcrole from Calc 1.0 (https vs http, and a
+    new path). The element used on the wire is still link:calculationArc.
+  * A Calc 1.1 network and a Calc 1.0 network are independent and MUST be
+    validated separately. Mixing the two arcroles within one ELR is allowed
+    but each network is processed under its own rules. Note: a Calc 1.1
+    capable processor MAY (per Calc 1.1 sec. 1.2) optionally apply Calc 1.1
+    semantics to a Calc 1.0 (summation-item) network as well; this is
+    implementation defined and should not be relied upon.
+  * Key difference: Calc 1.1 supports cross-context summation by reasoning
+    about period/aggregation duration, allowing roll-forwards and segment
+    aggregations that Calc 1.0 cannot express. It also redefines rounding
+    semantics for inconsistency detection.
+  * When to choose:
+      Stay on Calc 1.0 for any filing destined for a regulator that has
+      not explicitly endorsed Calc 1.1.
+      Use Calc 1.1 for internal pipelines or for taxonomies that have
+      opted in (e.g. some IFRS Foundation experimental work).
+      If unsure: ship Calc 1.0. It is universal.
+
+  ============================================================================
+  THIS FILE
+  ============================================================================
+
+  * Active scaffold uses Calc 1.0 (universal, regulator-safe).
+  * Commented-out Calc 1.1 example at the bottom of the calculationLink
+    is reference only.
+  * Custom ELR `http://example.com/role/IncomeStatement` MUST be declared
+    via link:roleType in the extension schema. The link:roleRef below
+    resolves that roleType.
+  * Concept locators reference `extension-schema.xsd`. Update the filename
+    and concept QName fragments for the actual taxonomy.
+-->
+<link:linkbase
+    xmlns:link="http://www.xbrl.org/2003/linkbase"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.xbrl.org/2003/linkbase
+                        http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd">
+
+  <!--
+    roleRef: resolves the custom ELR xlink:role used on the calculationLink
+    below. The href must point to a link:roleType roleURI declaration
+    inside the extension schema.
+  -->
+  <link:roleRef
+      roleURI="http://example.com/role/IncomeStatement"
+      xlink:type="simple"
+      xlink:href="extension-schema.xsd#IncomeStatement"/>
+
+  <!--
+    Calculation network for the Income Statement ELR.
+    Parent:   ext:OperatingProfit
+    Children: ext:Revenue          (weight = +1, additive)
+              ext:OtherIncome      (weight = +1, additive)
+              ext:CostOfSales      (weight = -1, subtractive)
+              ext:OperatingExpense (weight = -1, subtractive)
+    Semantics:
+      OperatingProfit = Revenue + OtherIncome - CostOfSales - OperatingExpense
+  -->
+  <link:calculationLink
+      xlink:type="extended"
+      xlink:role="http://example.com/role/IncomeStatement">
+
+    <!-- Locators: one per concept participating in the network. -->
+    <link:loc xlink:type="locator"
+              xlink:href="extension-schema.xsd#ext_OperatingProfit"
+              xlink:label="OperatingProfit"/>
+    <link:loc xlink:type="locator"
+              xlink:href="extension-schema.xsd#ext_Revenue"
+              xlink:label="Revenue"/>
+    <link:loc xlink:type="locator"
+              xlink:href="extension-schema.xsd#ext_OtherIncome"
+              xlink:label="OtherIncome"/>
+    <link:loc xlink:type="locator"
+              xlink:href="extension-schema.xsd#ext_CostOfSales"
+              xlink:label="CostOfSales"/>
+    <link:loc xlink:type="locator"
+              xlink:href="extension-schema.xsd#ext_OperatingExpense"
+              xlink:label="OperatingExpense"/>
+
+    <!--
+      Additive arc: Revenue contributes +1 to OperatingProfit.
+      `use` and `priority` are shown explicitly here for completeness;
+      defaults are use="optional" and priority="0".
+    -->
+    <link:calculationArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/summation-item"
+        xlink:from="OperatingProfit"
+        xlink:to="Revenue"
+        order="1"
+        weight="1"
+        use="optional"
+        priority="0"/>
+
+    <!-- Additive arc: OtherIncome contributes +1. -->
+    <link:calculationArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/summation-item"
+        xlink:from="OperatingProfit"
+        xlink:to="OtherIncome"
+        order="2"
+        weight="1"/>
+
+    <!-- Subtractive arc: CostOfSales contributes -1 (demonstrates negation). -->
+    <link:calculationArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/summation-item"
+        xlink:from="OperatingProfit"
+        xlink:to="CostOfSales"
+        order="3"
+        weight="-1"/>
+
+    <!-- Subtractive arc: OperatingExpense contributes -1. -->
+    <link:calculationArc
+        xlink:type="arc"
+        xlink:arcrole="http://www.xbrl.org/2003/arcrole/summation-item"
+        xlink:from="OperatingProfit"
+        xlink:to="OperatingExpense"
+        order="4"
+        weight="-1"/>
+
+    <!--
+      ========================================================================
+      CALC 1.1 EXAMPLE (commented out; do not enable for SEC/ESEF/SBR/HMRC)
+      ========================================================================
+
+      To opt in to Calc 1.1, change the arcrole on the calculationArc to the
+      new https URI. The element name (link:calculationArc) does NOT change.
+      A processor that supports Calc 1.1 will recognise the new arcrole and
+      apply Calc 1.1 semantics; a Calc 1.0-only processor will ignore arcs
+      with this arcrole, so the network becomes invisible to it.
+
+      To advertise that the linkbase contains Calc 1.1 relationships,
+      taxonomy authors should add an arcroleRef whose href points DIRECTLY
+      at the published Calc 1.1 schema URI (do NOT fabricate a local
+      arcroleType in your extension schema . the canonical declaration
+      lives at xbrl.org). For example:
+
+        link:arcroleRef
+            arcroleURI="https://xbrl.org/2023/arcrole/summation-item"
+            xlink:type="simple"
+            xlink:href="https://xbrl.org/2023/calculation-1.1.xsd#summation-item"
+
+      And the equivalent of the Revenue arc above would then be:
+
+        link:calculationArc
+            xlink:type="arc"
+            xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item"
+            xlink:from="OperatingProfit"
+            xlink:to="Revenue"
+            order="1"
+            weight="1"
+
+      Reminder: Calc 1.0 and Calc 1.1 networks are validated independently.
+      Do not assume a Calc 1.0 processor will silently upgrade.
+    -->
+
+  </link:calculationLink>
+</link:linkbase>

@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================================================
+  Inline XBRL 1.1 (iXBRL) skeleton instance - vendor neutral
+  ............................................................................
+  Minimal but COMPLETE iXBRL 1.1 scaffold for adaptation to any taxonomy or
+  regulator (SEC EDGAR, ESEF, UK FRC, Dutch SBR, EDINET, MCA, etc.). Uses
+  an example namespace ("ext") and concept names ("ext:Example...") so
+  structural scaffolding is the focus, not any one taxonomy's concepts.
+
+  Specifications this scaffold is built against:
+    * Inline XBRL 1.1   : https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18/
+                          (corrected errata 2024-12-17)
+    * XBRL 2.1          : https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/
+                          (corrected errata 2013-02-20)
+    * Transformation
+      Registry 4 (TRR4) : https://www.xbrl.org/Specification/transformationsRegistry/REC-2020-02-12/
+    * ISO 4217 currency : https://www.iso.org/iso-4217-currency-codes.html
+
+  Structural rules (non-exhaustive, the most-violated ones first):
+    * The Inline XBRL 1.1 namespace MUST be:
+        http://www.xbrl.org/2013/inlineXBRL
+    * ix:references, ix:resources and ix:hidden MUST be children of ix:header.
+      (iXBRL 1.1 spec sections 9.1.1, 12.1.1, 14.1.1)
+    * ix:nonFraction MUST carry: name, contextRef, unitRef, AND exactly one of
+      decimals OR precision (iXBRL 1.1 sec. 10.1.1, Table 11). format, scale
+      and sign are OPTIONAL.
+    * sign="-" indicates the reported numeric value is negative; the displayed
+      text in the XHTML is unsigned (parentheses are a presentation choice).
+    * Element names are case-sensitive: ix:nonFraction, ix:nonNumeric,
+      ix:hidden, ix:continuation, ix:references, ix:resources, ix:header.
+    * Hidden facts (ix:hidden) are XBRL-only . they are required for tagging
+      coverage but are not displayed to human readers in the rendered XHTML.
+
+  XML well-formedness note: XML comments cannot contain a double-hyphen
+  sequence ("two consecutive hyphens"). For visual separators inside comments
+  this scaffold uses '=' or '.' rather than '-' runs.
+  ============================================================================
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
+      xmlns:ixt="http://www.xbrl.org/inlineXBRL/transformation/2020-02-12"
+      xmlns:xbrli="http://www.xbrl.org/2003/instance"
+      xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+      xmlns:link="http://www.xbrl.org/2003/linkbase"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:iso4217="http://www.xbrl.org/2003/iso4217"
+      xmlns:ext="http://example.com/extension">
+  <!--
+    xmlns:ext is a placeholder. Replace with the targetNamespace of the
+    extension taxonomy schema referenced from link:schemaRef below.
+  -->
+  <head>
+    <title>Inline XBRL 1.1 Skeleton . Replace With Filer Name and Period</title>
+    <meta charset="utf-8" />
+    <style type="text/css">
+      /* Presentation-only styling. Not part of the XBRL semantics. */
+      body { font-family: Georgia, "Times New Roman", serif; margin: 2em; }
+      h1, h2 { font-family: Arial, Helvetica, sans-serif; }
+      .neg { color: #000; }
+      table { border-collapse: collapse; margin-top: 1em; }
+      th, td { border: 1px solid #999; padding: 0.4em 0.8em; text-align: right; }
+      th:first-child, td:first-child { text-align: left; }
+    </style>
+  </head>
+  <body>
+
+    <!--
+      ========================================================================
+      ix:header
+      ........................................................................
+      WHAT: Single container that MUST wrap ix:references, ix:resources,
+            and ix:hidden (iXBRL 1.1 spec).
+      WHY:  Centralises XBRL-only metadata (schema imports, contexts, units,
+            hidden facts).
+      ADAPT: One ix:header per document, placed at top of body. The wrapping
+             div with style="display:none" is conventional; ix:references /
+             ix:resources / ix:hidden render nothing anyway.
+      ========================================================================
+    -->
+    <div style="display:none;">
+      <ix:header>
+
+        <!--
+          ====================================================================
+          ix:references
+          ....................................................................
+          WHAT: Wraps the XBRL link:schemaRef (and optional link:linkbaseRef)
+                that point to the EXTENSION TAXONOMY entry point.
+          WHY:  Tells any XBRL processor which DTS (Discoverable Taxonomy Set)
+                governs the concepts referenced by name= attributes below.
+          ADAPT: Replace xlink:href with the URL/relative path of the actual
+                 extension schema for your filing. The schema must (transitively)
+                 import the regulator's reporting taxonomy.
+          ====================================================================
+        -->
+        <ix:references>
+          <link:schemaRef xlink:type="simple"
+                          xlink:href="example-extension.xsd" />
+          <!--
+            Optional: additional linkbaseRef elements may be placed here
+            if your filing carries entity-specific labels, presentation,
+            calculation, or definition linkbases that are not already
+            imported transitively from the schema.
+          -->
+        </ix:references>
+
+        <!--
+          ====================================================================
+          ix:resources
+          ....................................................................
+          WHAT: Container for XBRL contexts (xbrli:context), units (xbrli:unit)
+                and any role/arcrole types and footnote linkbases.
+          WHY:  Every fact MUST refer (via contextRef and unitRef) to an
+                xbrli:context and (for numeric facts) an xbrli:unit defined
+                here. Unique IDs are mandatory.
+          ADAPT: Add as many contexts and units as your filing requires.
+                 Period dates, entity identifier scheme, and currency must
+                 all match the regulator's expectations.
+          ====================================================================
+        -->
+        <ix:resources>
+
+          <!--
+            Context: instant (period-end). Used for balance-sheet style facts.
+            Replace 0000000000 with the entity's legal identifier (e.g. LEI,
+            CIK, KvK number, CRN). The scheme= URI MUST be the canonical URI
+            for that identifier system as specified by the regulator.
+          -->
+          <xbrli:context id="ctx-instant-end">
+            <xbrli:entity>
+              <xbrli:identifier scheme="http://example.com/identifier-scheme">0000000000</xbrli:identifier>
+            </xbrli:entity>
+            <xbrli:period>
+              <xbrli:instant>2025-12-31</xbrli:instant>
+            </xbrli:period>
+          </xbrli:context>
+
+          <!--
+            Context: duration (period start to period end). Used for income
+            statement / cash-flow style facts. Same entity, different period.
+          -->
+          <xbrli:context id="ctx-duration-current">
+            <xbrli:entity>
+              <xbrli:identifier scheme="http://example.com/identifier-scheme">0000000000</xbrli:identifier>
+            </xbrli:entity>
+            <xbrli:period>
+              <xbrli:startDate>2025-01-01</xbrli:startDate>
+              <xbrli:endDate>2025-12-31</xbrli:endDate>
+            </xbrli:period>
+          </xbrli:context>
+
+          <!--
+            Unit: monetary (EUR via the iso4217 namespace).
+            For another currency replace iso4217:EUR with iso4217:USD,
+            iso4217:GBP, iso4217:JPY, etc. (ISO 4217 alpha-3 codes).
+          -->
+          <xbrli:unit id="u-eur">
+            <xbrli:measure>iso4217:EUR</xbrli:measure>
+          </xbrli:unit>
+
+          <!--
+            Unit: shares. The xbrli:shares measure is defined by XBRL 2.1.
+          -->
+          <xbrli:unit id="u-shares">
+            <xbrli:measure>xbrli:shares</xbrli:measure>
+          </xbrli:unit>
+
+          <!--
+            Unit: pure (dimensionless ratios such as percentages or per-share
+            ratios). Defined by XBRL 2.1.
+          -->
+          <xbrli:unit id="u-pure">
+            <xbrli:measure>xbrli:pure</xbrli:measure>
+          </xbrli:unit>
+
+        </ix:resources>
+
+        <!--
+          ====================================================================
+          ix:hidden
+          ....................................................................
+          WHAT: Holds facts that MUST be tagged for XBRL purposes but do not
+                appear in the human-readable XHTML rendering. (iXBRL 1.1 sec. 9)
+          WHY:  Some regulator-mandated facts (entity registered name, document
+                period end date, document type) may not exist verbatim in the
+                visible report; or anchoring rules may require a tagged value
+                that has no clean DOM home. ix:hidden is the escape hatch.
+          ADAPT: Keep ix:hidden small. Many regulators (SEC, ESMA) restrict
+                 which concepts may be hidden. Check your filer manual.
+          ====================================================================
+        -->
+        <ix:hidden>
+          <ix:nonNumeric contextRef="ctx-instant-end"
+                         name="ext:ExampleEntityRegisteredName">Example Entity N.V.</ix:nonNumeric>
+        </ix:hidden>
+
+      </ix:header>
+    </div>
+
+    <!--
+      ========================================================================
+      VISIBLE REPORT BODY
+      ........................................................................
+      Everything below this point is rendered to the human reader. The
+      ix:nonFraction / ix:nonNumeric elements are inline tags wrapped around
+      the same text the reader sees. The XBRL processor extracts the values;
+      the browser displays the text.
+      ========================================================================
+    -->
+
+    <h1>Annual Report . Example Entity</h1>
+
+    <!--
+      Visible non-numeric fact (string).
+      ix:nonNumeric wraps inline text and reports it as a string-typed XBRL
+      fact. No unitRef, no decimals . these are forbidden on non-numeric facts.
+    -->
+    <p>
+      Reporting entity:
+      <ix:nonNumeric contextRef="ctx-instant-end"
+                     name="ext:ExampleEntityName">Example Entity N.V.</ix:nonNumeric>
+    </p>
+
+    <h2>Financial highlights</h2>
+
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Reported</th></tr>
+      </thead>
+      <tbody>
+
+        <!--
+          Numeric fact with scale.
+          * decimals="-3" means the reported value is precise to the nearest
+            thousand. The XBRL value = displayed-text * 10^scale.
+          * scale="3" multiplies the inline text by 10^3. The reader sees
+            "1,234"; the XBRL value is 1,234,000.
+          * format="ixt:num-dot-decimal" tells the processor that the inline
+            text uses '.' for decimal and ',' for thousands separator (TRR 4).
+        -->
+        <tr>
+          <td>Total revenue (in thousands)</td>
+          <td>
+            <ix:nonFraction name="ext:ExampleRevenue"
+                            contextRef="ctx-duration-current"
+                            unitRef="u-eur"
+                            decimals="-3"
+                            scale="3"
+                            format="ixt:num-dot-decimal">1,234</ix:nonFraction>
+          </td>
+        </tr>
+
+        <!--
+          Negative numeric fact via sign="-".
+          * The visible text is "5,678" (unsigned).
+          * sign="-" makes the XBRL value -5,678,000 (combined with scale="3").
+          * The surrounding parentheses are HTML presentation only and are
+            outside the ix:nonFraction element, so they do not affect the
+            transformation.
+        -->
+        <tr>
+          <td>Operating expenses (in thousands)</td>
+          <td>
+            (<ix:nonFraction name="ext:ExampleOperatingExpenses"
+                             contextRef="ctx-duration-current"
+                             unitRef="u-eur"
+                             decimals="-3"
+                             scale="3"
+                             sign="-"
+                             format="ixt:num-dot-decimal">5,678</ix:nonFraction>)
+          </td>
+        </tr>
+
+        <!--
+          Nil fact.
+          * xsi:nil="true" reports the fact as nil. The element MUST be empty.
+          * When xsi:nil="true", the decimals, precision, scale, sign, and
+            format attributes MUST be ABSENT (iXBRL 1.1 sec. 10.1.1). They are
+            mutually exclusive with nil because there is no numeric value to
+            describe. Only name, contextRef, and unitRef are required.
+          * xsi:nil-style facts typically render as an em dash or "n/a" in the
+            visible XHTML; here we use an em dash adjacent to the empty tag.
+        -->
+        <tr>
+          <td>Discontinued operations</td>
+          <td>
+            <ix:nonFraction name="ext:ExampleDiscontinuedOperations"
+                            contextRef="ctx-duration-current"
+                            unitRef="u-eur"
+                            xsi:nil="true"></ix:nonFraction>
+            &#8212;
+          </td>
+        </tr>
+
+        <!--
+          Share-count fact (uses the shares unit).
+        -->
+        <tr>
+          <td>Ordinary shares outstanding</td>
+          <td>
+            <ix:nonFraction name="ext:ExampleSharesOutstanding"
+                            contextRef="ctx-instant-end"
+                            unitRef="u-shares"
+                            decimals="0"
+                            format="ixt:num-dot-decimal">1,000,000</ix:nonFraction>
+          </td>
+        </tr>
+
+        <!--
+          Pure-ratio fact (e.g., effective tax rate as a decimal fraction).
+        -->
+        <tr>
+          <td>Effective tax rate</td>
+          <td>
+            <ix:nonFraction name="ext:ExampleEffectiveTaxRate"
+                            contextRef="ctx-duration-current"
+                            unitRef="u-pure"
+                            decimals="4"
+                            format="ixt:num-dot-decimal">0.2150</ix:nonFraction>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <!--
+      ========================================================================
+      Continuation chain (ix:continuation)
+      ........................................................................
+      WHAT: Allows a single XBRL fact (typically a long block of narrative
+            text) to be rendered across multiple, possibly non-contiguous,
+            DOM nodes without losing its identity as one fact.
+      WHY:  Real reports interleave narrative with tables, page breaks, or
+            sidebars. Without continuation, a tagged text block would have
+            to live in one contiguous element.
+      HOW:
+            * The originating element (ix:nonNumeric here) carries
+              continuedAt="id-of-next-piece".
+            * Each ix:continuation element has its own id, and may itself
+              carry a continuedAt= pointing further down the chain.
+            * The chain ends at an ix:continuation with no continuedAt.
+            * ix:continuation MUST NOT be a descendant of ix:hidden.
+      ADAPT: Use this for narrative disclosures that span sections (e.g.
+             accounting policies, risk factors, audit report).
+
+      WHITESPACE GOTCHA (iXBRL 1.1 sec. 4.1):
+            The reconstructed fact value is the plain string concatenation of
+            the originating element's text plus each ix:continuation's text in
+            chain order. NO whitespace is inserted between segments by the
+            processor. If the human-readable text needs spaces or newlines
+            between segments, you MUST include that whitespace inside the
+            ix:continuation element's own text (typically as a leading space
+            or newline). Otherwise the reconstructed XBRL value will read
+            ".fair value.Revenue is recognised." with no separator.
+      ========================================================================
+    -->
+    <h2>Significant accounting policies</h2>
+
+    <p>
+      <ix:nonNumeric name="ext:ExampleAccountingPoliciesTextBlock"
+                     contextRef="ctx-duration-current"
+                     continuedAt="ap-part-2">The financial statements have been
+        prepared on a going-concern basis under the historical cost convention,
+        except for certain financial instruments measured at fair value.</ix:nonNumeric>
+    </p>
+
+    <p>
+      <ix:continuation id="ap-part-2" continuedAt="ap-part-3"> Revenue is
+        recognised when control of goods or services is transferred to the
+        customer, in an amount that reflects the consideration the entity
+        expects to be entitled to.</ix:continuation>
+    </p>
+
+    <p>
+      <ix:continuation id="ap-part-3"> Income taxes comprise current and
+        deferred tax, recognised in profit or loss except to the extent
+        they relate to items recognised directly in equity or in other
+        comprehensive income.</ix:continuation>
+    </p>
+
+  </body>
+</html>
+<!--
+  ============================================================================
+  ADAPTATION CHECKLIST . what you MUST change before this becomes a real filing
+  ............................................................................
+   1. xmlns:ext  ........... Replace with your extension taxonomy's targetNamespace.
+   2. link:schemaRef ....... Point xlink:href to your real extension schema (.xsd).
+   3. xbrli:identifier ..... Replace scheme= and the identifier value with the
+                             regulator-required scheme (e.g. LEI:
+                             http://standards.iso.org/iso/17442) and the entity's
+                             actual identifier.
+   4. Contexts ............. Adjust period dates. Add prior-year contexts for
+                             comparative reporting. Add dimensional segments via
+                             xbrli:segment + xbrldi:explicitMember where the
+                             taxonomy requires hypercubes.
+   5. Units ................ Replace iso4217:EUR if reporting in another currency.
+                             Add unit ratios (e.g. EUR-per-share) where needed.
+   6. Concepts (name=) ..... Replace every ext:Example* with the actual QName
+                             from your taxonomy (regulator concepts use the
+                             regulator's prefix; only entity-specific extension
+                             concepts use your ext: prefix).
+   7. Hidden facts ......... Add every regulator-mandated fact that has no
+                             visible textual home (entity name, document type,
+                             document period end date, etc.). Keep this set
+                             minimal . most regulators restrict it.
+   8. Continuation chains .. Use for long narrative disclosures only. Numeric
+                             facts (ix:nonFraction, ix:fraction) MUST NOT use
+                             ix:continuation.
+   9. decimals / precision . Match real measurement precision. decimals="INF"
+                             asserts exact value; decimals="-3" = nearest 1,000.
+  10. Validate ............. Run through Arelle (or equivalent) with the target
+                             taxonomy package and the regulator's filer rules
+                             (e.g. EFM, ESEF, FR-NL) before filing.
+  ============================================================================
+-->

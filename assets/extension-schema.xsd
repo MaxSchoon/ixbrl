@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================================================
+  Vendor-neutral XBRL extension taxonomy schema scaffold.
+  ============================================================================
+
+  Minimal, complete template for an entity extension schema (SEC EDGAR,
+  ESMA ESEF, UK FRC, Dutch SBR/KvK, etc.). Customise targetNamespace, role
+  URIs, element names, and linkbaseRef hrefs for the actual filing.
+
+  Specifications
+    * XBRL 2.1 Recommendation (2003-12-31, errata 2013-02-20)
+        Section 5.1   schema authoring
+        Section 5.1.3 roleType
+        Section 5.1.4 arcroleType (cyclesAllowed enumeration)
+        Section 4.3.3 linkbaseRef
+    * XBRL Dimensions 1.0 (XDT) Recommendation (2012-01-25)
+        substitution groups in http://xbrl.org/2005/xbrldt
+    * XBRL Data Types Registry (DTR) 2024-01-31
+        Supplies textBlockItemType and domainItemType. DTR is versioned;
+        match the regulator's expected vintage. Active version:
+        https://www.xbrl.org/dtr/dtr.xml
+    * XBRL Unit Type Registry (UTR): https://www.xbrl.org/utr/utr.xml
+
+  TODO for production: add an <xs:import> for the regulator base taxonomy
+  (IFRS, US-GAAP, BW Titel 9 / RJ / KvK SBR, ESEF, EDINET). Anchoring
+  (xbrldt:* arcs, ESEF wider/narrower) requires the base taxonomy to be
+  discoverable from the same DTS.
+
+  Invariants encoded below
+    * xbrldt namespace is "http://xbrl.org/2005/xbrldt".
+    * xbrldt:hypercubeItem and xbrldt:dimensionItem both have
+      substitutionGroup="xbrli:item" (so periodType is required on them).
+    * xbrli:periodType is REQUIRED on every xbrli:item-derived element
+      (XBRL 2.1 sec. 5.1.1.1), including hypercubes, dimensions, and
+      domain members.
+    * abstract="true" is REQUIRED on hypercubes, dimensions, and domain
+      roots (XDT 1.0 sec. 3). Dimension-default targets MUST be
+      NON-abstract members (EFM 6.16.07, ESEF G3-1-2). Hence
+      ext:GeographyDomain is abstract (root) and ext:AllGeographiesMember
+      is non-abstract (default target).
+    * nillable="true" is conventional on XBRL items so reporters can mark
+      a fact nil when the regulator permits.
+    * cyclesAllowed enumeration on arcroleType: "none" | "undirected" |
+      "any" (xbrl-linkbase-2003-12-31.xsd).
+    * xlink:arcrole on linkbaseRef is fixed:
+      "http://www.w3.org/1999/xlink/properties/linkbase".
+-->
+<xs:schema
+    targetNamespace="http://example.com/extension"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:link="http://www.xbrl.org/2003/linkbase"
+    xmlns:xbrli="http://www.xbrl.org/2003/instance"
+    xmlns:xbrldt="http://xbrl.org/2005/xbrldt"
+    xmlns:nonnum="http://www.xbrl.org/dtr/type/2024-01-31"
+    xmlns:ext="http://example.com/extension"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+
+  <!--
+    ==========================================================================
+    Imports
+    ==========================================================================
+    Every extension schema MUST (transitively) import the XBRL instance and
+    linkbase namespaces to resolve xbrli:item, xbrli:*ItemType, and
+    link:roleType / link:arcroleType / link:linkbaseRef. XDT import enables
+    xbrldt:hypercubeItem / xbrldt:dimensionItem; DTR import enables
+    textBlockItemType / domainItemType.
+
+    schemaLocation values point at canonical XBRL.org URLs. Production
+    filings repoint these to the regulator's local taxonomy package (ESEF /
+    SBR NT / EDGAR loader paths); the namespace URI is what is normative.
+  -->
+  <xs:import
+      namespace="http://www.w3.org/1999/xlink"
+      schemaLocation="http://www.xbrl.org/2003/xlink-2003-12-31.xsd"/>
+  <xs:import
+      namespace="http://www.xbrl.org/2003/instance"
+      schemaLocation="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"/>
+  <xs:import
+      namespace="http://www.xbrl.org/2003/linkbase"
+      schemaLocation="http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd"/>
+  <xs:import
+      namespace="http://xbrl.org/2005/xbrldt"
+      schemaLocation="http://www.xbrl.org/2005/xbrldt-2005.xsd"/>
+  <xs:import
+      namespace="http://www.xbrl.org/dtr/type/2024-01-31"
+      schemaLocation="http://www.xbrl.org/dtr/type/2024-01-31/types.xsd"/>
+
+  <!--
+    ==========================================================================
+    Annotation: roleType / arcroleType / linkbaseRef declarations
+    ==========================================================================
+    Discoverable taxonomy metadata that is NOT an element declaration lives
+    inside <xs:annotation><xs:appinfo>. XBRL processors look here for custom
+    roles, custom arcroles, and references to the linkbase files that
+    constitute the rest of the DTS (Discoverable Taxonomy Set).
+  -->
+  <xs:annotation>
+    <xs:appinfo>
+
+      <!--
+        Custom extended-link roles (ELRs).
+        Each <link:roleType> introduces a new ELR for attaching presentation,
+        calculation, and definition relationships.
+          id         XML id targeted by xlink:href fragments from linkbases
+                     (e.g. xlink:href="schema.xsd#StatementOfFinancialPosition").
+          roleURI    Globally unique URI under the filer's authority.
+          definition Human-readable description. Regulators frequently
+                     require an ordering prefix like "001 - Statement - ...".
+          usedOn     Extended-link element types where this role may appear
+                     as xlink:role. Listing presentationLink, calculationLink,
+                     and definitionLink lets one ELR group all three
+                     relationship types for a single statement.
+      -->
+      <link:roleType
+          id="StatementOfFinancialPosition"
+          roleURI="http://example.com/role/StatementOfFinancialPosition">
+        <link:definition>001 - Statement - Statement of Financial Position</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+
+      <link:roleType
+          id="IncomeStatement"
+          roleURI="http://example.com/role/IncomeStatement">
+        <link:definition>002 - Statement - Income Statement</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+
+      <!--
+        ELR for the dimensional hypercube network (revenue-by-geography
+        table). Kept in its own ELR so dimensional relationships do not
+        collide with primary statement networks.
+      -->
+      <link:roleType
+          id="ExampleHypercubeRole"
+          roleURI="http://example.com/role/ExampleHypercubeRole">
+        <link:definition>901 - Disclosure - Revenue by Geography Hypercube</link:definition>
+        <link:usedOn>link:definitionLink</link:usedOn>
+        <link:usedOn>link:presentationLink</link:usedOn>
+      </link:roleType>
+
+      <!--
+        ELR for the dimension-default arcrole. XDT 1.0 sec. 3.2 allows at
+        most ONE dimension-default per dimension across the entire DTS;
+        segregate these arcs into a dedicated ELR.
+      -->
+      <link:roleType
+          id="ExampleDimensionDefaultRole"
+          roleURI="http://example.com/role/ExampleDimensionDefaultRole">
+        <link:definition>902 - Disclosure - Dimension Defaults</link:definition>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+
+      <!--
+        linkbaseRef elements.
+        Each <link:linkbaseRef> attaches one external linkbase to the DTS.
+          xlink:type    MUST be "simple".
+          xlink:arcrole MUST be "http://www.w3.org/1999/xlink/properties/linkbase".
+          xlink:href    URI (typically relative) to the linkbase file.
+          xlink:role    Technically optional, but validators expect it to
+                        identify the linkbase kind (label / presentation /
+                        calculation / definition / reference).
+
+        Filenames below are illustrative. Real filings follow the regulator's
+        convention (EDGAR uses {ticker}-{date}_{lab|pre|cal|def|ref}.xml;
+        ESEF / SBR use their own).
+      -->
+      <link:linkbaseRef
+          xlink:type="simple"
+          xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"
+          xlink:href="label-linkbase.xml"
+          xlink:role="http://www.xbrl.org/2003/role/labelLinkbaseRef"/>
+      <link:linkbaseRef
+          xlink:type="simple"
+          xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"
+          xlink:href="presentation-linkbase.xml"
+          xlink:role="http://www.xbrl.org/2003/role/presentationLinkbaseRef"/>
+      <link:linkbaseRef
+          xlink:type="simple"
+          xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"
+          xlink:href="calculation-linkbase.xml"
+          xlink:role="http://www.xbrl.org/2003/role/calculationLinkbaseRef"/>
+      <link:linkbaseRef
+          xlink:type="simple"
+          xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"
+          xlink:href="definition-linkbase.xml"
+          xlink:role="http://www.xbrl.org/2003/role/definitionLinkbaseRef"/>
+
+    </xs:appinfo>
+  </xs:annotation>
+
+  <!--
+    ==========================================================================
+    Typed-domain target for ext:CustomerAxis
+    ==========================================================================
+    A typed dimension's domain is defined by an XSD simpleType (or a complex
+    type with simple content). The dimension's typedDomainRef points at this
+    declaration via fragment identifier. Constraint here: non-empty token,
+    max 64 chars (suitable for a customer code or contract id). Pick a
+    constraint that prevents PII or unbounded free text from leaking through
+    the dimension.
+  -->
+  <xs:element name="CustomerIdentifier" id="ext_CustomerIdentifier">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:minLength value="1"/>
+        <xs:maxLength value="64"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+
+  <!--
+    ==========================================================================
+    Concept (item) declarations
+    ==========================================================================
+    Every reportable XBRL concept is an xs:element with:
+      substitutionGroup at or below xbrli:item (xbrli:tuple is deprecated)
+      type derived from xbrli:*ItemType or a DTR type
+      xbrli:periodType = "instant" | "duration"  (REQUIRED for items)
+      nillable="true"                             (conventional)
+      id                                          (used for label/href)
+    Monetary items SHOULD declare xbrli:balance ("debit" | "credit") when
+    the sign convention matters for calculation linkbase summing.
+
+    Element groups
+      Section A: Statement of Financial Position concepts
+      Section B: Income Statement concepts
+      Section C: Generic illustrative items (text block, monetary patterns)
+      Section D: Dimensional constructs (hypercube, dimensions, domain,
+                 members) for the Revenue-by-Geography-and-Customer example
+  -->
+
+  <!--
+    ..........................................................................
+    Section A . Statement of Financial Position concepts
+    ..........................................................................
+  -->
+
+  <xs:element
+      id="ext_StatementOfFinancialPositionAbstract"
+      name="StatementOfFinancialPositionAbstract"
+      type="xbrli:stringItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="duration"
+      nillable="true"
+      abstract="true"/>
+
+  <xs:element
+      id="ext_Assets"
+      name="Assets"
+      type="xbrli:monetaryItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant"
+      xbrli:balance="debit"
+      nillable="true"
+      abstract="false"/>
+
+  <xs:element
+      id="ext_CurrentAssets"
+      name="CurrentAssets"
+      type="xbrli:monetaryItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant"
+      xbrli:balance="debit"
+      nillable="true"
+      abstract="false"/>
+
+  <xs:element
+      id="ext_NoncurrentAssets"
+      name="NoncurrentAssets"
+      type="xbrli:monetaryItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant"
+      xbrli:balance="debit"
+      nillable="true"
+      abstract="false"/>
+
+  <xs:element
+      id="ext_Goodwill"
+      name="Goodwill"
+      type="xbrli:monetaryItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant"
+      xbrli:balance="debit"
+      nillable="true"
+      abstract="false"/>
+
+  <xs:element
+      id="ext_Liabilities"
+      name="Liabilities"
+      type="xbrli:monetaryItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant"
+      xbrli:balance="credit"
+      nillable="true"
+      abstract="false"/>
+
+  <xs:element
+      id="ext_Equity"
+      name="Equity"
+      type="xbrli:monetaryItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant"
+      xbrli:balance="credit"
+      nillable="true"
+      abstract="false"/>
+
+  <xs:element
+      id="ext_LiabilitiesAndEquity"
+      name="LiabilitiesAndEquity"
+      type="xbrli:monetaryItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant"
+      xbrli:balance="credit"
+      nillable="true"
+      abstract="false"/>
+
+  <!--
+    ..........................................................................
+    Section B . Income Statement concepts
+    ..........................................................................
+  -->
+
+  <xs:element
+      id="ext_IncomeStatementAbstract"
+      name="IncomeStatementAbstract"
+      type="xbrli:stringItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="duration"
+      nillable="true"
+      abstract="true"/>
+
+  <xs:element
+      id="ext_Revenue"
+      name="Revenue"
+      type="xbrli:monetaryItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="duration"
+      xbrli:balance="credit"
+      nillable="true"
+      abstract="false"/>
+
+  <xs:element
+      id="ext_OtherIncome"
+      name="OtherIncome"
+      type="xbrli:monetaryItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="duration"
+      xbrli:balance="credit"
+      nillable="true"
+      abstract="false"/>
+
+  <xs:element
+      id="ext_CostOfSales"
+      name="CostOfSales"
+      type="xbrli:monetaryItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="duration"
+      xbrli:balance="debit"
+      nillable="true"
+      abstract="false"/>
+
+  <xs:element
+      id="ext_OperatingExpense"
+      name="OperatingExpense"
+      type="xbrli:monetaryItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="duration"
+      xbrli:balance="debit"
+      nillable="true"
+      abstract="false"/>
+
+  <xs:element
+      id="ext_OperatingProfit"
+      name="OperatingProfit"
+      type="xbrli:monetaryItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="duration"
+      xbrli:balance="credit"
+      nillable="true"
+      abstract="false"/>
+
+  <!--
+    ..........................................................................
+    Section C - Generic illustrative concepts
+    ..........................................................................
+    Three alternative item patterns (instant monetary, duration monetary,
+    text block). Referenced by the label linkbase to demonstrate label
+    binding to each pattern.
+  -->
+
+  <!--
+    Monetary, instant period (balance-sheet line item like Cash).
+    Balance "debit" because Cash is an asset.
+  -->
+  <xs:element
+      id="ext_ExampleMonetaryConceptInstant"
+      name="ExampleMonetaryConceptInstant"
+      type="xbrli:monetaryItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant"
+      xbrli:balance="debit"
+      nillable="true"
+      abstract="false"/>
+
+  <!--
+    Monetary, duration period (income-statement line item like Revenue).
+    Balance "credit" because Revenue is credit-natured; the calc linkbase
+    then sums it correctly against debit-natured contras.
+  -->
+  <xs:element
+      id="ext_ExampleMonetaryConceptDuration"
+      name="ExampleMonetaryConceptDuration"
+      type="xbrli:monetaryItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="duration"
+      xbrli:balance="credit"
+      nillable="true"
+      abstract="false"/>
+
+  <!--
+    Text block item: free-text disclosures (accounting policies, notes).
+    Type from DTR (textBlockItemType) permits XHTML fragment content.
+    periodType is conventionally "duration" (disclosure spans the period).
+  -->
+  <xs:element
+      id="ext_ExampleTextBlock"
+      name="ExampleTextBlock"
+      type="nonnum:textBlockItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="duration"
+      nillable="true"
+      abstract="false"/>
+
+  <!--
+    ..........................................................................
+    Section D - Dimensional constructs (Revenue-by-Geography-and-Customer)
+    ..........................................................................
+    Declares the primary item, hypercube, two dimensions (one explicit, one
+    typed), the domain root, and three members (one default + two
+    reportable regions). Wiring lives in definition-linkbase.xml.
+  -->
+
+  <!--
+    Primary item (line-item parent for the hypercube). Abstract because in
+    this scaffold it serves only as a presentation/grouping parent. Real
+    taxonomies often make the corresponding line item NON-abstract (e.g.
+    ifrs-full:Revenue) so facts can be reported under it; in that case set
+    abstract="false" and add xbrli:balance="credit".
+  -->
+  <xs:element
+      id="ext_RevenueLineItem"
+      name="RevenueLineItem"
+      type="xbrli:stringItemType"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="duration"
+      nillable="true"
+      abstract="true"/>
+
+  <!--
+    Hypercube. Container that binds dimensions to primary items via
+    has-hypercube / hypercube-dimension arcs in the definition linkbase.
+    abstract="true" REQUIRED. Type xbrli:stringItemType by XDT convention.
+  -->
+  <xs:element
+      id="ext_ExampleHypercube"
+      name="ExampleHypercube"
+      type="xbrli:stringItemType"
+      substitutionGroup="xbrldt:hypercubeItem"
+      abstract="true"
+      nillable="true"
+      xbrli:periodType="duration"/>
+
+  <!--
+    Explicit dimension (Geography). Domain members are listed in the
+    definition linkbase via dimension-domain and domain-member arcs.
+    abstract="true" REQUIRED (a dimension is never reported as a fact).
+    Type xbrli:stringItemType per XDT convention. periodType still
+    REQUIRED (XBRL 2.1 sec. 5.1.1.1); set to "duration" by convention
+    since the dimension qualifies both duration and instant facts.
+  -->
+  <xs:element
+      id="ext_GeographyAxis"
+      name="GeographyAxis"
+      type="xbrli:stringItemType"
+      substitutionGroup="xbrldt:dimensionItem"
+      abstract="true"
+      nillable="true"
+      xbrli:periodType="duration"/>
+
+  <!--
+    Typed dimension (Customer). Open-domain variant of an explicit
+    dimension; each fact carries an instance-specific value of the
+    typed-domain simpleType. xbrldt:typedDomainRef points (via XPointer
+    fragment) at the simpleType earlier in this schema. Use sparingly;
+    many regulators (notably ESEF before 2022) restricted typed dimensions.
+  -->
+  <xs:element
+      id="ext_CustomerAxis"
+      name="CustomerAxis"
+      type="xbrli:stringItemType"
+      substitutionGroup="xbrldt:dimensionItem"
+      abstract="true"
+      nillable="true"
+      xbrli:periodType="duration"
+      xbrldt:typedDomainRef="#ext_CustomerIdentifier"/>
+
+  <!--
+    Domain root for the Geography axis. abstract="true" because the root
+    is a grouping placeholder and MUST NOT be reported as a fact. Type is
+    the DTR domainItemType.
+  -->
+  <xs:element
+      id="ext_GeographyDomain"
+      name="GeographyDomain"
+      type="nonnum:domainItemType"
+      substitutionGroup="xbrli:item"
+      abstract="true"
+      nillable="true"
+      xbrli:periodType="duration"/>
+
+  <!--
+    Default member for the Geography axis. NON-abstract by design: the
+    dimension-default arcrole MUST target a non-abstract member or
+    EFM 6.16.07 / ESEF G3-1-2 rejects the filing. The canonical "no
+    breakdown" / "all geographies" bucket implied for any fact that
+    does not carry an explicit ext:GeographyAxis dimension.
+  -->
+  <xs:element
+      id="ext_AllGeographiesMember"
+      name="AllGeographiesMember"
+      type="nonnum:domainItemType"
+      substitutionGroup="xbrli:item"
+      abstract="false"
+      nillable="true"
+      xbrli:periodType="duration"/>
+
+  <!--
+    Reportable region members. Non-abstract so they can appear as the
+    value of ext:GeographyAxis in a fact's segment.
+  -->
+  <xs:element
+      id="ext_RegionEMEAMember"
+      name="RegionEMEAMember"
+      type="nonnum:domainItemType"
+      substitutionGroup="xbrli:item"
+      abstract="false"
+      nillable="true"
+      xbrli:periodType="duration"/>
+
+  <xs:element
+      id="ext_RegionAmericasMember"
+      name="RegionAmericasMember"
+      type="nonnum:domainItemType"
+      substitutionGroup="xbrli:item"
+      abstract="false"
+      nillable="true"
+      xbrli:periodType="duration"/>
+
+</xs:schema>

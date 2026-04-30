@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================================================
+  Taxonomy Package metadata file (taxonomyPackage.xml)
+
+  Specification:
+    XBRL Taxonomy Packages 1.0 (Recommendation 2016-04-19)
+    https://www.xbrl.org/Specification/taxonomy-package/REC-2016-04-19/taxonomy-package-REC-2016-04-19.html
+
+  Required ZIP layout for a Conformant Taxonomy Package
+  (Spec section 3.1, errors tpe:metadataDirectoryNotFound / tpe:metadataFileNotFound):
+
+      <package-name>.zip
+        <single-top-level-directory>/        REQUIRED — exactly one top-level dir
+          META-INF/                          REQUIRED — exact name, exact case
+            taxonomyPackage.xml              REQUIRED — this file, exact name
+            catalog.xml                      OPTIONAL — XML Catalog rewriteURIs (see §3.3)
+          <taxonomy-files>/...               schema (.xsd) and linkbase (.xml) files
+                                             referenced by entryPointDocument @href
+
+  Notes:
+    - Element ORDER is significant. taxonomyPackageType is xsd:sequence.
+      Children must appear in: identifier, (name|description)*, version, license,
+      publisher*, publisherURL, publisherCountry, publicationDate, entryPoints,
+      supersededTaxonomyPackages, versioningReports.
+    - Only <tp:identifier> is REQUIRED by the schema. All other fields are
+      optional but strongly recommended for any real distribution.
+    - "Multi-lingual elements" (spec §3.4) — name, description, publisher —
+      MUST be subject to a non-empty xml:lang (may be inherited from an ancestor)
+      and language identifiers MUST be unique across sibling occurrences of the
+      same element (tpe:duplicateLanguagesForElement).
+    - entryPointDocument @href is a URI. Relative URIs are resolved per XML Base
+      [XML Base], with the base URI of this file being the package location of
+      META-INF/taxonomyPackage.xml. Resolved URIs are then subject to remappings
+      declared in META-INF/catalog.xml (rewriteURI longest-prefix match).
+  ============================================================================
+-->
+<tp:taxonomyPackage
+    xmlns:tp="http://xbrl.org/2016/taxonomy-package"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xbrl.org/2016/taxonomy-package http://www.xbrl.org/2016/taxonomy-package.xsd"
+    xml:lang="en">
+
+  <!--
+    3.2.1.1  tp:identifier  [REQUIRED, exactly 1, xsd:anyURI]
+    Globally unique, versioned, stable URI identifying this package.
+    Used by tp:supersededTaxonomyPackages/taxonomyPackageRef in successor
+    packages. Need not be dereferenceable.
+  -->
+  <tp:identifier>http://example.com/taxonomy/example/2024-01-01</tp:identifier>
+
+  <!--
+    3.2.1.2 / 3.2.1.3  tp:name and tp:description  [OPTIONAL, 0..unbounded each]
+    Both are Multi-lingual Elements. Repeat per language; xml:lang is REQUIRED
+    on each occurrence (or inherited). Schema models them as a documentationGroup
+    choice that may interleave, so name/description pairs per language are fine.
+  -->
+  <tp:name xml:lang="en">Example Extension Taxonomy</tp:name>
+  <tp:name xml:lang="nl">Voorbeeld Uitbreidingstaxonomie</tp:name>
+
+  <tp:description xml:lang="en">A vendor-neutral example taxonomy package scaffold demonstrating the structure required by XBRL Taxonomy Packages 1.0. Replace identifier, entry-point hrefs, and metadata with values for your own taxonomy before distribution.</tp:description>
+  <tp:description xml:lang="nl">Een leveranciers-neutraal voorbeeld van een taxonomiepakket dat de structuur toont die vereist is door XBRL Taxonomy Packages 1.0. Vervang de identifier, entry-point hrefs en metadata door uw eigen waarden voordat u dit pakket distribueert.</tp:description>
+
+  <!--
+    3.2.1.4  tp:version  [OPTIONAL, 0..1, string]
+    Free-form version string for the package. Best practice is semver or a
+    publication date (e.g., "2024-01-01"). Distinct from XBRL Versioning Reports.
+  -->
+  <tp:version>1.0.0</tp:version>
+
+  <!--
+    3.2.1.5  tp:license  [OPTIONAL, 0..1]
+    Empty element with REQUIRED @name and @href attributes (per schema). Other
+    attributes (including xml:lang, allowed by anyAttribute) are permitted but
+    not normative. @href MUST be the canonical URL of the license text.
+  -->
+  <tp:license
+      name="Creative Commons Attribution 4.0 International"
+      href="https://creativecommons.org/licenses/by/4.0/legalcode"
+      xml:lang="en"/>
+
+  <!--
+    3.2.1.6  tp:publisher  [OPTIONAL, 0..unbounded]
+    Multi-lingual Element. Human-readable name of the publishing organisation.
+    Repeat per language with a unique xml:lang per occurrence.
+  -->
+  <tp:publisher xml:lang="en">Example Standards Body</tp:publisher>
+  <tp:publisher xml:lang="nl">Voorbeeld Normalisatie-instelling</tp:publisher>
+
+  <!--
+    3.2.1.7  tp:publisherURL  [OPTIONAL, 0..1, xsd:anyURI]
+    Canonical web address of the publisher (not of this package).
+  -->
+  <tp:publisherURL>https://example.com/</tp:publisherURL>
+
+  <!--
+    3.2.1.8  tp:publisherCountry  [OPTIONAL, 0..1]
+    ISO 3166-1 alpha-2 country code. Schema enforces pattern [A-Z]{2}, length 2.
+    Use the country of the publishing organisation's registered seat.
+  -->
+  <tp:publisherCountry>NL</tp:publisherCountry>
+
+  <!--
+    3.2.1.9  tp:publicationDate  [OPTIONAL, 0..1, xsd:date]
+    ISO 8601 calendar date (YYYY-MM-DD). The official publication date of the
+    package, not the file's last-modified date.
+  -->
+  <tp:publicationDate>2024-01-01</tp:publicationDate>
+
+  <!--
+    3.2.2  tp:entryPoints  [OPTIONAL, 0..1] containing tp:entryPoint*
+    A package without entry points is legal but only useful to provide
+    catalog remappings. For a real taxonomy, declare every supported DTS
+    starting point here so consumers can list and select them.
+
+    Each tp:entryPoint requires:
+      - documentationGroup* (name/description, multilingual, xml:lang per spec §3.4)
+      - version?
+      - entryPointDocument (1..unbounded, REQUIRED) — note the singular spelling
+      - languages? containing language* (xsd:language / BCP 47)
+  -->
+  <tp:entryPoints>
+
+    <!-- Entry point 1: full taxonomy (extension + imported core) -->
+    <tp:entryPoint>
+      <tp:name xml:lang="en">Example Extension Taxonomy — Full</tp:name>
+      <tp:name xml:lang="nl">Voorbeeld Uitbreidingstaxonomie — Volledig</tp:name>
+      <tp:description xml:lang="en">Full entry point covering all reportable concepts, presentation, calculation, definition, and label linkbases.</tp:description>
+      <tp:description xml:lang="nl">Volledig entry-point dat alle rapporteerbare concepten, presentatie-, berekenings-, definitie- en labellinkbases omvat.</tp:description>
+      <tp:version>1.0.0</tp:version>
+      <!--
+        Relative URI is resolved per [XML Base] against this file
+        (META-INF/taxonomyPackage.xml). The example below points one level up
+        from META-INF/ into the package's top-level directory, where the
+        schema file is expected to live. Adjust to match your actual layout.
+      -->
+      <tp:entryPointDocument href="../extension-schema.xsd"/>
+      <tp:languages>
+        <tp:language>en</tp:language>
+        <tp:language>nl</tp:language>
+      </tp:languages>
+    </tp:entryPoint>
+
+    <!-- Illustrative second entry point. The referenced file does not exist in this scaffold; it demonstrates the multi-entry-point pattern. Replace or remove when adapting. -->
+    <tp:entryPoint>
+      <tp:name xml:lang="en">Example Extension Taxonomy — Core Only</tp:name>
+      <tp:name xml:lang="nl">Voorbeeld Uitbreidingstaxonomie — Alleen Kern</tp:name>
+      <tp:description xml:lang="en">Minimal entry point exposing only the core concept schema without optional linkbases. For processors that need element declarations only.</tp:description>
+      <tp:description xml:lang="nl">Minimaal entry-point dat alleen het kernconceptschema biedt zonder optionele linkbases. Voor processors die alleen elementdeclaraties nodig hebben.</tp:description>
+      <tp:version>1.0.0</tp:version>
+      <tp:entryPointDocument href="../extension-schema-core.xsd"/>
+      <tp:languages>
+        <tp:language>en</tp:language>
+      </tp:languages>
+    </tp:entryPoint>
+
+  </tp:entryPoints>
+
+  <!--
+    3.2.3  tp:supersededTaxonomyPackages  [OPTIONAL, 0..1]
+    Lists tp:taxonomyPackageRef URIs (each is the @tp:identifier of an older
+    package made obsolete by this one). The relationship is transitive — list
+    only the most recent superseded package(s).
+
+    Example structure (uncomment and fill in real predecessor identifiers):
+
+    <tp:supersededTaxonomyPackages>
+      <tp:taxonomyPackageRef>http://example.com/taxonomy/example/2023-01-01</tp:taxonomyPackageRef>
+    </tp:supersededTaxonomyPackages>
+  -->
+
+  <!--
+    3.2.4  tp:versioningReports  [OPTIONAL, 0..1]
+    References to XBRL Versioning Reports (per the Versioning 1.0 WGN) that
+    describe differences between this package's taxonomy and another. Each
+    tp:versioningReport requires @href; relative URIs undergo [XML Base]
+    resolution and are subject to catalog remappings. The href SHOULD be the
+    canonical published URL rather than a package-relative path.
+
+    Example structure (uncomment and provide a real versioning report URL):
+
+    <tp:versioningReports>
+      <tp:versioningReport href="http://example.com/taxonomy/example/2024-01-01/versioning-report.xml"/>
+    </tp:versioningReports>
+  -->
+
+</tp:taxonomyPackage>

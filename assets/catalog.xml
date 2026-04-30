@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================================================
+  XBRL Taxonomy Package : META-INF/catalog.xml
+  ============================================================================
+
+  Vendor-neutral skeleton. Replace the example URIs and paths with the actual
+  authoritative HTTP(S) namespaces and the corresponding folders inside this
+  package zip.
+
+  WHAT IS THIS FILE?
+
+  An OASIS XML Catalog (XML Catalogs 1.1, OASIS Standard, 7 October 2005).
+  An XML Catalog tells a processor: "if you are about to fetch this remote
+  URI, use this local file instead." Inside an XBRL Taxonomy Package this
+  lets validators (Arelle, ESEF Filing Manager, regulator tooling, etc.)
+  resolve every schemaRef / linkbaseRef / xs:import / xs:include reference
+  to a file inside the package, with NO internet access required.
+
+  WHY DOES IT MATTER?
+
+    * Reproducibility. Auditors validating the same filing five years from
+      now must get bit-identical results, even after the publisher's server
+      is gone or the URL has rotted.
+    * Offline / air-gapped validation. Banks, regulators, and audit firms
+      routinely run XBRL processors on isolated networks.
+    * Performance. Avoids hundreds of HTTPS round-trips to taxonomy hosts.
+    * Determinism. Guarantees the processor uses the exact taxonomy version
+      bundled in the package, not whatever is currently published online.
+
+  WHERE MUST IT LIVE?
+
+  Inside the package zip, at exactly:
+
+      <top-level-dir>/META-INF/catalog.xml
+
+  per Taxonomy Packages 1.0 (REC-2016-04-19) sections 3.2 and 3.3. The file
+  is OPTIONAL, but if present it MUST be a valid XML Catalog AND MUST
+  conform to the restricted schema in Appendix B.2 of that spec, otherwise
+  the package fails with error tpe:invalidCatalogFile.
+
+  PATH RESOLUTION
+
+  Relative URIs in @rewritePrefix are resolved relative to THIS file's
+  location. Since this file lives in META-INF/, a leading "../" is needed
+  to reach the package root. (XML Base may be used to change this; see
+  Taxonomy Packages 1.0 section 3.3.)
+
+  WHICH CATALOG DIRECTIVES ARE ALLOWED IN AN XBRL TAXONOMY PACKAGE?
+
+  Taxonomy Packages 1.0 defines a *restricted subset* of OASIS XML Catalogs
+  1.1 (see Appendix B.2, taxonomy-package-catalog.xsd). The catalog element
+  may contain ONLY:
+
+      ALLOWED:
+        <rewriteURI uriStartString="..." rewritePrefix="..."/>
+        (plus elements/attributes from foreign namespaces, treated as
+         extensions and ignored by conformant XBRL processors)
+
+      DISALLOWED in an XBRL Taxonomy Package catalog:
+        <rewriteSystem>            (the system-ID variant)
+        <public>, <system>         (PUBLIC / SYSTEM identifier mappings)
+        <uri>                      (single-URI mapping)
+        <delegatePublic>, <delegateSystem>, <delegateURI>
+        <nextCatalog>
+        <group>
+        Two <rewriteURI> entries with the same @uriStartString
+            (additional XBRL restriction, error
+             tpe:multipleRewriteURIsForStartString)
+
+  WHY ONLY rewriteURI (AND NOT rewriteSystem)?
+
+  In OASIS XML Catalogs 1.1 the two directives serve different lookups:
+
+    * rewriteSystem  (attributes: systemIdStartString, rewritePrefix)
+        Matches against an XML *system identifier*, typically used by
+        SAX/DOM parsers when resolving DOCTYPE / SYSTEM declarations and
+        xsi:schemaLocation hints.
+
+    * rewriteURI     (attributes: uriStartString, rewritePrefix)
+        Matches against any URI submitted to the catalog resolver,
+        including the URIs used by xs:import / xs:include schemaLocation,
+        XBRL link:schemaRef and link:linkbaseRef xlink:href values, and
+        XLink href values inside linkbases.
+
+  XBRL processors resolve every reference (schemaRef, linkbaseRef,
+  xs:import, xs:include, XLink href) through the URI resolution path, so
+  rewriteURI is sufficient AND is the only directive the Taxonomy Packages
+  1.0 schema permits. Adding <rewriteSystem> here would be schema-invalid
+  and the package would be rejected with tpe:invalidCatalogFile.
+
+  ATTRIBUTE NAMES (verified against Taxonomy Packages 1.0, Appendix B.2)
+
+    rewriteURI:
+      @uriStartString  REQUIRED. Prefix to match against the URI being
+                       resolved. Longest match wins when multiple
+                       rewriteURI entries share a common prefix.
+      @rewritePrefix   REQUIRED. Replacement prefix (typically a relative
+                       path that starts with "../" because this file lives
+                       in META-INF/).
+
+  REFERENCES
+
+    [XML Catalogs 1.1] OASIS Standard, 7 October 2005.
+    [Taxonomy Packages 1.0] XBRL International, REC-2016-04-19,
+        especially section 3.3 "The catalog.xml file" and Appendix B.2
+        "taxonomy-package-catalog.xsd".
+  ============================================================================
+-->
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+
+  <!-- Catalog rewrites apply to ABSOLUTE URIs that authoritative entry points carry.
+       The bundled scaffold uses RELATIVE hrefs in taxonomyPackage.xml's entryPointDocument,
+       which bypass catalog rewriting by design. Real filings typically use absolute
+       namespace URIs (e.g. http://www.your-org.com/taxonomy/2024/...) here so the catalog
+       can rewrite them to the bundled file at validation time. -->
+
+  <!--
+    Primary remapping for the example taxonomy.
+
+    A processor that needs to resolve, e.g.:
+        http://example.com/taxonomy/example/2025-01-01/example.xsd
+    will rewrite the prefix and load:
+        ../example/2025-01-01/example.xsd
+    (resolved relative to META-INF/, i.e.
+     <pkg-root>/example/2025-01-01/example.xsd).
+
+    Replace `http://example.com/taxonomy/example/` with the canonical
+    HTTP(S) namespace of your taxonomy entry point, and replace
+    `../example/` with the corresponding folder inside the package.
+  -->
+  <rewriteURI
+      uriStartString="http://example.com/taxonomy/example/"
+      rewritePrefix="../example/"/>
+
+  <!--
+    Optional second remapping for a nested or related taxonomy module
+    bundled in the same package (for example, a country-specific
+    extension or a separately versioned linkbase set).
+
+    Demonstrates that multiple rewriteURI entries are allowed; each must
+    have a UNIQUE @uriStartString (post URI-normalization), otherwise the
+    package fails with tpe:multipleRewriteURIsForStartString.
+  -->
+  <rewriteURI
+      uriStartString="http://example.com/taxonomy/example-extension/"
+      rewritePrefix="../example-extension/"/>
+
+</catalog>

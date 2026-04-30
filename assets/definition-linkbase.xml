@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================================================
+  Definition Linkbase. XBRL Dimensions (XDT 1.0) reference scaffold.
+  ============================================================================
+
+  Purpose.
+
+  Vendor neutral, minimal but complete example of an XBRL definition linkbase
+  that exercises the full XDT 1.0 mechanism: hypercubes, explicit and typed
+  dimensions, domains, members, and the dimension default arcrole.
+
+  Authoritative sources used to construct this file.
+
+    1. XBRL Dimensions 1.0 Recommendation (2012-01-25).
+       https://www.xbrl.org/Specification/XDT/REC-2012-01-25/XDT-REC-2012-01-25.html
+    2. XBRL 2.1 Recommendation (2003-12-31, errata 2013-02-20).
+       https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html
+    3. xbrldt-2005.xsd (the XDT attribute and arcroleType schema).
+       http://www.xbrl.org/2005/xbrldt-2005.xsd
+
+  Substitute the following before use.
+
+    1. "extension-schema.xsd" .filename of your extension taxonomy schema.
+    2. "ext:" prefix and URI .your real targetNamespace and prefix.
+    3. "ExampleHypercubeRole" .your real ELR id (XML id token).
+    4. "http://example.com/role/..." .your real ELR URIs.
+    5. All ext_* concept ids .your real concept ids.
+
+  Note on XML comment syntax: per XML 1.0 production [15], the two character
+  sequence consisting of a hyphen followed by another hyphen MUST NOT appear
+  inside the body of a comment. This file therefore uses periods or equals
+  signs as visual separators rather than runs of hyphens.
+-->
+<link:linkbase
+    xmlns:link="http://www.xbrl.org/2003/linkbase"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xbrldt="http://xbrl.org/2005/xbrldt"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd">
+
+  <!--
+    ==========================================================================
+    SECTION 1. roleRef declarations.
+    ==========================================================================
+    WHAT: Bring the custom Extended Link Roles (ELRs) declared in the
+          extension schema into scope for this linkbase.
+    WHY:  XBRL 2.1 section 3.5.2.4 requires that any xlink:role used on an
+          extended link must either be a standard role or be declared via
+          roleRef.
+    SUBSTITUTE: roleURI must match a link:roleType roleURI declared in
+                extension-schema.xsd; xlink:href must point to its id.
+    INVARIANT: Missing or mismatched roleRef yields error
+               xbrl.3.5.2.4.5:roleNotDeclared (Arelle) and equivalent
+               failures in any conformant processor.
+  -->
+  <link:roleRef
+      xlink:type="simple"
+      xlink:href="extension-schema.xsd#ExampleHypercubeRole"
+      roleURI="http://example.com/role/ExampleHypercubeRole"/>
+  <link:roleRef
+      xlink:type="simple"
+      xlink:href="extension-schema.xsd#ExampleDimensionDefaultRole"
+      roleURI="http://example.com/role/ExampleDimensionDefaultRole"/>
+
+  <!--
+    ==========================================================================
+    SECTION 2. arcroleRef declarations for the six XDT arcroles.
+    ==========================================================================
+    WHAT: Make the XDT arcroles resolvable. Each arcrole is declared in
+          xbrldt-2005.xsd with a stable XML id (verified directly against
+          http://www.xbrl.org/2005/xbrldt-2005.xsd).
+    WHY:  XBRL 2.1 section 3.5.2.4 requires arcroleRef for any non standard
+          arcrole. XDT arcroles are non standard from the perspective of
+          XBRL 2.1.
+    EXACT URI FORM (verified): the prefix is
+          http://xbrl.org/int/dim/arcrole/   (singular "arcrole", NOT the
+          plural "arcroles").
+    INVARIANT: Missing arcroleRef yields arcroleNotDeclared error; the
+               dimensional relationships will not be recognised by the DTS
+               processor.
+  -->
+  <link:arcroleRef
+      xlink:type="simple"
+      xlink:href="http://www.xbrl.org/2005/xbrldt-2005.xsd#all"
+      arcroleURI="http://xbrl.org/int/dim/arcrole/all"/>
+  <link:arcroleRef
+      xlink:type="simple"
+      xlink:href="http://www.xbrl.org/2005/xbrldt-2005.xsd#notAll"
+      arcroleURI="http://xbrl.org/int/dim/arcrole/notAll"/>
+  <link:arcroleRef
+      xlink:type="simple"
+      xlink:href="http://www.xbrl.org/2005/xbrldt-2005.xsd#hypercube-dimension"
+      arcroleURI="http://xbrl.org/int/dim/arcrole/hypercube-dimension"/>
+  <link:arcroleRef
+      xlink:type="simple"
+      xlink:href="http://www.xbrl.org/2005/xbrldt-2005.xsd#dimension-domain"
+      arcroleURI="http://xbrl.org/int/dim/arcrole/dimension-domain"/>
+  <link:arcroleRef
+      xlink:type="simple"
+      xlink:href="http://www.xbrl.org/2005/xbrldt-2005.xsd#dimension-default"
+      arcroleURI="http://xbrl.org/int/dim/arcrole/dimension-default"/>
+  <link:arcroleRef
+      xlink:type="simple"
+      xlink:href="http://www.xbrl.org/2005/xbrldt-2005.xsd#domain-member"
+      arcroleURI="http://xbrl.org/int/dim/arcrole/domain-member"/>
+
+  <!--
+    ==========================================================================
+    SECTION 3. Primary definitionLink. A hypercube on a primary item.
+    ==========================================================================
+    ELR: http://example.com/role/ExampleHypercubeRole
+
+    Network shape (read each arrow as "arc with the named arcrole"):
+
+      ext:RevenueLineItem
+          all (contextElement=segment, closed=true)
+              into ext:ExampleHypercube
+                  hypercube-dimension into ext:GeographyAxis
+                  hypercube-dimension into ext:CustomerAxis
+      ext:GeographyAxis
+          dimension-domain into ext:GeographyDomain
+      ext:GeographyDomain
+          domain-member into ext:RegionEMEAMember
+          domain-member into ext:RegionAmericasMember
+      ext:CustomerAxis
+          (typed dimension; NO domain arc here. Its values are constrained
+          by xbrldt:typedDomainRef on the dimension element declaration in
+          extension-schema.xsd, not by linkbase relationships.)
+
+    XDT invariants enforced here (XDT sections 1, 2, 3):
+      a) An "all" arc MUST carry xbrldt:contextElement (REQUIRED attribute).
+      b) The target of "all" or "notAll" MUST be a hypercube (concept whose
+         substitutionGroup resolves to xbrldt:hypercubeItem).
+      c) The target of hypercube-dimension MUST be a dimension
+         (substitutionGroup resolves to xbrldt:dimensionItem).
+      d) An explicit dimension MUST have a dimension-domain arc to a domain.
+      e) A typed dimension MUST NOT have a dimension-domain arc.
+
+    Choice of contextElement="segment":
+      XDT permits either "segment" or "scenario". This scaffold uses
+      "segment" because most regulators (ESEF, EDGAR, KvK SBR) and the
+      IFRS / US GAAP base taxonomies place dimensional qualifiers in the
+      xbrli:segment element. Switch to "scenario" only if your filing
+      regime explicitly mandates it.
+  -->
+  <link:definitionLink
+      xlink:type="extended"
+      xlink:role="http://example.com/role/ExampleHypercubeRole">
+
+    <!-- Locators. -->
+
+    <!-- Primary item (the line item characterised by the hypercube). -->
+    <link:loc
+        xlink:type="locator"
+        xlink:href="extension-schema.xsd#ext_RevenueLineItem"
+        xlink:label="loc_RevenueLineItem"/>
+
+    <!-- Hypercube concept (substitutionGroup="xbrldt:hypercubeItem"). -->
+    <link:loc
+        xlink:type="locator"
+        xlink:href="extension-schema.xsd#ext_ExampleHypercube"
+        xlink:label="loc_ExampleHypercube"/>
+
+    <!-- Explicit dimension (substitutionGroup="xbrldt:dimensionItem",
+         type="xbrli:stringItemType", abstract="true"). -->
+    <link:loc
+        xlink:type="locator"
+        xlink:href="extension-schema.xsd#ext_GeographyAxis"
+        xlink:label="loc_GeographyAxis"/>
+
+    <!-- Typed dimension (substitutionGroup="xbrldt:dimensionItem",
+         carries xbrldt:typedDomainRef on its declaration in the schema). -->
+    <link:loc
+        xlink:type="locator"
+        xlink:href="extension-schema.xsd#ext_CustomerAxis"
+        xlink:label="loc_CustomerAxis"/>
+
+    <!-- Domain root for the explicit dimension (abstract="true",
+         type="xbrli:stringItemType"). -->
+    <link:loc
+        xlink:type="locator"
+        xlink:href="extension-schema.xsd#ext_GeographyDomain"
+        xlink:label="loc_GeographyDomain"/>
+
+    <!-- Domain members (concrete, type="xbrli:stringItemType"). -->
+    <link:loc
+        xlink:type="locator"
+        xlink:href="extension-schema.xsd#ext_RegionEMEAMember"
+        xlink:label="loc_RegionEMEAMember"/>
+    <link:loc
+        xlink:type="locator"
+        xlink:href="extension-schema.xsd#ext_RegionAmericasMember"
+        xlink:label="loc_RegionAmericasMember"/>
+
+    <!-- Arcs. -->
+
+    <!--
+      "all" arc: primary item into hypercube.
+        xbrldt:contextElement   REQUIRED. Either "segment" or "scenario".
+        xbrldt:closed           OPTIONAL, schema default "false". When set
+                                to "true" the instance MUST NOT add
+                                dimensions outside this hypercube to facts
+                                of the primary item.
+        xbrldt:targetRole       OPTIONAL. If set, the consuming network for
+                                hypercube-dimension arcs is found under
+                                that ELR rather than the current one.
+                                Shown as a commented attribute below;
+                                omitted here so that the
+                                hypercube-dimension arcs in THIS link
+                                apply.
+    -->
+    <link:definitionArc
+        xlink:type="arc"
+        xlink:arcrole="http://xbrl.org/int/dim/arcrole/all"
+        xlink:from="loc_RevenueLineItem"
+        xlink:to="loc_ExampleHypercube"
+        order="1"
+        xbrldt:contextElement="segment"
+        xbrldt:closed="true"/>
+    <!--
+      Optional. To redirect dimension lookup to another ELR, add the
+      attribute below to the arc above:
+          xbrldt:targetRole="http://example.com/role/AnotherHypercubeRole"
+    -->
+
+    <!--
+      Negative hypercube ("notAll") example: omitted from this scaffold.
+      Real filings that need a notAll relationship MUST declare a separate
+      hypercube concept (and locator) for the EXCLUDED hypercube; that
+      excluded hypercube has its own hypercube-dimension network and
+      conventionally carries closed="false". Adding a notAll arc here
+      would require a real ext:ExcludedHypercube concept declaration in
+      the schema and a corresponding link:loc, which this scaffold does
+      not provide. See XDT 1.0 sec. 2.3 for the full notAll wiring
+      pattern.
+    -->
+
+    <!--
+      hypercube-dimension arcs: hypercube into each dimension.
+      INVARIANT: every dimension reachable from a hypercube must be linked
+      to that hypercube via a hypercube-dimension arc (XDT section 2.4).
+    -->
+    <link:definitionArc
+        xlink:type="arc"
+        xlink:arcrole="http://xbrl.org/int/dim/arcrole/hypercube-dimension"
+        xlink:from="loc_ExampleHypercube"
+        xlink:to="loc_GeographyAxis"
+        order="1"/>
+    <link:definitionArc
+        xlink:type="arc"
+        xlink:arcrole="http://xbrl.org/int/dim/arcrole/hypercube-dimension"
+        xlink:from="loc_ExampleHypercube"
+        xlink:to="loc_CustomerAxis"
+        order="2"/>
+
+    <!--
+      dimension-domain arc: explicit dimension into domain root.
+      INVARIANT: an explicit dimension MUST have exactly one effective
+      dimension-domain relationship (XDT section 3.1). A typed dimension
+      MUST NOT have one. That is why ext:CustomerAxis has no such arc here.
+    -->
+    <link:definitionArc
+        xlink:type="arc"
+        xlink:arcrole="http://xbrl.org/int/dim/arcrole/dimension-domain"
+        xlink:from="loc_GeographyAxis"
+        xlink:to="loc_GeographyDomain"
+        order="1"/>
+
+    <!--
+      domain-member arcs: domain root into members.
+      xbrldt:usable defaults to "true" (verified in xbrldt-2005.xsd). It is
+      shown explicitly on the second arc to demonstrate the syntax for
+      marking a member as not directly reportable while still keeping it
+      in the network for navigation and inheritance. Set xbrldt:usable to
+      "false" on abstract grouping members.
+    -->
+    <link:definitionArc
+        xlink:type="arc"
+        xlink:arcrole="http://xbrl.org/int/dim/arcrole/domain-member"
+        xlink:from="loc_GeographyDomain"
+        xlink:to="loc_RegionEMEAMember"
+        order="1"/>
+    <link:definitionArc
+        xlink:type="arc"
+        xlink:arcrole="http://xbrl.org/int/dim/arcrole/domain-member"
+        xlink:from="loc_GeographyDomain"
+        xlink:to="loc_RegionAmericasMember"
+        order="2"
+        xbrldt:usable="true"/>
+
+  </link:definitionLink>
+
+  <!--
+    ==========================================================================
+    SECTION 4. Secondary definitionLink. dimension default.
+    ==========================================================================
+    ELR: http://example.com/role/ExampleDimensionDefaultRole
+
+    WHAT: A separate ELR carrying the dimension-default arcrole, which
+          designates one member as the default value of an explicit
+          dimension. When a fact is reported without an explicit value for
+          that dimension, the default member is implied.
+
+    WHY here, not above? Per XDT section 3.2 a dimension MAY have at most
+          ONE dimension-default relationship across the entire DTS, so
+          regulators (ESEF, US GAAP, IFRS, SBR) conventionally segregate
+          these arcs into a dedicated ELR to keep them globally unique and
+          easy to override. This is mechanical, not semantic.
+
+    INVARIANT: A typed dimension MUST NOT have a dimension-default. Only
+               explicit dimensions may have one, and at most one DTS wide.
+
+    INVARIANT (regulator level): the target of dimension-default MUST be
+               a NON ABSTRACT domain member. EFM 6.16.07 (US SEC) and
+               ESEF Reporting Manual G3-1-2 reject dimension-default arcs
+               whose target is the abstract domain root. That is why
+               this arc points at ext:AllGeographiesMember (non abstract)
+               rather than ext:GeographyDomain (abstract root).
+  -->
+  <link:definitionLink
+      xlink:type="extended"
+      xlink:role="http://example.com/role/ExampleDimensionDefaultRole">
+
+    <link:loc
+        xlink:type="locator"
+        xlink:href="extension-schema.xsd#ext_GeographyAxis"
+        xlink:label="loc_GeographyAxis"/>
+    <link:loc
+        xlink:type="locator"
+        xlink:href="extension-schema.xsd#ext_AllGeographiesMember"
+        xlink:label="loc_AllGeographiesMember"/>
+
+    <link:definitionArc
+        xlink:type="arc"
+        xlink:arcrole="http://xbrl.org/int/dim/arcrole/dimension-default"
+        xlink:from="loc_GeographyAxis"
+        xlink:to="loc_AllGeographiesMember"
+        order="1"/>
+
+  </link:definitionLink>
+
+</link:linkbase>
