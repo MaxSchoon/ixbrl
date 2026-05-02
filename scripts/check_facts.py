@@ -45,7 +45,9 @@ NS = {
 ISO_4217 = re.compile(r"^[A-Z]{3}$")
 
 
-def find_facts(root: etree._Element) -> tuple[list, list, list]:
+def find_facts(
+    root: etree._Element,
+) -> tuple[list[etree._Element], list[etree._Element], list[etree._Element]]:
     nf = root.findall(".//ix:nonFraction", NS)
     nn = root.findall(".//ix:nonNumeric", NS)
     cont = root.findall(".//ix:continuation", NS)
@@ -140,7 +142,9 @@ def check(path: Path) -> list[str]:
             )
 
     # --- Duplicate facts: same concept+context+unit, different value ---
-    grouped: dict[tuple, list] = defaultdict(list)
+    grouped: dict[tuple[str | None, str | None, str | None], list[etree._Element]] = (
+        defaultdict(list)
+    )
     for el in nf_facts:
         key = (el.get("name"), el.get("contextRef"), el.get("unitRef"))
         if all(key):
