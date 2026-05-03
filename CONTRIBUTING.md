@@ -56,7 +56,7 @@ Every commit touching `assets/` must keep the scaffolds valid:
 - `taxonomyPackage.xml` must validate against `http://www.xbrl.org/2016/taxonomy-package.xsd`
 - `catalog.xml` must validate against `http://www.xbrl.org/2016/taxonomy-package-catalog.xsd`
 
-CI runs all of these on every PR. They must be green before merge.
+Run the local validation steps below before opening a PR and paste the output into the description.
 
 ## Local validation
 
@@ -64,17 +64,14 @@ CI runs all of these on every PR. They must be green before merge.
 # 1. xmllint on all assets
 xmllint --noout assets/*.xml assets/*.xsd assets/*.xhtml
 
-# 2. Cross-file ID and role-reference check
-python3 .github/scripts/validate_assets.py
-
-# 3. Optional: full Arelle validation
+# 2. Optional: full Arelle validation
 ./scripts/validate_with_arelle.sh assets/ixbrl-skeleton.xhtml
 
-# 4. Optional: fact sanity check
+# 3. Optional: fact sanity check
 python3 scripts/check_facts.py assets/ixbrl-skeleton.xhtml
 ```
 
-Install `libxml2-utils` (Linux) or use the `xmllint` shipped with macOS. Arelle is optional for local work; CI does not run it by default.
+Install `libxml2-utils` (Linux) or use the `xmllint` shipped with macOS. Arelle is optional.
 
 ## How to contribute
 
@@ -87,12 +84,12 @@ Install `libxml2-utils` (Linux) or use the `xmllint` shipped with macOS. Arelle 
    - `docs/contributing-clarification`
 3. **Make focused changes.** One logical change per PR. Mixing a regulator update with a scaffold fix makes review harder and slows everyone down.
 4. **Run local validation** (see above). Paste output into the PR.
-5. **Open a PR.** Fill in the template. Cite specs for every technical claim added or changed.
+5. **Open a PR.** Write a clear description. Cite specs for every technical claim added or changed.
 6. **Respond to review.** Spec citations may be requested for claims that look right but are uncited.
 
 ## PR checklist
 
-The PR template enforces these. Read them before opening:
+When opening a PR, confirm:
 
 - Type of change identified
 - Spec citations added or preserved for every technical claim
@@ -110,7 +107,7 @@ If your change touches normative content (spec interpretations, validation rules
 
 ## Reporting bugs and gaps
 
-Use the issue templates:
+Issues are most actionable when labeled by kind:
 
 - **Spec-citation correction** — "file says X but the spec actually says Y"
 - **Regulator update** — "ESEF 2026 changed Z, need to update files A and B"
@@ -119,11 +116,7 @@ Use the issue templates:
 - **Bug report** — anything else
 - **Enhancement** — proposals for new content or structure
 
-For security or filing-integrity concerns (a scaffold producing apparently-valid output that fails regulator validation), see [`SECURITY.md`](SECURITY.md) before filing publicly.
-
-## Code of Conduct
-
-Participation in this project is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). Report concerns to schonemax@gmail.com.
+For security or filing-integrity concerns (a scaffold producing apparently-valid output that fails regulator validation), email contact@doc2ixbrl.com before filing publicly.
 
 ## License
 
