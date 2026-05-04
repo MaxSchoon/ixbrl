@@ -26,7 +26,7 @@ In XBRL filings, the **`id`** attribute of every fact (`ix:nonFraction`,
 A **QName** ("qualified name") is defined by *Namespaces in XML 1.0*,
 productions [7]–[11]:
 
-```
+```text
 QName         ::= PrefixedName | UnprefixedName
 PrefixedName  ::= Prefix ':' LocalPart
 UnprefixedName::= LocalPart

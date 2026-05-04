@@ -2,6 +2,8 @@
 
 The major XBRL/iXBRL taxonomies in active use globally for statutory and supervisory reporting. Each section: issuer, current version, entry points, filing scope, download URLs. Versions verified against issuer websites; re-check before relying on a specific version for a filing.
 
+**Last verified (UTC): 2026-05-04.** Treat all "current version" references as point-in-time.
+
 ## 1. IFRS Accounting Taxonomy
 
 **Issuer / Jurisdiction:** IFRS Foundation (IASB) — global standard-setter
@@ -74,7 +76,7 @@ Labels and documentation ship in all 24 EU official languages.
 canonical filer guidance, updated annually. It specifies anchoring, sign
 conventions, scale, and the taxonomy elements applicable to block tags.
 
-**Filing scope:** All issuers with securities listed on EU regulated
+**Filing scope:** All issuers with securities listed on EU-regulated
 markets that prepare consolidated IFRS financial statements. National
 competent authorities (AFM, AMF, BaFin, CNMV, etc.) operate the actual
 filing infrastructure.
@@ -184,7 +186,7 @@ deposits; AFM extends ESEF/IFRS for listed-issuer AFRs.
   medium, large (different disclosure depths under Title 9 Book 2 BW).
 - KvK IFRS entry points where the entity reports under IFRS but files at
   the trade register.
-- AFM ESEF / IFRS for Dutch listed issuers' AFRs (extends ESEF core).
+- AFM ESEF / IFRS for Dutch listed-issuer AFRs (extends ESEF core).
 - Belastingdienst entry points for corporate income tax (VPB), VAT (OB),
   payroll, and ICP returns.
 

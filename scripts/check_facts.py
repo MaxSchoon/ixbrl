@@ -5,7 +5,8 @@ Runs cheap, deterministic checks BEFORE invoking Arelle. Catches the
 silent-failure category of mistakes preparers most often make.
 
 Checks performed:
-  - Every ix:nonFraction has contextRef, unitRef, decimals|precision.
+  - Every ix:nonFraction has contextRef, unitRef, and exactly one of
+    decimals, precision, or xsi:nil="true".
   - Every ix:nonNumeric has contextRef. If escape="true" the body is
     treated as XHTML; flag if it does not parse.
   - Continuation chains (continuedAt → ix:continuation@id) form a tree
@@ -39,6 +40,7 @@ except ImportError:
 NS = {
     "ix": "http://www.xbrl.org/2013/inlineXBRL",
     "xbrli": "http://www.xbrl.org/2003/instance",
+    "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     "xhtml": "http://www.w3.org/1999/xhtml",
 }
 
@@ -67,9 +69,22 @@ def check(path: Path) -> list[str]:
         for attr in ("contextRef", "unitRef"):
             if not el.get(attr):
                 issues.append(f"ix:nonFraction missing @{attr} at line {el.sourceline}")
-        if not (el.get("decimals") or el.get("precision")):
+        decimals_present = bool(el.get("decimals"))
+        precision_present = bool(el.get("precision"))
+        nil_value = (
+            el.get("{http://www.w3.org/2001/XMLSchema-instance}nil") or ""
+        ).lower()
+        nil_present = nil_value in {"true", "1"}
+        present_count = sum((decimals_present, precision_present, nil_present))
+        if present_count == 0:
             issues.append(
-                f"ix:nonFraction missing both @decimals and @precision at line {el.sourceline}"
+                "ix:nonFraction missing @decimals, @precision or "
+                f"xsi:nil='true' at line {el.sourceline}"
+            )
+        elif present_count > 1:
+            issues.append(
+                "ix:nonFraction has mutually exclusive attributes set "
+                f"(decimals, precision, xsi:nil) at line {el.sourceline}"
             )
         if el.get("decimals") == "INF":
             issues.append(
@@ -140,6 +155,30 @@ def check(path: Path) -> list[str]:
                 f"continuation id='{ref}' is the target of {count} continuedAt "
                 f"attributes (must be unique)"
             )
+
+    next_ref = {cid: c.get("continuedAt") for cid, c in cont_by_id.items()}
+    state: dict[str, int] = {}
+    stack: list[str] = []
+
+    def visit_continuation(cid: str) -> None:
+        current_state = state.get(cid, 0)
+        if current_state == 1:
+            cycle = stack[stack.index(cid):] + [cid] if cid in stack else [cid]
+            issues.append(f"continuation cycle detected: {' -> '.join(cycle)}")
+            return
+        if current_state == 2:
+            return
+
+        state[cid] = 1
+        stack.append(cid)
+        ref = next_ref.get(cid)
+        if ref in cont_by_id:
+            visit_continuation(ref)
+        stack.pop()
+        state[cid] = 2
+
+    for cid in cont_by_id:
+        visit_continuation(cid)
 
     # --- Duplicate facts: same concept+context+unit, different value ---
     grouped: dict[tuple[str | None, str | None, str | None], list[etree._Element]] = (

@@ -66,7 +66,7 @@ the `name` and `description` in the SKILL.md frontmatter.
 
 Once published, install via [skills.sh](https://skills.sh):
 
-```
+```bash
 skills add ixbrl
 ```
 

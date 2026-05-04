@@ -168,7 +168,7 @@ No validator error in step 1 or 2, but flagged by auditors or NCA post-filing re
 
 When base taxonomy lacks a needed concept, build a small extension. Typical ESEF / EFM-style layout:
 
-```
+```text
 {prefix}-{date}/
 ├── {prefix}-{date}.xsd          # schema with new concepts
 ├── {prefix}-{date}_pre.xml      # presentation linkbase
@@ -196,7 +196,7 @@ See `references/esef.md` §5 for ESEF specifics and `references/sec-edgar.md` §
 
 Both ESEF and report-package-aware regulators expect a `.zip` (or `.xbri`) with:
 
-```
+```text
 report-package.zip
 ├── META-INF/
 │   ├── taxonomyPackage.xml      # manifest (mandatory)

@@ -181,4 +181,4 @@ any preparation tool that purports to be ESEF-conformant.
 > Preparers requiring a definitive enumeration should fetch the
 > consolidated EUR-Lex text directly or load the ESMA-published ESEF
 > taxonomy package and enumerate elements with `xbrli:periodType` and
-> `dtr-types:textBlockItemType` substitution group.
+> `dtr-types:textBlockItemType` type (within `xbrli:item` substitution group).

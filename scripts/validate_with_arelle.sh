@@ -14,10 +14,10 @@
 # Requires: Python 3.10+, `pip install arelle-release`
 #
 # What this does:
-#   - Auto-detects whether the input is a single .xhtml/.html file, an
-#     iXBRL document set (folder), or a Report Package .zip / .xbri.
-#   - Wraps single files in --inlineXBRLDocumentSet so calc/dimension
-#     validation sees the embedded report as a single instance.
+#   - Accepts a single .xhtml/.html file, an iXBRL document set folder, or
+#     a Report Package .zip / .xbri through Arelle's --file entry point.
+#   - Loads the inlineXbrlDocumentSet plugin so calc/dimension validation
+#     sees embedded reports as a single instance.
 #   - Picks the right Arelle plugin chain per profile.
 
 set -euo pipefail
@@ -39,18 +39,8 @@ case "$PROFILE" in
   *) echo "Unknown profile: $PROFILE" >&2; exit 2 ;;
 esac
 
-# Single-file iXBRL must be wrapped as a document set so dimension/calc
-# linkbases resolve correctly. A .zip / .xbri is treated as a package.
-if [[ "$INPUT" == *.zip || "$INPUT" == *.xbri ]]; then
-  exec arelleCmdLine \
-    --plugins "$PLUGINS" \
-    --validate \
-    --packages "$INPUT" \
-    --logFormat "[%(messageCode)s] %(message)s"
-else
-  exec arelleCmdLine \
-    --plugins "$PLUGINS" \
-    --validate \
-    --file "$INPUT" \
-    --logFormat "[%(messageCode)s] %(message)s"
-fi
+exec arelleCmdLine \
+  --plugins "$PLUGINS" \
+  --validate \
+  --file "$INPUT" \
+  --logFormat "[%(messageCode)s] %(message)s"

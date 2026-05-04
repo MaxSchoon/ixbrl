@@ -114,7 +114,7 @@
     Network shape (read each arrow as "arc with the named arcrole"):
 
       ext:RevenueLineItem
-          all (contextElement=segment, closed=true)
+          all (contextElement=scenario, closed=true)
               into ext:ExampleHypercube
                   hypercube-dimension into ext:GeographyAxis
                   hypercube-dimension into ext:CustomerAxis
@@ -137,12 +137,11 @@
       d) An explicit dimension MUST have a dimension-domain arc to a domain.
       e) A typed dimension MUST NOT have a dimension-domain arc.
 
-    Choice of contextElement="segment":
-      XDT permits either "segment" or "scenario". This scaffold uses
-      "segment" because most regulators (ESEF, EDGAR, KvK SBR) and the
-      IFRS / US GAAP base taxonomies place dimensional qualifiers in the
-      xbrli:segment element. Switch to "scenario" only if your filing
-      regime explicitly mandates it.
+    Choice of contextElement:
+      XDT permits either "segment" or "scenario". ESEF filings require
+      "scenario" and prohibit xbrli:segment in contexts (ESEF.2.1.3.segmentUsed).
+      Other regimes may allow "segment"; adjust this scaffold to your target
+      regulator before use.
   -->
   <link:definitionLink
       xlink:type="extended"
@@ -197,7 +196,8 @@
 
     <!--
       "all" arc: primary item into hypercube.
-        xbrldt:contextElement   REQUIRED. Either "segment" or "scenario".
+        xbrldt:contextElement   REQUIRED. Either "segment" or "scenario";
+                                ESEF requires "scenario".
         xbrldt:closed           OPTIONAL, schema default "false". When set
                                 to "true" the instance MUST NOT add
                                 dimensions outside this hypercube to facts
@@ -216,7 +216,7 @@
         xlink:from="loc_RevenueLineItem"
         xlink:to="loc_ExampleHypercube"
         order="1"
-        xbrldt:contextElement="segment"
+        xbrldt:contextElement="scenario"
         xbrldt:closed="true"/>
     <!--
       Optional. To redirect dimension lookup to another ELR, add the
