@@ -29,6 +29,7 @@ from __future__ import annotations
 import re
 import sys
 from collections import defaultdict
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 try:
@@ -45,6 +46,18 @@ NS = {
 }
 
 ISO_4217 = re.compile(r"^[A-Z]{3}$")
+
+
+def canonical_fact_text(value: str) -> str:
+    """Return a stable comparison key for simple numeric duplicate checks."""
+    text = value.strip()
+    if not text:
+        return text
+    try:
+        parsed = Decimal(text)
+    except InvalidOperation:
+        return text
+    return format(parsed.normalize(), "f")
 
 
 def find_facts(
@@ -189,7 +202,7 @@ def check(path: Path) -> list[str]:
         if all(key):
             grouped[key].append(el)
     for key, els in grouped.items():
-        values = {(e.text or "").strip() for e in els}
+        values = {canonical_fact_text(e.text or "") for e in els}
         if len(values) > 1:
             lines = ", ".join(str(e.sourceline) for e in els)
             issues.append(

@@ -33,8 +33,8 @@ fi
 case "$PROFILE" in
   esef)  PLUGINS="validate/ESEF|inlineXbrlDocumentSet|XbrlPackage" ;;
   efm)   PLUGINS="validate/EFM|inlineXbrlDocumentSet" ;;
-  ukfrc) PLUGINS="validate/UK-FRC|inlineXbrlDocumentSet" ;;
-  hmrc)  PLUGINS="validate/HMRC|inlineXbrlDocumentSet" ;;
+  ukfrc) PLUGINS="validate/UK|inlineXbrlDocumentSet" ;;
+  hmrc)  PLUGINS="validate/UK|inlineXbrlDocumentSet" ;;
   core)  PLUGINS="inlineXbrlDocumentSet" ;;
   *) echo "Unknown profile: $PROFILE" >&2; exit 2 ;;
 esac
