@@ -19,10 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-This skill includes references to authoritative third-party documents (XBRL
-International specifications, ESMA Reporting Manuals, SEC EDGAR Filer Manual,
-FASB / IFRS Foundation taxonomies, FRC, SBR Netherlands, EBA, EIOPA, etc.).
-Those documents remain the property of their respective publishers and are
-cited under fair-use principles. Always verify the operative version of any
-cited rule against the publisher's primary source at filing date.

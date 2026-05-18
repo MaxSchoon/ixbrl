@@ -62,13 +62,19 @@ include `~/.<agent>/skills/ixbrl/` or a project-local
 `.agents/skills/ixbrl/`. Most harnesses auto-discover the skill from
 the `name` and `description` in the SKILL.md frontmatter.
 
-### Marketplace install
+### Install via the skills CLI
 
-Once published, install via [skills.sh](https://skills.sh):
+`SKILL.md` lives at the root of this public repo, so any runtime with
+the [`skills`](https://www.skills.sh) CLI can install it directly:
 
 ```bash
-skills add ixbrl
+npx skills add MaxSchoon/ixbrl
 ```
+
+skills.sh has no separate submission step — its directory is populated
+from CLI install telemetry. The skill becomes discoverable (via
+`npx skills find ixbrl`) and climbs the listing as people install it
+with the command above.
 
 ## Compatibility
 
@@ -90,7 +96,8 @@ without those dependencies — the references work on their own.
 
 ## License
 
-MIT — see [`LICENSE`](LICENSE).
+MIT — see [`LICENSE`](LICENSE). Third-party attribution notices are in
+[`NOTICE`](NOTICE).
 
 ## Disclaimer
 

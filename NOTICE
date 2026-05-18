@@ -1,0 +1,13 @@
+iXBRL Skill — Third-Party Attribution Notices
+=============================================
+
+The software in this repository is licensed under the MIT License (see
+LICENSE).
+
+This skill includes references to authoritative third-party documents
+(XBRL International specifications, ESMA Reporting Manuals, the SEC
+EDGAR Filer Manual, FASB / IFRS Foundation taxonomies, FRC, SBR
+Netherlands, EBA, EIOPA, and others). Those documents remain the
+property of their respective publishers and are cited under fair-use
+principles. Always verify the operative version of any cited rule
+against the publisher's primary source at filing date.

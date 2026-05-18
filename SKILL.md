@@ -1,6 +1,7 @@
 ---
 name: ixbrl
 description: Use for preparing, reviewing, validating, or debugging Inline XBRL (iXBRL) and XBRL filings. Trigger on iXBRL, XBRL, ESEF, EDGAR/EFM, UK FRC/HMRC, Dutch SBR/KvK/AFM, EBA/EIOPA DPM, IFRS, US-GAAP, EDINET, MCA, Arelle, taxonomy packages, report packages, extension taxonomies, anchoring, block or narrative tagging, fact mapping, contexts, units, decimals, transformation formats, calculation/linkbase/dimension errors, and validator codes such as FR-NL-*, EFM.6.*, ESEF.*, xbrldie:*, xbrldte:*, and xbrl.5.2.5.2. Use it to route to primary-source references, templates, and validation scripts.
+license: MIT
 ---
 
 # iXBRL skill
