@@ -97,6 +97,28 @@
   link:label resource for consistency. Filers may add ids on every resource
   if their tooling requires them, but mixing some-with-id and some-without
   on the same surface confuses diffs and review.
+
+  Authoring discipline (this is a catalogue, not a template)
+  ..........................................................
+  Concept 1 below shows the FULL set of standard and LRR label roles to
+  demonstrate the mechanism. Do NOT replicate that on every concept.
+    * Re-author nothing for base-taxonomy concepts. Concepts from the
+      regulator's taxonomy (IFRS, US-GAAP, the NL taxonomy, the FRC
+      suite) already carry official standard labels in the required
+      language. Adding your own label for a base concept duplicates the
+      DTS and risks silently diverging from the official wording. Only
+      EXTENSION concepts need labels you author.
+    * Match the source document. An extension concept's standard label
+      should be the line-item description exactly as it reads in the
+      financial statements being tagged - that wording is the entity's
+      own and is the basis on which a reviewer judges the concept's
+      meaning. A paraphrase breaks the audit trail.
+    * Add only the roles you actually use. Attach a totalLabel only if
+      the concept is presented as a total row; a periodStartLabel only
+      if it appears as an opening balance; a negatedLabel only if you
+      present it with a flipped sign. Roles added "just in case" are
+      dead weight.
+  See references/conversion.md section 7 for the rationale.
   ============================================================================
 -->
 <link:linkbase

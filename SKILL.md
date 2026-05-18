@@ -47,6 +47,7 @@ of them up front.
 | Label Role Registry (negated labels), Data Types Registry (`textBlockItemType`, `percentItemType`, ESRS quantity types), URI resolution conventions | `references/registries.md` |
 | DPM (EBA/EIOPA), Table Linkbase, filing indicators, COREP/FINREP/Solvency II, xBRL-CSV migration | `references/dpm.md` |
 | ESEF mandatory block-tag list (Annex II Table 2), block-tag selection guidance, `ix:continuation` for split disclosures | `references/esef-block-tags.md` |
+| Converting a PDF / Word / accounts-production document to faithful iXBRL — preserving hierarchy, abstracts, dates, completeness; the content-level review pass | `references/conversion.md` |
 | Which taxonomies exist, current versions, who issues them, who must file | `references/taxonomies.md` |
 | ESEF anchoring, block tagging, Reporting Manual rules, NCAs (AFM, BaFin, AMF, CONSOB, CNMV, FSMA), `ESEF.*` codes | `references/esef.md` |
 | SEC iXBRL phase-in, EDGAR Filer Manual sections, DEI / SRT / US-GAAP, `EFM.6.05.*` codes, Pay-Versus-Performance, cybersecurity tagging | `references/sec-edgar.md` |
@@ -120,6 +121,53 @@ Where note-block tagging is required (ESEF Article 6, mandatory from FY2022; ana
 
 `ix:hidden` carries facts required in XBRL but with no natural visible rendering (notably SEC `dei:` cover-page facts). ESEF and EFM both require any hidden fact whose value also appears as visible text to be linked via the `-esef-ix-hidden` (ESEF) or `-sec-ix-hidden` (SEC) CSS style. Do not put numeric/transformable facts in `ix:hidden` to suppress them — ESEF forbids it (`ESEF.2.4.1.transformableElementIncludedInHiddenSection`).
 
+The mistake runs both ways. `ix:hidden` is *under*-used as often as it is abused: taxonomy-mandated entity metadata (registered name, registration number, legal form, document/report type, period-end date) and non-numeric classification facts that steer interpretation but are not a line in any statement (an entity-size class member, a reporting-framework choice, a consolidated-vs-company-only indicator) are real required facts with no row to sit on — they belong in `ix:hidden`, not omitted. See `references/conversion.md` §8 for the positive case.
+
+## Converting a source document to iXBRL
+
+Most iXBRL is not authored from scratch — it is *converted* from a
+finished PDF, Word file, or accounts-production output. Conversion is
+where filings quietly go wrong, because a converted file can pass every
+validator and still misrepresent the financial statements: validators
+check syntax and DTS wiring, not whether the iXBRL is *faithful* to the
+document a human prepared.
+
+If the task involves a conversion (or building a pipeline that does
+one), read `references/conversion.md`. The failures it guards against
+are the ones that look fine from a distance and fall apart up close:
+
+- **Flattened hierarchy.** Headings, groupings, and indentation are
+  information. Every visible heading maps to an **abstract concept**;
+  the presentation linkbase tree must mirror the statement's visual
+  structure. A flattened presentation linkbase is the structural
+  equivalent of deleting every heading from the printed accounts.
+- **Lost dates and columns.** Each column header is a context. The
+  balance-sheet date is a disclosure, not decoration — never let it
+  disappear because the converter only kept the numbers.
+- **Half-tagged statements.** A primary statement is fully tagged or
+  defective; a consumer cannot tell an omitted line from a missed one.
+  Walk every row *and* every column. The most-skipped facts are the
+  totals that feel "derived" — total equity / shareholders' equity,
+  result before tax. The statement of changes in equity is a *matrix*
+  (components × movements); tag every cell.
+- **Incomplete or sign-wrong calc trees.** Every subtotal needs a
+  summation network covering all its children. A calc `weight` is not a
+  free choice: XBRL 2.1 §5.1.1.2 ties its sign to the `balance`
+  attributes — same balance → `weight="1"`, opposite → `weight="-1"`.
+- **Reinvented labels.** Do not re-author labels for base-taxonomy
+  concepts; they already carry official labels. Author labels only for
+  extension concepts, and make each label the line-item wording *as it
+  reads in the source document* — a paraphrase breaks the audit trail.
+- **A toy test filing.** A single-page micro-entity statement with no
+  cash flow, no changes-in-equity matrix, and no extensions exercises
+  almost none of the hard parts. Validate pipelines against a
+  representative filing (full primary statements, comparatives,
+  extensions, anchoring, dimensions).
+
+After the validators are clean, do the **content-level review pass** in
+`references/conversion.md` §10 — read the rendered statements as a
+financial professional. That pass catches what no validator does.
+
 ## Standard validation pipeline
 
 Run these in order. Each step depends on the prior being clean.
@@ -187,8 +235,9 @@ Rules:
 - Each concept has a Standard Label in the report language. Add English labels.
 - For monetary concepts, set `balance="debit"` or `balance="credit"` correctly — this drives sign convention everywhere downstream.
 - For ESEF: anchor each non-subtotal extension to the closest wider IFRS concept (and to each narrower component concept if the extension is an aggregation). Never anchor to abstract concepts.
+- Add an abstract concept for every section header and grouping so the presentation linkbase tree mirrors the statement's visible hierarchy (see `references/conversion.md` §2).
 - Wire concepts into a presentation link with appropriate `preferredLabel` roles on subtotal arcs.
-- Wire calculation links with `weight="1"` or `weight="-1"` according to balance arithmetic.
+- Wire calculation links with `weight="1"` when parent and child share the same `balance`, `weight="-1"` when they are opposite (XBRL 2.1 §5.1.1.2). Give every subtotal a summation network covering *all* of its children.
 
 See `references/esef.md` §5 for ESEF specifics and `references/sec-edgar.md` §4 for EFM specifics.
 
