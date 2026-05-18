@@ -69,8 +69,30 @@ def find_facts(
     return nf, nn, cont
 
 
+def secure_parser() -> etree.XMLParser:
+    """Return an lxml parser hardened against XXE and entity-expansion attacks.
+
+    An iXBRL document handed to this script is untrusted input. lxml's
+    default parser resolves entities, which opens the classic XML External
+    Entity vectors: an external entity can disclose local files, and nested
+    internal entities ("billion laughs") can exhaust memory. Conformant
+    iXBRL is self-contained XHTML using numeric character references, so
+    disabling entity resolution and external-DTD loading closes the attack
+    surface at no cost to legitimate documents. See the lxml FAQ, "How do I
+    use lxml safely as a web service endpoint?" (https://lxml.de/FAQ.html).
+    """
+    return etree.XMLParser(
+        recover=False,
+        ns_clean=True,
+        resolve_entities=False,
+        no_network=True,
+        load_dtd=False,
+        dtd_validation=False,
+    )
+
+
 def check(path: Path) -> list[str]:
-    parser = etree.XMLParser(recover=False, ns_clean=True)
+    parser = secure_parser()
     tree = etree.parse(str(path), parser)
     root = tree.getroot()
     issues: list[str] = []
@@ -111,7 +133,7 @@ def check(path: Path) -> list[str]:
             issues.append(f"ix:nonNumeric missing @contextRef at line {el.sourceline}")
         if el.get("escape") == "true":
             try:
-                etree.fromstring(f"<wrap>{el.text or ''}</wrap>")
+                etree.fromstring(f"<wrap>{el.text or ''}</wrap>", parser)
             except etree.XMLSyntaxError as exc:
                 issues.append(
                     f"ix:nonNumeric escape='true' content not well-formed at "
