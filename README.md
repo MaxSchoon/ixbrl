@@ -22,7 +22,8 @@ that produces their iXBRL.
 - **Arelle iXBRL Viewer review workflow** — explains how to prepare a
   local viewer with `--save-viewer`, handle document sets, and use the
   viewer's fact inspector, search/filtering, table export, calculation
-  mode, and review mode to inspect iXBRL quality.
+  mode, and review mode to inspect iXBRL quality. Links to the
+  open-source viewer project at <https://github.com/Arelle/ixbrl-viewer>.
 - **`references/`** — load on demand:
   - `spec.md` — Inline XBRL 1.1, XBRL 2.1, XDT (Dimensions),
     Transformation Registry 4, calculation linkbase semantics.
@@ -51,9 +52,9 @@ that produces their iXBRL.
 
 Every factual claim in this skill is tied to a primary source from the
 issuer or standard-setter (xbrl.org, ifrs.org, esma.europa.eu, sec.gov,
-fasb.org, frc.org.uk, sbr-nl.nl, eba.europa.eu, eiopa.europa.eu, the
-Arelle GitHub repository, and the Arelle iXBRL Viewer documentation).
-Each `references/*.md` ends with a
+fasb.org, frc.org.uk, sbr-nl.nl, eba.europa.eu, eiopa.europa.eu,
+Arelle's GitHub repositories, and the Arelle iXBRL Viewer
+documentation). Each `references/*.md` ends with a
 `Sources` list of the URLs consulted. Versions and rule numbers were
 verified at the time of writing — re-check the publisher's page before
 relying on a specific version for a regulated filing.

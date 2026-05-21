@@ -89,11 +89,31 @@ of them up front.
 | ESEF mandatory block-tag list (Annex II Table 2), block-tag selection guidance, `ix:continuation` for split disclosures | `references/esef-block-tags.md` |
 | Converting a PDF / Word / accounts-production document to faithful iXBRL — preserving hierarchy, abstracts, dates, completeness; the content-level review pass | `references/conversion.md` |
 | Real-world Inline XBRL examples by country, including Netherlands (`NL`) and other ESEF/UKSEF markets; viewer output, xBRL-JSON, report packages, and validation messages | <https://filings.xbrl.org/> and API docs at <https://filings.xbrl.org/docs/api> |
-| Preparing and using the Arelle iXBRL Viewer for interactive review, including `--save-viewer`, document sets, stub viewer mode, review mode, fact inspector, search/filtering, table export, and calculation mode | <https://arelle-ixbrl-viewer.readthedocs.io/en/latest/> and user guide at <https://arelle-ixbrl-viewer.readthedocs.io/en/latest/user_guides/user_guide.html> |
+| Preparing and using the Arelle iXBRL Viewer for interactive review, including `--save-viewer`, document sets, stub viewer mode, review mode, fact inspector, search/filtering, table export, and calculation mode | Docs: <https://arelle-ixbrl-viewer.readthedocs.io/en/latest/> and user guide at <https://arelle-ixbrl-viewer.readthedocs.io/en/latest/user_guides/user_guide.html>. Source: <https://github.com/Arelle/ixbrl-viewer> |
 | Which taxonomies exist, current versions, who issues them, who must file | `references/taxonomies.md` |
 | ESEF anchoring, block tagging, Reporting Manual rules, NCAs (AFM, BaFin, AMF, CONSOB, CNMV, FSMA), `ESEF.*` codes | `references/esef.md` |
 | SEC iXBRL phase-in, EDGAR Filer Manual sections, DEI / SRT / US-GAAP, `EFM.6.05.*` codes, Pay-Versus-Performance, cybersecurity tagging | `references/sec-edgar.md` |
 | Arelle CLI, plugins, formula linkbase, Calc 1.1, full anti-pattern list, ESEF + EFM + core XBRL error codes with fixes | `references/validation.md` |
+
+## GitHub source repositories to use
+
+Prefer the live source repositories when debugging tooling behaviour,
+checking option names, or tracing validator codes:
+
+- **Arelle core:** <https://github.com/Arelle/Arelle>. Use for CLI,
+  plugin loading, report-package handling, Inline XBRL processing,
+  ESEF validation implementation, and source-level issue searches.
+- **Arelle iXBRL Viewer:** <https://github.com/Arelle/ixbrl-viewer>.
+  This is the open-source project behind the ReadTheDocs viewer docs;
+  it contains the `iXBRLViewerPlugin`, the browser `ixbrlviewer.js`
+  application, release assets, samples, tests, and viewer README.
+- **Arelle EDGAR plugin:** <https://github.com/Arelle/EDGAR>. Use for
+  SEC/EFM-specific plugin behaviour rather than assuming it lives in
+  Arelle core.
+
+For normative reporting obligations, GitHub source is implementation
+evidence, not the legal source. Cross-check against the regulator manual
+or specification before treating a behaviour as required.
 
 ## First principles every preparer must internalise
 
@@ -215,7 +235,10 @@ financial professional. That pass catches what no validator does.
 Use the Arelle iXBRL Viewer as the visual review workbench, not as a
 replacement for validation. It prepares an iXBRL file by adding a link
 to `ixbrlviewer.js` plus processed XBRL/taxonomy JSON, so the resulting
-viewer can expose embedded facts interactively in a browser.
+viewer can expose embedded facts interactively in a browser. The source
+repository is <https://github.com/Arelle/ixbrl-viewer>; its README links
+to the same ReadTheDocs documentation and confirms the project consists
+of the Arelle plugin plus the JavaScript viewer application.
 
 Review checklist:
 
