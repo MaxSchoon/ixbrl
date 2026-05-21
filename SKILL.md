@@ -32,7 +32,30 @@ of the right manual and encodes patterns experts recognise on sight.
 3. **Choose your validation profile.** Use `scripts/validate_with_arelle.sh
    <file> <profile>` (`esef`, `efm`, `ukfrc`, `hmrc`, `core`). Run
    `core` first to isolate XBRL 2.1 violations from jurisdictional ones.
-4. **Use the live filing corpus for real examples.** For ESEF, UKSEF,
+4. **Prepare an Arelle iXBRL Viewer for review.** When reviewing a
+   local iXBRL file or document set, generate a viewer with the Arelle
+   iXBRL Viewer plugin before doing the content-level review:
+
+   ```bash
+   python3 /path/to/Arelle/arelleCmdLine.py \
+     --plugins=/abs/path/to/iXBRLViewerPlugin \
+     -f report.xhtml \
+     --save-viewer report-viewer.xhtml \
+     --viewer-url https://cdn.jsdelivr.net/npm/ixbrl-viewer@<version>/iXBRLViewerPlugin/viewer/dist/ixbrlviewer.js
+   ```
+
+   For Inline XBRL document sets, also load `inlineXbrlDocumentSet`,
+   pass the document-set JSON to `-f`, and write `--save-viewer` to an
+   output directory. Serve document-set or stub viewers over HTTP; the
+   viewer docs warn that browser security restrictions prevent loading
+   them directly from `file:` URLs. Pin the viewer JavaScript to the
+   same major version, and the same or later minor version, as the
+   plugin that prepared the viewer metadata. Use a local or downloaded
+   `ixbrlviewer.js` instead of the CDN when external network fetches are
+   not acceptable. If the source XHTML must remain unchanged, use stub
+   viewer mode when all facts and footnotes already have `id`
+   attributes.
+5. **Use the live filing corpus for real examples.** For ESEF, UKSEF,
    and Ukraine filings, use <https://filings.xbrl.org/> before and
    after authoring:
    - Filter the index by **Country** (for example `NL` for the
@@ -66,6 +89,7 @@ of them up front.
 | ESEF mandatory block-tag list (Annex II Table 2), block-tag selection guidance, `ix:continuation` for split disclosures | `references/esef-block-tags.md` |
 | Converting a PDF / Word / accounts-production document to faithful iXBRL — preserving hierarchy, abstracts, dates, completeness; the content-level review pass | `references/conversion.md` |
 | Real-world Inline XBRL examples by country, including Netherlands (`NL`) and other ESEF/UKSEF markets; viewer output, xBRL-JSON, report packages, and validation messages | <https://filings.xbrl.org/> and API docs at <https://filings.xbrl.org/docs/api> |
+| Preparing and using the Arelle iXBRL Viewer for interactive review, including `--save-viewer`, document sets, stub viewer mode, review mode, fact inspector, search/filtering, table export, and calculation mode | <https://arelle-ixbrl-viewer.readthedocs.io/en/latest/> and user guide at <https://arelle-ixbrl-viewer.readthedocs.io/en/latest/user_guides/user_guide.html> |
 | Which taxonomies exist, current versions, who issues them, who must file | `references/taxonomies.md` |
 | ESEF anchoring, block tagging, Reporting Manual rules, NCAs (AFM, BaFin, AMF, CONSOB, CNMV, FSMA), `ESEF.*` codes | `references/esef.md` |
 | SEC iXBRL phase-in, EDGAR Filer Manual sections, DEI / SRT / US-GAAP, `EFM.6.05.*` codes, Pay-Versus-Performance, cybersecurity tagging | `references/sec-edgar.md` |
@@ -185,6 +209,40 @@ are the ones that look fine from a distance and fall apart up close:
 After the validators are clean, do the **content-level review pass** in
 `references/conversion.md` §10 — read the rendered statements as a
 financial professional. That pass catches what no validator does.
+
+## Reviewing with the Arelle iXBRL Viewer
+
+Use the Arelle iXBRL Viewer as the visual review workbench, not as a
+replacement for validation. It prepares an iXBRL file by adding a link
+to `ixbrlviewer.js` plus processed XBRL/taxonomy JSON, so the resulting
+viewer can expose embedded facts interactively in a browser.
+
+Review checklist:
+
+- Turn on **Highlight XBRL Elements** to see every visible tagged fact;
+  namespace colours reveal which taxonomy or extension supplied each
+  concept.
+- Click facts and inspect concept, dimensions, date/range, value,
+  accuracy, scale, entity, labels, references, anchoring, calculations,
+  footnotes, and section placement in the fact inspector.
+- Use the document summary to compare fact counts, hidden fact counts,
+  concepts, dimensions, members, and included files against the expected
+  filing scope.
+- Use search and filters to find facts by taxonomy labels, references,
+  concept type, hidden/visible status, period, namespace, unit, scale,
+  dimensions, and calculation relationships.
+- Cycle duplicate fact locations when the inspector reports more than
+  one occurrence; inconsistent duplicate values are a filing defect, not
+  a display issue.
+- Export tagged tables to Excel when reviewing a table in a language the
+  reviewer does not read fluently; the export includes document
+  descriptions alongside concept and dimension labels.
+- Enable **Calculations v1.1** in the toolbar when the regulator accepts
+  Calc 1.1, then inspect calculation relationships for subtotal
+  completeness and sign errors.
+- For partially tagged or incomplete drafts, enable viewer review mode
+  with `--viewer-feature-review` or `?review=true`; it highlights
+  untagged numbers and dates instead of namespace-based fact colours.
 
 ## Standard validation pipeline
 
