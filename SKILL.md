@@ -32,6 +32,22 @@ of the right manual and encodes patterns experts recognise on sight.
 3. **Choose your validation profile.** Use `scripts/validate_with_arelle.sh
    <file> <profile>` (`esef`, `efm`, `ukfrc`, `hmrc`, `core`). Run
    `core` first to isolate XBRL 2.1 violations from jurisdictional ones.
+4. **Use the live filing corpus for real examples.** For ESEF, UKSEF,
+   and Ukraine filings, use <https://filings.xbrl.org/> before and
+   after authoring:
+   - Filter the index by **Country** (for example `NL` for the
+     Netherlands, or another listed country) to inspect filings from the
+     relevant market.
+   - Open the Inline XBRL viewer to compare how facts, continuations,
+     hidden facts, labels, dimensions, and note block tags appear in a
+     real report.
+   - Download or inspect the xBRL-JSON and XBRL Report Package when you
+     need concrete examples of fact values, contexts, units, taxonomy
+     package layout, and validation messages.
+   - Treat the corpus as evidence, not as authority: the repository is
+     not complete, and many included filings have validation errors or
+     warnings. Use it to learn market practice, then validate against
+     the operative regulator rules.
 
 ## How to use the references
 
@@ -49,6 +65,7 @@ of them up front.
 | DPM (EBA/EIOPA), Table Linkbase, filing indicators, COREP/FINREP/Solvency II, xBRL-CSV migration | `references/dpm.md` |
 | ESEF mandatory block-tag list (Annex II Table 2), block-tag selection guidance, `ix:continuation` for split disclosures | `references/esef-block-tags.md` |
 | Converting a PDF / Word / accounts-production document to faithful iXBRL — preserving hierarchy, abstracts, dates, completeness; the content-level review pass | `references/conversion.md` |
+| Real-world Inline XBRL examples by country, including Netherlands (`NL`) and other ESEF/UKSEF markets; viewer output, xBRL-JSON, report packages, and validation messages | <https://filings.xbrl.org/> and API docs at <https://filings.xbrl.org/docs/api> |
 | Which taxonomies exist, current versions, who issues them, who must file | `references/taxonomies.md` |
 | ESEF anchoring, block tagging, Reporting Manual rules, NCAs (AFM, BaFin, AMF, CONSOB, CNMV, FSMA), `ESEF.*` codes | `references/esef.md` |
 | SEC iXBRL phase-in, EDGAR Filer Manual sections, DEI / SRT / US-GAAP, `EFM.6.05.*` codes, Pay-Versus-Performance, cybersecurity tagging | `references/sec-edgar.md` |

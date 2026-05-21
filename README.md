@@ -15,6 +15,10 @@ that produces their iXBRL.
 
 - **`SKILL.md`** — first principles, regulator routing, and the
   validation pipeline. Loaded automatically when the skill triggers.
+- **Live filing corpus routing** — directs agents to
+  <https://filings.xbrl.org/> for country-filtered ESEF/UKSEF examples
+  such as Netherlands (`NL`) filings, with viewer output, xBRL-JSON,
+  report packages, and validation messages.
 - **`references/`** — load on demand:
   - `spec.md` — Inline XBRL 1.1, XBRL 2.1, XDT (Dimensions),
     Transformation Registry 4, calculation linkbase semantics.
