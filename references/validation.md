@@ -116,6 +116,35 @@ primarily on calc 1.0 with rounding consistency rules layered on top
 via EFM checks; the IFRS Taxonomy began publishing 1.1 calc
 relationships from the 2024 release.
 
+**Dual statement sets — a Calc 1.1 trap that Calc 1.0 hides.** A
+calculation network lives in an extended-link role, but the link role
+only *groups* the arcs; it does **not** restrict which contexts they
+apply to. A summation-item network is evaluated for **every** context in
+which its summation concept has a fact. So when an entity files both a
+consolidated and a separate (company-only) statement set that share base
+concepts — `bw2-titel9:Assets`, `AssetsCurrent`, `Liabilities`,
+`NetResultAfterTax`, distinguished only by a member such as
+`FinancialStatementsTypeAxis` Consolidated/Separate — the
+"BalanceSheetConsolidated" network is *also* bound against the separate
+contexts (and vice versa), where its children follow a different
+structure. Calc 1.1 round-to-nearest reports these as
+`calc11e:inconsistentCalculationUsingRounding` (it binds whenever *some*
+contributing items are present and the present items don't sum), whereas
+Calc 1.0 typically **skips** the binding (it requires *all* contributing
+items present). The result: a filing can be clean under `--calc c10`
+and show a dozen+ cross-scope inconsistencies under `--calc c11r`.
+
+This is **inherent to dual full-tagging** and is not removable without
+mis-tagging (you cannot invent a separate-scope subtotal that does not
+exist). Resolve it by validating with the **regulator's actual calc
+profile**: the Dutch KvK / SBR taxonomy uses Calc 1.0 semantics, so run
+`arelleCmdLine ... --calc c10` for the authoritative verdict and treat
+the `c11r` cross-scope warnings as diagnostic, not blocking. Before
+concluding a calc is "broken," classify each inconsistency: *in-scope*
+(role-scope == context-scope) is a real arithmetic gap to fix; *cross-
+scope* (role-scope != context-scope) is this artifact. Distinguish them
+by reading the `context …` and `link role …` fields of each message.
+
 ## 5. Common error categories with concrete codes
 
 ### 5.1 ESEF (European Single Electronic Format)
@@ -212,7 +241,9 @@ tooling).
 22. **Subtotal arcs without `preferredLabel="totalLabel"`.** Triggers `ESEF.3.4.4.missingPreferredLabelRole`.
 23. **Mismatched `id` references across the iXBRL document set.** Each fact `id` must be unique across the IXDS, not only within a single XHTML file.
 24. **Negative values on credit-balance concepts ignored.** Tagging a credit-balance concept with the same sign as a debit-balance concept inverts arithmetic in any downstream consumer. Look up `balance` on the concept declaration and align the sign.
-25. **Forgetting `META-INF/taxonomyPackage.xml` in the report package.** Without it Arelle cannot locate the taxonomy and validation aborts immediately.
+25. **Linkbase arc `from`/`to` pointing at a QName instead of the loc label.** An XLink extended-link arc references the `xlink:label` of a `link:loc`, *not* the concept's QName or href. Authoring a `definitionArc`/`presentationArc`/`calculationArc` with `xlink:from="kvk_LineItemsInConsolidatedFinancialStatementsPlaceholder"` (the resolved concept name) instead of the locator's actual label (e.g. `placeholder_consolidated_loc`, `statement_root_loc`) yields `xbrl.3.5.3.9.2:arcResource` ("attribute 'from' has no matching loc or resource label") and, downstream, `xbrldie:PrimaryItemDimensionallyInvalidError` because the intended domain-member relationship never forms. Beware: audit/dump scripts often *resolve* loc labels to their href localnames for readability, which hides the real label — read the raw `xlink:label` before reusing it as an arc endpoint.
+26. **Tagging a concept that does not exist in the operative DTS.** A fact whose `name` is a plausible-but-nonexistent QName — a concept invented from memory (`bw2-titel9:Result` when only `rj:Result` exists), or the right local name under the wrong prefix (`rj:PayablesBanksCurrent` vs `bw2-titel9:PayablesBanksCurrent`) — is **unbound**: Arelle reports `ix11.12.1.2:missingReferences` ("Instance fact missing schema definition") and any locator referencing it fails with `xbrl.3.5.4:hrefIdNotFound` + `xbrl.5.2.6.1:definitionLinkLocTarget`. This is worse than a warning — the fact carries no concept semantics at all. Never guess a QName: confirm the exact prefix *and* local name against the operative taxonomy schema (e.g. grep the `*-cor.xsd` in Arelle's cache, or check the namespace a sibling/twin fact already uses) before tagging. The cheapest catch is to validate early — `missingReferences` surfaces immediately.
+27. **Forgetting `META-INF/taxonomyPackage.xml` in the report package.** Without it Arelle cannot locate the taxonomy and validation aborts immediately.
 
 ## 7. Conformance suites and test material
 

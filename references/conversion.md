@@ -159,16 +159,41 @@ Tagging only the total column, or only the closing balances, is the
 "half-tagged roll-forward" — it leaves most of the statement dark.
 Walk the full grid: *components × movements*, every cell.
 
-The arithmetic of the matrix (opening + movements = closing, down each
-column) cannot be expressed in Calc 1.0, which cannot sum across the
-instant/duration period boundary. Two honest options:
+The arithmetic of the matrix runs two ways, and **neither belongs in the
+calculation linkbase**:
 
-- Tie opening and closing balances in the **presentation linkbase**
-  using the `periodStartLabel` / `periodEndLabel` preferred-label roles,
-  and rely on the calculation linkbase only within a single period type.
-- Or adopt **Calc 1.1**, which can validate the roll-forward
-  arithmetically — but only if the regulator accepts it (see
-  `validation.md` §4; most do not yet mandate it).
+- *Down each column* — opening + movements = closing — is a **roll-forward
+  across the instant/duration period boundary**. Summation-item arcs bind
+  only contributing facts that are *c-equal*: same context, i.e. same
+  period **and** dimensions (XBRL 2.1 §5.2.5.2). This restriction is **not
+  lifted by Calc 1.1** — its "dimensional alignment" binding still requires
+  the period aspect to match. Opening (instant, start), movements
+  (duration) and closing (instant, end) live in three different periods,
+  so they never bind under either Calc 1.0 or 1.1. (Only the *draft* Calc
+  2.0 targets cross-period checks; it is not yet a Recommendation.)
+- *Across the columns* — components sum to total equity — is **dimensional
+  domain aggregation** over the equity-components axis, not a line-item
+  summation. Calc arcs cannot point at dimension members at all.
+
+So author the SoCE with the **presentation linkbase plus dimensions**,
+and give it **no calculation role**:
+
+- Put the same equity concept under both the `periodStartLabel` and the
+  `periodEndLabel` preferred-label roles to document the opening→closing
+  roll-forward. ESEF Reporting Manual Guidance 3.4.8 prescribes exactly
+  this for the cross-period and cross-dimension relationships the
+  calculation linkbase "cannot be used to" express.
+- Model the components as dimension members; the total-equity column is
+  the domain default.
+
+Forcing the SoCE into the calculation linkbase is a positive error, not
+merely wasted effort: the cells never bind, and where a same-period
+network (e.g. the balance-sheet equity calc) overlaps the SoCE context it
+yields **false-positive calculation inconsistencies** that ESEF Guidance
+3.4.1 says to disregard. Both ESEF and the Dutch KvK / SBR taxonomy model
+the statement of changes in equity dimensionally and in presentation;
+neither defines a SoCE calculation link — and this holds equally for a
+consolidated SoCE and a separate (company-only) SoCE.
 
 ## 6. Calculation completeness and weight derivation
 
@@ -182,6 +207,15 @@ where only "gross operating result" has calculation children — and
 have none — is a half-built calc tree. Every subtotal gets its own
 summation network; every line item appears under the subtotal it rolls
 into.
+
+This rule is about *same-period* subtotals (balance sheet, income
+statement, cash-flow sections). **Cross-period movement schedules are the
+exception** — a statement of changes in equity, or a PP&E / provisions
+roll-forward (opening + movements = closing), is **not** wired with calc
+arcs, because the operands span the instant/duration period boundary and
+never bind (see §5). Don't "complete" a calc tree by forcing a roll-
+forward subtotal into it; that creates spurious inconsistencies, not
+coverage.
 
 **Weights inconsistent with balance type.** A calculation arc's `weight`
 is not free choice. XBRL 2.1 §5.1.1.2 requires the weight's sign to be
