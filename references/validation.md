@@ -137,9 +137,11 @@ and show a dozen+ cross-scope inconsistencies under `--calc c11r`.
 This is **inherent to dual full-tagging** and is not removable without
 mis-tagging (you cannot invent a separate-scope subtotal that does not
 exist). Resolve it by validating with the **regulator's actual calc
-profile**: the Dutch KvK / SBR taxonomy uses Calc 1.0 semantics, so run
-`arelleCmdLine ... --calc c10` for the authoritative verdict and treat
-the `c11r` cross-scope warnings as diagnostic, not blocking. Before
+profile**: the SBR Filing Rules (NT20) list **XBRL 2.1** — i.e. Calc 1.0 —
+as the normative calculation basis (Calculations 1.1 is *not* referenced,
+and Calculations 2.0 has only a 2019 requirements note, no specification),
+so run `arelleCmdLine ... --calc c10` for the authoritative KvK verdict and
+treat the `c11r` cross-scope warnings as diagnostic, not blocking. Before
 concluding a calc is "broken," classify each inconsistency: *in-scope*
 (role-scope == context-scope) is a real arithmetic gap to fix; *cross-
 scope* (role-scope != context-scope) is this artifact. Distinguish them

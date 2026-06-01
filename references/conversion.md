@@ -169,8 +169,10 @@ calculation linkbase**:
   lifted by Calc 1.1** — its "dimensional alignment" binding still requires
   the period aspect to match. Opening (instant, start), movements
   (duration) and closing (instant, end) live in three different periods,
-  so they never bind under either Calc 1.0 or 1.1. (Only the *draft* Calc
-  2.0 targets cross-period checks; it is not yet a Recommendation.)
+  so they never bind under either Calc 1.0 or 1.1. (Cross-period
+  calculations are the stated aim of **Calculations 2.0**, but as of 2026
+  that work has only a 2019 *Requirements* document and **no
+  specification** — so it cannot be used for an actual filing.)
 - *Across the columns* — components sum to total equity — is **dimensional
   domain aggregation** over the equity-components axis, not a line-item
   summation. Calc arcs cannot point at dimension members at all.
