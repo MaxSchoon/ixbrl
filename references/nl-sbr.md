@@ -17,22 +17,15 @@ official Filing Rules.
 
 Dutch SBR is an annual taxonomy generation: **NT19**, **NT20**, **NT21**
 etc. Filing Rules also evolve. The same iXBRL package can pass or fail
-on **identical content** depending on which NT generation it was
-prepared against — so before reviewing or validating, pin both:
+on **identical content** depending on which generation it was prepared
+against — so before reviewing or validating, pin:
 
-1. **The reporting period.** A Dutch annual account for fiscal year
-   ending 31 December 2024 is prepared against the **NT20 KvK Dutch
-   GAAP / Dutch IFRS entry points** published 12 December 2024 for FY2024
-   filings. FY2025 filings use the NT20 publication issued late 2025.
-   The Belastingdienst slice has its own cadence (`20251210.a` for VPB
-   2025, OB 2026, ICP 2026).
+1. **The reporting period** (read from `<xbrli:period>`, not today's date).
 2. **The filing channel.** KvK deposits flow through Digipoort or a
-   commercial SBR Portal; AFM ESEF filings flow through the AFM
-   loket. Each channel may pin a slightly different Filing Rules
-   version. Re-read the operative `FilingRules-*.pdf` on sbr-nl.nl
-   before declaring an iXBRL package "wrong" — many "errors" are merely
-   the difference between the rules you remembered and the rules in
-   force.
+   commercial SBR Portal; AFM ESEF filings flow through the AFM loket.
+   Re-read the operative `FilingRules-*.pdf` on sbr-nl.nl before
+   declaring an iXBRL package "wrong" — many "errors" are the
+   difference between the rules you remembered and the rules in force.
 3. **The entry point** (= which schema is in `link:schemaRef`). Entry
    point choice is concept-bearing: it determines which concepts are
    in-DTS, what dimension defaults apply, and which presentation /
@@ -40,21 +33,60 @@ prepared against — so before reviewing or validating, pin both:
    most of the bw2-titel9 disclosure concepts unbound; a Groot entry
    point makes them available.
 
+### Two taxonomy trees, same prefix family
+
+The Dutch SBR ecosystem ships **two parallel taxonomy stacks** that
+both bind to a `bw2-titel9:` / `rj:` / `kvk:` family of prefixes. They
+look alike but resolve to *different* schema URIs, and concepts that
+exist in one may not exist in the other:
+
+- **SBR-domein Handelsregister filer-facing taxonomy** — the one KvK
+  iXBRL annual accounts actually use. Schema URIs of the form
+  `https://www.nltaxonomie.nl/bw2-titel9/<release-date>/bw2-titel9-cor`,
+  `https://www.nltaxonomie.nl/rj/<release-date>/rj-cor`,
+  `https://www.nltaxonomie.nl/kvk/<release-date>/kvk-cor`. Distributed
+  as separate ZIPs from sbr-nl.nl (e.g. `bw2-titel9-2025_taxonomie.zip`,
+  `rj-2025_taxonomie.zip`, `kvk-2025_taxonomie.zip`). For FY2025 the
+  release date is `2025-12-31`.
+- **NT20 SBR-domein technical taxonomy** — the one that imports the
+  filer-facing taxonomy and carries the SBR-domein technical
+  infrastructure (jenv slice, BD slice, formula linkbases, validation
+  artefacts). Schema URIs of the form
+  `http://www.nltaxonomie.nl/nt20/jenv/<release-date>/dictionary/jenv-bw2-data`
+  (prefix `jenv-bw2-i:`), etc. Distributed as the large NT20 ZIP from
+  sbr-nl.nl.
+
+Both are normative for different things. The **filer-facing** stack is
+where preparers look up concept names for their facts; the **NT20
+technical** stack carries the formula linkbases, generic-message
+labels, and validation wiring that drive Arelle's validation behaviour.
+A reviewer needs both downloaded locally for offline validation.
+
+Verified namespace bindings used by a real FY2025 Groot NL-GAAP filing:
+
+| Prefix | Schema URI (2025-12-31 release) | Carries |
+|---|---|---|
+| `bw2-titel9` | `https://www.nltaxonomie.nl/bw2-titel9/2025-12-31/bw2-titel9-cor` | Title 9 BW data concepts (line items, axes, members), abstracts (`BalanceSheetTitle`, `IncomeStatementTitle`, `StatementOfComprehensiveIncomeTitle`), `FinancialStatementsTypeAxis` and its `ConsolidatedMember`/`SeparateMember` |
+| `rj` | `https://www.nltaxonomie.nl/rj/2025-12-31/rj-cor` | RJ application detail (`CashFlowStatementTitle`, `Creditors`, `Result`, RJ-specific disclosures) |
+| `kvk` | `https://www.nltaxonomie.nl/kvk/2025-12-31/kvk-cor` | KvK metadata, size-class axis (`LegalEntitySize`) and members (`LegalEntitySize{Micro,Small,Medium,Large}Member`), placeholders (`LineItemsIn{Consolidated,Separate}FinancialStatementsPlaceholder`), `AuditorsReportFinancialStatementsPresent` flag |
+| `<filer>` | `https://www.<filer>.nl/xbrl/<release-date>` | The filer's own extension (custom concepts, custom members, calculation/presentation/definition linkbases) |
+
 A pragmatic reviewer's first three commands:
 
 ```bash
-unzip -p report.zip 'reports/*.xhtml' | head -c 8000 | \
+unzip -p report.xbri 'reports/*/*.xhtml' | head -c 8000 | \
   grep -E 'schemaRef|xmlns:(bw2-titel9|rj|kvk|jenv-bw2-i)|xbrli:identifier' -c
 
-unzip -p report.zip 'META-INF/taxonomyPackage.xml' | \
+unzip -p report.xbri 'META-INF/taxonomyPackage.xml' | \
   grep -E 'tp:identifier|tp:entryPoint|tp:version'
 
-unzip -p report.zip 'META-INF/reports.json' 2>/dev/null  # Report Packages 1.0+
+unzip -p report.xbri 'META-INF/reportPackage.json' 2>/dev/null
+unzip -p report.xbri 'META-INF/reports.json' 2>/dev/null
 ```
 
-These tell you (a) which NT entry point was selected, (b) which
-filer-side extension is wired in, and (c) whether the package uses
-Report Packages 1.0 (`reports.json`) or the older `META-INF/` layout.
+The xBRI Report Package format (`https://xbrl.org/report-package/2023/xbri`)
+publishes `META-INF/reportPackage.json`; older Report Packages 1.0
+publish `META-INF/reports.json`. KvK FY2025 example packages use xBRI.
 
 ## 2. Bi-temporal cheatsheet (which rule applied when)
 
@@ -81,7 +113,10 @@ FY2025" is reviewable; "this is wrong" is not.
 
 The size class is a property of the entity, derived from balance-sheet
 total, net turnover, and average headcount over the prior two
-financial years (`bw2-titel9:LegalEntitySize` axis members). It
+financial years. In the FY2025 KvK taxonomy the size axis lives in the
+`kvk:` namespace, not `bw2-titel9:`: `kvk:LegalEntitySize` (axis),
+`kvk:LegalEntitySizeDomain`, and the four members
+`kvk:LegalEntitySize{Micro,Small,Medium,Large}Member`. The size class
 dictates:
 
 - Which KvK entry point schema is in `link:schemaRef`.
@@ -89,12 +124,18 @@ dictates:
   include everything Title 9 requires plus the auditor's report).
 - Whether the auditor's report (controleverklaring) is required at all.
 
-| Size class | bw2-titel9 axis member | Auditor's report required | Typical entry point family |
+| Size class | kvk:LegalEntitySize member | Auditor's report required | Typical entry point family (FY2025 KvK NL-GAAP) |
 |---|---|---|---|
-| Micro | `MicroEntity` | No | `bd-rpt-ihz-micro-*` (Bedrijfsdrijver), `kvk-rpt-jr-micro-*` |
-| Klein | `SmallEntity` | No | `kvk-rpt-jr-klein-*` |
-| Middelgroot | `MediumSizedEntity` | Yes | `kvk-rpt-jr-middelgroot-*` |
-| Groot | `LargeEntity` | Yes | `kvk-rpt-jr-groot-*` |
+| Micro | `kvk:LegalEntitySizeMicroMember` | No | `kvk-rpt-jaarverantwoording-2025-nlgaap-micro` |
+| Klein | `kvk:LegalEntitySizeSmallMember` | No | `kvk-rpt-jaarverantwoording-2025-nlgaap-klein` |
+| Middelgroot | `kvk:LegalEntitySizeMediumMember` | Yes | `kvk-rpt-jaarverantwoording-2025-nlgaap-middelgroot` |
+| Groot | `kvk:LegalEntitySizeLargeMember` | Yes | `kvk-rpt-jaarverantwoording-2025-nlgaap-groot` |
+
+(Specialised entry points exist for banks, insurers, pension funds,
+healthcare, housing, non-profit / fundraising organisations,
+cooperatives, cv/vof, foundations, etc.; the suffix `-publicatiestukken`
+selects publication-only accounts and `-verticaal` selects the
+vertical balance-sheet layout.)
 
 A common reviewer slip: applying Middelgroot disclosure expectations
 to a Klein filing, or vice versa. Pin the size class first; it changes
@@ -105,30 +146,46 @@ which absences count as defects.
 A medium / large group routinely files both a **consolidated** statement
 set and a **company-only (separate)** statement set in one report.
 Both use the same base concepts (`bw2-titel9:Assets`,
-`AssetsCurrent`, `Liabilities`, `NetResultAfterTax`) and are
-distinguished only by an explicit dimension member, typically on
-`FinancialStatementsTypeAxis` (Consolidated / Separate). This is where
-SBR Dutch GAAP filings most often go wrong — not because of one rule,
-but because three independent invariants must hold simultaneously.
+`bw2-titel9:AssetsCurrent`, `bw2-titel9:Liabilities`,
+`bw2-titel9:NetResultAfterTax`) and are distinguished only by an
+explicit dimension member on **`bw2-titel9:FinancialStatementsTypeAxis`**
+— `bw2-titel9:ConsolidatedMember` vs `bw2-titel9:SeparateMember`. This
+is where SBR Dutch GAAP filings most often go wrong — not because of
+one rule, but because three independent invariants must hold
+simultaneously.
 
-### 4.1 The mixed-scope ELR
+### 4.1 Placeholder membership across both scopes
 
-Any extension concept reported in **both** scopes must additionally be
-declared as a member of the extension's
-`MixedScopeFinancialStatementsCompatibility` extended-link role.
-Forgetting this — typically because an extension concept was added late
-without re-wiring the compatibility ELR — fires:
+The KvK taxonomy declares two placeholder concepts that anchor the
+extension's line-items into the consolidated and separate scopes
+respectively:
 
-> `NL-KVK.4.4.2.5.extensionTaxonomyLineItemNotLinkedToDesignatedPlaceholder`
+- `kvk:LineItemsInConsolidatedFinancialStatementsPlaceholder`
+- `kvk:LineItemsInSeparateFinancialStatementsPlaceholder`
 
-This is a deposit-blocking error. Diagnosis: the extension's
-`*_def.xml` shows the concept in
-`kvk_LineItemsInConsolidatedFinancialStatementsPlaceholder` **and**
-`kvk_LineItemsInSeparateFinancialStatementsPlaceholder`, but **not** in
-`MixedScopeFinancialStatementsCompatibility`. Fix: add the missing
-domain-member arc. Treat dual-scope placeholder membership and the
-mixed-scope ELR as derived from one source of truth; never patch one
-without updating the other.
+Both are confirmed members of `kvk-cor.xsd` in the FY2025 release. An
+extension concept reported in both scopes must be wired into **both**
+placeholder domain-member trees via the extension's definition
+linkbase. Forgetting one of them — typically because an extension
+concept was added late without re-wiring the dual-scope arcs — fires a
+KvK-specific filing-rule error of the form
+`extensionTaxonomyLineItemNotLinkedToDesignatedPlaceholder` and
+downstream `xbrldie:PrimaryItemDimensionallyInvalidError` against the
+unwired scope's contexts.
+
+Practitioner reports describe an additional extension-side compatibility
+role (often called something like
+`MixedScopeFinancialStatementsCompatibility`) used by some filer
+extensions to declare which concepts are legitimately reportable across
+both scopes. The KvK base taxonomy does not define this role — it
+appears in filer-extension architectures. Whether you must wire it
+depends on the extension framework your tooling uses; check the
+extension's `*_def.xml` for the actual extended-link roles in use
+before treating the absence of a specific role as a defect.
+
+Fix pattern: treat dual-scope placeholder membership as derived from
+one source predicate so the two arcs cannot drift apart, and document
+the extension's compatibility-role convention (if any) alongside it.
 
 ### 4.2 Calculation linkbase scope-bleed — and why Calc 1.1 is preferred for review
 
@@ -202,85 +259,132 @@ content pass; the cheapest signals:
 - `NetResultAfterTax` consolidated ≠ separate when the separate scope
   reflects only the parent's standalone result.
 
-## 5. NL-KVK validator codes — the ones that actually fire
+## 5. Recurring KvK deposit-blocker patterns
 
-These are the recurring KvK iXBRL deposit blockers as of NT20 Filing
-Rules. Full code list lives in the operative Filing Rules PDF — these
-are the high-frequency ones.
+The KvK Filing Rules / Business Rules (NT20 supplement) layer
+KvK-specific validations on top of the SBR Filing Rules. The
+authoritative code list lives in the operative
+`KVK Business Rules NT20` PDF and the SBR-domein Handelsregister
+**Reporting Manual** and **RTS**. Re-check those for the exact rule
+numbers that apply to a given filing — they evolve per release and
+this skill must not invent specific numbers it cannot cite.
 
-| Code | Meaning | Typical root cause | Fix |
-|---|---|---|---|
-| `NL-KVK.4.4.2.5.extensionTaxonomyLineItemNotLinkedToDesignatedPlaceholder` | Dual-scope extension concept missing from the `MixedScopeFinancialStatementsCompatibility` ELR | Concept added to consolidated + separate placeholders without updating compatibility ELR | Add the missing domain-member arc to the compatibility ELR; derive all three memberships from one predicate (see §4.1) |
-| `NL-KVK.4.4.6.1.usableConceptsNotAppliedByTaggedFacts` | Concept present in extension presentation/definition linkbase but never tagged in the instance | Over-inclusive linkbase — e.g. concept stayed after a tagging redesign | Remove the unused concept from the linkbase, **or** add the missing fact |
-| `NL.NL-KVK.3.4.1.3.transformableElementIncludedInHiddenSection` | Numeric / transformable fact emitted into `ix:hidden` | Convenience hiding of facts that don't fit visually | Render visibly; only non-transformable required-metadata facts belong in `ix:hidden` |
-| `NL-KVK.*.missingRelevantPlaceholder` | Primary statement root is an extension abstract rather than the official `bw2-titel9:*Title` (or `rj:CashFlowStatementTitle`) placeholder | Generator emitted its own abstract root | Replace the root with the operative placeholder |
-| `NL-KVK.*.extensionTaxonomyWrongFilesStructure` | Calculation linkbase file exists but contains no `link:calculationArc` | Empty calc linkbase emitted as a placeholder | Either populate the calc linkbase or remove it from the package |
+The recurring deposit-blocker **patterns** (what gets caught, not the
+exact rule code) are:
 
-In addition, two non-Filing-Rule signals routinely surface in NL
-reviews:
+| Pattern | Typical root cause | Fix |
+|---|---|---|
+| `extensionTaxonomyLineItemNotLinkedToDesignatedPlaceholder` — an extension concept is missing from one of the `kvk:LineItemsIn{Consolidated,Separate}FinancialStatementsPlaceholder` domain-member trees | Concept added to one scope's placeholder but not the other (dual-scope drift) | Wire the concept into both placeholders via the extension `*_def.xml`; derive both arcs from one source predicate (§4.1) |
+| `usableConceptsNotAppliedByTaggedFacts` — a concept exists in the extension presentation/definition linkbase but is never tagged in the instance | Over-inclusive linkbase (concept stayed after a tagging redesign) | Remove the unused concept from the linkbase **or** add the missing fact |
+| `transformableElementIncludedInHiddenSection` — a numeric / transformable fact is emitted into `ix:hidden` | Convenience hiding of facts that don't fit visually | Render visibly; only non-transformable required-metadata facts belong in `ix:hidden` |
+| `missingRelevantPlaceholder` — a primary statement roots on an extension abstract rather than the official Title 9 / RJ root (e.g. `bw2-titel9:BalanceSheetTitle`, `bw2-titel9:IncomeStatementTitle`, `rj:CashFlowStatementTitle`) | Generator emitted its own abstract root | Replace the root with the operative placeholder |
+| `extensionTaxonomyWrongFilesStructure` — calculation linkbase file exists but contains no `link:calculationArc` | Empty calc linkbase emitted as a placeholder | Either populate the calc linkbase or remove the file from the package |
+
+For the exact rule code that fired (the
+`NL-KVK.<n>.<n>.<n>...` identifier), quote the validator log line
+verbatim and look the code up in the operative Filing Rules /
+Business Rules PDF — do not paraphrase from memory.
+
+Two non-Filing-Rule signals routinely surface in NL reviews:
 
 - `xbrl.4.8.2:sharesFactUnit-notSharesMeasure` — share-count concepts
-  (`bw2-titel9:ShareCapital*`, `ShareCapitalNumberSharesIssue`) tagged
-  with a currency unit instead of `xbrli:shares`. Audit every
+  (`bw2-titel9:ShareCapital*`, `bw2-titel9:ShareCapitalNumberSharesIssue`)
+  tagged with a currency unit instead of `xbrli:shares`. Audit every
   `xbrli:sharesItemType` concept's unit.
 - `xbrldie:PrimaryItemDimensionallyInvalidError` — the concept is
-  missing from one of the `kvk_LineItemsIn{Consolidated,Separate}FinancialStatementsPlaceholder`
+  missing from one of the `kvk:LineItemsIn{Consolidated,Separate}FinancialStatementsPlaceholder`
   domain-member trees, so its fact's dimensional context is invalid.
 
-## 6. FR-NL- / FG-NL- — Filing Rules / Filing Guidelines recap
+## 6. FR-NL- / FG-NL- — SBR Filing Rules / Filing Guidelines
 
 These rules are taxonomy-agnostic (they apply across NT generations
-unless deprecated). The most common ones:
+and across SBR channels — KvK, Belastingdienst, DNB). The high-frequency
+**rule families** are:
 
-| Code | Rule |
+| Family | Topic |
 |---|---|
-| FR-NL-1.01 / 1.05 | Encoding: UTF-8, no BOM, correct XML declaration |
-| FR-NL-2.03 | Non-numeric facts carry `xml:lang` |
-| FR-NL-2.04 | `link:schemaRef` placement and count |
-| FR-NL-3.04 | `xbrli:forever` periods forbidden |
-| FR-NL-5.06 | `precision` attribute forbidden — use `decimals` |
-| FR-NL-5.07 | `xsi:nil="true"` on a reported fact forbidden — omit the fact instead |
-| FR-NL-6.01 | Footnotes — model and arcroles |
+| Encoding | UTF-8, no BOM, correct XML declaration |
+| Language | Non-numeric facts carry `xml:lang` for the report language |
+| `link:schemaRef` | Placement and count |
+| Period | `xbrli:forever` periods forbidden; times stripped from instant periods |
+| Numeric attributes | `precision` forbidden — use `decimals`; `decimals="INF"` not allowed for rounded values |
+| `xsi:nil` | `xsi:nil="true"` on a reported fact forbidden — omit the fact instead |
+| Footnotes | Specific model and arcroles |
 
-The newer NL-KVK.* code family in §5 layers KvK-specific Filing Rules
-on top of these. Re-check both code families when validating.
+The exact code numbers (`FR-NL-x.xx`, `FG-NL-x.xx`) and the rule prose
+live in the operative Filing Rules / Filing Guidelines PDF on
+sbr-nl.nl. When a validator log cites a code, look the code up in the
+PDF rather than paraphrasing from memory — the numbering has shifted
+between releases, and a renumbered rule is no longer the rule you
+remembered.
+
+The KvK Business Rules (NL-KVK.* family in §5) layer
+KvK-specific validations on top of these. Re-check both code families
+when validating.
 
 ## 7. The auditor's report (controleverklaring) in the package
 
 For Middelgroot and Groot entities subject to art. 2:393 BW, the
 auditor's report is **part of the deposit**, not optional commentary.
-SBR Dutch GAAP 2025 treats it as a **separate tagged iXBRL document**
-inside the report package, not as a section of the main
-financial-statements XHTML:
+The 2025 KvK taxonomy provides two related concepts:
+
+- **`bw2-titel9:AuditorsReportFinancialStatements`** (`xsd:element`
+  declared in `bw2-titel9-cor.xsd`) — the text-block concept carrying
+  the auditor's report content. Tagged as `ix:nonNumeric escape="true"`
+  in iXBRL with the controleverklaring's XHTML as the fact value.
+- **`kvk:AuditorsReportFinancialStatementsPresent`** (declared in
+  `kvk-cor.xsd`) — a boolean flag asserting whether the auditor's
+  report is included in the deposit. In the operative FY2025 Groot
+  example package this fact is tagged in the KvK-metadata iXBRL
+  document with `format="ixt:fixed-true"` and value `"Ja"` when
+  present.
+
+The xBRI Report Package shape observed in the operative FY2025 Groot
+NL-GAAP example:
 
 ```text
-report-package.zip
+report-package.xbri
 ├── META-INF/
-│   ├── taxonomyPackage.xml
-│   └── reports.json                              # may list both reports
-└── reports/
-    ├── <kvk>-<period>-annual-accounts.xhtml      # primary statements
-    └── <kvk>-<period>-auditor-report.xhtml       # controleverklaring
+│   ├── catalog.xml
+│   ├── reportPackage.json          # {"documentInfo":{"documentType":
+│   │                                #   "https://xbrl.org/report-package/2023/xbri"}}
+│   └── taxonomyPackage.xml
+├── reports/
+│   └── jaarrapportage-<period>/
+│       ├── jaarrapportage-<period>-nl.xhtml   # primary statements (annual report)
+│       └── kvk-<period>-nl.xhtml              # KvK filing metadata
+│                                              # carries kvk:AuditorsReportFinancialStatementsPresent
+└── <filer-domain>/xbrl/<period>/              # filer's extension taxonomy
+    ├── <filer>-<period>.xsd
+    ├── <filer>-<period>_cal.xml
+    ├── <filer>-<period>_def.xml
+    ├── <filer>-<period>_lab-nl.xml
+    └── <filer>-<period>_pre.xml
 ```
 
-The auditor's report XHTML carries an escaped text-block fact, typically
-`bw2-titel9:AuditorsReportFinancialStatements` (`ix:nonNumeric
-escape="true"`), and a boolean presence flag
-`kvk:AuditorsReportFinancialStatementsPresent` in the primary
-document. Reviewer checks:
+Reviewer checks:
 
-- The presence flag is `true` when the auditor's report XHTML is
-  included in the package, and `false` (or omitted, if the rule
-  allows) when it is not.
+- The package uses `META-INF/reportPackage.json` (xBRI 2023) or
+  `META-INF/reports.json` (Report Packages 1.0) — both are present in
+  the wild. Single-file iXBRL deposits without a manifest are not
+  acceptable for KvK Groot.
+- The `kvk:AuditorsReportFinancialStatementsPresent` flag matches the
+  filer's actual situation (`Ja` when the controleverklaring is in the
+  deposit; `Nee` when it is legitimately absent — e.g. art. 2:403 BW
+  group-subsidiary exemption, or a Klein/Micro entity).
+- When the controleverklaring text is included, the
+  `bw2-titel9:AuditorsReportFinancialStatements` fact's escaped XHTML
+  value preserves table structure, headings, signature block, date,
+  and auditor identification. The escaped XHTML *is* the fact value;
+  a screenshot is not.
 - The auditor's report concept appears in **some** presentation link in
-  the extension — orphaned-tagged facts trip `ESEF.3.4.6` equivalents
-  in `validate/NL`.
-- The escaped XHTML preserves table structure, headings, signature
-  block, date, and auditor identification. The escaped XHTML *is* the
-  fact value; a screenshot is not.
+  the extension — orphaned-tagged facts trip `validate/NL`
+  equivalents of `ESEF.3.4.6.UsableConceptsNotIncludedInPresentationLink`.
 - For art. 2:403 BW group-subsidiary exemption filings, the absence of
   the auditor's report on a Groot entity is not automatically wrong —
   cross-check the management report / 403-statement before flagging.
+  The 403-exemption KvK example package on sbr-nl.nl
+  (`403_voorbeeld-2025-12-31-nl.xbri`) shows the canonical pattern.
 
 ## 8. Presentation linkbase — what KvK reviewers actually look at
 
@@ -311,21 +415,25 @@ This is the area where converters drift fastest from review expectation.
 
 ## 9. Recurring Dutch concept choices that are syntactically valid but wrong
 
-Arelle accepts these because they exist in NT20; the auditor doesn't.
+Arelle accepts these because they exist somewhere in the operative DTS;
+the auditor doesn't.
 
 | Wrong | Right | Why it matters |
 |---|---|---|
-| `rj:Creditors` for trade payables | `bw2-titel9:TradePayablesCurrent` | `Creditors` is a broad RJ fallback covering all amounts owed; trade payables is a Title 9 line item. Using the broad concept loses the disclosure detail Title 9 requires. |
-| `bw2-titel9:InvestmentsInParticipatingInterests` on a separate-scope statement | `bw2-titel9:InvestmentsInParticipatingInterestsInGroupCompanies` | The general concept includes minority interests; the in-group-companies concept is the parent's holdings in its consolidated subsidiaries — a different financial fact. |
-| `rj:TreasurySharesMovement` on financing-activity rows in the cash flow | The specific bw2-titel9 / rj movement concept | `TreasurySharesMovement` is the equity-side change; cash spent on treasury shares is a separate financing-activity outflow. |
-| `bw2-titel9:Result` (does not exist) | `rj:Result` | Plausible-from-memory QName that is unbound. See `validation.md` §6 item 26: `ix11.12.1.2:missingReferences` follows. |
-| `rj:PayablesBanksCurrent` | `bw2-titel9:PayablesBanksCurrent` | Right local name, wrong prefix. Unbound concept. |
+| `rj:Creditors` for trade payables | `bw2-titel9:TradePayablesCurrent` (or `TradePayablesNoncurrent`) | Both concepts exist. `rj:Creditors` is a broad RJ fallback covering all amounts owed; `bw2-titel9:TradePayables*` is the Title 9 line item. Using the broad concept loses the disclosure detail Title 9 requires. |
+| `rj:Result` used as a generic profit/loss line | The specific Title 9 income-statement concept (e.g. `bw2-titel9:NetResultAfterTax` for total result; `bw2-titel9:ResultBeforeTax`; the appropriate `rj:*` for movements) | Both `bw2-titel9:Result` and `rj:Result` exist as concepts, but neither is "the" result line for a Title 9 income statement. Pick the specific concept the statement reports, not the broad fallback. |
+| `rj:TreasurySharesMovement` on financing-activity rows in the cash flow | The specific bw2-titel9 / rj movement concept | `rj:TreasurySharesMovement` is the equity-side movement; cash spent on treasury shares is a separate financing-activity outflow. |
+| `rj:PayablesBanksCurrent` | `bw2-titel9:PayablesBanksCurrent` | `rj:PayablesBanksCurrent` does not exist; the concept lives under `bw2-titel9:`. Right local name, wrong prefix → unbound fact. |
+| `bw2-titel9:InvestmentsInParticipatingInterests` as a flat line item | The typed-dimension architecture: `bw2-titel9:InvestmentsInParticipatingInterestsTypedAxis` with member; the substantive concepts are typed-dimension members, not a single flat concept | Title 9 captures participating interests as a typed dimension, not as a single flat line. Tagging a flat concept that doesn't exist as a non-dimensional concept will be unbound. Verify the actual axis usage in the example annual reports on sbr-nl.nl. |
 
 When reviewing a KvK iXBRL package, run a per-concept namespace check:
 every fact's QName must resolve to a concept declared in (or imported
-into) the operative DTS. Use `arelleCmdLine ... --saveInstance` to
+into) the operative DTS. The exact prefix-to-URI bindings used by FY2025
+KvK NL-GAAP filings are catalogued in §1; verify each tagged fact's
+prefix against that table. Use `arelleCmdLine ... --saveInstance` to
 extract the underlying XBRL instance and grep for missing-reference
-warnings before any content review.
+warnings (`ix11.12.1.2:missingReferences`, `xbrl.3.5.4:hrefIdNotFound`)
+before any content review.
 
 ## 10. Sign and balance — the Dutch flavour
 
