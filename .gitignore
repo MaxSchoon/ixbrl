@@ -1,6 +1,9 @@
-# Local agent configuration (machine-specific)
+# Local agent configuration (machine-specific) — never publish
 .agents/
 .claude
+
+# Python virtual environments
+.venv/
 
 # Python bytecode artifacts
 __pycache__/
