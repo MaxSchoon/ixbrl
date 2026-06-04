@@ -219,9 +219,14 @@ remote fetches against `nltaxonomie.nl` are a recurring source of
 flaky validation. See `references/nl-sbr.md` §12.
 
 **Validator / review:** Use `--plugins validate/NL` with the
-disclosure system matching the NT generation in the report, `--calc
-c10` for the normative KvK calculation verdict, and the end-to-end
-review checklist in `references/nl-sbr.md` §13.
+disclosure system matching the NT generation in the report. For SBR
+Dutch GAAP 2025 work prefer `--calc c11r` (Calc 1.1 — handles iXBRL
+duplicate facts and surfaces the dual-statement cross-scope
+inconsistencies that Calc 1.0 hides), then run `--calc c10`
+separately as the formal deposit-acceptance check, since NT20 Filing
+Rules still list XBRL 2.1 as the normative calculation basis. End-
+to-end review checklist in `references/nl-sbr.md` §13; calculation-
+verdict reasoning in §4.2.
 
 **Download:**
 - https://www.sbr-nl.nl/werken-met-sbr/taxonomie/documentatie-nederlandse-taxonomie

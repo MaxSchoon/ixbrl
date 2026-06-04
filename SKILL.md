@@ -249,12 +249,17 @@ prior being clean.
    For ESEF, IFRS vs national-GAAP issuer drives which extension
    patterns are normal.
 3. **Run validation in the operative profile, with calculations on
-   the regulator's normative basis.** Standard validation pipeline
-   below. For SBR Dutch GAAP this means `--calc c10` (KvK normative,
-   §4.2 of `nl-sbr.md`); for ESEF run `--calc c11r` if the issuer's
-   taxonomy has Calc 1.1 arcroles, else `c10`; for SEC EFM use
-   the EDGAR plugin defaults. Capture **all** messages, including
-   warnings; some Filing Rules surface as warnings in Arelle.
+   the right basis.** Standard validation pipeline below. For SBR
+   Dutch GAAP 2025, prefer `--calc c11r` as the substantive review
+   verdict (Calc 1.1 handles iXBRL's duplicate facts and surfaces the
+   dual-statement cross-scope inconsistencies that Calc 1.0 hides),
+   then run `--calc c10` separately as the formal deposit-acceptance
+   check — NT20 Filing Rules still list XBRL 2.1 as normative. See
+   `nl-sbr.md` §4.2 for why both passes earn their keep. For ESEF run
+   `--calc c11r` if the issuer's taxonomy has Calc 1.1 arcroles, else
+   `c10`; for SEC EFM use the EDGAR plugin defaults. Capture **all**
+   messages, including warnings; some Filing Rules surface as
+   warnings in Arelle.
 4. **Classify each finding by code prefix.** Route via the
    common-error decision tree. Distinguish real defects from known
    artefacts (dual-scope calc cross-binding, prefix-by-design noise,

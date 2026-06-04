@@ -116,7 +116,7 @@ primarily on calc 1.0 with rounding consistency rules layered on top
 via EFM checks; the IFRS Taxonomy began publishing 1.1 calc
 relationships from the 2024 release.
 
-**Dual statement sets — a Calc 1.1 trap that Calc 1.0 hides.** A
+**Dual statement sets — the cross-scope binding rule.** A
 calculation network lives in an extended-link role, but the link role
 only *groups* the arcs; it does **not** restrict which contexts they
 apply to. A summation-item network is evaluated for **every** context in
@@ -129,23 +129,39 @@ concepts — `bw2-titel9:Assets`, `AssetsCurrent`, `Liabilities`,
 contexts (and vice versa), where its children follow a different
 structure. Calc 1.1 round-to-nearest reports these as
 `calc11e:inconsistentCalculationUsingRounding` (it binds whenever *some*
-contributing items are present and the present items don't sum), whereas
-Calc 1.0 typically **skips** the binding (it requires *all* contributing
+contributing items are present and the present items don't sum); Calc
+1.0 typically **skips** the binding (it requires *all* contributing
 items present). The result: a filing can be clean under `--calc c10`
 and show a dozen+ cross-scope inconsistencies under `--calc c11r`.
 
-This is **inherent to dual full-tagging** and is not removable without
-mis-tagging (you cannot invent a separate-scope subtotal that does not
-exist). Resolve it by validating with the **regulator's actual calc
-profile**: the SBR Filing Rules (NT20) list **XBRL 2.1** — i.e. Calc 1.0 —
-as the normative calculation basis (Calculations 1.1 is *not* referenced,
-and Calculations 2.0 has only a 2019 requirements note, no specification),
-so run `arelleCmdLine ... --calc c10` for the authoritative KvK verdict and
-treat the `c11r` cross-scope warnings as diagnostic, not blocking. Before
-concluding a calc is "broken," classify each inconsistency: *in-scope*
-(role-scope == context-scope) is a real arithmetic gap to fix; *cross-
-scope* (role-scope != context-scope) is this artifact. Distinguish them
-by reading the `context …` and `link role …` fields of each message.
+The architecture is **inherent to dual full-tagging** and is not
+removable without mis-tagging (you cannot invent a separate-scope
+subtotal that does not exist). Two different verdicts are needed:
+
+- **For substantive review of an SBR Dutch GAAP 2025 filing — prefer
+  Calc 1.1** (`--calc c11r`). Calc 1.1 uses OIM rounding semantics
+  rather than XBRL 2.1 fact-level decimals, so iXBRL's routinely-
+  duplicate facts (the same number tagged in a summary and a
+  footnote) no longer fire false calc errors when their values agree
+  within their declared precision. The cross-scope warnings Calc 1.0
+  hides carry real information about the dual-statement architecture
+  — they're "diagnostic" in the sense that not every one is a defect
+  to fix, but they tell you the dual-scope structure is in play and
+  any *in-scope* inconsistency in the same log is a real arithmetic
+  gap.
+- **For the formal deposit-acceptance verdict — run Calc 1.0
+  separately** (`--calc c10`). NT20 Filing Rules list XBRL 2.1 as the
+  normative calculation basis (Calculations 1.1 is not referenced;
+  Calculations 2.0 had a 2019 requirements note only, no specification),
+  so the KvK acceptance test runs on Calc 1.0 semantics. The package
+  must pass Calc 1.0 as well — running both is cheap.
+
+Before concluding a calc is "broken," classify each inconsistency:
+*in-scope* (role-scope == context-scope) is a real arithmetic gap to
+fix; *cross-scope* (role-scope ≠ context-scope) is the dual-statement
+artefact — useful information that the dual-scope architecture is at
+work but not in itself a defect. Distinguish them by reading the
+`context …` and `link role …` fields of each message.
 
 ## 5. Common error categories with concrete codes
 
@@ -225,9 +241,13 @@ applies across SBR channels (KvK, Belastingdienst, DNB).
 | `FR-NL-5.07` | `xsi:nil="true"` on a reported fact | Generator nilled a fact instead of omitting it | Omit the fact entirely |
 | `FR-NL-6.01` | Footnote model / arcrole violation | Visual footnote not wired as `ix:footnote` | Use the iXBRL footnote model with fact-footnote arc |
 
-The KvK normative calculation basis is **Calc 1.0** — run `arelleCmdLine
-... --calc c10`. Calc 1.1 cross-scope warnings are diagnostic, not
-deposit blockers (see §4 above). For the dual-scope pattern, the
+For **SBR Dutch GAAP 2025 review work, prefer Calc 1.1** (`--calc
+c11r`) — it handles iXBRL duplicate facts and dimensional alignment
+correctly and surfaces the dual-statement cross-scope inconsistencies
+Calc 1.0 hides. Run `--calc c10` separately as the formal
+deposit-acceptance check, because NT20 Filing Rules list XBRL 2.1 as
+the normative basis. See §4 above for the full discussion of which
+calculation verdict to apply when. For the dual-scope pattern, the
 auditor's report as a separate iXBRL document in the package, the
 per-fiscal-year cheatsheet, the size-class entry points, and the
 recurring deprecated-concept choices, see `references/nl-sbr.md`.

@@ -69,7 +69,8 @@ Do not apply 2026 rules to a 2024 filing.
 | Notes block-tagging required for KvK Dutch GAAP | **FY2026** (preview taxonomies live earlier) | For FY2025 and earlier KvK Dutch GAAP filings, notes block-tagging is **not** required and emitting it can break presentation parity. Watch for `kvk-inline-2025-preview` vs the operative entry point. |
 | ESEF block-tagging for AFM (listed) IFRS notes | FY2022 | Distinct from KvK above. AFM listed AFRs follow ESMA Annex II Table 2, not KvK. |
 | Auditor's report (controleverklaring) required in package | Middelgroot + Groot, always (article 2:393 BW) | Klein/Micro: not required. art. 2:403 BW: group subsidiaries may be exempt — its absence on a Groot subsidiary is not automatically wrong. |
-| SBR Filing Rules calculation basis | XBRL 2.1 / Calc 1.0 throughout | NT20 Filing Rules still list XBRL 2.1 as normative; Calc 1.1 is diagnostic, not blocking. Calc 2.0 had a 2019 requirements note only, no specification. |
+| SBR Filing Rules calculation basis (formal) | XBRL 2.1 / Calc 1.0 — listed as normative by NT20 Filing Rules | Calc 1.1 is not addressed by NT20 Filing Rules (neither required nor forbidden). Calc 2.0 had a 2019 requirements note only, no specification. |
+| Calculation basis for SBR Dutch GAAP 2025 review work (preferred) | **Calc 1.1** (`--calc c11r`) | Calc 1.1 uses OIM rounding semantics — it handles iXBRL's routinely-duplicate facts correctly and surfaces the dual-statement cross-scope inconsistencies that Calc 1.0 silently hides. Use it as the substantive review verdict; run Calc 1.0 separately as the final deposit-acceptance check, since that is what KvK formally validates against (§4.2). |
 | `validate/NL` disclosure system | Per NT release | Run `arelleCmdLine --plugins validate/NL --disclosureSystem` matching the NT generation in the report. |
 
 When uncertain, **state the rule version you are applying** before
@@ -129,32 +130,61 @@ domain-member arc. Treat dual-scope placeholder membership and the
 mixed-scope ELR as derived from one source of truth; never patch one
 without updating the other.
 
-### 4.2 Calculation linkbase scope-bleed
+### 4.2 Calculation linkbase scope-bleed — and why Calc 1.1 is preferred for review
 
 A `link:calculationLink` is grouped by extended-link role but is **not**
 context-scoped — XBRL 2.1 binds every contributing item present in
 **every** context where the summation concept also has a fact. So a
 "BalanceSheetConsolidated" network binds against separate contexts too,
 where the children may legitimately differ. Under Calc 1.1 round-to-
-nearest semantics, this produces
-`calc11e:inconsistentCalculationUsingRounding` warnings that look like
-arithmetic errors but are role-vs-context artefacts.
+nearest semantics this surfaces as
+`calc11e:inconsistentCalculationUsingRounding`; under Calc 1.0 the
+binding is typically *skipped* (it requires *all* contributing items
+present), so the same architectural fact stays invisible.
 
-The KvK normative basis is **Calc 1.0** (XBRL 2.1). Run:
+**For SBR Dutch GAAP 2025 review work, prefer Calc 1.1 (`--calc c11r`).**
+The reasons:
+
+- Calc 1.1 uses OIM rounding semantics rather than XBRL 2.1
+  fact-level decimals, so iXBRL's routinely-duplicate facts (the same
+  number tagged in a summary and a footnote) no longer produce false
+  calc errors when their values agree within their declared precision.
+- The cross-scope inconsistencies Calc 1.0 hides are real information
+  about the dual-statement architecture. "Diagnostic" does not mean
+  "noise" — it means the inconsistency does not need to be fixed *if*
+  it is a cross-scope artefact, and it does need to be fixed if it
+  isn't.
+- The IFRS Accounting Taxonomy began publishing Calc 1.1 relationships
+  from the 2024 release; SBR Dutch GAAP filings that import IFRS
+  concepts (KvK IFRS entry points, AFM ESEF) are effectively already
+  operating in a Calc 1.1 world for those concepts.
+
+The formal verdict, however, is Calc 1.0. NT20 Filing Rules list XBRL
+2.1 as the normative calculation basis and do not address Calc 1.1.
+For a deposit-acceptance check, run Calc 1.0 separately and confirm
+the file passes it; for the substantive review, run Calc 1.1 first.
 
 ```bash
+# Primary review pass — preferred for substantive content review
+arelleCmdLine --plugins inlineXbrlDocumentSet|validate/NL \
+              --calc c11r \
+              --packages <NT package>.zip \
+              -f report-package.zip --validate
+
+# Deposit-acceptance check — what KvK validates against (NT20 FR)
 arelleCmdLine --plugins inlineXbrlDocumentSet|validate/NL \
               --calc c10 \
               --packages <NT package>.zip \
               -f report-package.zip --validate
 ```
 
-Treat Calc 1.1 cross-scope inconsistencies as diagnostic only, not as
-deposit blockers. Before concluding a calc network is broken, classify
-each inconsistency by reading the `context …` and `link role …` fields:
+Before concluding a calc network is broken, classify each
+inconsistency by reading the `context …` and `link role …` fields:
 *in-scope* (role-scope == context-scope) is a real arithmetic gap to
-fix; *cross-scope* is the dual-statement artefact. See
-`validation.md` §4 for the full discussion.
+fix; *cross-scope* (role-scope ≠ context-scope) is the dual-statement
+artefact — useful information that the dual-scope architecture is in
+play, but not in itself a defect. See `validation.md` §4 for the full
+binding-rule discussion.
 
 ### 4.3 Per-scope value-correctness — what Arelle won't catch
 
@@ -343,20 +373,22 @@ or pick up the wrong NT generation. For deposit-quality validation:
    local files only:
 
 ```bash
+# Primary review pass — Calc 1.1 preferred (see §4.2)
 arelleCmdLine \
   --plugins inlineXbrlDocumentSet|validate/NL \
   --disclosureSystem nl-fr-nt20-kvk-ifrs-2025 \
   --packages NT20-20251212.zip,kvk-nt20-fr-ifrs-2025.zip \
-  --calc c10 \
+  --calc c11r \
   -f report-package.zip --validate \
   --internetConnectivity offline
 ```
 
 Adapt the disclosure system name to the operative one in your Arelle
 build (it changes per NT generation; `arelleCmdLine
---showEnvironment` lists what's registered). When validation is
-slow or intermittent, suspect remote-taxonomy resolution before
-suspecting the package.
+--showEnvironment` lists what's registered). Run the same command a
+second time with `--calc c10` for the formal deposit-acceptance
+verdict. When validation is slow or intermittent, suspect
+remote-taxonomy resolution before suspecting the package.
 
 ## 13. A pragmatic NL review pass — in order
 
@@ -369,9 +401,14 @@ walk this in order. Each step depends on the prior being clean.
 2. **Pin the entity-size class.** §3. The size class changes which
    absences count as defects (auditor's report, certain disclosures).
 3. **Run validation in the operative profile, offline.** §12. Capture
-   the full log, including warnings. Use `--calc c10` for the
-   normative KvK calc verdict; treat any `calc11r` cross-scope
-   warning as diagnostic, not blocking.
+   the full log, including warnings. Run **Calc 1.1** (`--calc c11r`)
+   first as the substantive review verdict (it handles iXBRL
+   duplicate facts and surfaces the dual-statement cross-scope
+   inconsistencies Calc 1.0 hides). Run **Calc 1.0** (`--calc c10`)
+   separately as the formal deposit-acceptance check, since NT20
+   Filing Rules list XBRL 2.1 as the normative basis (§4.2).
+   Classify any cross-scope inconsistency by role-vs-context before
+   treating it as a defect.
 4. **Classify each finding.** Route by code prefix using `SKILL.md`'s
    common-error decision tree. Distinguish dual-scope artefacts (§4.2)
    from real arithmetic defects, and rule violations from style
