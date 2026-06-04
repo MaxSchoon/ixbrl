@@ -203,7 +203,36 @@ by reading the `context …` and `link role …` fields of each message.
 | `EFM.6.05.48` | Fact with `decimals="INF"` and a non-exact textual representation | Filer rounded but kept INF | Lower `decimals` to match the rendered scale |
 | `EFM.6.08.x` | Linkbase validations for industry taxonomies (`cef`, `ecd`, `oef`, `rxp`, `vip`, `sro`, `spac`) | Wrong relationships for the relevant SEC industry overlay | Repair presentation/calculation/definition arcs against the industry config |
 
-### 5.3 Core XBRL 2.1 and Inline XBRL
+### 5.3 SBR Dutch GAAP / KvK (NL-KVK.* and FR-NL- / FG-NL-)
+
+The Dutch filing path layers KvK-specific Filing Rules supplements
+(NL-KVK.*) on top of taxonomy-agnostic SBR Filing Rules (FR-NL-).
+The KvK supplement is normative for trade-register deposits; FR-NL-
+applies across SBR channels (KvK, Belastingdienst, DNB).
+
+| Code | Meaning | Typical root cause | Fix |
+|---|---|---|---|
+| `NL-KVK.4.4.2.5.extensionTaxonomyLineItemNotLinkedToDesignatedPlaceholder` | Dual-scope extension concept missing from the `MixedScopeFinancialStatementsCompatibility` ELR | Concept added to consolidated **and** separate placeholders without updating the compatibility ELR | Add the missing domain-member arc; treat all three memberships as derived from one source predicate |
+| `NL-KVK.4.4.6.1.usableConceptsNotAppliedByTaggedFacts` | Concept present in the extension presentation/definition linkbase but never tagged in the instance | Over-inclusive linkbase (often a concept left behind after a tagging redesign) | Either tag the missing fact or remove the unused concept from the linkbase |
+| `NL.NL-KVK.3.4.1.3.transformableElementIncludedInHiddenSection` | Numeric / transformable fact emitted into `ix:hidden` instead of visible | Convenience hiding of facts that don't fit visually | Render the fact visibly; only non-transformable required-metadata facts belong in `ix:hidden` |
+| `NL-KVK.*.missingRelevantPlaceholder` | Primary-statement root is an extension abstract, not an official Title 9 / RJ placeholder | Generator emitted its own abstract root | Replace the root with `bw2-titel9:*Title` or `rj:CashFlowStatementTitle` etc. |
+| `NL-KVK.*.extensionTaxonomyWrongFilesStructure` | Calculation linkbase exists but is empty (no `link:calculationArc`) | Empty calc linkbase shipped as a placeholder | Populate the calc linkbase or remove the file from the package |
+| `FR-NL-1.01` / `1.05` | Encoding violation | Non-UTF-8 source, BOM, or wrong XML declaration | Re-serialise as UTF-8 without BOM |
+| `FR-NL-2.03` | Non-numeric fact missing `xml:lang` | Translation block emitted without lang | Add `xml:lang="nl"` (or the report language) |
+| `FR-NL-2.04` | `link:schemaRef` placement / count violation | Multiple or mis-placed `schemaRef` elements | Single `schemaRef` in the operative location |
+| `FR-NL-3.04` | `xbrli:forever` period used | Forever periods are forbidden in SBR | Use bounded `xbrli:duration` or `xbrli:instant` |
+| `FR-NL-5.06` | `precision` attribute on a numeric fact | Carried over from non-SBR templates | Replace with `decimals` |
+| `FR-NL-5.07` | `xsi:nil="true"` on a reported fact | Generator nilled a fact instead of omitting it | Omit the fact entirely |
+| `FR-NL-6.01` | Footnote model / arcrole violation | Visual footnote not wired as `ix:footnote` | Use the iXBRL footnote model with fact-footnote arc |
+
+The KvK normative calculation basis is **Calc 1.0** — run `arelleCmdLine
+... --calc c10`. Calc 1.1 cross-scope warnings are diagnostic, not
+deposit blockers (see §4 above). For the dual-scope pattern, the
+auditor's report as a separate iXBRL document in the package, the
+per-fiscal-year cheatsheet, the size-class entry points, and the
+recurring deprecated-concept choices, see `references/nl-sbr.md`.
+
+### 5.4 Core XBRL 2.1 and Inline XBRL
 
 | Code | Meaning | Typical root cause | Fix |
 |---|---|---|---|

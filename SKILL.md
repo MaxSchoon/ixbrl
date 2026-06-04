@@ -21,40 +21,38 @@ of the right manual and encodes patterns experts recognise on sight.
    which jurisdiction and which taxonomy. Common combinations:
    - EU listed issuer, IFRS consolidated AFR → **ESEF**, see `references/esef.md`
    - US SEC registrant → **EDGAR / EFM**, see `references/sec-edgar.md`
-   - Dutch entity (KvK deposit or AFM listed) → **NL Taxonomie / SBR**, see the NL section in `references/taxonomies.md`
+   - Dutch entity (KvK deposit or AFM listed) → **NL Taxonomie / SBR**, see `references/nl-sbr.md` (and the NL section of `references/taxonomies.md` for entry-point catalogue)
    - UK statutory accounts or HMRC tax → **UK FRC Suite**, see `references/taxonomies.md`
    - Bank or insurer supervisory return → **EBA / EIOPA DPM**, see `references/taxonomies.md`
    - IFRS digital financial statements (no jurisdictional overlay) → **IFRS Accounting Taxonomy**, see `references/taxonomies.md`
-2. **Pick the operative taxonomy version.** ESEF 2024 ≠ ESEF 2025;
-   FASB 2024 GRT ≠ 2025 GRT; FRC 2025 Suite ≠ 2026 Suite. Confirm the
-   financial-year boundary against `references/taxonomies.md` before
-   tagging.
+2. **Pin the operative rules to the reporting period — bi-temporal.**
+   Taxonomies and filing rules are *versioned per year*, and the rules
+   in force when a report was prepared are not necessarily the rules in
+   force today. Before reviewing or validating, state explicitly:
+   - **Which financial year** the report covers (use the period in
+     `<xbrli:period>`, not today's date).
+   - **Which taxonomy generation and version** applied for that year
+     (ESEF 2024 ≠ ESEF 2025; NT19 ≠ NT20; FASB 2024 GRT ≠ 2025 GRT;
+     FRC 2025 Suite ≠ 2026 Suite; EBA Reporting Framework 4.2 ≠ 4.4).
+   - **Which Filing Rules / Filer Manual edition** applied (ESEF
+     Reporting Manual editions, SEC EDGAR Filer Manual volume/version,
+     SBR Filing Rules NT-generation supplement).
+   Confirm against `references/taxonomies.md` (entry-point catalogue),
+   `references/nl-sbr.md` §2 (Dutch bi-temporal cheatsheet), and the
+   regulator's published cut-in dates. **Do not apply current-year
+   rules retroactively to a prior-year filing** — e.g. KvK Dutch GAAP
+   notes block-tagging is a FY2026 obligation, not a FY2024 one, and
+   declaring its absence on a FY2024 deposit a defect would itself be
+   the defect.
 3. **Choose your validation profile.** Use `scripts/validate_with_arelle.sh
    <file> <profile>` (`esef`, `efm`, `ukfrc`, `hmrc`, `core`). Run
    `core` first to isolate XBRL 2.1 violations from jurisdictional ones.
 4. **Prepare an Arelle iXBRL Viewer for review.** When reviewing a
    local iXBRL file or document set, generate a viewer with the Arelle
-   iXBRL Viewer plugin before doing the content-level review:
-
-   ```bash
-   python3 /path/to/Arelle/arelleCmdLine.py \
-     --plugins=/abs/path/to/iXBRLViewerPlugin \
-     -f report.xhtml \
-     --save-viewer report-viewer.xhtml \
-     --viewer-url https://cdn.jsdelivr.net/npm/ixbrl-viewer@<version>/iXBRLViewerPlugin/viewer/dist/ixbrlviewer.js
-   ```
-
-   For Inline XBRL document sets, also load `inlineXbrlDocumentSet`,
-   pass the document-set JSON to `-f`, and write `--save-viewer` to an
-   output directory. Serve document-set or stub viewers over HTTP; the
-   viewer docs warn that browser security restrictions prevent loading
-   them directly from `file:` URLs. Pin the viewer JavaScript to the
-   same major version, and the same or later minor version, as the
-   plugin that prepared the viewer metadata. Use a local or downloaded
-   `ixbrlviewer.js` instead of the CDN when external network fetches are
-   not acceptable. If the source XHTML must remain unchanged, use stub
-   viewer mode when all facts and footnotes already have `id`
-   attributes.
+   iXBRL Viewer plugin before doing the content-level review. The
+   full preparation command (single file, document set, stub viewer
+   mode), version-pinning guidance, and the per-step review checklist
+   live in `references/viewer.md`.
 5. **Use the live filing corpus for real examples.** For ESEF, UKSEF,
    and Ukraine filings, use <https://filings.xbrl.org/> before and
    after authoring:
@@ -89,10 +87,11 @@ of them up front.
 | ESEF mandatory block-tag list (Annex II Table 2), block-tag selection guidance, `ix:continuation` for split disclosures | `references/esef-block-tags.md` |
 | Converting a PDF / Word / accounts-production document to faithful iXBRL — preserving hierarchy, abstracts, dates, completeness; the content-level review pass | `references/conversion.md` |
 | Real-world Inline XBRL examples by country, including Netherlands (`NL`) and other ESEF/UKSEF markets; viewer output, xBRL-JSON, report packages, and validation messages | <https://filings.xbrl.org/> and API docs at <https://filings.xbrl.org/docs/api> |
-| Preparing and using the Arelle iXBRL Viewer for interactive review, including `--save-viewer`, document sets, stub viewer mode, review mode, fact inspector, search/filtering, table export, and calculation mode | Docs: <https://arelle-ixbrl-viewer.readthedocs.io/en/latest/> and user guide at <https://arelle-ixbrl-viewer.readthedocs.io/en/latest/user_guides/user_guide.html>. Source: <https://github.com/Arelle/ixbrl-viewer> |
+| Preparing and using the Arelle iXBRL Viewer for interactive review — `--save-viewer`, document sets, stub viewer mode, review mode, fact inspector, search/filtering, table export, Calc 1.1 toolbar | `references/viewer.md` |
 | Which taxonomies exist, current versions, who issues them, who must file | `references/taxonomies.md` |
 | ESEF anchoring, block tagging, Reporting Manual rules, NCAs (AFM, BaFin, AMF, CONSOB, CNMV, FSMA), `ESEF.*` codes | `references/esef.md` |
 | SEC iXBRL phase-in, EDGAR Filer Manual sections, DEI / SRT / US-GAAP, `EFM.6.05.*` codes, Pay-Versus-Performance, cybersecurity tagging | `references/sec-edgar.md` |
+| SBR Dutch GAAP / KvK / AFM filings — NT20 entry points by size class, NL-KVK.* / FR-NL- codes, the dual-scope (consolidated + separate) pattern and mixed-scope ELR, the auditor's report inside the package, recurring deprecated-concept choices, bi-temporal cheatsheet, end-to-end review checklist | `references/nl-sbr.md` |
 | Arelle CLI, plugins, formula linkbase, Calc 1.1, full anti-pattern list, ESEF + EFM + core XBRL error codes with fixes | `references/validation.md` |
 
 ## GitHub source repositories to use
@@ -187,85 +186,118 @@ The mistake runs both ways. `ix:hidden` is *under*-used as often as it is abused
 
 ## Converting a source document to iXBRL
 
-Most iXBRL is not authored from scratch — it is *converted* from a
-finished PDF, Word file, or accounts-production output. Conversion is
-where filings quietly go wrong, because a converted file can pass every
-validator and still misrepresent the financial statements: validators
-check syntax and DTS wiring, not whether the iXBRL is *faithful* to the
-document a human prepared.
+Most iXBRL is *converted* from a finished PDF, Word, or
+accounts-production document, not authored from scratch. Conversion is
+where filings quietly go wrong: a converted file can pass every
+validator and still misrepresent the underlying financial statements,
+because validators check syntax and DTS wiring rather than fidelity to
+the source.
 
 If the task involves a conversion (or building a pipeline that does
-one), read `references/conversion.md`. The failures it guards against
-are the ones that look fine from a distance and fall apart up close:
-
-- **Flattened hierarchy.** Headings, groupings, and indentation are
-  information. Every visible heading maps to an **abstract concept**;
-  the presentation linkbase tree must mirror the statement's visual
-  structure. A flattened presentation linkbase is the structural
-  equivalent of deleting every heading from the printed accounts.
-- **Lost dates and columns.** Each column header is a context. The
-  balance-sheet date is a disclosure, not decoration — never let it
-  disappear because the converter only kept the numbers.
-- **Half-tagged statements.** A primary statement is fully tagged or
-  defective; a consumer cannot tell an omitted line from a missed one.
-  Walk every row *and* every column. The most-skipped facts are the
-  totals that feel "derived" — total equity / shareholders' equity,
-  result before tax. The statement of changes in equity is a *matrix*
-  (components × movements); tag every cell.
-- **Incomplete or sign-wrong calc trees.** Every subtotal needs a
-  summation network covering all its children. A calc `weight` is not a
-  free choice: XBRL 2.1 §5.1.1.2 ties its sign to the `balance`
-  attributes — same balance → `weight="1"`, opposite → `weight="-1"`.
-- **Reinvented labels.** Do not re-author labels for base-taxonomy
-  concepts; they already carry official labels. Author labels only for
-  extension concepts, and make each label the line-item wording *as it
-  reads in the source document* — a paraphrase breaks the audit trail.
-- **A toy test filing.** A single-page micro-entity statement with no
-  cash flow, no changes-in-equity matrix, and no extensions exercises
-  almost none of the hard parts. Validate pipelines against a
-  representative filing (full primary statements, comparatives,
-  extensions, anchoring, dimensions).
-
-After the validators are clean, do the **content-level review pass** in
-`references/conversion.md` §10 — read the rendered statements as a
-financial professional. That pass catches what no validator does.
+one), read `references/conversion.md`. It covers the recurring
+silent-failure patterns — flattened presentation hierarchy, lost
+column/period contexts, half-tagged primary statements (especially the
+changes-in-equity matrix), incomplete or sign-wrong calc trees,
+re-authored labels on base concepts, and toy test filings that exercise
+none of the hard parts. After validators are clean, do the
+**content-level review pass** at `references/conversion.md` §10 — read
+the rendered statements as a financial professional. That pass catches
+what no validator does.
 
 ## Reviewing with the Arelle iXBRL Viewer
 
-Use the Arelle iXBRL Viewer as the visual review workbench, not as a
-replacement for validation. It prepares an iXBRL file by adding a link
-to `ixbrlviewer.js` plus processed XBRL/taxonomy JSON, so the resulting
-viewer can expose embedded facts interactively in a browser. The source
-repository is <https://github.com/Arelle/ixbrl-viewer>; its README links
-to the same ReadTheDocs documentation and confirms the project consists
-of the Arelle plugin plus the JavaScript viewer application.
+The Arelle iXBRL Viewer is the **visual review workbench** that
+complements validation — it makes content-level defects visible that no
+validator catches (sign errors, scope mis-tagging, orphan presentation
+arcs, dimensional context drift). Validate first; review second.
 
-Review checklist:
+Generate a viewer for any iXBRL file or document set before doing the
+content pass, then walk the review checklist. See
+`references/viewer.md` for the full preparation command (single file,
+document set, stub viewer mode), the per-step review checklist (fact
+inspector, document summary, search filters, duplicate-fact cycle,
+Excel export, Calc 1.1 toolbar, review mode for drafts), and what the
+viewer does **not** catch (per-scope value mapping, fidelity to source
+document, entity-metadata correctness).
 
-- Turn on **Highlight XBRL Elements** to see every visible tagged fact;
-  namespace colours reveal which taxonomy or extension supplied each
-  concept.
-- Click facts and inspect concept, dimensions, date/range, value,
-  accuracy, scale, entity, labels, references, anchoring, calculations,
-  footnotes, and section placement in the fact inspector.
-- Use the document summary to compare fact counts, hidden fact counts,
-  concepts, dimensions, members, and included files against the expected
-  filing scope.
-- Use search and filters to find facts by taxonomy labels, references,
-  concept type, hidden/visible status, period, namespace, unit, scale,
-  dimensions, and calculation relationships.
-- Cycle duplicate fact locations when the inspector reports more than
-  one occurrence; inconsistent duplicate values are a filing defect, not
-  a display issue.
-- Export tagged tables to Excel when reviewing a table in a language the
-  reviewer does not read fluently; the export includes document
-  descriptions alongside concept and dimension labels.
-- Enable **Calculations v1.1** in the toolbar when the regulator accepts
-  Calc 1.1, then inspect calculation relationships for subtotal
-  completeness and sign errors.
-- For partially tagged or incomplete drafts, enable viewer review mode
-  with `--viewer-feature-review` or `?review=true`; it highlights
-  untagged numbers and dates instead of namespace-based fact colours.
+## Reviewing an existing iXBRL report package
+
+When a user hands you a `.zip` (or `.xbri`) report package and asks
+"please review this", the work is not "run Arelle and report what it
+says". Validators check syntax and DTS wiring; they do not check
+whether the iXBRL faithfully represents the underlying financial
+statements, whether it is tagged in the right scope, or whether the
+right rules were applied for the report's vintage. A package can pass
+every validator and still be defective in ways the regulator's
+downstream tooling — or the next reviewer — will catch.
+
+A disciplined review proceeds in this order. Each step depends on the
+prior being clean.
+
+1. **Pin the regime, period, taxonomy version, and entry point.** Read
+   the period from `<xbrli:period>`; do not assume "this year". Open
+   `META-INF/taxonomyPackage.xml` and `link:schemaRef` to confirm the
+   taxonomy generation and entry point. Apply bi-temporal reasoning
+   (the "When you load this skill, do this first" §2 above) — the
+   rules in force when this report was prepared may differ from
+   current rules. State the regime / period / version / entry point
+   explicitly before opening the file in earnest.
+2. **Pin the filer's classification.** For Dutch SBR, the entity-size
+   class (Micro / Klein / Middelgroot / Groot) changes which absences
+   count as defects — see `references/nl-sbr.md` §3. For SEC filings,
+   the filer category (LAF / AF / NAF / SRC) drives DEI requirements.
+   For ESEF, IFRS vs national-GAAP issuer drives which extension
+   patterns are normal.
+3. **Run validation in the operative profile, with calculations on
+   the regulator's normative basis.** Standard validation pipeline
+   below. For SBR Dutch GAAP this means `--calc c10` (KvK normative,
+   §4.2 of `nl-sbr.md`); for ESEF run `--calc c11r` if the issuer's
+   taxonomy has Calc 1.1 arcroles, else `c10`; for SEC EFM use
+   the EDGAR plugin defaults. Capture **all** messages, including
+   warnings; some Filing Rules surface as warnings in Arelle.
+4. **Classify each finding by code prefix.** Route via the
+   common-error decision tree. Distinguish real defects from known
+   artefacts (dual-scope calc cross-binding, prefix-by-design noise,
+   diagnostic-only cross-scope warnings). When in doubt, quote the
+   validator's log line verbatim and route on its leading code.
+5. **Verify concept binding.** Every fact's QName must resolve to a
+   concept declared in (or imported into) the operative DTS. A fact
+   tagged with a plausible-but-nonexistent QName carries no concept
+   semantics; downstream checks become meaningless. See `references/validation.md`
+   §6 item 26 (`ix11.12.1.2:missingReferences`).
+6. **Open the Arelle iXBRL Viewer and walk the report.** The viewer
+   makes content defects visible that no validator catches — see the
+   "Reviewing with the Arelle iXBRL Viewer" section above. At
+   minimum: highlight tagged facts, click each primary-statement
+   subtotal to read its calculation network, search for hidden facts,
+   and sample a dozen facts across statements to confirm period, unit,
+   decimals, scale, and dimensional context.
+7. **Content-level review of the rendered statements.** Read the
+   report as a financial professional would — does the balance
+   sheet balance, do the cash-flow categories reconcile, are sign
+   conventions consistent, do extension concepts make accounting
+   sense in context, do period-end metadata facts match the
+   statements they accompany. See `references/conversion.md` §10.
+8. **Package shape.** No `.DS_Store` / `__MACOSX/` at package root;
+   no `.html` files (must be `.xhtml`); `META-INF/taxonomyPackage.xml`
+   present and well-formed; for Report Packages 1.0, `reports.json`
+   present and consistent; for jurisdictions that require it, the
+   auditor's report packaged as a separate tagged iXBRL document
+   (Dutch SBR, see `references/nl-sbr.md` §7).
+
+For regime-specific review checklists, load:
+
+- **SBR Dutch GAAP / KvK / AFM** → `references/nl-sbr.md` (end-to-end
+  review pass at §13).
+- **ESEF (listed-issuer AFR)** → `references/esef.md`.
+- **SEC EFM** → `references/sec-edgar.md`.
+
+The output of a review is not "validates / does not validate". It is
+a categorised list: deposit-blockers, deposit-allowed-but-substantive
+defects, style/cosmetic defects, and known artefacts. Each finding
+quotes the evidence (validator code or rendered-document observation)
+and cites the rule it violates with version. That is the form a
+filer's preparer, an auditor, and the regulator can all act on.
 
 ## Standard validation pipeline
 
@@ -294,7 +326,8 @@ When the user shows you a validator error, route by code prefix:
 - `ESEF.3.x.*` → extension-taxonomy issue (anchoring, labels, link roles). Same references.
 - `EFM.6.05.*` → SEC iXBRL syntax/DEI/decimals issue. See `references/sec-edgar.md` §7 and `references/validation.md` §5.2.
 - `EFM.6.08.*` → SEC industry-overlay (ECD, RXP, OEF, CEF) linkbase issue.
-- `FR-NL-*` / `FG-NL-*` → Dutch SBR rule. The most common are encoding (1.01–1.05), missing `xml:lang` (2.03), `link:schemaRef` placement (2.04), `xbrli:forever` use (3.04), `precision` usage (5.06), `xsi:nil` on facts (5.07), footnotes (6.01).
+- `FR-NL-*` / `FG-NL-*` → SBR Filing Rules / Filing Guidelines (taxonomy-agnostic). The most common are encoding (1.01–1.05), missing `xml:lang` (2.03), `link:schemaRef` placement (2.04), `xbrli:forever` use (3.04), `precision` usage (5.06), `xsi:nil` on facts (5.07), footnotes (6.01). See `references/nl-sbr.md` §6 and `references/validation.md` §5.3.
+- `NL-KVK.*` → KvK-specific Filing Rules supplement (layered on top of FR-NL-). Recurring deposit blockers: `4.4.2.5` mixed-scope ELR missing for a dual-scope concept; `4.4.6.1` usable concepts not applied by tagged facts; `3.4.1.3` transformable element in `ix:hidden`. See `references/nl-sbr.md` §5 and §4 for the dual-scope pattern, and the duplicated/expanded table in `references/validation.md` §5.3.
 - `xbrl.5.2.5.2` → calculation inconsistency. Either fix the data or move to Calc 1.1 if the regulator accepts it. See `references/validation.md` §4.
 - `xbrldie:*` (instance-level) → dimensional context error. See `references/dimensions.md` §"Dimensional validity errors".
 - `xbrldte:*` (taxonomy/DTS-level) → hypercube/dimension/domain wiring error in the linkbases. See `references/dimensions.md` §"Dimensional validity errors".
@@ -378,3 +411,14 @@ Be honest. iXBRL has many regimes and they evolve. If a question concerns:
 - **`scripts/check_facts.py <ixbrl.xhtml>`** — pure-Python pre-flight sanity check. Catches: required attributes (`contextRef`, `unitRef`, `decimals`/`precision`), unresolved context/unit references, non-ISO-4217 currency measures, `decimals="INF"` abuse, broken continuation chains, inconsistent duplicate facts. Run before Arelle to surface cheap-to-detect errors fast.
 
 Both scripts are dependency-light (`arelle-release`, `lxml`) and CI-safe.
+
+## Editing this skill
+
+This file is loaded into agent runtimes with real size limits — Codex
+CLI caps project documentation files at 32 KiB by default and silently
+truncates beyond that, and Anthropic limits the YAML frontmatter
+`description` to 1024 characters. Before adding substantive content,
+prefer extending a file in `references/` (loaded only when this body
+points the agent at it) over expanding `SKILL.md`. See `CONTRIBUTING.md`
+§"Size discipline" for the full rules and the `wc -c` check to run
+before merging.

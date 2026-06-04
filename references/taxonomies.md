@@ -174,7 +174,10 @@ The Belastingdienst slice of NT20 (release `20251210.a`) was published
 29 August 2025 and applies to corporate income tax 2025, VAT 2026, and
 ICP 2026 filings. The definitive iXBRL annual-reporting taxonomies for
 fiscal year 2025 were published **12 December 2025** for filing with the
-KvK.
+KvK. The pairing of fiscal year → NT release → Filing Rules version
+matters bi-temporally — see the cheatsheet in `references/nl-sbr.md`
+§2 for the per-fiscal-year mapping, including which obligations cut in
+when (block-tagging FY2026, digital-deposit obligations by size class).
 
 **Architecture:** The NT layers downward — BW2 (Civil Code Book 2) is the
 core; RJ (Raad voor de Jaarverslaggeving) extends it for Dutch GAAP
@@ -184,6 +187,10 @@ deposits; AFM extends ESEF/IFRS for listed-issuer AFRs.
 **Common entry points:**
 - KvK Dutch GAAP entry points by company-size class: micro, small,
   medium, large (different disclosure depths under Title 9 Book 2 BW).
+  The size class is itself a tagged fact (`bw2-titel9:LegalEntitySize`)
+  and the entry point choice is concept-bearing — it changes which
+  concepts are in-DTS. See `references/nl-sbr.md` §3 for the
+  size-class table.
 - KvK IFRS entry points where the entity reports under IFRS but files at
   the trade register.
 - AFM ESEF / IFRS for Dutch listed-issuer AFRs (extends ESEF core).
@@ -196,11 +203,25 @@ deposits; AFM extends ESEF/IFRS for listed-issuer AFRs.
 - `kvk:` — KvK metadata and entity-size dimensions.
 - IFRS namespaces where applicable.
 
+A recurring source of "looks tagged, isn't bound" defects is picking
+the wrong namespace for a concept that exists in only one (e.g.
+`rj:PayablesBanksCurrent` vs `bw2-titel9:PayablesBanksCurrent`).
+`references/nl-sbr.md` §9 lists the high-frequency mis-bindings.
+
 **Filing scope:** All Dutch legal entities required to file annual
 accounts at the KvK; all VPB taxpayers; all AFR filers under ESEF for
 Dutch listed issuers.
 
-**Hosting:** Canonical schemas live at `nltaxonomie.nl`.
+**Hosting:** Canonical schemas live at `nltaxonomie.nl`. For
+deposit-quality validation, download the operative NT packages and
+pass them to Arelle via `--packages` so the DTS resolves offline —
+remote fetches against `nltaxonomie.nl` are a recurring source of
+flaky validation. See `references/nl-sbr.md` §12.
+
+**Validator / review:** Use `--plugins validate/NL` with the
+disclosure system matching the NT generation in the report, `--calc
+c10` for the normative KvK calculation verdict, and the end-to-end
+review checklist in `references/nl-sbr.md` §13.
 
 **Download:**
 - https://www.sbr-nl.nl/werken-met-sbr/taxonomie/documentatie-nederlandse-taxonomie

@@ -46,6 +46,39 @@ Do not paper over uncertainty. A documented gap is a contribution; a confident-s
 
 The skill must be usable in any agent harness that supports the skill convention. Do not mention specific harnesses, vendors, IDEs, or assistants by name. Use "the agent", "an AI agent", "the agent runtime", "the harness".
 
+## Size discipline (skill-runtime limits)
+
+Skills are loaded into agent runtimes that enforce real size limits. A
+bloated `SKILL.md` is silently truncated by some runtimes and crowds
+out other skills from the loadable index. Keep:
+
+- **YAML frontmatter `description`** ≤ **1024 characters** (Anthropic's
+  hard limit for SKILL.md descriptions). The description is what the
+  runtime reads to decide whether to load this skill at all, so the
+  budget is precious.
+- **`SKILL.md` body** ≤ **32 KiB (32,768 bytes)** and aim for **< 500
+  lines**. Codex CLI caps project documentation files at
+  `project_doc_max_bytes = 32 KiB` by default and silently truncates
+  beyond that; the cross-platform skill-authoring guidance treats 500
+  lines as the comfort ceiling.
+- **Aggregate skill-metadata budget** in Codex CLI is roughly **2% of
+  the model's context window**, or 8,000 characters when the window is
+  unknown. Long descriptions get truncated first when many skills are
+  installed, so keep this skill's description tight even though 1024
+  characters are allowed.
+
+If you need to add substantive content, prefer extending a file in
+`references/` over expanding `SKILL.md`. Reference files load only
+when the skill body points the agent at them (progressive disclosure),
+so they do not consume context until needed. Before merging an edit
+that grows `SKILL.md`, run:
+
+```bash
+wc -c SKILL.md  # must stay under 32768
+```
+
+and trim or relocate content if you cross the limit.
+
 ## Asset integrity
 
 Every commit touching `assets/` must keep the scaffolds valid:
