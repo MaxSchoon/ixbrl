@@ -1,0 +1,50 @@
+name: 📚 Spec-citation correction
+description: The skill states something a spec or regulator publication contradicts.
+title: "[spec] "
+labels: ["spec-correction", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Use this when a factual claim in the skill is wrong or outdated. Every
+        correction needs a **primary-source citation** — a spec section or a
+        pinned regulator URL you actually fetched, with its version/date. See
+        CONTRIBUTING.md.
+  - type: input
+    id: location
+    attributes:
+      label: Where in the skill?
+      description: File and section/line (e.g. `references/validation.md` → calculation linkbase).
+      placeholder: references/...
+    validations:
+      required: true
+  - type: textarea
+    id: claim
+    attributes:
+      label: What the skill currently says
+    validations:
+      required: true
+  - type: textarea
+    id: correct
+    attributes:
+      label: What it should say, and why
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Primary source (section or URL + version/date)
+      description: >-
+        A spec section (`iXBRL 1.1 §13.1.2`, `EFM 6.5.21`, `ESEF Reporting
+        Manual G.4.1.3`) or a pinned regulator URL you fetched (xbrl.org,
+        sec.gov, esma.europa.eu, frc.org.uk, sbr-nl.nl, eba.europa.eu, …).
+      placeholder: "iXBRL 1.1 §13.1.2  —  or  https://...  (version/date: ...)"
+    validations:
+      required: true
+  - type: checkboxes
+    id: coc
+    attributes:
+      label: Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct.
+          required: true

@@ -1,0 +1,19 @@
+# Code owners for the iXBRL skill.
+# Listed owners are requested for review automatically on every PR, and —
+# when "Require review from Code Owners" is enabled in the main ruleset —
+# their approval is required before merge.
+
+# Default owner for everything in the repo.
+*                       @MaxSchoon
+
+# Normative content gets the same owner explicitly (claim/citation review).
+/SKILL.md               @MaxSchoon
+/references/            @MaxSchoon
+/assets/                @MaxSchoon
+/scripts/               @MaxSchoon
+
+# CI and governance — flag any PR that touches automation or these controls.
+/.github/               @MaxSchoon
+/.github/workflows/     @MaxSchoon
+/.github/CODEOWNERS     @MaxSchoon
+/tests/                 @MaxSchoon

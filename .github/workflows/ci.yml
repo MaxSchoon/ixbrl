@@ -1,0 +1,48 @@
+name: CI
+
+# Runs on PRs (incl. forks — read-only token, no secrets) and on pushes to main.
+# This job is the required status check enforced by the `main` ruleset; its job id
+# (`ci`) is what the ruleset's required_status_checks context must match.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Least privilege: drop the default token to read-only for the whole workflow.
+permissions:
+  contents: read
+
+# One run per ref; cancel superseded runs to save minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      # Pinned to a full commit SHA (immutable); the comment tracks the version
+      # and Dependabot bumps both together. ubuntu-latest already ships Python
+      # 3.10+, so no setup-python action is needed (fewer third-party deps).
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Python version
+        run: python3 --version
+
+      - name: Install libxml2-utils (xmllint)
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libxml2-utils
+
+      - name: Assets are well-formed XML (xmllint)
+        run: xmllint --noout assets/*.xml assets/*.xsd assets/*.xhtml
+
+      - name: Skill guardrails (size, description, references, asset cross-refs)
+        run: python3 tests/check_skill.py
+
+      - name: Scripts compile
+        run: python3 -m py_compile scripts/check_facts.py
+
+      - name: Fact pre-flight smoke test (scaffold skeleton)
+        run: python3 scripts/check_facts.py assets/ixbrl-skeleton.xhtml
