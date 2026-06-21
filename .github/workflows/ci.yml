@@ -44,5 +44,8 @@ jobs:
       - name: Scripts compile
         run: python3 -m py_compile scripts/check_facts.py
 
+      - name: Install check_facts dependency (lxml)
+        run: python3 -m pip install --upgrade lxml
+
       - name: Fact pre-flight smoke test (scaffold skeleton)
         run: python3 scripts/check_facts.py assets/ixbrl-skeleton.xhtml
