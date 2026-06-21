@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🔒 Security / filing-integrity report
+    url: https://github.com/MaxSchoon/ixbrl/security/advisories/new
+    about: >-
+      Do NOT open a public issue for a security or filing-integrity problem
+      (a rule or scaffold that would produce a non-compliant filing). Report it
+      privately here, or email contact@doc2ixbrl.com.
+  - name: 💬 Questions & collaboration
+    url: mailto:contact@doc2ixbrl.com
+    about: General questions or collaboration proposals — email the maintainer.

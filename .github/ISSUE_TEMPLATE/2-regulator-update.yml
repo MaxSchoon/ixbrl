@@ -1,0 +1,53 @@
+name: 🗓️ Regulator / taxonomy update
+description: A new ESEF, EFM, FRC, SBR/NT, EBA/EIOPA DPM, or IFRS taxonomy release needs to be reflected.
+title: "[update] "
+labels: ["regulator-update", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Regulators and taxonomy owners publish on their own cadence. Use this to
+        flag a new release the skill should track, and which files it touches.
+  - type: dropdown
+    id: regulator
+    attributes:
+      label: Regulator / framework
+      options:
+        - ESMA ESEF
+        - SEC EDGAR / EFM
+        - UK FRC / Companies House / HMRC
+        - Dutch SBR / KvK / AFM (NT)
+        - EBA / EIOPA (DPM)
+        - IFRS Accounting Taxonomy
+        - FASB US-GAAP / DEI / SRT
+        - Other (EDINET / CNMV / MCA / …)
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: New version / release
+      placeholder: "e.g. ESEF 2025 RTS, EFM v74, NT21, IFRS 2026 taxonomy"
+    validations:
+      required: true
+  - type: input
+    id: announcement
+    attributes:
+      label: Official announcement / publication URL
+      placeholder: "https://..."
+    validations:
+      required: true
+  - type: textarea
+    id: changes
+    attributes:
+      label: What changed / what to update
+      description: Which files/claims are affected (SKILL.md version lines, references/esef.md, references/taxonomies.md, validation codes, assets/, …).
+    validations:
+      required: true
+  - type: checkboxes
+    id: coc
+    attributes:
+      label: Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct.
+          required: true

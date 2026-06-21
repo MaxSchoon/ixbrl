@@ -119,10 +119,25 @@ right manual; it does not replace professional judgement.
 
 ## Contributing
 
-Issues and pull requests welcome. Two principles:
+Issues and pull requests welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md)
+for the full workflow, the [issue templates](.github/ISSUE_TEMPLATE) for the
+right place to file, and [`SUPPORT.md`](SUPPORT.md) for where to get help. Two
+principles govern every change:
 
 1. **Source discipline.** Every new factual claim must cite a primary
-   authoritative URL the contributor has actually fetched.
+   authoritative source — a spec section or a regulator publication URL the
+   contributor has actually fetched.
 2. **Generality.** This is a public, vendor-neutral skill. No
    product-specific naming, no internal jargon, no jurisdiction-narrow
    shortcuts presented as universal.
+
+By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md). To
+report a security or filing-integrity problem privately, see
+[`SECURITY.md`](SECURITY.md).
+
+## Contact
+
+Questions, collaboration, or corrections: **contact@doc2ixbrl.com**. For
+anything that could affect filing integrity — a rule or scaffold in the skill
+that would produce a non-compliant filing — please report it privately (see
+[`SECURITY.md`](SECURITY.md)) before opening a public issue.
