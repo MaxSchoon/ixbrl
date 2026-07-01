@@ -362,6 +362,38 @@ report-package.xbri
     └── <filer>-<period>_pre.xml
 ```
 
+### 7.1 NBA Alert 50: accountant consent and conversion scope
+
+NBA Alert 50 (26 June 2025) is the accountant-facing source for SBR
+Report Package situations where the originally audited annual accounts
+were not themselves prepared as an SBR Report Package. Its practical
+point for reviewers: a technical conversion to iXBRL can create a gap
+between the original audited accounts, the visible XHTML, and the
+machine-readable XBRL facts.
+
+When the original controleverklaring is reproduced in the SBR Report
+Package after that conversion, treat it as a **new publication** of the
+auditor's report. Do not infer assurance over the technical conversion,
+RTS compliance, extension taxonomy, or XBRL markings merely because the
+controleverklaring is present in the package. NBA Alert 50 describes
+the conditions and work needed before the external auditor can give
+written consent, and distinguishes that from a voluntary assurance
+engagement under Standard 3950N.
+
+For review work, use the Alert as a prompt to separate three questions:
+
+- Does the visible XHTML faithfully reproduce the audited annual
+  accounts, allowing only legitimate filing exemptions?
+- Does the SBR Report Package meet the minimum technical validation /
+  RTS acceptance criteria for KvK filing?
+- Is the machine-readable XBRL layer materially consistent with the
+  visible XHTML after a consistent transformation of the tags?
+
+An NBA Alert is transitional professional guidance: the PDF says alerts
+normally expire after one year unless explicitly extended. Cite the
+current NBA page before treating Alert 50 as live professional guidance
+for an engagement.
+
 Reviewer checks:
 
 - The package uses `META-INF/reportPackage.json` (xBRI 2023) or
@@ -377,6 +409,10 @@ Reviewer checks:
   value preserves table structure, headings, signature block, date,
   and auditor identification. The escaped XHTML *is* the fact value;
   a screenshot is not.
+- If the controleverklaring is reproduced after a technical conversion
+  from paper / Word / PDF accounts into an SBR Report Package, apply
+  NBA Alert 50 before assuming the auditor has consented to that new
+  publication or provided assurance over the XBRL markings.
 - The auditor's report concept appears in **some** presentation link in
   the extension — orphaned-tagged facts trip `validate/NL`
   equivalents of `ESEF.3.4.6.UsableConceptsNotIncludedInPresentationLink`.
@@ -533,7 +569,10 @@ walk this in order. Each step depends on the prior being clean.
    flat, BS nested, every tagged fact placed somewhere.
 9. **Package shape.** §7. Auditor's report present if size class
    requires; metadata facts present and tagged; no MacOS artefacts
-   (`.DS_Store`, `__MACOSX/`) at package root.
+   (`.DS_Store`, `__MACOSX/`) at package root. If the package contains
+   a reproduced controleverklaring after technical conversion, separate
+   the statutory audit opinion from any consent / assurance question
+   under NBA Alert 50.
 10. **Content-level review (read the rendered statements).** See
     `conversion.md` §10. The validators cannot tell whether the iXBRL
     is faithful to the source document; you can.
@@ -554,6 +593,9 @@ Defer to and cite:
   (`wetten.overheid.nl`).
 - **Richtlijnen voor de Jaarverslaggeving (RJ)** for Dutch GAAP
   application detail.
+- **NBA Alert 50** for external-accountant consent, scope, and
+  controleverklaring wording in SBR Report Package situations —
+  <https://www.nba.nl/wet--en-regelgeving/alerts/nba-alert-50/>.
 - **AFM ESEF guidance** for listed-issuer filings (then return to
   `esef.md`).
 
