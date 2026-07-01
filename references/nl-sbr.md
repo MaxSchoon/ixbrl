@@ -68,7 +68,7 @@ Verified namespace bindings used by a real FY2025 Groot NL-GAAP filing:
 |---|---|---|
 | `bw2-titel9` | `https://www.nltaxonomie.nl/bw2-titel9/2025-12-31/bw2-titel9-cor` | Title 9 BW data concepts (line items, axes, members), abstracts (`BalanceSheetTitle`, `IncomeStatementTitle`, `StatementOfComprehensiveIncomeTitle`), `FinancialStatementsTypeAxis` and its `ConsolidatedMember`/`SeparateMember` |
 | `rj` | `https://www.nltaxonomie.nl/rj/2025-12-31/rj-cor` | RJ application detail (`CashFlowStatementTitle`, `Creditors`, `Result`, RJ-specific disclosures) |
-| `kvk` | `https://www.nltaxonomie.nl/kvk/2025-12-31/kvk-cor` | KvK metadata, size-class axis (`LegalEntitySize`) and members (`LegalEntitySize{Micro,Small,Medium,Large}Member`), placeholders (`LineItemsIn{Consolidated,Separate}FinancialStatementsPlaceholder`), `AuditorsReportFinancialStatementsPresent` flag |
+| `kvk` | `https://www.nltaxonomie.nl/kvk/2025-12-31/kvk-cor` | KvK metadata, `LegalEntitySize` extensible-enumeration fact and values (`LegalEntitySize{Micro,Small,Medium,Large}Member`), placeholders (`LineItemsIn{Consolidated,Separate}FinancialStatementsPlaceholder`), `AuditorsReportFinancialStatementsPresent` flag |
 | `<filer>` | `https://www.<filer>.nl/xbrl/<release-date>` | The filer's own extension (custom concepts, custom members, calculation/presentation/definition linkbases) |
 
 A pragmatic reviewer's first three commands:
@@ -98,33 +98,96 @@ Do not apply 2026 rules to a 2024 filing.
 | KvK Groot-class **must** deposit digitally (SBR Report Package) | FY2025 | Earlier years allowed paper for Groot. Don't insist on iXBRL for a FY2023 Groot deposit. |
 | KvK Middelgroot must deposit digitally | FY2017 onward | Stable for years. |
 | KvK Klein / Microbedrijf must deposit digitally | FY2016 / FY2017 | Stable for years. |
-| Notes block-tagging required for KvK Dutch GAAP | **FY2026** (preview taxonomies live earlier) | For FY2025 and earlier KvK Dutch GAAP filings, notes block-tagging is **not** required and emitting it can break presentation parity. Watch for `kvk-inline-2025-preview` vs the operative entry point. |
+| Notes / management report / other-information block-tagging for KvK iXBRL | Delayed: one year after ESMA's amended block-tagging approach takes effect | The RTS 2025 expresses the date as `202X`, not a fixed year. For FY2025 and earlier, voluntary block-tagging is not permitted; check the current RTS / FAQ before requiring it. |
 | ESEF block-tagging for AFM (listed) IFRS notes | FY2022 | Distinct from KvK above. AFM listed AFRs follow ESMA Annex II Table 2, not KvK. |
 | Auditor's report (controleverklaring) required in package | Middelgroot + Groot, always (article 2:393 BW) | Klein/Micro: not required. art. 2:403 BW: group subsidiaries may be exempt — its absence on a Groot subsidiary is not automatically wrong. |
-| SBR Filing Rules calculation basis (formal) | XBRL 2.1 / Calc 1.0 — listed as normative by NT20 Filing Rules | Calc 1.1 is not addressed by NT20 Filing Rules (neither required nor forbidden). Calc 2.0 had a 2019 requirements note only, no specification. |
-| Calculation basis for SBR Dutch GAAP 2025 review work (preferred) | **Calc 1.1** (`--calc c11r`) | Calc 1.1 uses OIM rounding semantics — it handles iXBRL's routinely-duplicate facts correctly and surfaces the dual-statement cross-scope inconsistencies that Calc 1.0 silently hides. Use it as the substantive review verdict; run Calc 1.0 separately as the final deposit-acceptance check, since that is what KvK formally validates against (§4.2). |
+| Calculation basis for FY2025 KvK iXBRL Report Packages | **Calc 1.1** is listed in RTS 2025 Annex III | Calc 1.1 uses OIM rounding semantics — it handles iXBRL's routinely-duplicate facts correctly and surfaces the dual-statement cross-scope inconsistencies that Calc 1.0 silently hides. Run Calc 1.0 only as a legacy / compatibility pass if the operative validator profile still checks it (§4.2). |
 | `validate/NL` disclosure system | Per NT release | Run `arelleCmdLine --plugins validate/NL --disclosureSystem` matching the NT generation in the report. |
 
 When uncertain, **state the rule version you are applying** before
 declaring a defect. "This violates the NT20 KvK Filing Rule X for
 FY2025" is reviewable; "this is wrong" is not.
 
+### 2.1 RTS 2025 essentials for SBR-domein Handelsregister
+
+The **Regelgevende Technische Standaard (RTS) van het SBR-domein
+Handelsregister** is the domain-level implementation of the Besluit
+elektronische deponering handelsregister. Use the current Dutch RTS as
+the authority; the English translation says the Dutch version prevails.
+The 2025 RTS was finalised on 31 October 2025 for annual reports for
+financial years beginning on or after 1 January 2025.
+
+The RTS is not the same thing as the Reporting Manual (RM):
+
+- **RTS** — the technical filing requirements: format, package,
+  mandatory markup, valid taxonomy/specification set, and extension
+  taxonomy constraints.
+- **RM** — preparer guidance for applying those requirements in an
+  actual iXBRL annual report.
+
+RTS points that matter in review:
+
+- It splits the regime into **iXBRL Report Packages** (chapter 2) and
+  legacy **XBRL instance / document-set filings** (chapter 3). The
+  iXBRL rules are aligned with the ESEF RTS where useful, but KvK uses
+  KvK/BW2/RJ/IFRS core taxonomies and KvK-specific filing metadata.
+- For iXBRL, the annual report is filed in **XHTML** as a **Report
+  Package** through Digipoort or the KvK upload portal. The package may
+  not exceed **100 MB**, must contain the Inline XBRL Document Set and
+  any extension taxonomy files in one package, and only one adopted
+  annual report may be filed per legal entity per financial year.
+- The RTS treats iXBRL as the recommended standard where presentation
+  matters. A legal entity that uses entity-specific line items, changes
+  the standard format / presentation, reports sustainability
+  information, or cannot use a predefined XBRL entry point should expect
+  to use iXBRL rather than legacy XBRL.
+- Annex II requires detailed tagging of all numbers in a declared
+  currency in the primary statements (including dashes / empty cells
+  that represent nil or zero) and the mandatory KvK filing metadata
+  facts such as registration number, legal-entity name, legal form,
+  registered office, entity size, period end, reporting period,
+  consolidation flag, auditor's-report-present flag, and adoption
+  status. Conditional facts include adoption date and 2:403 / 2:408
+  foreign-group filing flags when applicable.
+- Annex III lists the applicable XBRL specifications for iXBRL Report
+  Packages: Inline XBRL 1.1, Transformation Registry 4 or 5, Units
+  Registry 1.0, Data Type Registry 1.x, Link Role Registry 2.0, XBRL
+  2.1, Dimensions 1.0, **Calculations 1.1**, Taxonomy Packages 1.0,
+  and Report Package 1.0.
+- Annex IV is the core markup rulebook: use the core-taxonomy element
+  with the closest / narrowest accounting meaning; create an extension
+  only when the core taxonomy would misrepresent the disclosure; give
+  every used extension element proper datatype / period / balance
+  attributes and report-language labels; include each used extension
+  element in at least one presentation hierarchy and one definition
+  hierarchy; document arithmetic relationships in the calculation
+  linkbase; and anchor extension concepts to wider / narrower core
+  concepts where required.
+
+Do not cite an RTS rule from memory. The SBR project page also publishes
+the current FAQ, practice guidance, conformance suite, taxonomy
+packages, and example `.xbri` filings; use those alongside the RTS/RM
+when diagnosing a deposit failure.
+
 ## 3. Entry point by entity-size class (Title 9 Book 2 BW)
 
 The size class is a property of the entity, derived from balance-sheet
 total, net turnover, and average headcount over the prior two
-financial years. In the FY2025 KvK taxonomy the size axis lives in the
-`kvk:` namespace, not `bw2-titel9:`: `kvk:LegalEntitySize` (axis),
-`kvk:LegalEntitySizeDomain`, and the four members
-`kvk:LegalEntitySize{Micro,Small,Medium,Large}Member`. The size class
-dictates:
+financial years. In the FY2025 KvK taxonomy, size class is reported as
+the mandatory metadata fact `kvk:LegalEntitySize`, an
+extensible-enumeration fact. Its value is one of the KvK size members
+(`kvk:LegalEntitySize{Micro,Small,Medium,Large}Member`), reported as a
+URI value such as
+`https://www.nltaxonomie.nl/kvk/2025-12-31/kvk-cor#LegalEntitySizeLargeMember`.
+It is **not** an XDT context axis and should not appear as an
+`xbrldi:explicitMember`. The size class dictates:
 
 - Which KvK entry point schema is in `link:schemaRef`.
 - Which disclosures are mandatory (Klein omits many notes; Groot must
   include everything Title 9 requires plus the auditor's report).
 - Whether the auditor's report (controleverklaring) is required at all.
 
-| Size class | kvk:LegalEntitySize member | Auditor's report required | Typical entry point family (FY2025 KvK NL-GAAP) |
+| Size class | `kvk:LegalEntitySize` fact value | Auditor's report required | Typical entry point family (FY2025 KvK NL-GAAP) |
 |---|---|---|---|
 | Micro | `kvk:LegalEntitySizeMicroMember` | No | `kvk-rpt-jaarverantwoording-2025-nlgaap-micro` |
 | Klein | `kvk:LegalEntitySizeSmallMember` | No | `kvk-rpt-jaarverantwoording-2025-nlgaap-klein` |
@@ -139,7 +202,8 @@ vertical balance-sheet layout.)
 
 A common reviewer slip: applying Middelgroot disclosure expectations
 to a Klein filing, or vice versa. Pin the size class first; it changes
-which absences count as defects.
+which absences count as defects. Also verify it as a reported metadata
+fact, not as a context dimension.
 
 ## 4. The dual-scope pattern (consolidated + separate)
 
@@ -154,24 +218,144 @@ is where SBR Dutch GAAP filings most often go wrong — not because of
 one rule, but because three independent invariants must hold
 simultaneously.
 
+For IFRS-based statements, use the IFRS consolidated/separate axis
+(`ifrs-full:ConsolidatedAndSeparateFinancialStatementsAxis`) and its
+consolidated / separate members instead. In all KvK iXBRL contexts,
+dimensions belong in `xbrli:scenario`, not `xbrli:segment`.
+
+### 4.0 What the RTS requires when both scopes are present
+
+RTS 2025 Article 4 sets the minimum tagging target by accounting basis:
+
+- If the annual report contains **both consolidated and company
+  financial statements** prepared under IFRS and/or NL-GAAP, the legal
+  entity must mark up the **consolidated financial statements**.
+- If the annual report contains **only company financial statements**
+  under IFRS and/or NL-GAAP, it must mark up those **company financial
+  statements**.
+- If the report uses generally accepted standards of another country
+  (**Other GAAP**), only the filing metadata / mandatory elements in
+  Annex II point 3 are required.
+
+That minimum rule is easy to misread. It does **not** mean separate
+financial statements may be dimensionally ambiguous when they are
+tagged. Once a report tags facts from both consolidated and company
+statements, the two statement sets must be separated consistently by
+the appropriate financial-statements-type dimension:
+
+- Consolidated facts use the consolidated member on
+  `bw2-titel9:FinancialStatementsTypeAxis` for NL-GAAP or
+  `ifrs-full:ConsolidatedAndSeparateFinancialStatementsAxis` for IFRS.
+- Company-only facts use the corresponding separate member on the same
+  basis-specific axis.
+- The mandatory metadata fact
+  `rj:FinancialStatementsConsolidated` states whether the filed
+  financial statements are consolidated; it is not a replacement for
+  per-fact consolidated/separate dimensional context.
+
+The 2025 KVK taxonomy documentation exposes four extension-taxonomy
+placeholder roles for this purpose:
+
+| Role URI | Scope / basis |
+|---|---|
+| `https://www.nltaxonomie.nl/kvk/role/lineitems-consolidated-financial-statements-nlgaap` (`[990010]`) | Consolidated + NL-GAAP |
+| `https://www.nltaxonomie.nl/kvk/role/lineitems-consolidated-financial-statements-ifrs` (`[990015]`) | Consolidated + IFRS |
+| `https://www.nltaxonomie.nl/kvk/role/lineitems-separate-financial-statements-nlgaap` (`[990020]`) | Separate + NL-GAAP |
+| `https://www.nltaxonomie.nl/kvk/role/lineitems-separate-financial-statements-ifrs` (`[990025]`) | Separate + IFRS |
+
+Use the entry point that matches the accounting-basis mix:
+
+- **NL-GAAP consolidated + NL-GAAP company** — import the NL-GAAP
+  extension entry point and wire line items into the consolidated and,
+  if tagged, separate NL-GAAP placeholders.
+- **IFRS consolidated + IFRS company** — import the IFRS extension entry
+  point and wire the two scopes into the IFRS placeholders.
+- **IFRS consolidated + NL-GAAP company** — import the IFRS extension
+  entry point: it is designed to discover both IFRS and NL-GAAP concepts
+  and to support IFRS consolidated statements with NL-GAAP company
+  statements.
+
+For equity, RTS Annex II has a special practical rule: if the equity
+disclosure in the consolidated financial statements refers to the
+company financial statements, only the statement of changes in equity
+in the company financial statements needs to be marked up, using the
+**Separate** member. Do not force a duplicate consolidated SoCE tag set
+where the report itself points the reader to the separate equity
+statement. Notes explaining differences between consolidated and
+company equity are not currently subject to mandatory note markup while
+block-tagging is deferred.
+
+Typical NL-GAAP context families:
+
+```xml
+<!-- Filing metadata: no financial-statement-scope dimension -->
+<xbrli:context id="meta-current">
+  <xbrli:entity>
+    <xbrli:identifier scheme="http://www.kvk.nl/kvk-id">12345678</xbrli:identifier>
+  </xbrli:entity>
+  <xbrli:period><xbrli:instant>2025-12-31</xbrli:instant></xbrli:period>
+</xbrli:context>
+
+<!-- Consolidated statement fact -->
+<xbrli:context id="consolidated-current">
+  <xbrli:entity>
+    <xbrli:identifier scheme="http://www.kvk.nl/kvk-id">12345678</xbrli:identifier>
+  </xbrli:entity>
+  <xbrli:period><xbrli:instant>2025-12-31</xbrli:instant></xbrli:period>
+  <xbrli:scenario>
+    <xbrldi:explicitMember dimension="bw2-titel9:FinancialStatementsTypeAxis">
+      bw2-titel9:ConsolidatedMember
+    </xbrldi:explicitMember>
+  </xbrli:scenario>
+</xbrli:context>
+
+<!-- Company-only statement fact -->
+<xbrli:context id="separate-current">
+  <xbrli:entity>
+    <xbrli:identifier scheme="http://www.kvk.nl/kvk-id">12345678</xbrli:identifier>
+  </xbrli:entity>
+  <xbrli:period><xbrli:instant>2025-12-31</xbrli:instant></xbrli:period>
+  <xbrli:scenario>
+    <xbrldi:explicitMember dimension="bw2-titel9:FinancialStatementsTypeAxis">
+      bw2-titel9:SeparateMember
+    </xbrldi:explicitMember>
+  </xbrli:scenario>
+</xbrli:context>
+```
+
 ### 4.1 Placeholder membership across both scopes
 
-The KvK taxonomy declares two placeholder concepts that anchor the
-extension's line-items into the consolidated and separate scopes
-respectively:
+The KvK taxonomy declares scope/basis-specific placeholder roles that
+anchor the extension's line-items into consolidated or separate
+financial-statement hypercubes. In the FY2025 NL-GAAP release these
+surface through placeholder concepts such as:
 
 - `kvk:LineItemsInConsolidatedFinancialStatementsPlaceholder`
 - `kvk:LineItemsInSeparateFinancialStatementsPlaceholder`
 
 Both are confirmed members of `kvk-cor.xsd` in the FY2025 release. An
 extension concept reported in both scopes must be wired into **both**
-placeholder domain-member trees via the extension's definition
+relevant placeholder domain-member trees via the extension's definition
 linkbase. Forgetting one of them — typically because an extension
 concept was added late without re-wiring the dual-scope arcs — fires a
 KvK-specific filing-rule error of the form
 `extensionTaxonomyLineItemNotLinkedToDesignatedPlaceholder` and
 downstream `xbrldie:PrimaryItemDimensionallyInvalidError` against the
 unwired scope's contexts.
+
+The RM/taxonomy architecture also defines two gatekeeper roles:
+
+- `[990080]` — line items to be reported as non-dimensional. These are
+  not valid with dimensions.
+- `[990090]` — line items that may be reported dimensionally only when
+  the preparer's extension explicitly allows that use.
+
+The consolidated/separate placeholders are for the single
+financial-statements-type axis only. If a fact also uses another axis
+— for example an equity-class axis in the statement of changes in
+equity — build a proper extension definition role for that
+multi-dimensional schedule rather than relying only on the KVK
+placeholder.
 
 Practitioner reports describe an additional extension-side compatibility
 role (often called something like
@@ -187,7 +371,7 @@ Fix pattern: treat dual-scope placeholder membership as derived from
 one source predicate so the two arcs cannot drift apart, and document
 the extension's compatibility-role convention (if any) alongside it.
 
-### 4.2 Calculation linkbase scope-bleed — and why Calc 1.1 is preferred for review
+### 4.2 Calculation linkbase scope-bleed — and why Calc 1.1 is the RTS basis
 
 A `link:calculationLink` is grouped by extended-link role but is **not**
 context-scoped — XBRL 2.1 binds every contributing item present in
@@ -199,7 +383,8 @@ nearest semantics this surfaces as
 binding is typically *skipped* (it requires *all* contributing items
 present), so the same architectural fact stays invisible.
 
-**For SBR Dutch GAAP 2025 review work, prefer Calc 1.1 (`--calc c11r`).**
+**For FY2025 KvK iXBRL Report Packages, Calc 1.1 (`--calc c11r`) is
+the RTS Annex III calculation basis.**
 The reasons:
 
 - Calc 1.1 uses OIM rounding semantics rather than XBRL 2.1
@@ -216,19 +401,19 @@ The reasons:
   concepts (KvK IFRS entry points, AFM ESEF) are effectively already
   operating in a Calc 1.1 world for those concepts.
 
-The formal verdict, however, is Calc 1.0. NT20 Filing Rules list XBRL
-2.1 as the normative calculation basis and do not address Calc 1.1.
-For a deposit-acceptance check, run Calc 1.0 separately and confirm
-the file passes it; for the substantive review, run Calc 1.1 first.
+Run Calc 1.0 only as a legacy / compatibility pass if the operative
+validator profile or filing channel still applies older FR-NL checks.
+Do not treat an older Calc 1.0 assumption as overriding the FY2025
+iXBRL RTS unless the current validator profile actually does so.
 
 ```bash
-# Primary review pass — preferred for substantive content review
+# FY2025 KvK iXBRL RTS pass
 arelleCmdLine --plugins inlineXbrlDocumentSet|validate/NL \
               --calc c11r \
               --packages <NT package>.zip \
               -f report-package.zip --validate
 
-# Deposit-acceptance check — what KvK validates against (NT20 FR)
+# Legacy / compatibility pass only if the operative validator profile uses it
 arelleCmdLine --plugins inlineXbrlDocumentSet|validate/NL \
               --calc c10 \
               --packages <NT package>.zip \
@@ -517,7 +702,7 @@ or pick up the wrong NT generation. For deposit-quality validation:
    local files only:
 
 ```bash
-# Primary review pass — Calc 1.1 preferred (see §4.2)
+# FY2025 KvK iXBRL RTS pass — Calc 1.1 (see §4.2)
 arelleCmdLine \
   --plugins inlineXbrlDocumentSet|validate/NL \
   --disclosureSystem nl-fr-nt20-kvk-ifrs-2025 \
@@ -529,10 +714,11 @@ arelleCmdLine \
 
 Adapt the disclosure system name to the operative one in your Arelle
 build (it changes per NT generation; `arelleCmdLine
---showEnvironment` lists what's registered). Run the same command a
-second time with `--calc c10` for the formal deposit-acceptance
-verdict. When validation is slow or intermittent, suspect
-remote-taxonomy resolution before suspecting the package.
+--showEnvironment` lists what's registered). Run a second pass with
+`--calc c10` only if the operative validator profile or filing channel
+still applies older Calc 1.0 checks. When validation is slow or
+intermittent, suspect remote-taxonomy resolution before suspecting the
+package.
 
 ## 13. A pragmatic NL review pass — in order
 
@@ -544,36 +730,43 @@ walk this in order. Each step depends on the prior being clean.
    are ambiguous, ask.
 2. **Pin the entity-size class.** §3. The size class changes which
    absences count as defects (auditor's report, certain disclosures).
-3. **Run validation in the operative profile, offline.** §12. Capture
+3. **Pin the RTS Article 4 statement scope.** §4.0. If both
+   consolidated and company financial statements are present under IFRS
+   and/or NL-GAAP, detailed statement tagging applies at least to the
+   consolidated statements. If only company statements are present, tag
+   those. If both scopes are tagged, verify the basis-specific
+   consolidated/separate dimensions and placeholder roles before
+   interpreting validation errors.
+4. **Run validation in the operative profile, offline.** §12. Capture
    the full log, including warnings. Run **Calc 1.1** (`--calc c11r`)
-   first as the substantive review verdict (it handles iXBRL
+   as the FY2025 KvK iXBRL RTS calculation basis (it handles iXBRL
    duplicate facts and surfaces the dual-statement cross-scope
    inconsistencies Calc 1.0 hides). Run **Calc 1.0** (`--calc c10`)
-   separately as the formal deposit-acceptance check, since NT20
-   Filing Rules list XBRL 2.1 as the normative basis (§4.2).
+   only as a legacy / compatibility pass if the operative validator
+   profile still applies it (§4.2).
    Classify any cross-scope inconsistency by role-vs-context before
    treating it as a defect.
-4. **Classify each finding.** Route by code prefix using `SKILL.md`'s
+5. **Classify each finding.** Route by code prefix using `SKILL.md`'s
    common-error decision tree. Distinguish dual-scope artefacts (§4.2)
    from real arithmetic defects, and rule violations from style
    warnings.
-5. **Concept-binding pass.** §9. Confirm every fact's QName resolves
+6. **Concept-binding pass.** §9. Confirm every fact's QName resolves
    in the operative DTS. `missingReferences` is harder to fix than
    surface validation errors and changes the meaning of every
    downstream check.
-6. **Per-scope value pass.** §4.3. For consolidated + separate filings,
+7. **Per-scope value pass.** §4.3. For consolidated + separate filings,
    sample a dozen line items and confirm the value belongs in the
    scope it appears in. No validator catches this for you.
-7. **Sign and period class.** §10, §11. Walk the IS, CF, and SoCE.
-8. **Presentation pass.** §8. Roots on official placeholders, IS/CF
+8. **Sign and period class.** §10, §11. Walk the IS, CF, and SoCE.
+9. **Presentation pass.** §8. Roots on official placeholders, IS/CF
    flat, BS nested, every tagged fact placed somewhere.
-9. **Package shape.** §7. Auditor's report present if size class
+10. **Package shape.** §7. Auditor's report present if size class
    requires; metadata facts present and tagged; no MacOS artefacts
    (`.DS_Store`, `__MACOSX/`) at package root. If the package contains
    a reproduced controleverklaring after technical conversion, separate
    the statutory audit opinion from any consent / assurance question
    under NBA Alert 50.
-10. **Content-level review (read the rendered statements).** See
+11. **Content-level review (read the rendered statements).** See
     `conversion.md` §10. The validators cannot tell whether the iXBRL
     is faithful to the source document; you can.
 
@@ -586,6 +779,15 @@ distinguish a real defect from a known artefact.
 This file is a reviewer's working reference, not the legal source.
 Defer to and cite:
 
+- **SBR-domein Handelsregister project page** for the current RTS, RM,
+  FAQ, conformance suite, taxonomy packages, and example `.xbri`
+  filings — <https://www.sbr-nl.nl/sbr-domeinen/handelsregister/uitbreiding-elektronische-deponering-handelsregister>
+- **RTS SBR-domein Handelsregister** for FY2025 iXBRL / XBRL filing
+  requirements, Annex II mandatory markups, Annex III specifications,
+  and Annex IV markup / extension rules.
+- **Reporting Manual SBR-domein Handelsregister** and **KVK taxonomy
+  documentation** for practical iXBRL construction, consolidated /
+  separate placeholders, contexts, extension DRS, and examples.
 - **SBR Nederland Filing Rules (FR-NL- / FG-NL-)** — <https://www.sbr-nl.nl/>
 - **KvK Filing Rules supplements (NL-KVK.*)** — published with each
   NT generation; the PDF lives in the same documentation tree.
