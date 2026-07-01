@@ -148,6 +148,50 @@ Full lists:
 - **Financial Report Viewer**: renders embedded facts at https://www.sec.gov/cgi-bin/viewer and on EDGAR full-text search.
 - **Dissemination**: accepted submissions are publicly disseminated within minutes via EDGAR full-text search and the bulk Public Dissemination Service.
 
+### 8.1 Auditor assurance, certifications, liability, and consistency
+
+SEC EDGAR does not have a single NBA Alert 50-style auditor guidance
+document for Inline XBRL. The relevant authority is distributed across
+Regulation S-T Rule 405, SEC adopting releases, the EDGAR Filer Manual /
+EDGAR XBRL Guide, staff interpretations, and PCAOB standards.
+
+The practical rule: Inline XBRL changes the filing format, not the
+default audit scope. Release 33-10514 reaffirmed that the move from
+exhibit XBRL to Inline XBRL did **not** change the SEC's existing
+positions on officer certifications or auditor assurance.
+
+- **No mandatory auditor assurance.** Auditors are not required to
+  apply PCAOB AS 2710, AS 4101, or AS 4105 to the Interactive Data File.
+  Filers are not required to obtain assurance or involve auditors,
+  consultants, or other third parties in preparing it.
+- **Audit-report scope.** The financial statement audit report does not
+  by itself extend to XBRL tagging. The SEC declined to require audit
+  report changes or auditor-responsibility legends for Inline XBRL,
+  though issuers may disclose the degree or absence of auditor
+  involvement, for example in a financial-statement footnote.
+- **Voluntary assurance and consent.** Issuers may voluntarily obtain
+  third-party assurance on XBRL tagging. If a filing refers to that
+  assurance or names the auditor as an expert, evaluate the Securities
+  Act consent implications separately; PCAOB AS 4101 remains relevant
+  in that expert/consent context.
+- **Officer certifications.** Exchange Act Rules 13a-14(f) and
+  15d-14(f) exclude Interactive Data Files from CEO/CFO certification
+  requirements. That exclusion does not remove interactive data from
+  disclosure controls and procedures: SEC staff says filers still must
+  consider controls over interactive data when evaluating disclosure
+  controls under Rules 13a-15 / 15d-15 and Regulation S-K Item 307.
+- **Liability.** Do not rely on the old phase-in safe-harbor framing:
+  temporary modified liability under Regulation S-T Rule 406T expired
+  on 31 October 2014, and Release 33-10514 noted that expiration. Treat
+  accepted Inline XBRL as part of the live SEC filing risk surface.
+- **Consistency with the human-readable filing.** Rule 405 requires
+  each data element in the Interactive Data File to reflect the same
+  information in the corresponding data in the Related Official Filing.
+  Do not change, delete, or summarize data elements merely because the
+  tag layer is machine-readable; choose the appropriate standard tag
+  unless an extension is required. SEC staff guidance clarifies that
+  identical visual appearance is not the test — content consistency is.
+
 ## 9. Recent rule updates (last ~24 months)
 
 - **Pay-Versus-Performance** — Release **34-95607**, adopted 25 August 2022, effective 11 October 2022. Compliance for proxy / information statements with fiscal years ending on or after **16 December 2022**. Each value in the PVP table is separately tagged; footnote, relationship, and Tabular List disclosures are block-text tagged. Smaller reporting companies provide Inline XBRL beginning the third PVP filing. Tagging uses the 2022Q4 ECD taxonomy.
@@ -169,6 +213,7 @@ correct final-rule numbers are 33-11125 and 33-11216 respectively.
 - https://www.sec.gov/data-research/structured-data/inline-xbrl
 - https://www.sec.gov/newsroom/whats-new/osd-announcement-061121-inline-xbrl-be-required
 - https://www.sec.gov/resources-small-businesses/small-business-compliance-guides/operating-company-inline-xbrl-filing-tagged-data
+- https://www.sec.gov/files/rules/final/2009/33-9002fr.pdf
 - https://www.sec.gov/files/edgar/filermanual/efmvol2.pdf
 - https://www.sec.gov/files/edgar/filermanual/efmvol2-c6.pdf
 - https://www.sec.gov/submit-filings/edgar-filer-manual
@@ -179,10 +224,14 @@ correct final-rule numbers are 33-11125 and 33-11216 respectively.
 - https://www.sec.gov/newsroom/whats-new/2503-2025-xbrl-taxonomies-update
 - https://xbrl.sec.gov/ecd/2022q4/ecd-taxonomy-guide-2022-12-19.pdf
 - https://www.sec.gov/structureddata/FAQs
+- https://www.sec.gov/rules-regulations/staff-guidance/corporation-finance-interpretations-cfis/interactive-data
 - https://www.sec.gov/data-research/xbrl-validation-rendering/edgar-xbrl-validation-errors
 - https://www.sec.gov/data-research/xbrl-validation-rendering/edgar-xbrl-validation-warnings
 - https://www.sec.gov/structureddata/osdinteractivedatatestsuite
 - https://www.sec.gov/rules-regulations/staff-guidance/disclosure-guidance/sample-letter-companies-regarding-their-xbrl
+- https://pcaobus.org/oversight/standards/auditing-standards/details/AS2710
+- https://pcaobus.org/oversight/standards/auditing-standards/details/AS4101
+- https://pcaobus.org/oversight/standards/auditing-standards/details/AS4105
 - https://www.sec.gov/files/rules/final/2022/34-95607.pdf
 - https://www.sec.gov/files/rules/final/2023/33-11216.pdf
 - https://www.sec.gov/files/rules/final/2022/33-11125.pdf

@@ -61,6 +61,55 @@ it operationally, so non-conformance materially raises filing risk.
 9. **Guidance 3.1.2 — Correct ESEF taxonomy entry point.** The DTS must import the ESEF entry point matching the financial year.
 10. **Guidance 2.4 — Hidden facts.** Facts in `ix:hidden` must either be transformable element types or carry the specific `-esef-ix-hidden` style tying them to a visible value; hidden non-transformable facts must not duplicate visible content.
 
+### 2.1 ESEF audit and assurance
+
+ESEF has a stronger auditor-involvement model than Dutch KvK SBR Report
+Packages. The closest sources are the **Commission Interpretative
+Communication 2020/C 379/01** and the **CEAOB Guidelines on auditors'
+involvement on financial statements in ESEF** (adopted 9 November
+2021).
+
+The Commission's position: Union law requires statutory auditors to
+provide an audit opinion on whether the financial statements included
+in the annual financial report comply with the relevant ESEF statutory
+requirements, and that opinion belongs in the audit report. CEAOB then
+turns that into practical audit-work expectations.
+
+For ESEF review work, treat the auditor's ESEF procedures as covering:
+
+- Understanding the issuer's ESEF preparation process and related
+  controls, including whether conversion is outsourced or tool-driven.
+- Verifying that all financial statements in the AFR are prepared in
+  XHTML.
+- If the audited version was not originally prepared in ESEF format,
+  reconciling the XHTML financial statements to the audited version for
+  full alignment.
+- Obtaining sufficient appropriate evidence over required and
+  voluntary markups.
+- Verifying completeness of required primary-statement numeric tagging
+  and Annex II note block tagging.
+- Testing whether selected taxonomy elements have the closest
+  accounting meaning, whether extensions comply with Annex IV, and
+  whether markups comply with Annex III / Annex IV.
+- Considering risks that marked-up information does not correspond to
+  the human-readable layer, including wrong period, currency, sign,
+  scale, context, concept selection, or extension use.
+
+This is different from a pure technical-validation pass. Software
+validation is evidence, not the audit conclusion: CEAOB also expects
+materiality, risk assessment, communication of misstatements, written
+representations, documentation, and audit-report consequences where
+material ESEF non-compliance exists or the auditor cannot obtain
+sufficient appropriate evidence.
+
+ESMA treats the ESEF filing as the official annual financial report for
+Transparency Directive purposes. If a PDF or other convenience version
+is also published, do not treat it as the filed AFR; use it only as a
+cross-check and make clear which version is authoritative. National
+competent authorities may add local mechanics — for example electronic
+signature requirements or portal-specific submission rules — but they
+do not displace the EU-level XHTML / iXBRL obligations.
+
 ## 3. Block tagging vs detailed tagging
 
 ESEF imposes **two complementary regimes** on issuers preparing IFRS
@@ -199,6 +248,8 @@ errors.
 - https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R0815
 - https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02019R0815-20250101
 - https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L_202500019
+- https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52020XC1110(01)
+- https://finance.ec.europa.eu/document/download/ce847777-0caa-47e1-8a9a-fcac34943878_en?filename=211109-ceaob-esef-guidelines-auditors_en.pdf
 - https://www.esma.europa.eu/sites/default/files/library/esma32-60-254_esef_reporting_manual.pdf
 - https://www.esma.europa.eu/document/esef-reporting-manual
 - https://www.esma.europa.eu/document/esef-conformance-suite-2024
@@ -208,5 +259,6 @@ errors.
 - https://www.xbrl.org/guidance/esef-rules-anchoring-extensions/
 - https://www.xbrl.org/guidance/esef-rules-anchoring-extensions-examples/
 - https://www.afm.nl/en/sector/effectenuitgevende-ondernemingen/financiele-en-duurzaamheidsverslaggeving/jaarlijkse-verslaggeving-in-esef
+- https://www.fsma.be/sites/default/files/media/files/2021-12/fsma_2021_19_en.pdf
 - https://www.fsma.be/en/stori-belgian-official-mechanism-storage-regulated-information
 - https://www.amf-france.org/en/professionals/management-companies/my-relations-amf/submit-annual-reports-amf
