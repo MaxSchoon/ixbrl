@@ -607,6 +607,58 @@ Reviewer checks:
   The 403-exemption KvK example package on sbr-nl.nl
   (`403_voorbeeld-2025-12-31-nl.xbri`) shows the canonical pattern.
 
+### 7.2 Foreign group head exemption (art. 2:403 / 2:408 BW) — a DIFFERENT package shape
+
+When a **foreign parent's group annual report** is deposited to support
+an NL entity's exemption (art. 2:403 group exemption, or art. 2:408
+consolidation exemption), the package is **not** the shape in §7 / §1
+above. Verified against the official FY2025 example
+`403_voorbeeld-2025-12-31-nl.xbri` (downloaded and unzipped):
+
+- The IXDS holds **two XHTML documents**: the foreign group report
+  carried **UNTAGGED** (zero `ix:` tags), plus a separate **iXBRL
+  filing-data document** that carries all the markup.
+- META-INF contains **only `reportPackage.json`** (xBRI 2023). **No
+  `catalog.xml`, no `taxonomyPackage.xml`, no filer extension
+  taxonomy** — the §1/§7 layout above is the *Groot own-accounts* shape,
+  wrong for this case.
+- `link:schemaRef` → the KvK **"Other" entry point**, FY-dated: FY2025
+  `https://www.nltaxonomie.nl/kvk/2025-12-31/kvk-annual-report-other.xsd`
+  (FY2024 was `…/2024-12-31/kvk-annual-report-other-gaap.xsd`, note the
+  `-gaap` suffix). **Same entry point for both 403 and 408.**
+- The filing-data file describes the **NL entity** claiming the exemption
+  (its KvK number / name / legal form / seat); the untagged report is the
+  **foreign parent's** group accounts. One package per NL entity.
+
+Mandatory facts in the filing-data document (RTS Annex II, Table 2 +
+Table 3), against entity scheme `http://www.kvk.nl/kvk-id` and one
+`duration` context: `bw2-titel9:ChamberOfCommerceRegistrationNumber`,
+`:LegalEntityName`, `:LegalEntityLegalForm`, `:LegalEntityRegisteredOffice`,
+`kvk:LegalEntitySize` (enum), `bw2-titel9:FinancialReportingPeriodEndDate`,
+`:FinancialReportingPeriod`, `rj:FinancialStatementsConsolidated`,
+`kvk:AuditorsReportFinancialStatementsPresent`,
+`bw2-titel9:DocumentAdoptionStatus`, and (if adopted)
+`bw2-titel9:DocumentAdoptionDate`.
+
+The article is distinguished **only** by one boolean (both
+`xbrli:booleanItemType`, `periodType=duration`, tagged
+`format="ixt:fixed-true"` value `Ja`, **must be True, never False**):
+
+- art. 2:403 → `kvk:AnnualReportOfForeignGroupHeadForExemptionUnderArticle403` (rules G7-1-4_1 / G7-1-4_2)
+- art. 2:408 → `kvk:AnnualReportOfForeignGroupHeadForExemptionUnderArticle408` (rules G7-2-1_1 / G7-2-1_2; note the manual's G7-2-1_2 has a typo naming the 403 QName)
+
+**Timing (bi-temporal — see §2).** The 403 iXBRL route is operative for
+FY2025. The 408 iXBRL route + 408 boolean are mandatory only for
+**financial years starting on or after 2026-01-01**; FY2025 art. 2:408
+filings may still be submitted **by PDF email**.
+
+Note: in the FY2025 403 example, `kvk:AuditorsReportFinancialStatementsPresent`
+is **`Ja`** — set it per the actual deposit, not by assuming the
+exemption implies the auditor's report is absent.
+
+Validate this package type with
+`--disclosureSystem NL-INLINE-2025-GAAP-OTHER-PREVIEW` (§12).
+
 ## 8. Presentation linkbase — what KvK reviewers actually look at
 
 This is the area where converters drift fastest from review expectation.
@@ -705,20 +757,26 @@ or pick up the wrong NT generation. For deposit-quality validation:
 # FY2025 KvK iXBRL RTS pass — Calc 1.1 (see §4.2)
 arelleCmdLine \
   --plugins inlineXbrlDocumentSet|validate/NL \
-  --disclosureSystem nl-fr-nt20-kvk-ifrs-2025 \
+  --disclosureSystem NL-INLINE-2025 \
   --packages NT20-20251212.zip,kvk-nt20-fr-ifrs-2025.zip \
   --calc c11r \
   -f report-package.zip --validate \
   --internetConnectivity offline
 ```
 
-Adapt the disclosure system name to the operative one in your Arelle
-build (it changes per NT generation; `arelleCmdLine
---showEnvironment` lists what's registered). Run a second pass with
-`--calc c10` only if the operative validator profile or filing channel
-still applies older Calc 1.0 checks. When validation is slow or
-intermittent, suspect remote-taxonomy resolution before suspecting the
-package.
+The operative `validate/NL` disclosure systems for FY2025 are
+**`NL-INLINE-2025`** (an entity's own NL-GAAP / NL-IFRS accounts) and
+**`NL-INLINE-2025-GAAP-OTHER-PREVIEW`** (the KvK "Other" entry point —
+used for the foreign-group-head 403/408 filings in §7.2). Earlier
+editions of this file cited `nl-fr-nt20-kvk-ifrs-2025`; that name is
+**not** registered in Arelle — the `validate/NL` `config.xml` declares
+the `NL-INLINE-2025*` names above (and their lowercase aliases), so the
+old name silently falls back to no disclosure system. Confirm the
+operative name in your build with `arelleCmdLine --plugins validate/NL
+--showEnvironment`. Run a second pass with `--calc c10` only if the
+operative validator profile or filing channel still applies older
+Calc 1.0 checks. When validation is slow or intermittent, suspect
+remote-taxonomy resolution before suspecting the package.
 
 ## 13. A pragmatic NL review pass — in order
 
@@ -800,6 +858,11 @@ Defer to and cite:
   <https://www.nba.nl/wet--en-regelgeving/alerts/nba-alert-50/>.
 - **AFM ESEF guidance** for listed-issuer filings (then return to
   `esef.md`).
+- **Arelle `validate/NL` plugin `config.xml`** for the registered
+  disclosure-system names (`NL-INLINE-2025`,
+  `NL-INLINE-2025-GAAP-OTHER-PREVIEW`, and their aliases) — the operative
+  reference when a `--disclosureSystem` name silently fails to bind —
+  <https://github.com/Arelle/Arelle/tree/master/arelle/plugin/validate/NL>.
 
 If the question concerns a rule version newer than what this file
 cites, or a code not listed in §5 / §6, say so and link the primary
