@@ -1,6 +1,6 @@
 ---
 name: ixbrl
-description: Use for preparing, reviewing, validating, or debugging Inline XBRL (iXBRL) and XBRL filings. Trigger on iXBRL, XBRL, ESEF, EDGAR/EFM, UK FRC/HMRC, Dutch SBR/KvK/AFM, EBA/EIOPA DPM, IFRS, US-GAAP, EDINET, MCA, Arelle, taxonomy packages, report packages, extension taxonomies, anchoring, block or narrative tagging, fact mapping, contexts, units, decimals, transformation formats, calculation/linkbase/dimension errors, and validator codes such as FR-NL-*, EFM.6.*, ESEF.*, xbrldie:*, xbrldte:*, and xbrl.5.2.5.2. Use it to route to primary-source references, templates, and validation scripts.
+description: Use for preparing, reviewing, validating, or debugging Inline XBRL (iXBRL) and XBRL filings. Trigger on iXBRL, XBRL, ESEF, EDGAR/EFM, UK FRC/HMRC/Companies House, Dutch SBR/KvK/AFM, Danish Erhvervsstyrelsen/ÅRL/Regnskab, Finnish PRH digital financial statements, French AMF, German E-Bilanz/Bundesanzeiger, Belgian NBB/Biztax, EBA/EIOPA DPM, IFRS, US-GAAP, EDINET, MCA, Arelle, taxonomy packages, report packages, extension taxonomies, anchoring, block or narrative tagging, fact mapping, contexts, units, decimals, transformation formats, calculation/linkbase/dimension errors, and validator codes such as FR-NL-*, EFM.6.*, ESEF.*, JFCVC.*, xbrldie:*, xbrldte:*, and xbrl.5.2.5.2. Use it to route to primary-source references, templates, and validation scripts.
 license: MIT
 ---
 
@@ -22,7 +22,12 @@ of the right manual and encodes patterns experts recognise on sight.
    - EU listed issuer, IFRS consolidated AFR → **ESEF**, see `references/esef.md`
    - US SEC registrant → **EDGAR / EFM**, see `references/sec-edgar.md`
    - Dutch entity (KvK deposit or AFM listed) → **NL Taxonomie / SBR**, see `references/nl-sbr.md` (and the NL section of `references/taxonomies.md` for entry-point catalogue)
-   - UK statutory accounts or HMRC tax → **UK FRC Suite**, see `references/taxonomies.md`
+   - UK statutory accounts (Companies House), HMRC CT600, or FCA/UKSEF → **UK FRC Suite**, see `references/uk-frc.md`
+   - Danish årsrapport (Erhvervsstyrelsen deposit) → **ÅRL taxonomy / Regnskab Indberet**, see `references/dk-erst.md`
+   - Finnish digital financial statements (PRH Trade Register) → **FI SBR / IFRS / ESEF-ZIP**, see `references/fi-prh.md`
+   - French listed issuer → **ESEF via AMF/ONDE**, see `references/fr-amf.md` (FR statutory accounts & tax are *not* XBRL)
+   - German filing → **E-Bilanz XBRL / Unternehmensregister / ESEF via BaFin**, see `references/de-hgb.md`
+   - Belgian annual accounts → **NBB Central Balance Sheet Office XBRL**, see `references/be-nbb.md`
    - Bank or insurer supervisory return → **EBA / EIOPA DPM**, see `references/taxonomies.md`
    - IFRS digital financial statements (no jurisdictional overlay) → **IFRS Accounting Taxonomy**, see `references/taxonomies.md`
 2. **Pin the operative rules to the reporting period — bi-temporal.**
@@ -41,11 +46,11 @@ of the right manual and encodes patterns experts recognise on sight.
    `references/nl-sbr.md` §2 (Dutch bi-temporal cheatsheet), and the
    regulator's published cut-in dates. **Do not apply current-year
    rules retroactively to a prior-year filing** — e.g. KvK Dutch GAAP
-   notes block-tagging is a FY2026 obligation, not a FY2024 one, and
-   declaring its absence on a FY2024 deposit a defect would itself be
-   the defect.
+   notes block-tagging is voluntary from FY2026 (mandatory date still
+   an open "202X" pending ESMA), so declaring its absence on a FY2024
+   deposit a defect would itself be the defect.
 3. **Choose your validation profile.** Use `scripts/validate_with_arelle.sh
-   <file> <profile>` (`esef`, `efm`, `ukfrc`, `hmrc`, `core`). Run
+   <file> <profile>` (`esef`, `efm`, `ukfrc`, `hmrc`, `dk`, `core`). Run
    `core` first to isolate XBRL 2.1 violations from jurisdictional ones.
 4. **Prepare an Arelle iXBRL Viewer for review.** When reviewing a
    local iXBRL file or document set, generate a viewer with the Arelle
@@ -86,12 +91,18 @@ of them up front.
 | DPM (EBA/EIOPA), Table Linkbase, filing indicators, COREP/FINREP/Solvency II, xBRL-CSV migration | `references/dpm.md` |
 | ESEF mandatory block-tag list (Annex II Table 2), block-tag selection guidance, `ix:continuation` for split disclosures | `references/esef-block-tags.md` |
 | Converting a PDF / Word / accounts-production document to faithful iXBRL — preserving hierarchy, abstracts, dates, completeness; the content-level review pass | `references/conversion.md` |
-| Real-world Inline XBRL examples by country, including Netherlands (`NL`) and other ESEF/UKSEF markets; viewer output, xBRL-JSON, report packages, and validation messages | <https://filings.xbrl.org/> and API docs at <https://filings.xbrl.org/docs/api> |
-| Preparing and using the Arelle iXBRL Viewer for interactive review — `--save-viewer`, document sets, stub viewer mode, review mode, fact inspector, search/filtering, table export, Calc 1.1 toolbar | `references/viewer.md` |
+| Real-world Inline XBRL examples by country (ESEF/UKSEF markets); viewer output, xBRL-JSON, report packages, validation messages | <https://filings.xbrl.org/> and API docs at <https://filings.xbrl.org/docs/api> |
+| Preparing and using the Arelle iXBRL Viewer for interactive review — `--save-viewer`, document sets, stub/review modes, fact inspector, search, table export, Calc 1.1 toolbar | `references/viewer.md` |
 | Which taxonomies exist, current versions, who issues them, who must file | `references/taxonomies.md` |
 | ESEF anchoring, block tagging, Reporting Manual rules, NCAs (AFM, BaFin, AMF, CONSOB, CNMV, FSMA), `ESEF.*` codes | `references/esef.md` |
 | SEC iXBRL phase-in, EDGAR Filer Manual sections, DEI / SRT / US-GAAP, `EFM.6.05.*` codes, Pay-Versus-Performance, cybersecurity tagging | `references/sec-edgar.md` |
-| SBR Dutch GAAP / KvK / AFM filings — NT20 entry points by size class, NL-KVK.* / FR-NL- codes, the dual-scope (consolidated + separate) pattern and mixed-scope ELR, the auditor's report inside the package, recurring deprecated-concept choices, bi-temporal cheatsheet, end-to-end review checklist | `references/nl-sbr.md` |
+| SBR Dutch GAAP / KvK / AFM filings — NT entry points by size class, NL-KVK.*/FR-NL- codes, dual-scope pattern + mixed-scope ELR, packaged auditor's report, bi-temporal cheatsheet, review checklist | `references/nl-sbr.md` |
+| UK Companies House / HMRC CT600 / FCA-UKSEF / Irish ROS — FRC-suite bi-temporal, JFCVC/HMRC codes, closed taxonomy (no anchoring), review checklist | `references/uk-frc.md` |
+| Danish årsrapport — ÅRL taxonomy, Regnskab channels, DKFIN, Fejl/Advis + TH/TR/TM/FR codes, floating-year dimension | `references/dk-erst.md` |
+| Finnish PRH digital financial statements — national SBR (FAS)/IFRS/ESEF-ZIP, XHTML-in-ZIP (not `.xbri`), 2026 PRH decisions | `references/fi-prh.md` |
+| French AMF/ONDE ESEF filing; why FR statutory accounts, *liasse fiscale*, and ACPR are not iXBRL | `references/fr-amf.md` |
+| German E-Bilanz (§ 5b EStG XBRL, not inline), Bundesanzeiger/Unternehmensregister, ESEF via BaFin | `references/de-hgb.md` |
+| Belgian NBB Central Balance Sheet Office XBRL, models/be-gaap, FSMA ESEF, Biztax | `references/be-nbb.md` |
 | Arelle CLI, plugins, formula linkbase, Calc 1.1, full anti-pattern list, ESEF + EFM + core XBRL error codes with fixes | `references/validation.md` |
 
 ## GitHub source repositories to use
@@ -100,15 +111,13 @@ Prefer the live source repositories when debugging tooling behaviour,
 checking option names, or tracing validator codes:
 
 - **Arelle core:** <https://github.com/Arelle/Arelle>. Use for CLI,
-  plugin loading, report-package handling, Inline XBRL processing,
-  ESEF validation implementation, and source-level issue searches.
+  plugin loading, report packages, Inline XBRL processing, and
+  source-level issue searches.
 - **Arelle iXBRL Viewer:** <https://github.com/Arelle/ixbrl-viewer>.
-  This is the open-source project behind the ReadTheDocs viewer docs;
-  it contains the `iXBRLViewerPlugin`, the browser `ixbrlviewer.js`
-  application, release assets, samples, tests, and viewer README.
-- **Arelle EDGAR plugin:** <https://github.com/Arelle/EDGAR>. Use for
-  SEC/EFM-specific plugin behaviour rather than assuming it lives in
-  Arelle core.
+  Contains the `iXBRLViewerPlugin` and the browser `ixbrlviewer.js`
+  application, plus samples and tests.
+- **Arelle EDGAR plugin:** <https://github.com/Arelle/EDGAR> —
+  SEC/EFM-specific plugin behaviour lives here, not in Arelle core.
 
 For normative reporting obligations, GitHub source is implementation
 evidence, not the legal source. Cross-check against the regulator manual
@@ -285,8 +294,9 @@ prior being clean.
    statements they accompany. See `references/conversion.md` §10.
 8. **Package shape.** No `.DS_Store` / `__MACOSX/` at package root;
    no `.html` files (must be `.xhtml`); `META-INF/taxonomyPackage.xml`
-   present and well-formed; for Report Packages 1.0, `reports.json`
-   present and consistent; for jurisdictions that require it, the
+   present and well-formed; for Report Packages 1.0,
+   `META-INF/reportPackage.json` present and consistent; for
+   jurisdictions that require it, the
    auditor's report packaged as a separate tagged iXBRL document
    (Dutch SBR, see `references/nl-sbr.md` §7).
 
@@ -333,6 +343,8 @@ When the user shows you a validator error, route by code prefix:
 - `EFM.6.08.*` → SEC industry-overlay (ECD, RXP, OEF, CEF) linkbase issue.
 - `FR-NL-*` / `FG-NL-*` → SBR Filing Rules / Filing Guidelines (taxonomy-agnostic). The most common are encoding (1.01–1.05), missing `xml:lang` (2.03), `link:schemaRef` placement (2.04), `xbrli:forever` use (3.04), `precision` usage (5.06), `xsi:nil` on facts (5.07), footnotes (6.01). See `references/nl-sbr.md` §6 and `references/validation.md` §5.3.
 - `NL-KVK.*` → KvK-specific Filing Rules supplement (layered on top of FR-NL-). Recurring deposit blockers: `4.4.2.5` mixed-scope ELR missing for a dual-scope concept; `4.4.6.1` usable concepts not applied by tagged facts; `3.4.1.3` transformable element in `ix:hidden`. See `references/nl-sbr.md` §5 and §4 for the dual-scope pattern, and the duplicated/expanded table in `references/validation.md` §5.3.
+- `JFCVC.*` / HMRC gateway `1606`/`1607`/`331x` → UK CH/HMRC joint filing checks (Arelle `validate/UK`). See `references/uk-frc.md` §8-§9.
+- Danish `TH*`/`TR*`/`TM*`/`FR<n>` codes or a Fejl/Advis verdict → ERST Regnskab Indberet controls. See `references/dk-erst.md` §6-§8, §12-§14.
 - `xbrl.5.2.5.2` → calculation inconsistency. Either fix the data or move to Calc 1.1 if the regulator accepts it. See `references/validation.md` §4.
 - `xbrldie:*` (instance-level) → dimensional context error. See `references/dimensions.md` §"Dimensional validity errors".
 - `xbrldte:*` (taxonomy/DTS-level) → hypercube/dimension/domain wiring error in the linkbases. See `references/dimensions.md` §"Dimensional validity errors".
@@ -387,7 +399,7 @@ report-package.zip
 ├── META-INF/
 │   ├── taxonomyPackage.xml      # manifest (mandatory)
 │   ├── catalog.xml              # standard remap (optional but expected)
-│   └── reports.json             # for newer Report Packages 1.0
+│   └── reportPackage.json       # Report Packages 1.0 manifest
 ├── reports/
 │   └── {LEI}-{YYYY-MM-DD}.xhtml # single-file iXBRL
 │   └── {set}/                    # OR a folder with multiple .xhtml files
@@ -412,7 +424,7 @@ Be honest. iXBRL has many regimes and they evolve. If a question concerns:
 
 ## Bundled scripts
 
-- **`scripts/validate_with_arelle.sh <file> [profile]`** — wraps `arelleCmdLine` with the right plugins per profile (`esef`, `efm`, `ukfrc`, `hmrc`, `core`). Auto-detects single file, iXBRL document set, or `.zip` / `.xbri` report package.
+- **`scripts/validate_with_arelle.sh <file> [profile]`** — wraps `arelleCmdLine` with the right plugins per profile (`esef`, `efm`, `ukfrc`, `hmrc`, `dk`, `core`). Auto-detects single file, iXBRL document set, or `.zip` / `.xbri` report package.
 - **`scripts/check_facts.py <ixbrl.xhtml>`** — pure-Python pre-flight sanity check. Catches: required attributes (`contextRef`, `unitRef`, `decimals`/`precision`), unresolved context/unit references, non-ISO-4217 currency measures, `decimals="INF"` abuse, broken continuation chains, inconsistent duplicate facts. Run before Arelle to surface cheap-to-detect errors fast.
 
 Both scripts are dependency-light (`arelle-release`, `lxml`) and CI-safe.

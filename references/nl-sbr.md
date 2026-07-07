@@ -774,7 +774,53 @@ When a finding is unclear, **quote the validator log line verbatim**
 and route by the code prefix in step 4 — that is the cheapest way to
 distinguish a real defect from a known artefact.
 
-## 14. When to escalate to primary sources
+## 14. Stakeholders and governance
+
+Which body owns a stack layer decides who you cite when it is wrong.
+
+- **Business register — KvK (Kamer van Koophandel).** Statutory filing
+  destination: art. 2:394 BW requires depositing the annual report with KvK.
+  KvK owns only KvK-specific concepts, link roles, and the jaarverantwoording
+  entry points — not the accounting concepts.
+- **Digital-reporting programme — SBR, run by Logius.** Logius manages the
+  Nederlandse Taxonomie (NT) and provides **Digipoort** (the exchange
+  gateway). Governance is public-private — the **SBR Beraad** (decision board,
+  chaired by the Rijksregisseur), the **SBR Platform**, and the
+  **Expertgroepen**, with changes routed through **Requests for Comment
+  (RFC)**.
+- **Standards setter — Raad voor de Jaarverslaggeving (RJ).** Issues the
+  Richtlijnen (Dutch GAAP detail); the legislature owns Title 9 Book 2 BW.
+  RJ's annual bundle (Sep–Dec) paces the NT release cycle.
+- **Taxonomy governance / releasekalender.** A new NT ships annually (dates on
+  sbr-nl.nl's **releasekalender**); build order BW2 → RJ → KvK (KvK imports
+  RJ, BW2, IFRS). Ownership by requesting party (uitvragende partij):
+  SBR-generic + VenJ/BW2 → Logius; KvK → KvK; BD slices → Belastingdienst;
+  bank credit/vastgoed (BT/VT) → SBR Nexus.
+- **Tax / prudential / securities authorities.** **Belastingdienst** is the
+  largest requesting party (jenv/BD slice). **DNB** runs a parallel
+  SBR/XBRL prudential domain on the European Filing Rules (like EBA/EIOPA —
+  `dpm.md`). **AFM** regulates listed issuers (ESEF).
+
+## 15. Relation to EU reporting
+
+Several "KvK" rules are EU law wearing a local label.
+
+- **ESEF passthrough.** Per the RTS, SBR supports the uniform format of
+  Delegated Regulation (EU) 2019/815 (XHTML); an in-scope ESEF filer may file
+  its **ESEF report directly with KvK**, the KvK iXBRL provisions still
+  applying. Listed-issuer detail: `esef.md`.
+- **Accounting basis is EU-anchored.** Art. 2:362 BW permits **IFRS as
+  adopted by the EU** and another EU member state's GAAP (the latter reduced
+  to Annex II point 3 metadata tagging; §4.0).
+- **Register interconnection — BRIS.** KvK connects to the EU **Business
+  Registers Interconnection System** (Reg. (EU) 2015/884; EUID), so deposits
+  are discoverable across member-state registers.
+- **DNB ↔ EU supervisors.** DNB's XBRL returns feed the EBA/ECB/EIOPA/SRB DPM
+  taxonomies as national competent authority (`dpm.md`).
+
+Verify any EU-law citation against the operative RTS first.
+
+## 16. When to escalate to primary sources
 
 This file is a reviewer's working reference, not the legal source.
 Defer to and cite:
