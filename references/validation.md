@@ -169,7 +169,7 @@ work but not in itself a defect. Distinguish them by reading the
 
 | Code | Meaning | Typical root cause | Fix |
 |---|---|---|---|
-| `ESEF.2.1.1.nonLEIContextScheme` | Context identifier scheme is not the LEI scheme | Filer used CIK / KvK number, not LEI URI | Set `<xbrli:identifier scheme="http://standard.iso.org/iso/17442">` |
+| `ESEF.2.1.1.nonLEIContextScheme` | Context identifier scheme is not the LEI scheme | Filer used CIK / KvK number, not LEI URI | Set `<xbrli:identifier scheme="http://standards.iso.org/iso/17442">` |
 | `ESEF.2.1.1.invalidIdentifierFormat` | LEI not a valid 20-char ISO-17442 string | Typo or trimmed LEI | Re-key the LEI |
 | `ESEF.2.1.2.periodWithTimeContent` | xbrli:period contains a time component | Generated `2024-12-31T00:00:00` | Strip the time portion |
 | `ESEF.2.1.3.segmentUsed` | xbrli:segment used (forbidden in ESEF) | Legacy template emitting segment | Replace with xbrli:scenario + dimensions |

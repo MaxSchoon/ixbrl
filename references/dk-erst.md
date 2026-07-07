@@ -136,9 +136,9 @@ mellemstor / C stor / D) [S3][S8].
 
 | Class | Channel |
 |---|---|
-| B | Regnskab Basis **or** Special — but **must** use Special if it applies one or more class-C rules (unless Basis offers those C-elements), if the report is IFRS, if it is multilingual (one language Danish/English), or if it splits accounting-policy disclosure per ÅRL § 16 stk. 1 (§ 14) |
-| C | Regnskab Special (§ 15) |
-| D | Regnskab Special, ÅRL or IFRS alike (§ 16) |
+| B | Regnskab Basis **or** Special (or system-til-system, § 13 stk. 3) — but **must** use Special if it applies one or more class-C rules (unless Basis offers those C-elements), if the report is IFRS, if it is multilingual (one language Danish/English), or if it splits accounting-policy disclosure per ÅRL § 16 stk. 1 (§ 14) |
+| C | Regnskab Special or system-til-system (§ 15; § 13 stk. 3) |
+| D | Regnskab Special or system-til-system, ÅRL or IFRS alike (§ 16; § 13 stk. 3) |
 
 > **Honest gap.** The ÅRL § 7 threshold figures come from a Tier-2
 > consolidated mirror (danskelove.dk) [S7]; retsinformation's consolidated

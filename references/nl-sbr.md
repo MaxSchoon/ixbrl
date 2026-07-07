@@ -408,13 +408,13 @@ iXBRL RTS unless the current validator profile actually does so.
 
 ```bash
 # FY2025 KvK iXBRL RTS pass
-arelleCmdLine --plugins inlineXbrlDocumentSet|validate/NL \
+arelleCmdLine --plugins 'inlineXbrlDocumentSet|validate/NL' \
               --calc c11r \
               --packages <NT package>.zip \
               -f report-package.zip --validate
 
 # Legacy / compatibility pass only if the operative validator profile uses it
-arelleCmdLine --plugins inlineXbrlDocumentSet|validate/NL \
+arelleCmdLine --plugins 'inlineXbrlDocumentSet|validate/NL' \
               --calc c10 \
               --packages <NT package>.zip \
               -f report-package.zip --validate
@@ -704,7 +704,7 @@ or pick up the wrong NT generation. For deposit-quality validation:
 ```bash
 # FY2025 KvK iXBRL RTS pass — Calc 1.1 (see §4.2)
 arelleCmdLine \
-  --plugins inlineXbrlDocumentSet|validate/NL \
+  --plugins 'inlineXbrlDocumentSet|validate/NL' \
   --disclosureSystem nl-fr-nt20-kvk-ifrs-2025 \
   --packages NT20-20251212.zip,kvk-nt20-fr-ifrs-2025.zip \
   --calc c11r \

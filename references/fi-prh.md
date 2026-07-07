@@ -116,7 +116,7 @@ applied to financial periods starting in 2024) [S6][S7].
 > **not** re-verified against the rendered body of either predecessor decision.
 > Confirm against the superseded decision PDFs before relying on the exact
 > vintage identifiers.
-
+>
 > **Honest gap.** The full **operative paragraph text** of both decision
 > PDFs was **not extracted** this session — only the Finlex metadata /
 > legal basis for PRH/1087 and PRH's own summary pages were fetched. The

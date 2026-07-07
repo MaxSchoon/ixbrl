@@ -97,7 +97,7 @@ the same amendment as `esef.md` §1. The 2025-taxonomy amendment is now
 18/19 elements, a **Calculations 1.1** validity requirement — applying
 at the latest for FYs **beginning on/after 1 Jan 2026**, with **early
 application allowed for FY2025** [S27]; ESMA has stated it does not
-plan to amend the ESEF RTS or taxonomy in 2026 [S32]. Pin the
+plan to amend the ESEF RTS or taxonomy in 2026 [S33]. Pin the
 period from `<xbrli:period>` and confirm the ESEF generation before
 declaring a defect.
 
@@ -148,8 +148,9 @@ the declaration/liasse, AUTACK for securisation, CONTRL for the
 syntactic ack) of directory D00B — **not XBRL and not iXBRL** [S13].
 
 - DGFiP adopted EDIFACT per the directive of 16 January 1997; since
-  **April 2002 EDI-TDFC is the only usable format** — only
-  EDI-TDFC-norm transmissions are accepted [S12].
+  **April 2002 EDI-TDFC is the mandatory EDI format** — on the EDI
+  channel only EDI-TDFC-norm transmissions are accepted (EFI, below,
+  is the separate online-form channel) [S12].
 - Data flows through an accredited *partenaire EDI* via CFT or
   sFTP/FTPS to a DGFiP ESI (Strasbourg); software carries an EDIFICAS
   conformity attestation [S12].
@@ -430,7 +431,7 @@ Verify the operative version of every cited rule at filing date.
 - **[S25]** ESMA — *CP: ESEF RTS marking-up rules for sustainability reports & financial notes* (Dec 2024) — <https://www.esma.europa.eu/sites/default/files/2024-12/ESMA32-2009130576-3024_CP_ESEF_RTS_-_marking_up_rules_for_sustainability_reports_and_financial_notes_and_EEAP_RTS_-_amendments.pdf>
 - **[S26]** XBRL France GT ESG — *Points d'attention pour la digitalisation des rapports de durabilité* (14/01/2026) — <https://www.xbrlfrance.org/wp-content/uploads/2026/02/Taxonomie-ESG-Points-dattention-et-recommandations-XBRL-France_v1def.pdf>
 - **[S27]** Commission Delegated Regulation (EU) 2026/283 of 12 Dec 2025 (adopted as C(2025) 8507; OJ 18 Mar 2026) — 2025 ESEF taxonomy update; Calc 1.1; IFRS 18/19 — <https://eur-lex.europa.eu/eli/reg_del/2026/283/oj>
-- **[S32]** ESMA — *ESMA support ESEF implementation with updated taxonomy* (21 Apr 2026; states no ESEF RTS/taxonomy amendment planned in 2026) — <https://www.esma.europa.eu/press-news/esma-news/esma-support-esef-implementation-updated-taxonomy>
+- **[S33]** ESMA — *ESMA support ESEF implementation with updated taxonomy* (21 Apr 2026; states no ESEF RTS/taxonomy amendment planned in 2026) — <https://www.esma.europa.eu/press-news/esma-news/esma-support-esef-implementation-updated-taxonomy>
 - **[S28]** Réglementation Environnement (blog, **Tier 3 — overstated**) — *CSRD juin 2026 : deuxième rapport, contrôle AMF* — <https://www.reglementation-environnement.com/csrd-premiers-rapports-large-companies-juin-2026-amf-sanctions/>
 - **[S29]** AMF — *Bilan 2024 du reporting de durabilité des sociétés cotées* — <https://www.amf-france.org/sites/institutionnel/files/private/2024-12/rapport-amf-2024-bilan-reporting-durabilite-des-societes-cotees_fr.pdf>
 - **[S30]** Directive **(EU) 2026/470** (Omnibus I), 24 Feb 2026, OJ L 26 Feb 2026 — amends CSRD Art. 29d (recital 24: mark-up suspended until Reg. 2019/815 updated; recital 25: Member-State board-responsibility limit) — <https://eur-lex.europa.eu/eli/dir/2026/470/oj/eng>

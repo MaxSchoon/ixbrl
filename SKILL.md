@@ -50,7 +50,7 @@ of the right manual and encodes patterns experts recognise on sight.
    an open "202X" pending ESMA), so declaring its absence on a FY2024
    deposit a defect would itself be the defect.
 3. **Choose your validation profile.** Use `scripts/validate_with_arelle.sh
-   <file> <profile>` (`esef`, `efm`, `ukfrc`, `hmrc`, `dk`, `core`). Run
+   <file> [profile]` (`esef`, `efm`, `ukfrc`, `hmrc`, `dk`, `core`). Run
    `core` first to isolate XBRL 2.1 violations from jurisdictional ones.
 4. **Prepare an Arelle iXBRL Viewer for review.** When reviewing a
    local iXBRL file or document set, generate a viewer with the Arelle

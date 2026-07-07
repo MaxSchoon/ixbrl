@@ -238,9 +238,9 @@ authoritative source is the Joint Filing Common Validation Checks — §8):
   least one of
   `CharityRegistrationNumber{EnglandWales, Scotland, NorthernIreland}`.
 
-Audited accounts require `DateAuditorsReport` + `OpinionAuditorsOnEntity`
-+ (`NameIndividualAuditor` **OR**
-`NameSeniorStatutoryAuditor`+`NameEntityAuditors`) — the disjunction is
+Audited accounts require `DateAuditorsReport` plus
+`OpinionAuditorsOnEntity` plus (`NameIndividualAuditor` **OR**
+`NameSeniorStatutoryAuditor` + `NameEntityAuditors`) — the disjunction is
 what makes the 2026-suite change (§2.1) validator-safe. Charity audits
 additionally key off the
 `CharityAuditCarriedOutInAccordanceWithCharitiesAct2011Truefalse`
