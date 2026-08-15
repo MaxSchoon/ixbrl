@@ -85,7 +85,9 @@ def read_baseline(ref: str, path: Path) -> str | None:
     return proc.stdout if proc.returncode == 0 else None
 
 
-def compare(ref: str, path: Path, renames: dict[str, str]) -> list[str]:
+def compare(
+    ref: str, path: Path, renames: dict[str, str], allow_added: bool = False
+) -> list[str]:
     problems: list[str] = []
     source_path = Path(renames.get(str(path.relative_to(ROOT)), path))
     before = read_baseline(ref, ROOT / source_path)
@@ -104,11 +106,24 @@ def compare(ref: str, path: Path, renames: dict[str, str]) -> list[str]:
             f"{path.name}: {n} block(s) LOST or ALTERED -- first line: "
             f"{index[h].splitlines()[0][:90]!r}"
         )
-    for h, n in (new_counts - old_counts).items():
-        problems.append(
-            f"{path.name}: {n} block(s) ADDED or ALTERED -- first line: "
-            f"{index[h].splitlines()[0][:90]!r}"
-        )
+    added = new_counts - old_counts
+    if allow_added:
+        # A restructure legitimately introduces front matter, a Start-here
+        # table and anchors. Additions are visible in review; the dangerous
+        # direction is content going missing or being quietly reworded, and
+        # that is still caught -- a reworded block registers as a LOSS of the
+        # original regardless of what replaced it.
+        for h, n in added.items():
+            print(
+                f"  + {path.name}: {n} new block(s) -- "
+                f"{index[h].splitlines()[0][:70]!r}"
+            )
+    else:
+        for h, n in added.items():
+            problems.append(
+                f"{path.name}: {n} block(s) ADDED or ALTERED -- first line: "
+                f"{index[h].splitlines()[0][:90]!r}"
+            )
 
     if not problems:
         print(
@@ -127,6 +142,14 @@ def main() -> int:
         default=[],
         metavar="NEW=OLD",
         help="declare a moved file, e.g. references/jurisdictions/x.md=references/x.md",
+    )
+    ap.add_argument(
+        "--allow-added",
+        action="store_true",
+        help=(
+            "permit NEW blocks (front matter, navigation, anchors) while still "
+            "rejecting any block that is lost or altered"
+        ),
     )
     ap.add_argument("paths", nargs="*", help="markdown files (default: references/)")
     args = ap.parse_args()
@@ -147,14 +170,17 @@ def main() -> int:
 
     problems: list[str] = []
     for path in paths:
-        problems.extend(compare(args.baseline, path, renames))
+        problems.extend(compare(args.baseline, path, renames, args.allow_added))
 
     if problems:
         for p in problems:
             print(f"::error::{p}")
         print(f"\n{len(problems)} move-integrity failure(s).")
         return 1
-    print("\nMove integrity verified: no content block added, dropped, or altered.")
+    if args.allow_added:
+        print("\nMove integrity verified: no content block lost or altered.")
+    else:
+        print("\nMove integrity verified: no content block added, dropped, or altered.")
     return 0
 
 
