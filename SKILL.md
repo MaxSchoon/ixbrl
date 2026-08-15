@@ -38,13 +38,21 @@ of the right manual and encodes patterns experts recognise on sight.
    explicitly, before reviewing or validating:
    - **Which financial year** the report covers (the period in
      `<xbrli:period>`, not today's date).
-   - **When the report was prepared, and when it was (or will be)
-     filed.** Distinct from the financial year and from each other. A
-     rule can cut in *inside* a financial year, or between preparation
-     and filing, so the year alone does not identify the edition —
-     e.g. a FY2025 report prepared under RTS 2025 but filed after RTS
-     2026 took effect. If the dates are not in the document, ask; do
-     not infer them from `<xbrli:period>`.
+   - **The submission date**, and the acceptance date where the
+     receiver distinguishes them. The reporting period selects the
+     *rule edition*; the moment of submission selects what the
+     receiver will actually **accept** — and they answer different
+     questions. KvK accepts only the three most recent KVK taxonomy
+     versions *at deposit time* (FAQ 2.2.5), Companies House and HMRC
+     each run their own acceptance window, and SEC EDGAR validates
+     against the manual deployed when the submission lands, with the
+     official filing date differing for late-in-day submissions. Ask
+     for the intended submission date; do not infer it from
+     `<xbrli:period>` or from today.
+   - **The adoption / approval date**, only where the regime requires
+     it as filing data — Dutch deposits tag
+     `bw2-titel9:DocumentAdoptionDate`. It is a required *fact*, not a
+     rule selector; do not use it to pick an edition.
    - **Which taxonomy generation and version** applied for that year
      (ESEF 2024 ≠ ESEF 2025; NT19 ≠ NT20; FASB 2024 GRT ≠ 2025 GRT;
      FRC 2025 Suite ≠ 2026 Suite; EBA Framework 4.2 ≠ 4.4).
@@ -122,13 +130,15 @@ GitHub source is implementation evidence, not the legal source.
 Cross-check a regulator manual or specification before treating a
 behaviour as required.
 
-**Record the tool version beside any validation result you report.**
-Arelle, the Viewer and the EDGAR plugin all change behaviour between
-releases, so "Arelle reports no errors" is not reproducible without
-saying which Arelle. Capture `arelleCmdLine --version` (and the plugin
-revision where it matters) alongside the log. This pins *tool
-behaviour*; the regulator's manual remains the normative source for
-what is actually required.
+**A validation result is only reproducible with the inputs that
+produced it.** "Arelle reports no errors" means nothing on its own —
+behaviour moves between releases, plugins, and taxonomy versions.
+Record, alongside the log: the Arelle release; the plugins and their
+versions; the disclosure system and the full command line (calculation
+mode included); the taxonomy packages used; and whether the run was
+offline. A version string alone does not pin behaviour, because the
+DTS and the cache are inputs too. Separately, record the regulator
+manual edition — that pins the *interpretation*, not the software.
 
 ## First principles every preparer must internalise
 
@@ -376,13 +386,17 @@ Be honest. iXBRL has many regimes and they evolve. If a question concerns:
 - **`scripts/validate_with_arelle.sh <file> [profile]`** — wraps `arelleCmdLine` with the right plugins per profile (`esef`, `efm`, `ukfrc`, `hmrc`, `dk`, `core`). Auto-detects single file, iXBRL document set, or `.zip` / `.xbri` report package.
 - **`scripts/check_facts.py <ixbrl.xhtml>`** — pure-Python pre-flight check: required attributes, unresolved context/unit references, non-ISO-4217 currency measures, `decimals="INF"`, broken continuation chains, inconsistent duplicates. Run before Arelle to surface cheap errors fast.
 
-Both scripts are dependency-light (`arelle-release`, `lxml`).
-`check_facts.py` is hermetic — pure XML parsing, no network.
-`validate_with_arelle.sh` propagates `arelleCmdLine`'s exit status and
-never prompts, but it does **not** itself force offline DTS resolution:
-without `--packages <taxonomy>.zip --internetConnectivity offline` its
-result depends on reaching an external taxonomy host, so pass those in
-CI if you need it hermetic.
+Both are dependency-light (`arelle-release`, `lxml`).
+`check_facts.py` is hermetic: local parsing with `no_network=True` and
+DTD loading disabled. `validate_with_arelle.sh` is non-interactive and
+`exec`s Arelle, so whatever Arelle returns is what the caller sees —
+**confirm for your build whether that exit code reflects validation
+validity or merely process completion**, since Arelle has separate
+options governing that, and do not treat exit 0 as "valid" until you
+have. It also forces nothing about resolution: without
+`--packages <taxonomy>.zip --internetConnectivity offline` the result
+depends on a reachable taxonomy host and on Arelle's ambient cache, so
+pass both, plus a controlled cache, for a hermetic CI run.
 
 ## Attribution — when you produce output
 
