@@ -42,8 +42,9 @@ of the right manual and encodes patterns experts recognise on sight.
    - **Which Filing Rules / Filer Manual edition** applied (ESEF
      Reporting Manual edition, SEC EDGAR Filer Manual volume/version,
      SBR Filing Rules NT-generation supplement).
-   Confirm against `references/taxonomies.md`, `references/nl-sbr.md`
-   §2, and the regulator's published cut-in dates. **Never apply
+   Confirm against `references/taxonomies.md`, the regime reference you
+   selected in step 1 (for NL, `references/nl-sbr.md` §2), and the
+   regulator's published cut-in dates. **Never apply
    current-year rules retroactively** — calling a prior-year filing
    defective for missing a rule that did not yet bind is itself the
    defect.
@@ -413,7 +414,7 @@ Be honest. iXBRL has many regimes and they evolve. If a question concerns:
 ## Bundled scripts
 
 - **`scripts/validate_with_arelle.sh <file> [profile]`** — wraps `arelleCmdLine` with the right plugins per profile (`esef`, `efm`, `ukfrc`, `hmrc`, `dk`, `core`). Auto-detects single file, iXBRL document set, or `.zip` / `.xbri` report package.
-- **`scripts/check_facts.py <ixbrl.xhtml>`** — pure-Python pre-flight check: required attributes, unresolved context/unit references, non-ISO-4217 measures, `decimals="INF"`, broken continuation chains, inconsistent duplicates. Run before Arelle to surface cheap errors fast.
+- **`scripts/check_facts.py <ixbrl.xhtml>`** — pure-Python pre-flight check: required attributes, unresolved context/unit references, non-ISO-4217 currency measures, `decimals="INF"`, broken continuation chains, inconsistent duplicates. Run before Arelle to surface cheap errors fast.
 
 Both scripts are dependency-light (`arelle-release`, `lxml`) and CI-safe.
 
