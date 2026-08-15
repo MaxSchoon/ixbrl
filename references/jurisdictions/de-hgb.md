@@ -352,11 +352,21 @@ infringement procedure. A 2024 draft died with the Ampel coalition; a
 Referentenentwurf (10 Jul 2025) and a Regierungsentwurf of a
 **CSRD-Umsetzungsgesetz (CSRD-UG)** followed on 3 Sep 2025, incorporating
 the Omnibus "stop-the-clock" two-year deferral (Art. 96 Abs. 3/4 EGHGB-E).
-As of the research window (early-mid 2026) the CSRD-UG was **still not
-enacted**: Rechtsausschuss Änderungsanträge on 31 Mar 2026, public hearing
-13 Apr 2026, a SPD/CDU-CSU amendment folding in Omnibus I (Directive (EU)
-2026/470). The final enactment date and § 289b ff. HGB text are not yet
-fixed — an honest gap (*Coverage and known limitations*). Because no HGB
+**Checked 2026-08-15: the CSRD-UG was still not enacted.** The trail:
+Rechtsausschuss Änderungsanträge 31 Mar 2026, public hearing 13 Apr 2026,
+a CDU/CSU–SPD amendment folding in Omnibus I (Directive (EU) 2026/470).
+The legislature targeted completion **during summer 2026**, so this is
+precisely the claim to re-check before relying on it — verify against the
+Bundesgesetzblatt rather than this file.
+
+Under the 31 Mar 2026 amendment the scope becomes **cumulative**: more
+than **1,000 employees** on annual average **and** more than **EUR 450m**
+net turnover. Newly in-scope entities would report from financial years
+beginning **1 Jan 2025**, i.e. retroactively over closed years — a point
+the IDW contested in its Stellungnahme, and one to watch because it
+changes whether an FY2025 report was ever required. The final enactment
+date and the operative § 289b ff. HGB text are not fixed — an honest gap
+(*Coverage and known limitations*). Because no HGB
 amendment passed, the pre-existing (NFRD-based) regime remains in force
 for FY2025; large German PIEs largely applied ESRS 1.0 voluntarily
 (advisory/chamber analysis, *Coverage and known limitations*).
