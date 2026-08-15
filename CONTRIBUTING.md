@@ -4,7 +4,7 @@ Thanks for considering a contribution. This skill is read by AI agents, so its a
 
 ## What this project is
 
-A vendor-neutral skill for any AI agent runtime that supports the standard skill convention. It contains:
+An open, primary-source-grounded skill for any AI agent runtime that supports the standard skill convention. Maintained by [Doc2iXBRL](https://doc2ixbrl.com). It contains:
 
 - `SKILL.md` — the agent entrypoint
 - `references/` — primary-source-cited reference notes for XBRL 2.1, iXBRL 1.1, ESEF, EDGAR/EFM, dimensions, taxonomies, validation, registries, DPM, etc.
