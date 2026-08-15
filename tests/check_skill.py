@@ -6,7 +6,9 @@ break the agent contract or the runnable scaffolds:
 
   1. SKILL.md exists, stays under 32 KiB, and has YAML frontmatter with a
      `name` and a `description` (description under 1024 chars).
-  2. Every `references/*.md` linked from SKILL.md actually exists.
+  2. Every reference link resolves -- across ALL repository Markdown, not just
+     SKILL.md, and through subdirectories. Both link forms in use are handled:
+     repo-root (`references/foo.md`) and sibling (`foo.md` inside references/).
   3. Asset cross-references resolve: every `xlink:href="extension-schema.xsd#X"`
      in assets/ matches an `id="X"` declared in extension-schema.xsd.
   4. The licence attribution required by ATTRIBUTION.md is actually present:
@@ -98,10 +100,53 @@ def check_skill() -> None:
     else:
         print(f"SKILL.md frontmatter OK (description {len(fm['description'])} chars)")
 
-    # Every references/*.md referenced from SKILL.md must exist.
-    for rel in sorted(set(re.findall(r"references/([A-Za-z0-9._-]+\.md)", text))):
-        if not (ROOT / "references" / rel).is_file():
-            fail(f"SKILL.md references missing file: references/{rel}")
+    # Link resolution is checked repo-wide by check_reference_links().
+
+
+# Repo-root form (references/foo.md, or references/sub/foo.md) and the sibling
+# form used inside references/ (foo.md). The first pattern must allow path
+# separators: it did not, so a file moved into references/<subdir>/ stopped
+# matching and its links silently went unchecked -- a guardrail that quietly
+# covers less is worse than one that fails.
+ROOT_LINK = re.compile(r"references/((?:[A-Za-z0-9._-]+/)*[A-Za-z0-9._-]+\.md)")
+SIBLING_LINK = re.compile(r"(?<![\w/.])([A-Za-z0-9._-]+\.md)")
+
+
+def check_reference_links() -> None:
+    """Every link to a references/ document must resolve, from any file."""
+    mark = len(errors)
+    references = ROOT / "references"
+    known = {p.relative_to(references).as_posix() for p in references.rglob("*.md")}
+    basenames = {p.name for p in references.rglob("*.md")}
+
+    sources = [ROOT / "SKILL.md", *sorted(references.rglob("*.md"))]
+    checked = 0
+    for src in sources:
+        if not src.is_file():
+            continue
+        text = src.read_text(encoding="utf-8")
+        label = src.relative_to(ROOT).as_posix()
+
+        for rel in sorted(set(ROOT_LINK.findall(text))):
+            checked += 1
+            if rel not in known:
+                fail(f"{label}: link to references/{rel} does not resolve")
+
+        # Sibling form only makes sense from inside references/.
+        if src.is_relative_to(references):
+            for name in sorted(set(SIBLING_LINK.findall(text))):
+                if name == src.name or name not in basenames:
+                    continue  # unknown .md names are prose, not links
+                checked += 1
+                if not (src.parent / name).is_file():
+                    fail(
+                        f"{label}: sibling link to {name} does not resolve from "
+                        f"{src.parent.relative_to(ROOT).as_posix()}/ "
+                        "(the file moved -- use the repo-root form)"
+                    )
+
+    if not failures_since(mark):
+        print(f"Reference links OK ({checked} checked across {len(sources)} files)")
 
 
 def check_asset_crossrefs() -> None:
@@ -203,6 +248,7 @@ def check_attribution() -> None:
 
 def main() -> int:
     check_skill()
+    check_reference_links()
     check_asset_crossrefs()
     check_attribution()
     if errors:
