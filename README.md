@@ -13,46 +13,82 @@ that produces their iXBRL.
 
 ## What this skill gives you
 
-- **`SKILL.md`** — first principles, regulator routing, and the
-  validation pipeline. Loaded automatically when the skill triggers.
-- **Live filing corpus routing** — directs agents to
-  <https://filings.xbrl.org/> for country-filtered ESEF/UKSEF examples
-  such as Netherlands (`NL`) filings, with viewer output, xBRL-JSON,
-  report packages, and validation messages.
-- **Arelle iXBRL Viewer review workflow** — explains how to prepare a
-  local viewer with `--save-viewer`, handle document sets, and use the
-  viewer's fact inspector, search/filtering, table export, calculation
-  mode, and review mode to inspect iXBRL quality. Links to the
-  open-source viewer project at <https://github.com/Arelle/ixbrl-viewer>.
-- **`references/`** — load on demand:
-  - `spec.md` — Inline XBRL 1.1, XBRL 2.1, XDT (Dimensions),
-    Transformation Registry 4, calculation linkbase semantics.
-  - `taxonomies.md` — IFRS, ESEF, US-GAAP / DEI / SRT, UK FRC Suite,
-    Dutch NT / SBR, Denmark ÅRL, Finland PRH, France, Germany, Belgium,
-    EBA & EIOPA DPM, plus EDINET / CNMV / SBR-AU / MCA.
-  - `esef.md` — ESEF legal basis, Reporting Manual rules, anchoring,
-    block tagging, report package, NCAs, and `ESEF.*` error codes.
-  - `nl-sbr.md`, `uk-frc.md`, `dk-erst.md`, `fi-prh.md`, `fr-amf.md`,
-    `de-hgb.md`, `be-nbb.md` — jurisdiction deep-dives (filing rules,
-    bi-temporal version cheatsheets, validator gates, stakeholder and
-    EU-relationship maps, review checklists).
-  - `sec-edgar.md` — SEC iXBRL phase-in, EDGAR Filer Manual sections,
-    DEI cover-page tagging, `EFM.6.05.*` codes, recent rules
-    (Pay-Versus-Performance, cybersecurity disclosure, tailored
-    shareholder reports).
-  - `validation.md` — Arelle CLI, plugins, formula linkbase, Calc 1.1,
-    a master list of `ESEF.*` / `EFM.*` / `xbrl.*` / `xbrldie:*` error
-    codes with root cause and fix, and 25 anti-patterns that pass
-    syntax but fail review.
-- **`scripts/validate_with_arelle.sh`** — wraps `arelleCmdLine` with
-  the right plugin chain per profile (`esef`, `efm`, `ukfrc`, `hmrc`,
-  `dk`, `core`), selecting the disclosure system where the plugin
-  requires one; extra args pass through.
-- **`scripts/check_facts.py`** — pure-Python pre-flight that catches
-  cheap-to-detect issues (missing `decimals`, dangling continuation
-  chains, undefined contexts/units, non-ISO currency measures,
-  `decimals="INF"` abuse, inconsistent duplicate facts) before you
-  spend cycles in Arelle.
+An agent that reviews a filing has one job: tell you what is wrong, and be
+right. Everything here serves that.
+
+The skill is not a library you call. It is knowledge the agent loads when it
+needs it, and scripts it runs when knowing is not enough.
+
+### The entry point
+
+`SKILL.md` loads automatically when the skill triggers. It holds the routing
+logic and nothing else: identify the regulator, pin the rules to the reporting
+period, pick the validation profile, then go to the reference that answers the
+question.
+
+It stays under 32 KiB because a file the runtime truncates is a file that lies
+to you. Depth lives in `references/`, which load only when the body points at
+them. That is the whole design.
+
+### The references
+
+Load one. Do not load them all.
+
+| Read this | When you need |
+|---|---|
+| `first-principles.md` | The eight things that decide whether tagged output is right, in any jurisdiction |
+| `spec.md` | Inline XBRL 1.1, XBRL 2.1, XDT, Transformation Registry, calculation semantics |
+| `types.md` | QNames, item types, concept attributes |
+| `structure.md` | DTS, linkbases, roles, tuples, OIM, instance pointers |
+| `dimensions.md` | Hypercubes, axes, default members, `xbrldie:*` errors |
+| `advanced-specs.md` | Generic links, Functions Registry, Versioning |
+| `registries.md` | Label Role Registry, Data Types Registry, URI conventions |
+| `taxonomies.md` | Which taxonomy applies, which version, who issues it |
+| `esef.md` | ESEF legal basis, anchoring, block tagging, `ESEF.*` codes |
+| `esef-block-tags.md` | The Annex II Table 2 mandatory block-tag list |
+| `dpm.md` | EBA and EIOPA DPM, Table Linkbase, filing indicators |
+| `conversion.md` | Turning a PDF or Word document into faithful iXBRL |
+| `viewer.md` | Preparing and driving the Arelle iXBRL Viewer for review |
+| `validation.md` | Arelle CLI, plugins, Calc 1.1, and every error code with its cause and fix |
+
+### The jurisdictions
+
+One file per regime, under `references/jurisdictions/`. Each opens with a
+profile table, because most jurisdictions run more than one filing regime and
+picking the wrong one wastes the whole review.
+
+| File | Regime |
+|---|---|
+| `nl-sbr.md` | KvK Handelsregister, AFM, SBR Dutch GAAP |
+| `uk-frc.md` | Companies House, HMRC CT600, FCA/UKSEF, Irish Revenue |
+| `sec-edgar.md` | SEC EDGAR, EFM, operating companies and funds |
+| `dk-erst.md` | Erhvervsstyrelsen, ÅRL, Regnskab channels, DKFIN |
+| `fi-prh.md` | PRH digital financial statements |
+| `de-hgb.md` | E-Bilanz, Offenlegung, ESEF via BaFin |
+| `fr-amf.md` | AMF ESEF, and the French obligations that are not XBRL |
+| `be-nbb.md` | NBB Central Balance Sheet Office, FSMA, Biztax |
+
+A jurisdiction that has no XBRL obligation says so plainly. That is worth as
+much as a rule, and harder to find.
+
+### The scripts
+
+Knowing the rules is not the same as checking the file. Two scripts do that.
+
+| Script | Catches | Cost |
+|---|---|---|
+| `scripts/check_facts.py` | Missing `decimals`, dangling continuation chains, undefined contexts and units, non-ISO currency measures, `decimals="INF"`, inconsistent duplicate facts | Milliseconds, no network, standard library plus `lxml` |
+| `scripts/validate_with_arelle.sh` | Everything the regulator's own validator catches | An Arelle run |
+
+Run the cheap one first. It finds the errors that would waste an Arelle cycle,
+and it never touches the network.
+
+### The scaffolds
+
+`assets/` holds a complete, valid iXBRL skeleton with its extension schema and
+all four linkbases, plus a taxonomy package and catalog. They are not
+illustrations. They pass `xmllint`, and CI keeps them passing, because a broken
+example teaches the wrong thing with total confidence.
 
 ## Source discipline
 
