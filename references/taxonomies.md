@@ -158,6 +158,16 @@ versions should be in active use simultaneously.
   (mandatory iXBRL).
 - Charity Commission / HMRC for charities meeting the threshold.
 - FCA for UKSEF AFR filings of premium- and standard-listed issuers.
+- **Companies House April 2028 (ECCTA):** software-only iXBRL accounts
+  mandate confirmed 9 June 2026 (moved from the paused April-2027 date) —
+  web and paper accounts routes close; small/micro P&L with a
+  publication opt-out; abridged accounts abolished. See
+  `references/uk-frc.md` §3.
+
+**Deep dive:** for the receiver-by-receiver filing rules, bi-temporal
+cheatsheet, validation gates (CH validator, Arelle `validate/UK` JFCVC /
+HMRC codes, Irish `validate/ROS`), the closed-taxonomy / no-anchoring
+design, and the end-to-end review checklist, see `references/uk-frc.md`.
 
 **Download:**
 - https://www.frc.org.uk/library/standards-codes-policy/accounting-and-reporting/frc-taxonomies/
@@ -282,7 +292,86 @@ version.
 
 **Download:** https://www.eiopa.europa.eu/tools-and-data/supervisory-reporting-dpm-and-xbrl_en
 
-## 7. Other Notable Taxonomies
+## 7. Denmark — ÅRL Taxonomy / DCCA (Erhvervsstyrelsen)
+
+**Issuer / Jurisdiction:** Erhvervsstyrelsen (Danish Business Authority / DCCA), which runs the Regnskab Indberet platform and publishes filed data on `www.data.virk.dk`. Statute: Årsregnskabsloven (ÅRL, lovbek. nr. 1057 af 23/09/2024); filing rules: BEK nr. 859 af 18/06/2025 (indsendelsesbekendtgørelsen).
+
+**Versioning:** Annual ÅRL taxonomy generations (`20241001`, `20251001`, …). Inline XBRL is mandatory for the årsrapport from **balance date on/after 2025-01-01** — bi-temporal, keyed to the balance date not the filing date. The pairing of balance date → taxonomy generation → Kontroller version matters; see the cheatsheet in `references/dk-erst.md` §2.
+
+**Architecture:** Root URL `http://archprod.service.eogs.dk/taxonomy/`, `{yyyymmdd}/{component}` layout. Modular three-letter namespaces: `gsd` (general + submission data), `arr` (auditor's reports), `mrv` (management's review), `sob` (statement of boards), `fsa` (financial statements), `dst`/`tax`/`eogs`, plus `tch`/`cmn` common schemas with `da`/`en` label linkbases.
+
+**Entry points:** ÅRL schema files selected by balance-sheet form (account vs report) × income-statement form (by nature vs by function) plus disclosure set. IFRS filers use the ÅRL taxonomy **plus** ESEF (§ 17 stk. 3 — the DK-IFRS taxonomy is phased out). Financial-sector entities use Finanstilsynet's **DKFIN** taxonomy (embedded in ÅRL, mandatory FY2025, eight entry points by entity type).
+
+**Channels:** Regnskab Basis (guided web-keying), Regnskab Special (file upload), or system-til-system (API). The filer submits **one Inline XBRL file**; the platform derives the XBRL instance(s) server-side.
+
+**No filer extensions under ÅRL** (widen-and-disclose, § 22); only IFRS filers may extend (§ 23 stk. 2).
+
+**Filing scope:** All ÅRL reporting-class B/C/D entities (plus class A voluntary filers).
+
+**Hosting / validation:** Validate with the Arelle `validate/DBA` plugin (`--disclosureSystem arl-2025-multi-target-preview`, or `dkfin-2024-multi-target-preview` for financial-sector filings). Rule authority is ERST's Kontroller corpus (Fejl = blocking, Advis = advisory). See `references/dk-erst.md` for the full deep-dive.
+
+## 8. Finland — PRH Digital Financial Statements
+
+**Issuer / Jurisdiction:** Finnish limited companies (osakeyhtiö) and co-operatives (osuuskunta) file statutory financial statements with the **Finnish Trade Register** (kaupparekisteri), operated by **PRH** (Patentti- ja rekisterihallitus), as a **digital financial statement** (digitaalinen tilinpäätös / *digitilinpäätös*): Inline XBRL in XHTML, filed as a plain **ZIP of XHTML** (max 200 MB) — **not** an `.xbri` report package, which PRH cannot receive. Statutory basis: Accounting Act (Kirjanpitolaki 1336/1993) ch. 7 ss. 22–25; operative technical requirements in two PRH decisions **PRH/1087/01/2026** (technical filing) and **PRH/1088/01/2026** (PRH identifiers / taxonomy adoption), both in force 24.6.2026.
+
+**Two-stage mandate:** digital (XHTML) filing has been **mandatory for sustainability-reporting (CSRD-scope) companies since FY2025**; structured **taxonomy markup** (PRH identifiers) is mandatory only for **periods starting on/after 1 Jan 2026** — FY2025 permitted untagged XHTML. **Law 555/2026** (in force 30.6.2026) narrowed CSRD scope to turnover >€450M AND >1,000 employees (or a voluntary ESRS committer), for periods starting on/after 1.7.2026 (opt-in from 1.1.2026). Filing is voluntary "for the time being" for all other limited companies.
+
+**Taxonomy families, by accounting basis:**
+
+| Basis | Taxonomy | Governance / supported versions |
+|---|---|---|
+| Finnish FAS | **National SBR taxonomy** (module **OYTP** for LLC/co-op; also STK/STP/VYTP/LSTP) | PRH maintains company modules, State Treasury (Valtiokonttori) the municipal/wellbeing modules; on `avoindata.fi`; annual cadence; **SBR-DPM-2025-12-31** (from periods starting 1.1.2026) + legacy `kpl-2016-12/*` |
+| IFRS | **IFRS Accounting Taxonomy** (IFRS Foundation) | version approved for the period; PRH intake supports **2025, 2024** |
+| Listed (consolidated) | **ESEF taxonomy** (ESMA) | ESEF ZIP re-used; also to Trade Register from FY starting 2024; PRH intake supports **ESEF 2024, 2022** |
+
+Mixed basis: IFRS consolidated + FAS parent → consolidated tagged with IFRS, parent with SBR.
+
+**Validation:** no Arelle FI/PRH disclosure system exists (`arelle/plugin/validate/` ships CIPC, DBA, EBA, EDINET, ESEF, FERC, NL, ROS, UK only); the FAS/SBR gate is core XBRL 2.1 + iXBRL 1.1 + SBR taxonomy-package resolution plus PRH's own intake-API checks — no published FI rule-code catalogue. The IFRS/ESEF re-use path validates as ESEF. See `references/fi-prh.md` for the full regime, packaging, filing channels, and review checklist.
+
+## 9. France — AMF / ESEF (and the non-XBRL regimes)
+
+- **Listed issuers (AMF) — ESEF.** France's Transparency-Directive NCA is the AMF. RFA / DEU-valant-RFA with IFRS consolidated accounts filed exclusively in ESEF since FY2021 (from 1 Jan 2022), deposited on the ONDE extranet (issuer or *diffuseur professionnel*), archived on info-financiere.fr; Instruction AMF DOC-2007-03 (v. 02/2025) is the deposit rulebook. Same ESEF base taxonomy as every EU NCA (Reg. 2019/815 as amended by 2025/19; 2025 taxonomy RTS + Calc 1.1 for FYs from 1 Jan 2026, early FY2025). See `references/fr-amf.md`.
+- **Statutory annual accounts — no XBRL.** *Dépôt des comptes annuels* is PDF via the INPI Guichet unique since 1 Jan 2023; INPI keys structured data out of the PDFs downstream. No filer-facing XBRL taxonomy (the historic XBRL France TCA / Infogreffe path is retired).
+- **Tax — no XBRL.** The *liasse fiscale* is UN/EDIFACT (INFENT) via EDI-TDFC to the DGFiP, not XBRL.
+- **Banking / insurance — DPM.** ACPR collects EBA/EIOPA DPM xBRL via OneGate (xBRL-XML → xBRL-CSV from 03/2026); see `references/dpm.md`.
+- **CSRD / ESRS.** EFRAG ESRS Set 1 XBRL taxonomy exists (Aug 2024) but tagging is expressly suspended by Directive (EU) 2026/470 (Omnibus I) pending an updated ESEF RTS.
+
+## 10. Germany — HGB / E-Bilanz / ESEF (three regimes)
+
+Germany runs three structured-reporting regimes; only ESEF is Inline
+XBRL. Deep dive: `references/de-hgb.md`.
+
+- **E-Bilanz** (§ 5b EStG) — plain XBRL 2.1 on the **HGB-Taxonomie**
+  (author: XBRL Deutschland e.V.; blessed by BMF). GCD + GAAP modules;
+  fiscal entry point "GAAP steuerlicher Einzelabschluss"; sector modules
+  (FI/RechKredV, INS, KHBV/PBV). Yearly versions by dated BMF-Schreiben:
+  **v6.9** (WJ beginning after 31 Dec 2025), **v6.10** (WJ after 31 Dec
+  2026). Published at esteuer.de / de.xbrl.org. Transmitted via
+  ELSTER/ERiC to the Finanzverwaltung — no Arelle gate.
+- **HGB Offenlegung** (§§ 325 ff. HGB) — plain XML/XBRL default
+  (Word/PDF accepted with a conversion fee, § 11 URV) to the
+  Unternehmensregister via the Bundesanzeiger-Verlag Publikations-
+  Plattform. Accepts HGB/IFRS/US-GAAP taxonomies; operator intake
+  validation, not an Arelle plugin. *(Current Offenlegung taxonomy
+  version vs the E-Bilanz v6.9/6.10 line unconfirmed — honest gap.)*
+- **ESEF** (§ 114 WpHG / § 328 Abs. 1 HGB) — XHTML/iXBRL under Del.
+  Reg. (EU) 2019/815 for listed Inlandsemittenten; NCA is **BaFin**
+  (sole Bilanzkontrolle authority since FISG). Use the ESEF core
+  taxonomy and Arelle ESEF plugin — see `references/esef.md`.
+
+## 11. Belgium — NBB / FSMA / Biztax (three regimes)
+
+Three distinct structured-reporting regimes — do not conflate them; only the ESEF path is Inline XBRL. See `references/be-nbb.md`.
+
+| Regime | Taxonomy | Owner | Format | Current version | Who files |
+|---|---|---|---|---|---|
+| Statutory annual accounts | `be-gaap` (`nbb-cbso`) | NBB Central Balance Sheet Office | **XBRL 2.1** (`.xbrl`) | `nbb-cbso-26.0.15` (since 2 Jan 2026; prior `25.0.11`, 6 Jan 2025) | ~500,000 legal entities/year via the Filing (2.0) portal |
+| Listed-issuer AFR | ESEF core + issuer extension | FSMA (NCA/OAM; eCorporate → STORI) | **Inline XBRL 1.1** (`.xbri`) | per ESEF RTS year (see `esef.md`) | EU-listed issuers with BE as home Member State |
+| Corporate income-tax return | `be-tax` | FPS Finance | **XBRL 2.1** + Dimensions 1.0 + Formula 1.0 (`.biztax`) | `be-tax-2025-04-30` (annual by assessment year; AY2026 unconfirmed) | companies (VenB), non-residents (INR), legal entities (IPM) |
+
+NBB `be-gaap` models: with-capital `m02-f`/`m01-f`/`m07-f`, without-capital `m82-f`/`m81-f`/`m87-f`, associations `m05-f`/`m04-f`/`m08-f`, plus `m100-r`/`m101-r` and CbCR `m90-f` (new in 26.0). No Arelle Belgium plugin exists; NBB/Biztax validate via generic XBRL 2.1 + shipped Formula linkbases, ESEF via `validate/ESEF`.
+
+## 12. Other Notable Taxonomies
 
 **Japan — EDINET (FSA).** The Financial Services Agency of Japan operates
 EDINET for electronic disclosure of statutory filings (annual securities
@@ -310,6 +399,14 @@ https://www.mca.gov.in/MinistryV2/xbrl.html
 
 ## Sources
 
+- https://erhvervsstyrelsen.dk/vejledning-teknisk-vejledning-og-dokumentation-regnskab-20-taksonomier-aktuelle
+- https://www.retsinformation.dk/eli/lta/2025/859
+- https://www.prh.fi/en/companiesandorganisations/financial_statements/limited_liability_companies_co-operatives_and_other_companies/digital.html
+- https://www.avoindata.fi/data/en_GB/dataset/sbr-taksonomia
+- https://www.amf-france.org/fr/actualites-publications/actualites/formats-et-modalites-de-depot-des-rapports-financiers-annuels-et-des-documents-denregistrement
+- https://www.esteuer.de/
+- https://www.nbb.be/en/central-balance-sheet-office
+- https://financien.belgium.be/nl/E-services/biztax
 - https://www.ifrs.org/issued-standards/ifrs-taxonomy/
 - https://www.ifrs.org/issued-standards/ifrs-taxonomy/ifrs-accounting-taxonomy-2025/
 - https://www.ifrs.org/news-and-events/news/2025/03/ifrs-accounting-taxonomy-2025-is-now-available/

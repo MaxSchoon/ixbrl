@@ -28,9 +28,14 @@ that produces their iXBRL.
   - `spec.md` — Inline XBRL 1.1, XBRL 2.1, XDT (Dimensions),
     Transformation Registry 4, calculation linkbase semantics.
   - `taxonomies.md` — IFRS, ESEF, US-GAAP / DEI / SRT, UK FRC Suite,
-    Dutch NT / SBR, EBA & EIOPA DPM, plus EDINET / CNMV / SBR-AU / MCA.
+    Dutch NT / SBR, Denmark ÅRL, Finland PRH, France, Germany, Belgium,
+    EBA & EIOPA DPM, plus EDINET / CNMV / SBR-AU / MCA.
   - `esef.md` — ESEF legal basis, Reporting Manual rules, anchoring,
     block tagging, report package, NCAs, and `ESEF.*` error codes.
+  - `nl-sbr.md`, `uk-frc.md`, `dk-erst.md`, `fi-prh.md`, `fr-amf.md`,
+    `de-hgb.md`, `be-nbb.md` — jurisdiction deep-dives (filing rules,
+    bi-temporal version cheatsheets, validator gates, stakeholder and
+    EU-relationship maps, review checklists).
   - `sec-edgar.md` — SEC iXBRL phase-in, EDGAR Filer Manual sections,
     DEI cover-page tagging, `EFM.6.05.*` codes, recent rules
     (Pay-Versus-Performance, cybersecurity disclosure, tailored
@@ -41,7 +46,8 @@ that produces their iXBRL.
     syntax but fail review.
 - **`scripts/validate_with_arelle.sh`** — wraps `arelleCmdLine` with
   the right plugin chain per profile (`esef`, `efm`, `ukfrc`, `hmrc`,
-  `core`).
+  `dk`, `core`), selecting the disclosure system where the plugin
+  requires one; extra args pass through.
 - **`scripts/check_facts.py`** — pure-Python pre-flight that catches
   cheap-to-detect issues (missing `decimals`, dangling continuation
   chains, undefined contexts/units, non-ISO currency measures,
