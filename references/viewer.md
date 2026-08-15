@@ -85,7 +85,7 @@ Walk these in order. Each step builds on the prior.
   cross-scope inconsistencies Calc 1.0 hides); Calc 1.0 is run
   separately as the formal deposit-acceptance check per NT20 Filing
   Rules. Classify each cross-scope warning by role-vs-context before
-  treating it as a defect. See `nl-sbr.md` §4.2.
+  treating it as a defect. See `references/jurisdictions/nl-sbr.md` §4.2.
 - **Review mode for drafts.** For partially tagged or incomplete
   drafts, enable viewer review mode with `--viewer-feature-review` or
   `?review=true` in the URL. Review mode highlights untagged numbers
@@ -97,7 +97,7 @@ Walk these in order. Each step builds on the prior.
 The viewer is a visualisation of what was tagged. It does not catch:
 
 - Whether the value mapped into the correct dimensional context
-  (consolidated vs separate scope; see `nl-sbr.md` §4.3).
+  (consolidated vs separate scope; see `references/jurisdictions/nl-sbr.md` §4.3).
 - Whether the rendered XHTML is faithful to the source document
   (number transcription errors, omitted comparatives).
 - Whether the entity-metadata facts match the filer's actual

@@ -23,7 +23,7 @@ computations), the **FCA National Storage Mechanism / UKSEF** (UK listed
 issuer AFRs), or **Irish Revenue (ROS)** iXBRL Corporation Tax filing —
 or when the file binds the FRC taxonomy family (FRS 101 / FRS 102 incl.
 FRS 105 / UK IFRS / Charities / UKSEF / Irish Revenue Extension). For a
-UK-listed issuer's ESEF-shaped obligation, read `esef.md` for the
+UK-listed issuer's ESEF-shaped obligation, read `references/esef.md` for the
 tagging mechanics and return here for the UK-specific DTR / NSM /
 UKSEF overlay.
 
@@ -38,7 +38,7 @@ cross-regulator FRC programme (the FRC runs the Charities taxonomy on its
 behalf), but charitable-company iXBRL accounts still flow through the
 **CH and HMRC**
 gates — there is no separate Charity Commission iXBRL channel — so it is a
-fifth stakeholder, not a fifth iXBRL gate. [see `taxonomies.md` §4]
+fifth stakeholder, not a fifth iXBRL gate. [see `references/taxonomies.md` §4]
 
 | Situation | Profile | Section |
 |---|---|---|
@@ -280,7 +280,7 @@ format", FCA]
 (introduced 2022) lets one filing serve both regulators; NSM switchover
 dates are announced each year in the FCA Filing Manual. For AFR tagging
 mechanics (anchoring, block tagging, hidden facts, report-package layout)
-read `esef.md` — UKSEF inherits the ESEF model. UK overlay: consolidated
+read `references/esef.md` — UKSEF inherits the ESEF model. UK overlay: consolidated
 **UKSEF** data may use **minimum tagging** where regulations permit;
 otherwise accounts are fully tagged. ["2026 FRC Taxonomy Suite";
 "Structured Digital Reporting: Insights 2025/26", FRC]
@@ -537,7 +537,7 @@ Each step depends on the prior being clean.
    this changes which absences are defects.
 3. **Run the right gate** (§8): CH accounts → CH validator + JFCVC
    (`validate/UK`, system `hmrc`); HMRC CT → JFCVC + CT technical-pack;
-   FCA/UKSEF → `esef.md` NSM checks + the §6 DTR overlay; ROS →
+   FCA/UKSEF → `references/esef.md` NSM checks + the §6 DTR overlay; ROS →
    `validate/ROS`. Capture warnings.
 4. **Classify by code prefix.** `JFCVC.*` / `HMRC.*` / `FRC.TG.*` are
    Arelle implementation evidence; `1606/1607/3312/3316/3317/3318/3320`
@@ -557,7 +557,7 @@ Each step depends on the prior being clean.
    `DescriptorEndOfPeriodForWhichReturnRequired` = CT600
    `PeriodCovered/To`; DPL in exactly one of accounts/computation.
 10. **Content review**: rendered statements — EPS scaling (§10 finding 5),
-    signs, company-vs-group scope (finding 9). See `conversion.md` §10.
+    signs, company-vs-group scope (finding 9). See `references/conversion.md` §10.
 
 ### FRC "Structured Digital Reporting: Insights 2025/26" — design against these
 

@@ -22,14 +22,14 @@ of the right manual and encodes patterns experts recognise on sight.
    passes or fails depending on which validator runs. Ask the user
    which jurisdiction and which taxonomy. Common combinations:
    - EU listed issuer, IFRS consolidated AFR → **ESEF**, see `references/esef.md`
-   - US SEC registrant → **EDGAR / EFM**, see `references/sec-edgar.md`
-   - Dutch entity (KvK deposit or AFM listed) → **NL Taxonomie / SBR**, see `references/nl-sbr.md` (and the NL section of `references/taxonomies.md` for entry-point catalogue)
-   - UK statutory accounts (Companies House), HMRC CT600, or FCA/UKSEF → **UK FRC Suite**, see `references/uk-frc.md`
-   - Danish årsrapport (Erhvervsstyrelsen deposit) → **ÅRL taxonomy / Regnskab Indberet**, see `references/dk-erst.md`
-   - Finnish digital financial statements (PRH Trade Register) → **FI SBR / IFRS / ESEF-ZIP**, see `references/fi-prh.md`
-   - French listed issuer → **ESEF via AMF/ONDE**, see `references/fr-amf.md` (FR statutory accounts & tax are *not* XBRL)
-   - German filing → **E-Bilanz XBRL / Unternehmensregister / ESEF via BaFin**, see `references/de-hgb.md`
-   - Belgian annual accounts → **NBB Central Balance Sheet Office XBRL**, see `references/be-nbb.md`
+   - US SEC registrant → **EDGAR / EFM**, see `references/jurisdictions/sec-edgar.md`
+   - Dutch entity (KvK deposit or AFM listed) → **NL Taxonomie / SBR**, see `references/jurisdictions/nl-sbr.md` (and the NL section of `references/taxonomies.md` for entry-point catalogue)
+   - UK statutory accounts (Companies House), HMRC CT600, or FCA/UKSEF → **UK FRC Suite**, see `references/jurisdictions/uk-frc.md`
+   - Danish årsrapport (Erhvervsstyrelsen deposit) → **ÅRL taxonomy / Regnskab Indberet**, see `references/jurisdictions/dk-erst.md`
+   - Finnish digital financial statements (PRH Trade Register) → **FI SBR / IFRS / ESEF-ZIP**, see `references/jurisdictions/fi-prh.md`
+   - French listed issuer → **ESEF via AMF/ONDE**, see `references/jurisdictions/fr-amf.md` (FR statutory accounts & tax are *not* XBRL)
+   - German filing → **E-Bilanz XBRL / Unternehmensregister / ESEF via BaFin**, see `references/jurisdictions/de-hgb.md`
+   - Belgian annual accounts → **NBB Central Balance Sheet Office XBRL**, see `references/jurisdictions/be-nbb.md`
    - Bank or insurer supervisory return → **EBA / EIOPA DPM**, see `references/taxonomies.md`
    - IFRS digital financial statements (no jurisdictional overlay) → **IFRS Accounting Taxonomy**, see `references/taxonomies.md`
 2. **Pin the operative rules to the reporting period — bi-temporal.**
@@ -60,7 +60,7 @@ of the right manual and encodes patterns experts recognise on sight.
      Reporting Manual edition, SEC EDGAR Filer Manual volume/version,
      SBR Filing Rules NT-generation supplement).
    Confirm against `references/taxonomies.md`, the regime reference you
-   selected in step 1 (for NL, `references/nl-sbr.md` §2), and the
+   selected in step 1 (for NL, `references/jurisdictions/nl-sbr.md` §2), and the
    regulator's published cut-in dates. **Never apply
    current-year rules retroactively** — calling a prior-year filing
    defective for missing a rule that did not yet bind is itself the
@@ -103,14 +103,14 @@ of them up front.
 | Preparing and using the Arelle iXBRL Viewer for interactive review — `--save-viewer`, document sets, stub/review modes, fact inspector, search, table export, Calc 1.1 toolbar | `references/viewer.md` |
 | Which taxonomies exist, current versions, who issues them, who must file | `references/taxonomies.md` |
 | ESEF anchoring, block tagging, Reporting Manual rules, NCAs (AFM, BaFin, AMF, CONSOB, CNMV, FSMA), `ESEF.*` codes | `references/esef.md` |
-| SEC iXBRL phase-in, EDGAR Filer Manual sections, DEI / SRT / US-GAAP, `EFM.6.05.*` codes, Pay-Versus-Performance, cybersecurity tagging | `references/sec-edgar.md` |
-| SBR Dutch GAAP / KvK / AFM filings — NT entry points by size class, NL-KVK.*/FR-NL- codes, dual-scope pattern + mixed-scope ELR, packaged auditor's report, bi-temporal cheatsheet, review checklist | `references/nl-sbr.md` |
-| UK Companies House / HMRC CT600 / FCA-UKSEF / Irish ROS — FRC-suite bi-temporal, JFCVC/HMRC codes, closed taxonomy (no anchoring), review checklist | `references/uk-frc.md` |
-| Danish årsrapport — ÅRL taxonomy, Regnskab channels, DKFIN, Fejl/Advis + TH/TR/TM/FR codes, floating-year dimension | `references/dk-erst.md` |
-| Finnish PRH digital financial statements — national SBR (FAS)/IFRS/ESEF-ZIP, XHTML-in-ZIP (not `.xbri`), 2026 PRH decisions | `references/fi-prh.md` |
-| French AMF/ONDE ESEF filing; why FR statutory accounts, *liasse fiscale*, and ACPR are not iXBRL | `references/fr-amf.md` |
-| German E-Bilanz (§ 5b EStG XBRL, not inline), Bundesanzeiger/Unternehmensregister, ESEF via BaFin | `references/de-hgb.md` |
-| Belgian NBB Central Balance Sheet Office XBRL, models/be-gaap, FSMA ESEF, Biztax | `references/be-nbb.md` |
+| SEC iXBRL phase-in, EDGAR Filer Manual sections, DEI / SRT / US-GAAP, `EFM.6.05.*` codes, Pay-Versus-Performance, cybersecurity tagging | `references/jurisdictions/sec-edgar.md` |
+| SBR Dutch GAAP / KvK / AFM filings — NT entry points by size class, NL-KVK.*/FR-NL- codes, dual-scope pattern + mixed-scope ELR, packaged auditor's report, bi-temporal cheatsheet, review checklist | `references/jurisdictions/nl-sbr.md` |
+| UK Companies House / HMRC CT600 / FCA-UKSEF / Irish ROS — FRC-suite bi-temporal, JFCVC/HMRC codes, closed taxonomy (no anchoring), review checklist | `references/jurisdictions/uk-frc.md` |
+| Danish årsrapport — ÅRL taxonomy, Regnskab channels, DKFIN, Fejl/Advis + TH/TR/TM/FR codes, floating-year dimension | `references/jurisdictions/dk-erst.md` |
+| Finnish PRH digital financial statements — national SBR (FAS)/IFRS/ESEF-ZIP, XHTML-in-ZIP (not `.xbri`), 2026 PRH decisions | `references/jurisdictions/fi-prh.md` |
+| French AMF/ONDE ESEF filing; why FR statutory accounts, *liasse fiscale*, and ACPR are not iXBRL | `references/jurisdictions/fr-amf.md` |
+| German E-Bilanz (§ 5b EStG XBRL, not inline), Bundesanzeiger/Unternehmensregister, ESEF via BaFin | `references/jurisdictions/de-hgb.md` |
+| Belgian NBB Central Balance Sheet Office XBRL, models/be-gaap, FSMA ESEF, Biztax | `references/jurisdictions/be-nbb.md` |
 | The eight cross-jurisdiction fundamentals: decimals/rendering/value, sign vs balance vs preferredLabel, period type, identifier scheme, XDT, anchoring, block tagging, hidden section | `references/first-principles.md` |
 | Arelle CLI, plugins, formula linkbase, Calc 1.1, full anti-pattern list, ESEF + EFM + core XBRL error codes with fixes | `references/validation.md` |
 
@@ -212,7 +212,7 @@ prior being clean.
    explicitly before opening the file in earnest.
 2. **Pin the filer's classification.** For Dutch SBR, the entity-size
    class (Micro / Klein / Middelgroot / Groot) changes which absences
-   count as defects — see `references/nl-sbr.md` §3. For SEC filings,
+   count as defects — see `references/jurisdictions/nl-sbr.md` §3. For SEC filings,
    the filer category (LAF / AF / NAF / SRC) drives DEI requirements.
    For ESEF, IFRS vs national-GAAP issuer drives which extension
    patterns are normal.
@@ -257,14 +257,14 @@ prior being clean.
    `META-INF/reportPackage.json` present and consistent; for
    jurisdictions that require it, the
    auditor's report packaged as a separate tagged iXBRL document
-   (Dutch SBR, see `references/nl-sbr.md` §7).
+   (Dutch SBR, see `references/jurisdictions/nl-sbr.md` §7).
 
 For regime-specific review checklists, load:
 
-- **SBR Dutch GAAP / KvK / AFM** → `references/nl-sbr.md` (end-to-end
+- **SBR Dutch GAAP / KvK / AFM** → `references/jurisdictions/nl-sbr.md` (end-to-end
   review pass at §13).
 - **ESEF (listed-issuer AFR)** → `references/esef.md`.
-- **SEC EFM** → `references/sec-edgar.md`.
+- **SEC EFM** → `references/jurisdictions/sec-edgar.md`.
 
 The output of a review is not "validates / does not validate". It is
 a categorised list: deposit-blockers, deposit-allowed-but-substantive
@@ -298,12 +298,12 @@ When the user shows you a validator error, route by code prefix:
 
 - `ESEF.2.x.*` → iXBRL/instance-construction issue. See the table in `references/esef.md` §8 and the duplicated/expanded table in `references/validation.md` §5.1.
 - `ESEF.3.x.*` → extension-taxonomy issue (anchoring, labels, link roles). Same references.
-- `EFM.6.05.*` → SEC iXBRL syntax/DEI/decimals issue. See `references/sec-edgar.md` §7 and `references/validation.md` §5.2.
+- `EFM.6.05.*` → SEC iXBRL syntax/DEI/decimals issue. See `references/jurisdictions/sec-edgar.md` §7 and `references/validation.md` §5.2.
 - `EFM.6.08.*` → SEC industry-overlay (ECD, RXP, OEF, CEF) linkbase issue.
-- `FR-NL-*` / `FG-NL-*` → SBR Filing Rules / Filing Guidelines (taxonomy-agnostic). The most common are encoding (1.01–1.05), missing `xml:lang` (2.03), `link:schemaRef` placement (2.04), `xbrli:forever` use (3.04), `precision` usage (5.06), `xsi:nil` on facts (5.07), footnotes (6.01). See `references/nl-sbr.md` §6 and `references/validation.md` §5.3.
-- `NL-KVK.*` → KvK-specific Filing Rules supplement (layered on top of FR-NL-). Recurring deposit blockers: `4.4.2.5` mixed-scope ELR missing for a dual-scope concept; `4.4.6.1` usable concepts not applied by tagged facts; `3.4.1.3` transformable element in `ix:hidden`. See `references/nl-sbr.md` §5 and §4 for the dual-scope pattern, and the duplicated/expanded table in `references/validation.md` §5.3.
-- `JFCVC.*` / HMRC gateway `1606`/`1607`/`331x` → UK CH/HMRC joint filing checks (Arelle `validate/UK`). See `references/uk-frc.md` §8-§9.
-- Danish `TH*`/`TR*`/`TM*`/`FR<n>` codes or a Fejl/Advis verdict → ERST Regnskab Indberet controls. See `references/dk-erst.md` §6-§8, §12-§14.
+- `FR-NL-*` / `FG-NL-*` → SBR Filing Rules / Filing Guidelines (taxonomy-agnostic). The most common are encoding (1.01–1.05), missing `xml:lang` (2.03), `link:schemaRef` placement (2.04), `xbrli:forever` use (3.04), `precision` usage (5.06), `xsi:nil` on facts (5.07), footnotes (6.01). See `references/jurisdictions/nl-sbr.md` §6 and `references/validation.md` §5.3.
+- `NL-KVK.*` → KvK-specific Filing Rules supplement (layered on top of FR-NL-). Recurring deposit blockers: `4.4.2.5` mixed-scope ELR missing for a dual-scope concept; `4.4.6.1` usable concepts not applied by tagged facts; `3.4.1.3` transformable element in `ix:hidden`. See `references/jurisdictions/nl-sbr.md` §5 and §4 for the dual-scope pattern, and the duplicated/expanded table in `references/validation.md` §5.3.
+- `JFCVC.*` / HMRC gateway `1606`/`1607`/`331x` → UK CH/HMRC joint filing checks (Arelle `validate/UK`). See `references/jurisdictions/uk-frc.md` §8-§9.
+- Danish `TH*`/`TR*`/`TM*`/`FR<n>` codes or a Fejl/Advis verdict → ERST Regnskab Indberet controls. See `references/jurisdictions/dk-erst.md` §6-§8, §12-§14.
 - `xbrl.5.2.5.2` → calculation inconsistency. Either fix the data or move to Calc 1.1 if the regulator accepts it. See `references/validation.md` §4.
 - `xbrldie:*` (instance-level) → dimensional context error. See `references/dimensions.md` §"Dimensional validity errors".
 - `xbrldte:*` (taxonomy/DTS-level) → hypercube/dimension/domain wiring error in the linkbases. See `references/dimensions.md` §"Dimensional validity errors".
@@ -347,7 +347,7 @@ Rules:
 - Wire concepts into a presentation link with appropriate `preferredLabel` roles on subtotal arcs.
 - Wire calculation links with `weight="1"` when parent and child share the same `balance`, `weight="-1"` when they are opposite (XBRL 2.1 §5.1.1.2). Give every subtotal a summation network covering *all* of its children.
 
-See `references/esef.md` §5 for ESEF specifics and `references/sec-edgar.md` §4 for EFM specifics.
+See `references/esef.md` §5 for ESEF specifics and `references/jurisdictions/sec-edgar.md` §4 for EFM specifics.
 
 ## Generating a Report Package
 

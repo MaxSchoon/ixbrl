@@ -19,9 +19,9 @@ Load this when the filer is a **Belgian** entity and the regulator is the
 **National Bank of Belgium (NBB)** Central Balance Sheet Office (statutory annual
 accounts, `be-gaap` / `nbb-cbso`), the **FSMA** (listed-issuer AFR under ESEF), or
 **FPS Finance** (corporate income-tax return via **Biztax**, `be-tax`). For
-generic ESEF taxonomy / tagging / RTS mechanics, prefer `esef.md`; for the
+generic ESEF taxonomy / tagging / RTS mechanics, prefer `references/esef.md`; for the
 EBA/EIOPA supervisory DPM the NBB also runs as prudential supervisor, see
-`dpm.md`. This file carries **only the Belgian jurisdiction layer** — its job is
+`references/dpm.md`. This file carries **only the Belgian jurisdiction layer** — its job is
 to stop a conversion product making the one mistake that gets a Belgian filing
 rejected: emitting the wrong *format* for the wrong regime.
 
@@ -255,7 +255,7 @@ Alternext issuers), filed since 1 January 2011.
   full ESEF-Regulation compliance**; a temporary ESEF test environment previews
   validation without publishing to STORI.
 
-For the ESEF taxonomy, tagging, anchoring, and RTS rules, defer to `esef.md` —
+For the ESEF taxonomy, tagging, anchoring, and RTS rules, defer to `references/esef.md` —
 this is only the Belgian filing-mechanism overlay.
 
 ### CSRD / ESRS in Belgium and the Omnibus I effect on digital tagging
@@ -363,7 +363,7 @@ channels:
   format; there is no EU-mandated iXBRL for unlisted entities' annual accounts.
 - **Transparency Directive 2004/109/EC + ESEF RTS (Delegated Regulation (EU)
   2019/815)** land at **FSMA / eCorporate / STORI** — the only Belgian iXBRL
-  regime. Generic ESEF mechanics → `esef.md`; Belgian overlay → §7.
+  regime. Generic ESEF mechanics → `references/esef.md`; Belgian overlay → §7.
 - **CSRD (Directive (EU) 2022/2464)** flows through the WVV/CSA and FSMA
   supervision (Law of 2 December 2024, stop-the-clock Law of 12 December 2025,
   Omnibus I Directive (EU) 2026/470), with ESRS **mark-up suspended** pending the
@@ -386,7 +386,7 @@ Per regime:
 1. **FSMA / ESEF (iXBRL) — covered by the generic ESEF plugin.** The AFR package
    validates like any other member state's; the Belgian layer (eCorporate, STORI,
    `.xbri`, deadlines) is **filing-mechanism policy, not encoded in Arelle**. Use
-   `--plugins inlineXbrlDocumentSet|validate/ESEF` (see `esef.md`).
+   `--plugins inlineXbrlDocumentSet|validate/ESEF` (see `references/esef.md`).
 2. **NBB `be-gaap` and Biztax `be-tax` — no profile-aware plugin.** The
    statutory-model selection rules, fee/deadline logic, and specific-model
    PDF-only rule are **not encoded in Arelle** — enforce them in your pipeline.
@@ -447,7 +447,7 @@ Walk this in order; each step depends on the prior being clean.
    a legal control failure, not a style warning.
 8. **Biztax: batch atomicity** — a `.biztax` package (≤25 returns) is rejected
    whole if any one return fails; validate each before bundling (§8).
-9. **FSMA: apply the ESEF checklist** (`esef.md`), then the Belgian mechanics —
+9. **FSMA: apply the ESEF checklist** (`references/esef.md`), then the Belgian mechanics —
    `.xbri`, ESEF as main document, PDF only as attachment, one ZIP per language,
    deadline of the earlier of AGM − 30 days or year-end + 4 months (§7).
 10. **CSRD/ESRS: do not require sustainability mark-up** — suspended pending the
@@ -479,7 +479,7 @@ The institutional map a Belgian filing product must hold in its head:
   March 2025).
 - **NBB, prudential hat** — also the banks/insurers prudential supervisor running
   separate **EBA/EIOPA DPM supervisory reporting (OneGate)**, distinct from the
-  CBSO regime (see `dpm.md`). Consequence: specific-model financial entities file
+  CBSO regime (see `references/dpm.md`). Consequence: specific-model financial entities file
   their **CBSO annual accounts as PDF**, not `be-gaap` XBRL (§6).
 - **XBRL Belgium** — XBRL International jurisdiction since 15 July 2006, hosted by
   the NBB.
@@ -495,7 +495,7 @@ The institutional map a Belgian filing product must hold in its head:
   confirmed from the CAPTCHA-gated FPS Finance index; pull from the official page
   when reachable.
 - Belgium-specific ESEF guidance beyond the FSMA FAQ was not separately fetched;
-  defer generic ESEF/RTS mechanics to `esef.md`.
+  defer generic ESEF/RTS mechanics to `references/esef.md`.
 
 If the question concerns a rule version newer than this file cites, or a Belgian
 error code (there is no Arelle `FR-BE-*` family), say so and link the primary

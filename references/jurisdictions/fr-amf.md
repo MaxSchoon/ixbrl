@@ -26,7 +26,7 @@ financial report filed with the **AMF** (Autorité des marchés
 financiers), the French statutory annual-accounts deposit, the *liasse
 fiscale*, or French banking/insurance supervisory reporting. For ESEF
 mechanics common to every EU Member State (legal basis, anchoring, block
-tagging, extension taxonomies, the `ESEF.*` codes) stay in `esef.md` —
+tagging, extension taxonomies, the `ESEF.*` codes) stay in `references/esef.md` —
 this file adds only the **France layer** on top of it and must not
 duplicate or contradict it.
 
@@ -62,7 +62,7 @@ right non-XBRL channel rather than attempting Inline XBRL validation.
 
 **Taxonomy version to pin.** The applicable text now cites Reg.
 2019/815 **as amended by Reg. (UE) 2025/19** (taxonomy update) [S5] —
-the same amendment as `esef.md` §1. The 2025-taxonomy amendment is now
+the same amendment as `references/esef.md` §1. The 2025-taxonomy amendment is now
 **adopted and in force**: **Commission Delegated Regulation (EU)
 2026/283** of 12 Dec 2025 (OJ 18 Mar 2026) — 2025 IFRS taxonomy, IFRS
 18/19 elements, a **Calculations 1.1** validity requirement — applying
@@ -85,7 +85,7 @@ annuel* (RFA) — or the *document d'enregistrement universel valant RFA*
 (URD acting as the AFR) — must be filed with the AMF **exclusively in
 ESEF** [S1].
 
-**Format split** (identical to `esef.md` §1 Article 4, restated with the
+**Format split** (identical to `references/esef.md` §1 Article 4, restated with the
 French document names):
 
 - RFA / DEU with **IFRS consolidated** accounts → XHTML with primary
@@ -135,7 +135,7 @@ XHTML with proper heading / section tags for machine exploitation [S6].
 Use the `esefxbrl@` pre-filing test route before a first deposit.
 
 **French-label / language note.** Beyond the general ESMA Reporting
-Manual guidance in `esef.md` §5 (labels in the report language; English
+Manual guidance in `references/esef.md` §5 (labels in the report language; English
 widely recommended), **no AMF-specific French-label rule was located in
 Tier-1 AMF sources**. Do not invent one. A French-language report
 satisfies `ESEF.3.4.5.missingLabelForRoleInReportLanguage` with French
@@ -301,14 +301,14 @@ stage; the Commission handles translation on adoption.)
 ### Relation to EU reporting (ESEF and CSRD context)
 
 France is an EU Member State; the France layer sits on the EU rails in
-`esef.md`. Delta-only — cross-references, not duplication.
+`references/esef.md`. Delta-only — cross-references, not duplication.
 
 - **ESEF / Transparency-Directive transposition.** ESEF applies through
   the AMF as NCA under the TD (2004/109/CE, rev. 2013/50/UE), with
   info-financiere.fr as France's TD storage mechanism (§2). No national
   *inline* format competes with ESEF — unlike the Dutch SBR/KvK route,
   France adds only document-typology and deposit mechanics on top of the
-  common ESEF rules (§2, `esef.md`).
+  common ESEF rules (§2, `references/esef.md`).
 - **Coexistence with national structured regimes.** The non-ESEF French
   structured filings (EDI-TDFC tax §4; ACPR DPM §5; INPI PDF §3) are
   **not** iXBRL and do not overlap ESEF — they coexist on separate rails
@@ -327,7 +327,7 @@ France is an EU Member State; the France layer sits on the EU rails in
 ### Arelle / validation notes (France layer)
 
 - **Listed-issuer path is pure ESEF** — validate against the ESEF
-  disclosure system exactly as in `esef.md` / `validation.md`. Base
+  disclosure system exactly as in `references/esef.md` / `references/validation.md`. Base
   taxonomy = ESEF/IFRS (Reg. 2019/815 as amended by 2025/19 and, for
   the 2025 taxonomy, **Reg. (EU) 2026/283** — applying for FYs from
   1 Jan 2026 with early FY2025 option and requiring the instance +
@@ -437,7 +437,7 @@ obligation to its own channel (§1).
   trigger) is not fixed; ESMA said "not before 2026" with a
   30-June-keyed phase-in [S25].
 - **French-language ESEF labels.** No AMF-specific French-label rule was
-  located; `esef.md` §5 general guidance stands (§2).
+  located; `references/esef.md` §5 general guidance stands (§2).
 - **INPI XBRL roadmap.** INPI keys structured data out of PDFs [S11];
   no announced plan to move filers to structured/XBRL submission was
   found — treated as absent, not confirmed-absent-by-statement.
@@ -487,6 +487,6 @@ Verify the operative version of every cited rule at filing date.
 - **[S31]** EFRAG — *EFRAG provides its technical advice on draft simplified (Amended) ESRS to the European Commission* (EFRAG SRB approval 28 Nov 2025; delivered 3 Dec 2025) — <https://www.efrag.org/en/news-and-calendar/news/efrag-provides-its-technical-advice-on-draft-simplified-esrs-to-the-european-commission>
 - **[S32]** BODACC — *Bulletin officiel des annonces civiles et commerciales* (publicité des actes enregistrés au RNE) — <https://www.bodacc.fr/>
 
-For anything ESEF-general, return to `esef.md`. When a question concerns
+For anything ESEF-general, return to `references/esef.md`. When a question concerns
 a rule version newer than this file cites, or a French mechanism not
 covered here, say so and link the primary source rather than guessing.

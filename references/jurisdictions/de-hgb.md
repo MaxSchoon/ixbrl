@@ -27,8 +27,8 @@ Inlandsemittent under § 114 WpHG / § 328 Abs. 1 HGB, BaFin as NCA). The
 most important fact for an iXBRL practitioner is in §1: **only the ESEF
 regime is Inline XBRL** — the other two are plain XBRL 2.1 instances. For
 generic ESEF mechanics (anchoring, block tagging, Reporting Manual,
-report-package layout, `ESEF.*` codes) stay in `esef.md`; for bank/insurer
-prudential DPM reporting use `dpm.md`. This file carries **only the German
+report-package layout, `ESEF.*` codes) stay in `references/esef.md`; for bank/insurer
+prudential DPM reporting use `references/dpm.md`. This file carries **only the German
 jurisdiction layer**.
 
 | Situation | Profile | Section |
@@ -275,7 +275,7 @@ and from BaFin:
 
 This is the only iXBRL regime. For anchoring, block tagging, the
 Reporting Manual, report-package layout, and `ESEF.*` codes, use
-`esef.md`. This section supplies **only** the German additions.
+`references/esef.md`. This section supplies **only** the German additions.
 
 **Legal basis in German law.**
 
@@ -335,7 +335,7 @@ Finanzdienstleistungsaufsicht) is Germany's securities NCA under the WpHG:
    years, and let BaFin publish error findings and require Neuaufstellung /
    Fehlerkorrektur.
 
-`esef.md` §7 already lists BaFin/Bundesanzeiger among the NCAs; treat this
+`references/esef.md` §7 already lists BaFin/Bundesanzeiger among the NCAs; treat this
 as the deeper German cut, not a duplicate.
 
 ---
@@ -400,7 +400,7 @@ transmitted "in Form eines XBRL-Datensatzes" — a plain XBRL instance, not
 iXBRL (BMF Grundlagen-Schreiben zu § 5b EStG). Regime B defaults to plain
 XML/XBRL on the HGB taxonomy. Do not build an iXBRL pipeline for E-Bilanz
 or ordinary HGB Offenlegung; build it for the listed-issuer ESEF path and
-route its generic mechanics to `esef.md`.
+route its generic mechanics to `references/esef.md`.
 
 ### Relation to EU reporting (how the national formats coexist with ESEF)
 
@@ -446,7 +446,7 @@ cannot be gated deterministically:
 3. **ESEF (§ 114 WpHG / § 328 HGB) — IS covered.** Because ESEF is the
    harmonised EU format (Del. Reg. (EU) 2019/815), the Arelle **ESEF plugin**
    validates the German listed-issuer filing like any other ESEF report.
-   Route to `esef.md` §8 for the `ESEF.*` codes and use the standard
+   Route to `references/esef.md` §8 for the `ESEF.*` codes and use the standard
    pipeline:
 
    ```bash
@@ -454,7 +454,7 @@ cannot be gated deterministically:
    scripts/validate_with_arelle.sh report.zip esef   # ESEF.* rules
    ```
 4. **Bank prudential (supervisory DPM) — covered by the EBA plugin**, a
-   **separate regime** from all three above. See `dpm.md`.
+   **separate regime** from all three above. See `references/dpm.md`.
 
 **Net.** Only the ESEF (listed-issuer) side is deterministically validatable
 with the shipped Arelle plugins; E-Bilanz and HGB Offenlegung require ERiC
@@ -475,7 +475,7 @@ Walk this in order; each step depends on the prior being clean.
    ESEF. Only ESEF is iXBRL. State it back before opening the file.
 2. **Pin year and version.** E-Bilanz taxonomy by Wirtschaftsjahr (v6.9 /
    v6.10, §3); DiRUG filing-point split by Geschäftsjahr (§4); ESEF
-   taxonomy year (`esef.md`).
+   taxonomy year (`references/esef.md`).
 3. **Pin the size class** (Kleinst / klein / mittelgroß / groß, §5) — it
    changes which absences are defects (Bestätigungsvermerk requirement;
    Hinterlegung availability).
@@ -488,7 +488,7 @@ Walk this in order; each step depends on the prior being clean.
    label and a presentation position, and no extension references concepts
    over the internet (register intake rejects these, §5). A non-XML format
    means a conversion fee, not an error.
-6. **ESEF:** run the full ESEF review in `esef.md`, then add the German
+6. **ESEF:** run the full ESEF review in `references/esef.md`, then add the German
    layer — German extension labels, the four-month deadline and
    Hinweisbekanntmachung to BaFin (§ 114 WpHG), and that the § 328 HGB
    Offenlegung duty is satisfied by this ESEF report (§9). **Do not require
@@ -535,7 +535,7 @@ file to the wrong body gets nowhere.
 - **Financial-sector overlays** — special taxonomies (FI for credit
   institutions under RechKredV, INS for insurers, KHBV/PBV forms) attach to
   both E-Bilanz and Offenlegung. Bank **prudential** reporting runs on the
-  **EBA DPM**, a separate regime — see `dpm.md`.
+  **EBA DPM**, a separate regime — see `references/dpm.md`.
 
 ---
 

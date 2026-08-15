@@ -22,15 +22,15 @@ Load this when the regulator is **KvK (Kamer van Koophandel)**, **AFM**
 **Belastingdienst** (corporate income tax, VAT, ICP, payroll), or
 **DNB**, or when the file uses `bw2-titel9:`, `rj:`, or `kvk:`
 namespaces. For ESEF-only listed-issuer questions, prefer
-`esef.md` and only return here for SBR-specific overlays.
+`references/esef.md` and only return here for SBR-specific overlays.
 
 | Situation | Profile | Section |
 |---|---|---|
 | An NL legal entity deposits its own adopted annual accounts (NL-GAAP or IFRS, Micro to Groot) with the Handelsregister as an iXBRL Report Package | KvK Handelsregister iXBRL annual accounts | [Profile: KvK Handelsregister iXBRL annual accounts](#profile-kvk-ixbrl-annual-accounts) |
 | A foreign parent's group annual report is deposited to support an NL subsidiary's art. 2:403 BW exemption (FY2025 onward, iXBRL) | art. 2:403 foreign group head report in iXBRL | [Profile: art. 2:403 foreign group head report in iXBRL](#profile-kvk-403-foreign-group-head) |
 | A foreign parent's group annual report supports an art. 2:408 BW consolidation exemption for a financial year beginning before 2028-01-01 — **no XBRL: PDF by e-mail** | art. 2:408 foreign group head report by PDF e-mail | [Profile: art. 2:408 foreign group head report by PDF e-mail (before FY2028)](#profile-kvk-408-foreign-group-head-pdf) |
-| A Dutch listed issuer files an Annual Financial Report with the AFM under ESEF | (out of scope here — ESEF overlay) | see `esef.md`; SBR-specific overlays are in [Vintage and applicability](#vintage-and-applicability) and the KvK profile above |
-| A DNB prudential return or a Belastingdienst (jenv/BD) filing | (out of scope here — DPM / tax domain) | see `dpm.md` and [Authorities and governance](#authorities-and-governance) |
+| A Dutch listed issuer files an Annual Financial Report with the AFM under ESEF | (out of scope here — ESEF overlay) | see `references/esef.md`; SBR-specific overlays are in [Vintage and applicability](#vintage-and-applicability) and the KvK profile above |
+| A DNB prudential return or a Belastingdienst (jenv/BD) filing | (out of scope here — DPM / tax domain) | see `references/dpm.md` and [Authorities and governance](#authorities-and-governance) |
 
 <a id="vintage-and-applicability"></a>
 
@@ -134,7 +134,7 @@ defect.
 | art. 2:408 BW foreign-group-head report in iXBRL | **Not before FY2028** | FAQ 2.2.4 (10 July 2026): for financial years beginning **before 2028-01-01** the 2:408 group report is deposited **by PDF e-mail**; the iXBRL obligation is only *expected* from FY2028. An FY2026 PDF-by-email 2:408 deposit is correct — do not flag it (§7.2). |
 | ESEF block-tagging for AFM (listed) IFRS notes | FY2022 | Distinct from KvK above. AFM-listed AFRs follow ESMA Annex II Table 2, not KvK. |
 | Auditor's report (controleverklaring) required in package | Middelgroot + Groot, always (article 2:393 BW) | Klein/Micro: not required. art. 2:403 BW: group subsidiaries may be exempt — its absence on a Groot subsidiary is not automatically wrong. |
-| Calculation basis for KvK iXBRL Report Packages | FY2025 **and** FY2026 — **Calc 1.1**, listed in Annex III of both RTS 2025 and RTS 2026 (the specification set is unchanged between them) | Calc 1.1 uses OIM rounding semantics — it handles iXBRL's routinely-duplicate facts correctly and surfaces the dual-statement cross-scope inconsistencies that Calc 1.0 silently hides. Two verdicts are needed: use Calc 1.1 for **substantive review**, and run Calc 1.0 (`--calc c10`) as well for the **formal deposit-acceptance** verdict — the NT20 Filing Rules list XBRL 2.1 as the normative calculation basis, so the KvK acceptance test runs on Calc 1.0 semantics (`validation.md` §4). Running both is cheap. Not re-verified against the NT21 Filing Rules. |
+| Calculation basis for KvK iXBRL Report Packages | FY2025 **and** FY2026 — **Calc 1.1**, listed in Annex III of both RTS 2025 and RTS 2026 (the specification set is unchanged between them) | Calc 1.1 uses OIM rounding semantics — it handles iXBRL's routinely-duplicate facts correctly and surfaces the dual-statement cross-scope inconsistencies that Calc 1.0 silently hides. Two verdicts are needed: use Calc 1.1 for **substantive review**, and run Calc 1.0 (`--calc c10`) as well for the **formal deposit-acceptance** verdict — the NT20 Filing Rules list XBRL 2.1 as the normative calculation basis, so the KvK acceptance test runs on Calc 1.0 semantics (`references/validation.md` §4). Running both is cheap. Not re-verified against the NT21 Filing Rules. |
 | Base (filer-facing) taxonomy release to tag against | Per financial year, three-year window | RTS 2026 Annex VI names the `2026-12-31` set for FY2026. FAQ 2.2.5 allows any of the **three most recent** KVK taxonomy versions, so an FY2026 report may be filed on the 2026, 2025 or 2024 set; older versions are rejected. **Checked 2026-08-15: `nltaxonomie.nl/kvk/2026-12-31/` returns 404** — the newest published filer-facing release is still `2025-12-31`. Resolve the live directory before assuming a 2026 schemaRef works. |
 | KVK taxonomy generation for the legacy **XBRL** channel | Per NT release | RTS 2026 ch. 3 Annex I supports NT21 (FY2026), NT20 (FY2025), NT19 (FY2024). **NT21 is pre-release as of 2026-08-15**: `nltaxonomie.nl/nt21/kvk/` holds only `20261209.a` (alfa) and `20261209.b` (bèta); the SBR release calendar puts final publication at 29-10-2026 and production at 09-12-2026. |
 | `validate/NL` disclosure system | Per NT release | Run `arelleCmdLine --plugins validate/NL --disclosureSystem` matching the NT generation in the report. There is **no `NL-INLINE-2026`** registered in Arelle as of 2026-08-15 — validate FY2026 packages with `NL-INLINE-2025` and say so in the report (§12). |
@@ -463,7 +463,7 @@ Run Calc 1.0 (`--calc c10`) **as well**, as a separate pass. Calc 1.1
 is the RTS Annex III specification basis and the better *review*
 instrument, but the NT20 Filing Rules list XBRL 2.1 as the normative
 calculation basis, so the KvK deposit-acceptance test runs on Calc 1.0
-semantics (`validation.md` §4). The package must pass both: 1.1 tells
+semantics (`references/validation.md` §4). The package must pass both: 1.1 tells
 you what is substantively wrong, 1.0 tells you whether KvK will accept
 it. Do not let a Calc 1.0 result override the RTS on *review*
 questions, and do not skip the 1.0 pass on the assumption that 1.1
@@ -488,7 +488,7 @@ inconsistency by reading the `context …` and `link role …` fields:
 *in-scope* (role-scope == context-scope) is a real arithmetic gap to
 fix; *cross-scope* (role-scope ≠ context-scope) is the dual-statement
 artefact — useful information that the dual-scope architecture is in
-play, but not in itself a defect. See `validation.md` §4 for the full
+play, but not in itself a defect. See `references/validation.md` §4 for the full
 binding-rule discussion.
 
 ### Per-scope value-correctness — what Arelle won't catch
@@ -852,7 +852,7 @@ the `NL-INLINE-2025*` names above (and their lowercase aliases), so the
 old name silently falls back to no disclosure system. Confirm the
 operative name in your build with `arelleCmdLine --plugins validate/NL
 --showEnvironment`. Run a second pass with `--calc c10` for the
-formal deposit-acceptance verdict (`validation.md` §4) — not merely
+formal deposit-acceptance verdict (`references/validation.md` §4) — not merely
 "if the profile still checks it". When validation is slow or intermittent, suspect
 remote-taxonomy resolution before suspecting the package.
 
@@ -880,7 +880,7 @@ walk this in order. Each step depends on the prior being clean.
    duplicate facts and surfaces the dual-statement cross-scope
    inconsistencies Calc 1.0 hides). Then run **Calc 1.0** (`--calc c10`) as a
    separate pass for the deposit-acceptance verdict — the package must
-   pass both (§4.2, `validation.md` §4).
+   pass both (§4.2, `references/validation.md` §4).
    Classify any cross-scope inconsistency by role-vs-context before
    treating it as a defect.
 5. **Classify each finding.** Route by code prefix using `SKILL.md`'s
@@ -904,7 +904,7 @@ walk this in order. Each step depends on the prior being clean.
    the statutory audit opinion from any consent / assurance question
    under NBA Alert 50.
 11. **Content-level review (read the rendered statements).** See
-    `conversion.md` §10. The validators cannot tell whether the iXBRL
+    `references/conversion.md` §10. The validators cannot tell whether the iXBRL
     is faithful to the source document; you can.
 
 When a finding is unclear, **quote the validator log line verbatim**
@@ -938,7 +938,7 @@ Which body owns a stack layer decides who you cite when it is wrong.
 - **Tax / prudential / securities authorities.** **Belastingdienst** is the
   largest requesting party (jenv/BD slice). **DNB** runs a parallel
   SBR/XBRL prudential domain on the European Filing Rules (like EBA/EIOPA —
-  `dpm.md`). **AFM** regulates listed issuers (ESEF).
+  `references/dpm.md`). **AFM** regulates listed issuers (ESEF).
 
 ### Relation to EU reporting
 
@@ -947,7 +947,7 @@ Several "KvK" rules are EU law wearing a local label.
 - **ESEF passthrough.** Per the RTS, SBR supports the uniform format of
   Delegated Regulation (EU) 2019/815 (XHTML); an in-scope ESEF filer may file
   its **ESEF report directly with KvK**, the KvK iXBRL provisions still
-  applying. Listed-issuer detail: `esef.md`.
+  applying. Listed-issuer detail: `references/esef.md`.
 - **Accounting basis is EU-anchored.** Art. 2:362 BW permits **IFRS as
   adopted by the EU** and another EU member state's GAAP (the latter reduced
   to Annex II point 3 metadata tagging; §4.0).
@@ -955,7 +955,7 @@ Several "KvK" rules are EU law wearing a local label.
   Registers Interconnection System** (Reg. (EU) 2015/884; EUID), so deposits
   are discoverable across member-state registers.
 - **DNB ↔ EU supervisors.** DNB's XBRL returns feed the EBA/ECB/EIOPA/SRB DPM
-  taxonomies as national competent authority (`dpm.md`).
+  taxonomies as national competent authority (`references/dpm.md`).
 
 Verify any EU-law citation against the operative RTS first.
 
@@ -992,7 +992,7 @@ Defer to and cite:
   controleverklaring wording in SBR Report Package situations —
   <https://www.nba.nl/wet--en-regelgeving/alerts/nba-alert-50/>.
 - **AFM ESEF guidance** for listed-issuer filings (then return to
-  `esef.md`).
+  `references/esef.md`).
 - **Arelle `validate/NL` plugin `config.xml`** for the registered
   disclosure-system names (`NL-INLINE-2025`,
   `NL-INLINE-2025-GAAP-OTHER-PREVIEW`, and their aliases) — the operative

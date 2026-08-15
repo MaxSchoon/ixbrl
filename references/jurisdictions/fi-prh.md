@@ -29,7 +29,7 @@ Register.
 
 Finland is **not** a report-package (`.xbri`) regime: a deposit is a plain
 **ZIP of XHTML**, and for a listed issuer it is the **ESEF ZIP** re-used.
-For the IFRS/ESEF path, most of the work is ESEF work — use `esef.md` and
+For the IFRS/ESEF path, most of the work is ESEF work — use `references/esef.md` and
 return here only for the Trade-Register overlays (channel, metadata
 attachments, packaging, deadlines). For the national-GAAP (Finnish FAS /
 SBR) path there is **no jurisdictional Arelle disclosure system** — see §5
@@ -222,7 +222,7 @@ Foundation for the reporting period**; supported at PRH intake: **IFRS
 Accounting Taxonomy 2025 and 2024** [S2][S4].
 
 **(C) ESEF taxonomy (ESMA) — for listed issuers' consolidated figures.**
-Governed by the EU ESEF RTS (see `esef.md`); ESEF statements go to the
+Governed by the EU ESEF RTS (see `references/esef.md`); ESEF statements go to the
 **Nasdaq Helsinki OAM** and, from the financial year starting 2024, **also
 to the Trade Register**; supported at PRH intake: **ESEF 2024 and 2022** [S2].
 
@@ -262,7 +262,7 @@ Packaging rules from the PRH example [S8]:
 
 ### Relation to EU reporting — ESEF coexistence and the CSRD/ESRS trajectory
 
-Delta-only; ESEF mechanics live in `esef.md` and §6–§7.
+Delta-only; ESEF mechanics live in `references/esef.md` and §6–§7.
 
 - **ESEF / Transparency-Directive transposition.** The ESEF RTS (**Reg (EU)
   2019/815**) is directly applicable; the Transparency Directive is transposed
@@ -454,7 +454,7 @@ Consequences for review and for any converter:
 - For the **IFRS / ESEF re-use path**, the standard Arelle **ESEF plugin
   is present** [S12] and is the right profile, because Finnish listed
   issuers re-use their ESEF ZIP for the Trade Register filing — validate
-  that path **exactly as an ESEF filing** (`esef.md`, and
+  that path **exactly as an ESEF filing** (`references/esef.md`, and
   `scripts/validate_with_arelle.sh <zip> esef`). Use the calculation
   behaviour consistent with the taxonomy in play (IFRS/ESEF for that
   path); the SBR path has no PRH-published Arelle calc profile, so rely on
@@ -509,7 +509,7 @@ order; each step depends on the prior being clean.
    employees, or a voluntary ESRS committer)? For everyone else digital
    filing is voluntary and its **absence is not a defect** [S1][S7].
 3. **Choose the validation profile — honestly.** IFRS/ESEF → validate as
-   ESEF (`esef.md`, plugin present [S12]). FAS/SBR → **core XBRL 2.1 +
+   ESEF (`references/esef.md`, plugin present [S12]). FAS/SBR → **core XBRL 2.1 +
    iXBRL 1.1 + SBR taxonomy-package resolution only**; **no** PRH Arelle
    disclosure system, so do not report an "FI profile" verdict (§5).
 4. **Check the package shape.** **XHTML-in-ZIP**, ≤ **200 MB**, **not** a
@@ -576,7 +576,7 @@ operative filing/taxonomy/interface/packaging guidance; the **Accounting
 Act (Kirjanpitolaki 1336/1993)** ch. 3 s. 5 (language) and ch. 7 ss. 22–25
 (format + markup power) and **law 555/2026** [S7] at `finlex.fi`; and
 **avoindata.fi** / **Valtiokonttori** for the SBR packages [S2][S5]
-(IFRS/ESEF → `esef.md`).
+(IFRS/ESEF → `references/esef.md`).
 
 If a question concerns a rule version newer than this file cites, an FI
 error code (none are catalogued here — see §5), or whether PRH has begun
