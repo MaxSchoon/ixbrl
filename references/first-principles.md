@@ -39,7 +39,7 @@ Mismatching period type to concept class causes `xbrldie:PrimaryItemDimensionall
 
 ## 4. Identifier scheme constancy
 
-Every `<xbrli:identifier scheme="...">` in an instance must use the **same scheme URI**: ESEF → LEI scheme (`http://standard.iso.org/iso/17442`); SEC → CIK scheme (`http://www.sec.gov/CIK`); SBR → KvK scheme. Mixing schemes silently produces "duplicate fact" errors because consumers treat differently-scheme'd entities as different.
+Every `<xbrli:identifier scheme="...">` in an instance must use the **same scheme URI**: ESEF → LEI scheme (`http://standards.iso.org/iso/17442`); SEC → CIK scheme (`http://www.sec.gov/CIK`); SBR → KvK scheme. Mixing schemes silently produces "duplicate fact" errors because consumers treat differently-scheme'd entities as different.
 
 ## 5. Dimensions and axes — XDT is the substrate of every regime
 
@@ -51,7 +51,7 @@ Minimum rules:
 - **`xbrldt:contextElement` lives on the `all`/`notAll` has-hypercube arc**, not on `hypercube-dimension`. It picks `segment` or `scenario`.
 - **ESEF is scenario-only.** Reporting Manual §2.1.3 forbids `xbrli:segment`; `xbrli:scenario` may contain only `xbrldi:explicitMember` / `xbrldi:typedMember`.
 - **"Axis" ≠ XDT vocabulary.** XDT uses *dimensions*. "Axis" is FASB/IFRS taxonomy convention (SEC EDGAR XBRL Filing Guide §3.5) — a label suffix marking explicit dimensions.
-- **Closed hypercubes are exclusive.** `@xbrldt:closed="true"` means the container must contain *only* and *exactly* the declared dimensions.
+- **Closed hypercubes are exclusive, not exhaustive.** `@xbrldt:closed="true"` restricts the `segment`/`scenario` chosen by `@xbrldt:contextElement` to dimensions *declared by that hypercube* — no others may appear. It does **not** require every declared dimension to be stated: a dimension with a default member may be omitted and is treated as present at its default (XDT 1.0 §3.1.4.3.2). Reading it as "exactly" contradicts the default-member rule above — the default may not be emitted, so a hypercube with a defaulted dimension could never be satisfied.
 - **Error namespaces split:** `xbrldie:*` is instance-level (e.g., `PrimaryItemDimensionallyInvalidError`); `xbrldte:*` is taxonomy/DTS-level (e.g., `HasHypercubeMissingContextElementAttributeError`, `TooManyDefaultMembersError`).
 
 See `references/dimensions.md` for the full arcrole table, error codes, explicit-vs-typed contrast, and per-regime axis examples (IFRS, US-GAAP / SRT / DEI, SBR, EBA DPM).
