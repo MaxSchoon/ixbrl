@@ -357,8 +357,26 @@ authoritative source is the Joint Filing Common Validation Checks — see
   `AccountsStatusAuditedOrUnaudited`, `LegalFormEntity`,
   `DescriptionPrincipalActivities`, plus `AccountsType` (FRS-2022) /
   `AccountsTypeFullOrAbbreviated` (pre-2022).
-- A `companieshouse.gov.uk` entity scheme makes
-  `UKCompaniesHouseRegisteredNumber` mandatory; **charities** need at
+- **When the entity has a Companies House registration number** — which
+  includes LLPs, and normally includes charitable companies — the scheme
+  is `http://www.companieshouse.gov.uk/` and
+  `UKCompaniesHouseRegisteredNumber` becomes mandatory. That is the exact
+  value: lowercase `http`, `www.`, and the **trailing slash**. The slash
+  is part of the attribute value, so a bare domain is a *different
+  identifier*, not a lenient spelling of the same one (HMRC, *XBRL
+  tagging: context entity identifiers*). The same value serves Companies
+  House accounts and HMRC CT600 accounts and computations.
+
+  It is **not the only valid scheme**, and this section should not be read
+  as if it were. Unincorporated charities may use
+  `http://www.charitycommission.gov.uk/`; mutual societies
+  `http://mutuals.fsa.gov.uk/`; certain regulated insurers historically
+  `http://www.fsa.gov.uk/`; foreign entities their home-jurisdiction
+  scheme; and HMRC's residual scheme is `http://www.hmrc.gov.uk/` with
+  the UTR. A charitable *company* still normally uses its CRN as the
+  context entity identifier — charity registration is tagged separately.
+
+  **Charities** need at
   least one of
   `CharityRegistrationNumber{EnglandWales, Scotland, NorthernIreland}`.
 
@@ -512,7 +530,7 @@ number at the gateway":
 | `JFCVC.3312` (+ `JFCVC.3312.atLeastOne`) | A mandatory concept is missing, or sits on a context whose dates don't align with `Start/EndDateForPeriodCoveredByReport`; the `atLeastOne` variant is the charity registration-number one-of |
 | `JFCVC.3314` | Inconsistent **duplicate fact** values (precision-aware) |
 | `JFCVC.3315` | A **generic-dimension member** used with no paired name/description item (or that item has no text) — see *Generic-dimension pairing* |
-| `JFCVC.3316` | The context entity identifier (scheme `companieshouse.gov.uk`) does not equal the `UKCompaniesHouseRegisteredNumber` fact |
+| `JFCVC.3316` | The context entity identifier (scheme `http://www.companieshouse.gov.uk/`) does not equal the `UKCompaniesHouseRegisteredNumber` fact |
 | `HMRC.5.3` | A negative numeric value whose `en` label lacks a bracketed negative term |
 | `HMRC.5.4` | `precision` attribute present on a numeric fact — HMRC requires `decimals`, not `precision` |
 | `HMRC.SG.4.5` | Insignificant non-zero digits vs the declared `decimals` |
@@ -672,6 +690,12 @@ say so and link the primary source. The cost of a wrong citation on a
 regulated filing is high.
 
 ## Sources
+
+- **HMRC, *XBRL tagging: context entity identifiers*** — the identifier
+  scheme URL table. Companies Act 2006 entities use
+  `http://www.companieshouse.gov.uk/` with the company registration
+  number; the protocol, `www.` and trailing slash are part of the value —
+  <https://www.gov.uk/government/publications/xbrl-tagging-context-entity-identifiers/xbrl-tagging-context-entity-identifiers>.
 
 Cite these, with version, before declaring a defect. Do not cite a rule
 from memory; the FRC suites and filing rules evolve annually. Each line
