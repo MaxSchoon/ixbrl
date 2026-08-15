@@ -1,5 +1,8 @@
 # Major XBRL/iXBRL Taxonomies
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
+
+
 The major XBRL/iXBRL taxonomies in active use globally for statutory and supervisory reporting. Each section: issuer, current version, entry points, filing scope, download URLs. Versions verified against issuer websites; re-check before relying on a specific version for a filing.
 
 **Last verified (UTC): 2026-05-04.** Treat all "current version" references as point-in-time.

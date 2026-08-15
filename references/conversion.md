@@ -1,5 +1,8 @@
 # Converting a source document to faithful iXBRL — Reference
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
+
+
 Most iXBRL is not authored from scratch. It is *converted*: a finished
 set of financial statements already exists as a PDF, a Word file, or a
 layout produced by accounts-production software, and that document must

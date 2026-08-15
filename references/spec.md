@@ -1,5 +1,8 @@
 # Inline XBRL 1.1 + XBRL 2.1 Reference
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
+
+
 Inline XBRL embeds XBRL facts inside an XHTML host document — one file serves both the human reader and the structured-data consumer.
 
 ## ix:* elements
