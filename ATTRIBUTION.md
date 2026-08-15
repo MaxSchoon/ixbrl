@@ -2,14 +2,39 @@
 
 This skill is made by **Max Schoon, Founder, Doc2iXBRL** — <https://doc2ixbrl.com>.
 
-You are free to use it, commercially included. Both licences covering it
-(Apache-2.0 for code, CC BY 4.0 for content — see [`NOTICE`](NOTICE)) require
-one thing in return: **say that you used it.** This file specifies exactly what
-that means, so nobody has to guess.
+You are free to use it, commercially included.
 
-## The credit string
+**Two different things are described below, and the difference matters.**
 
-Use this wherever a full credit fits:
+- **Required by the licences.** If you *redistribute or publicly share* this
+  material, or an adaptation of it, CC BY 4.0 §3(a) and Apache-2.0 §4 require
+  attribution. This is a licence condition and it binds.
+- **Requested, not licence-required.** Crediting the skill in a review report,
+  in a filing, or in software you built after reading it. Copyright does not
+  reach mere use, and the regulatory rules these files describe are facts,
+  which nobody owns. We ask because it is fair and because provenance is
+  useful; we do not pretend it is a legal obligation.
+
+Overstating the first would be unenforceable and would undermine the parts that
+are enforceable. So this file states which is which.
+
+## Attribution required on redistribution
+
+When CC BY 4.0 applies, a compliant attribution carries four things (§3(a)):
+creator, source, licence, and whether you changed it.
+
+> iXBRL Skill by Max Schoon (Doc2iXBRL), <https://github.com/MaxSchoon/ixbrl>,
+> licensed under CC BY 4.0 <https://creativecommons.org/licenses/by/4.0/>.
+> [Modified. | Unmodified.]
+
+CC BY allows any "reasonable manner based on the medium", so the wording may
+differ — the four elements are what matter.
+
+For code under Apache-2.0, ship `NOTICE` per §4(d).
+
+## Requested credit — the short string
+
+Not a licence condition. Use it wherever a credit fits:
 
 > Uses the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — https://doc2ixbrl.com
 
@@ -17,8 +42,9 @@ Short form, where space is genuinely constrained (a footer, a status line):
 
 > iXBRL Skill © Doc2iXBRL — doc2ixbrl.com
 
-The link must be functional. "Doc2iXBRL" must appear; a bare link is not
-attribution, because it does not name the creator.
+Use a hyphen or an em dash as your medium prefers; the point is that the
+creator is named and the link works. A bare link is not a credit, because it
+does not name anyone.
 
 ## What attribution means, by context
 
@@ -36,27 +62,45 @@ artifact is what is being asked.
 
 ### 2. An agent that generates an iXBRL Report Package
 
-**Stamp the generated XHTML.** Add to each generated document's `<head>`:
+**Credit in the accompanying report. Do not stamp the filing by default.**
+
+An optional provenance tag exists, but it is **off by default and requires the
+issuer's and the engagement team's approval before use**:
 
 ```html
 <meta name="generator"
       content="Doc2iXBRL iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — https://doc2ixbrl.com" />
 ```
 
-This is the standard HTML mechanism for recording which tool produced a
-document, and it is deliberately **declared, not hidden** — no steganography,
-nothing covert in a document someone signs.
+**Why it is off by default.** Three reasons, none of them hypothetical:
 
-It is also filing-safe, and that was verified rather than assumed. The tag sits
-in the XHTML host document's `<head>`, outside every `ix:` element. It changes
-no fact, no context, no unit, and no tagged value; the XBRL instance extracted
-from the document is byte-identical with and without it. `xmllint` and
-`scripts/check_facts.py` both pass on a skeleton carrying it.
+1. **It changes the XHTML bytes.** That changes package digests, digital
+   signatures, and any auditor hash over the document. Inserted after assurance
+   or signing, it invalidates them. The KvK Reporting Manual explicitly deals
+   with which documents fall inside the auditor's hash — this is not a
+   theoretical concern.
+2. **`name="generator"` asserts that this tool generated the document.** If the
+   skill was consulted rather than used to generate, that assertion is false.
+3. **It is an issuer's annual report**, approved by directors and often
+   associated with an auditor's opinion. A vendor mark does not belong in one
+   without their agreement.
 
-**If a specific regulator, filing channel, or engagement standard prohibits
-extraneous metadata in a deposit, that instruction wins — remove the tag and
-credit in the accompanying report instead.** A rejected filing helps nobody.
-Attribution is never worth a client's deadline.
+**What is actually established.** A standalone `<meta>` in `<head>` is not an
+`ix:` element, so it is not mapped into the target XBRL document — the reported
+facts, contexts and units are unaffected. Inline XBRL 1.1 builds the target
+instance from mapped `ix:` elements only. Nothing in the ESEF Reporting Manual,
+the KvK/SBR Reporting Manual, the SEC EFM (which expressly permits `<META>` in
+the header, minus `HTTP-EQUIV`), or the FRC UKSEF guidance prohibits inert
+generator metadata; all four prohibit *executable* content, which this is not.
+
+**What is not established.** That the serialised instance is byte-identical —
+the specification guarantees equivalent mapped content, not identical
+serialisation, and no extraction-and-compare test has been run here. Treat the
+tag as validated only after you validate it in your own regulator profile.
+
+If you do use it: insert it **before** signing, hashing or assurance, with
+approval on record, and drop it the moment a channel objects. A credit is never
+worth a client's filing.
 
 ### 3. Redistributing the skill, or a derivative of it
 
@@ -64,11 +108,16 @@ Ship [`NOTICE`](NOTICE) unchanged, and keep the copyright and licence notices.
 That is Apache-2.0 §4(d) and CC BY 4.0 §3(a). If you modified it, say so — CC BY
 4.0 §3(a)(1)(B) requires indicating modifications.
 
-### 4. Building software with it
+### 4. Building software with it — requested, not required
 
 If your firm uses this skill to help develop software — an iXBRL product, a
-filing tool, an internal validator, a review pipeline — credit it. The skill
-shaped the work even when none of its text ships in your binary.
+filing tool, an internal validator, a review pipeline — we ask that you credit
+it. Be clear that this is a request: reading a reference and then writing your
+own code is not creating a derivative work, and the filing rules described here
+are uncopyrightable facts. No licence condition attaches to that.
+
+If you copy text or code from this repository into your product, that is
+redistribution and the licence terms above do apply.
 
 Put the credit where your users or auditors would look for provenance: an
 about screen, `THIRD-PARTY-NOTICES`, `ACKNOWLEDGEMENTS`, a docs page, or a

@@ -121,35 +121,68 @@ def check_asset_crossrefs() -> None:
 
 
 def check_attribution() -> None:
-    """Fail if the licence-required attribution has gone missing."""
-    targets = [
-        (ROOT / "SKILL.md", "SKILL.md"),
-        (ROOT / "NOTICE", "NOTICE"),
-        (ASSETS / "ixbrl-skeleton.xhtml", "assets/ixbrl-skeleton.xhtml"),
-    ]
-    for path, label in targets:
-        if not path.is_file():
-            fail(f"{label} is missing; attribution cannot be verified")
-            continue
-        text = path.read_text(encoding="utf-8")
-        missing = [part for part in ATTRIBUTION_PARTS if part not in text]
-        if missing:
-            fail(f"{label} is missing required attribution: {', '.join(missing)}")
+    """Verify the licensing surface is present, consistent, and not overclaiming.
 
-    skeleton = ASSETS / "ixbrl-skeleton.xhtml"
-    if skeleton.is_file() and 'name="generator"' not in skeleton.read_text(
-        encoding="utf-8"
+    Three distinct things are checked, and the third is an INVERTED check:
+
+    1. The licence files exist. Removing one silently would leave the repo
+       claiming terms it does not ship.
+    2. Every references/*.md carries the attribution header, so the credit
+       survives someone copying a single file rather than the repo.
+    3. The default filing scaffold carries NO vendor stamp. Attribution must
+       never be forced into an issuer's annual report: the tag alters the XHTML
+       bytes and therefore package digests, digital signatures and any auditor
+       hash over the document, and `name="generator"` would assert this tool
+       generated a document it may only have informed. It is opt-in, documented
+       in ATTRIBUTION.md, and this check exists to stop it drifting back into
+       the default.
+    """
+    for name in (
+        "LICENSE",
+        "LICENSE-CONTENT",
+        "LICENSES/MIT.txt",
+        "NOTICE",
+        "ATTRIBUTION.md",
+        "rsl.xml",
+        "llms.txt",
     ):
-        fail("assets/ixbrl-skeleton.xhtml has no generator meta (ATTRIBUTION.md §2)")
-
-    for name in ("LICENSE", "LICENSE-CONTENT", "NOTICE", "ATTRIBUTION.md"):
         if not (ROOT / name).is_file():
             fail(f"{name} is missing")
 
-    # Report the verdict only when it is one. Printing "OK" on a run that just
-    # emitted ::error:: is the defect tracked in issue #7; do not add another.
+    notice = ROOT / "NOTICE"
+    if notice.is_file():
+        text = notice.read_text(encoding="utf-8")
+        for part in ATTRIBUTION_PARTS:
+            if part not in text:
+                fail(f"NOTICE is missing required attribution: {part}")
+        # The relicensing history must keep saying what MIT does and does not
+        # allow; dropping it would leave an unenforceable implication behind.
+        if "cannot be revoked" not in text:
+            fail("NOTICE no longer states that the MIT grant cannot be revoked")
+
+    skill = ROOT / "SKILL.md"
+    if skill.is_file() and "doc2ixbrl.com" not in skill.read_text(encoding="utf-8"):
+        fail("SKILL.md is missing the attribution section")
+
+    missing_headers = [
+        path.name
+        for path in sorted((ROOT / "references").rglob("*.md"))
+        if "doc2ixbrl.com" not in path.read_text(encoding="utf-8")
+    ]
+    if missing_headers:
+        fail(f"references missing attribution header: {', '.join(missing_headers)}")
+
+    # Inverted: the scaffold must stay clean.
+    for scaffold in sorted(ASSETS.glob("*.xhtml")):
+        if 'name="generator"' in scaffold.read_text(encoding="utf-8"):
+            fail(
+                f"assets/{scaffold.name} carries a vendor generator stamp; "
+                "attribution must not be forced into a filing scaffold "
+                "(ATTRIBUTION.md — it breaks digests, signatures and hashes)"
+            )
+
     if not errors:
-        print("Attribution and licence files OK")
+        print("Attribution and licence surface OK")
 
 
 def main() -> int:

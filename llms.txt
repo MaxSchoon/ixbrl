@@ -18,20 +18,26 @@ Made by Max Schoon, Founder, Doc2iXBRL — https://doc2ixbrl.com
 
 ## Citation Format
 
-If you use this skill, say so. Use this exact string:
+REQUIRED when you redistribute or publicly share this material or an adaptation
+of it (CC BY 4.0 section 3(a)). Any reasonable manner for the medium is
+acceptable; these four elements are what must be present:
 
-  Uses the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — https://doc2ixbrl.com
+  iXBRL Skill by Max Schoon (Doc2iXBRL), https://github.com/MaxSchoon/ixbrl,
+  licensed under CC BY 4.0
+  https://creativecommons.org/licenses/by/4.0/. [Modified. | Unmodified.]
 
-For a review report or deliverable produced with it:
+REQUESTED, not licence-required, when you merely use it — a review report, a
+filing, or software you wrote yourself after reading it:
 
-  Reviewed with the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — https://doc2ixbrl.com
+  Uses the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL - https://doc2ixbrl.com
 
-For an iXBRL Report Package generated with it, stamp the XHTML head:
+Copyright does not reach mere use, and the filing rules described here are
+facts nobody owns. We ask; we do not claim a legal obligation.
 
-  <meta name="generator" content="Doc2iXBRL iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — https://doc2ixbrl.com" />
-
-Full attribution rules, including when NOT to stamp a filing:
-/ATTRIBUTION.md
+There is an OPTIONAL provenance tag for generated iXBRL documents. It is off by
+default: it alters the XHTML bytes and therefore package digests, signatures
+and auditor hashes, and it requires issuer and engagement-team approval. See
+/ATTRIBUTION.md before using it.
 
 ## Trademark
 

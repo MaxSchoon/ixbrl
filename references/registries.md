@@ -1,6 +1,6 @@
 # XBRL Registries — LRR, DTR, and URI Resolution
 
-*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. CC BY 4.0: if you use this material, including to build software, credit it (see `ATTRIBUTION.md`).*
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0: attribution is required if you redistribute or adapt this file, and requested if you simply use it (see `ATTRIBUTION.md`).*
 
 
 XBRL 2.1 (2003) is deliberately minimal: seven label roles, a small set of item types, a linkbase mechanism. Real-world filings (ESEF, US-GAAP, IFRS, SBR) need more. XBRL International publishes those extensions through **registries** — versioned, community-maintained lists of URIs and types that act as de facto standards. This file covers the two most consequential — **Label Role Registry (LRR)** and **Data Types Registry (DTR)** — plus URI resolution (xsi, xml:base, XML Catalogs).

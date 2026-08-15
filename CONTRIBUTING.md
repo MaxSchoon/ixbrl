@@ -219,5 +219,6 @@ repository's terms: **Apache-2.0** for code (`scripts/`, `tests/`) and
 [`NOTICE`](NOTICE).
 
 Contributions merged before the relicensing commit were made under the MIT
-License, which permits sublicensing; they are redistributed under the terms
-above with the original notice retained.
+License. They remain identified under MIT — see `NOTICE` § Relicensing history,
+which names them — and are not represented as relicensed. Written consent will
+be sought before doing so. The MIT text is preserved at `LICENSES/MIT.txt`.
