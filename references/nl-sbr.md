@@ -91,31 +91,51 @@ publish `META-INF/reports.json`. KvK FY2025 example packages use xBRI.
 ## 2. Bi-temporal cheatsheet (which rule applied when)
 
 For each rule, ask: *was this in force when this report was prepared?*
-Do not apply 2026 rules to a 2024 filing.
+Do not apply 2026 rules to a 2024 filing — and do not apply 2025 rules
+to a 2026 one. Two RTS generations are in circulation: **RTS 2025**
+(final 31 October 2025, financial years beginning on or after
+2025-01-01) and **RTS 2026** (final 10 July 2026, financial years
+beginning on or after 2026-01-01). Both may be applied early to
+earlier financial years, so an FY2025 report prepared under RTS 2026
+is not wrong — establish which the preparer targeted before calling a
+defect.
 
 | Rule | Applies from | Notes |
 |---|---|---|
 | KvK Groot-class **must** deposit digitally (SBR Report Package) | FY2025 | Earlier years allowed paper for Groot. Don't insist on iXBRL for a FY2023 Groot deposit. |
 | KvK Middelgroot must deposit digitally | FY2017 onward | Stable for years. |
 | KvK Klein / Microbedrijf must deposit digitally | FY2016 / FY2017 | Stable for years. |
-| Notes / management report / other-information block-tagging for KvK iXBRL | Delayed: one year after ESMA's amended block-tagging approach takes effect | The RTS 2025 expresses the date as `202X`, not a fixed year. For FY2025 and earlier, voluntary block-tagging is not permitted; check the current RTS / FAQ before requiring it. |
-| ESEF block-tagging for AFM (listed) IFRS notes | FY2022 | Distinct from KvK above. AFM listed AFRs follow ESMA Annex II Table 2, not KvK. |
+| Notes / management report / other-information block-tagging for KvK iXBRL | Not yet fixed — **not sooner than two years** after ESMA's definitive block-tagging requirements take effect | RTS 2026 Annex II point 2 still writes the date as `1 januari 20XX`, and *widened* the lag: RTS 2025 said one year after ESMA's amended approach, RTS 2026 says "niet eerder voorzien dan twee jaar na invoering van de definitieve ESMA-vereisten", adding XBRL International best-practice work as a second dependency. Voluntary block-tagging before that date remains **not permitted**. Check the current RTS / FAQ before requiring it. |
+| ESEF report deposited **directly** at the Handelsregister | FY2026 | RTS 2026 art. 4(5): an in-scope issuer "kan hun ESEF-rapportage rechtstreeks deponeren bij het handelsregister". Two review-visible consequences: the entity identifier becomes the **LEI** with scheme `http://standards.iso.org/iso/17442` instead of the KvK number with `http://www.kvk.nl/kvk-id` (Annex IV pt 2), and `esef_cor:NotesAccountingPoliciesAndMandatoryTags` joins the start points (Annex IV Table 7). Filing with the AFM still discharges the KvK obligation (art. 2:394 lid 8 BW). |
+| art. 2:403 BW foreign-group-head report in iXBRL | FY2025 | Operative. Untagged group report + separate filing-data iXBRL document in one Report Package (§7.2). |
+| art. 2:408 BW foreign-group-head report in iXBRL | **Not before FY2028** | FAQ 2.2.4 (10 July 2026): for financial years beginning **before 2028-01-01** the 2:408 group report is deposited **by PDF e-mail**; the iXBRL obligation is only *expected* from FY2028. An FY2026 PDF-by-email 2:408 deposit is correct — do not flag it (§7.2). |
+| ESEF block-tagging for AFM (listed) IFRS notes | FY2022 | Distinct from KvK above. AFM-listed AFRs follow ESMA Annex II Table 2, not KvK. |
 | Auditor's report (controleverklaring) required in package | Middelgroot + Groot, always (article 2:393 BW) | Klein/Micro: not required. art. 2:403 BW: group subsidiaries may be exempt — its absence on a Groot subsidiary is not automatically wrong. |
-| Calculation basis for FY2025 KvK iXBRL Report Packages | **Calc 1.1** is listed in RTS 2025 Annex III | Calc 1.1 uses OIM rounding semantics — it handles iXBRL's routinely-duplicate facts correctly and surfaces the dual-statement cross-scope inconsistencies that Calc 1.0 silently hides. Run Calc 1.0 only as a legacy / compatibility pass if the operative validator profile still checks it (§4.2). |
-| `validate/NL` disclosure system | Per NT release | Run `arelleCmdLine --plugins validate/NL --disclosureSystem` matching the NT generation in the report. |
+| Calculation basis for KvK iXBRL Report Packages | FY2025 **and** FY2026 — **Calc 1.1**, listed in Annex III of both RTS 2025 and RTS 2026 (the specification set is unchanged between them) | Calc 1.1 uses OIM rounding semantics — it handles iXBRL's routinely-duplicate facts correctly and surfaces the dual-statement cross-scope inconsistencies that Calc 1.0 silently hides. Two verdicts are needed: use Calc 1.1 for **substantive review**, and run Calc 1.0 (`--calc c10`) as well for the **formal deposit-acceptance** verdict — the NT20 Filing Rules list XBRL 2.1 as the normative calculation basis, so the KvK acceptance test runs on Calc 1.0 semantics (`validation.md` §4). Running both is cheap. Not re-verified against the NT21 Filing Rules. |
+| Base (filer-facing) taxonomy release to tag against | Per financial year, three-year window | RTS 2026 Annex VI names the `2026-12-31` set for FY2026. FAQ 2.2.5 allows any of the **three most recent** KVK taxonomy versions, so an FY2026 report may be filed on the 2026, 2025 or 2024 set; older versions are rejected. **Checked 2026-08-15: `nltaxonomie.nl/kvk/2026-12-31/` returns 404** — the newest published filer-facing release is still `2025-12-31`. Resolve the live directory before assuming a 2026 schemaRef works. |
+| KVK taxonomy generation for the legacy **XBRL** channel | Per NT release | RTS 2026 ch. 3 Annex I supports NT21 (FY2026), NT20 (FY2025), NT19 (FY2024). **NT21 is pre-release as of 2026-08-15**: `nltaxonomie.nl/nt21/kvk/` holds only `20261209.a` (alfa) and `20261209.b` (bèta); the SBR release calendar puts final publication at 29-10-2026 and production at 09-12-2026. |
+| `validate/NL` disclosure system | Per NT release | Run `arelleCmdLine --plugins validate/NL --disclosureSystem` matching the NT generation in the report. There is **no `NL-INLINE-2026`** registered in Arelle as of 2026-08-15 — validate FY2026 packages with `NL-INLINE-2025` and say so in the report (§12). |
 
 When uncertain, **state the rule version you are applying** before
 declaring a defect. "This violates the NT20 KvK Filing Rule X for
-FY2025" is reviewable; "this is wrong" is not.
+FY2025" is reviewable; "this is wrong" is not. With two RTS
+generations live, name the RTS year as well.
 
-### 2.1 RTS 2025 essentials for SBR-domein Handelsregister
+### 2.1 RTS essentials for SBR-domein Handelsregister (2025 / 2026)
 
 The **Regelgevende Technische Standaard (RTS) van het SBR-domein
 Handelsregister** is the domain-level implementation of the Besluit
 elektronische deponering handelsregister. Use the current Dutch RTS as
 the authority; the English translation says the Dutch version prevails.
-The 2025 RTS was finalised on 31 October 2025 for annual reports for
-financial years beginning on or after 1 January 2025.
+Two generations are live. The **2025 RTS** was finalised on 31
+October 2025 for financial years beginning on or after 1 January 2025.
+The **2026 RTS** was finalised on **10 July 2026** for financial years
+beginning on or after 1 January 2026, and may be applied to earlier
+years. Article numbering and the Annex I–VI layout are unchanged
+between them; the substantive deltas are the ESEF-direct route (art.
+4(5)), the LEI identifier and the `esef_cor` notes start point for
+ESEF reports (Annex IV pt 2 and Table 7), the widened block-tagging
+lag (Annex II pt 2), and the rolled base-taxonomy set (Annex VI).
 
 The RTS is not the same thing as the Reporting Manual (RM):
 
@@ -153,7 +173,8 @@ RTS points that matter in review:
   Packages: Inline XBRL 1.1, Transformation Registry 4 or 5, Units
   Registry 1.0, Data Type Registry 1.x, Link Role Registry 2.0, XBRL
   2.1, Dimensions 1.0, **Calculations 1.1**, Taxonomy Packages 1.0,
-  and Report Package 1.0.
+  and Report Package 1.0. This list is **identical in RTS 2025 and RTS
+  2026** — the specification set did not move for FY2026.
 - Annex IV is the core markup rulebook: use the core-taxonomy element
   with the closest / narrowest accounting meaning; create an extension
   only when the core taxonomy would misrepresent the disclosure; give
@@ -163,6 +184,16 @@ RTS points that matter in review:
   hierarchy; document arithmetic relationships in the calculation
   linkbase; and anchor extension concepts to wider / narrower core
   concepts where required.
+
+**Honest gaps in this section (checked 2026-08-15).** The RTS 2026
+delta list above is a comparison of the two final texts, not the
+publisher's own track-changes document, so small Annex IV wording
+changes may be missing. The Reporting Manual 2026 — whose chapter 7
+governs the §7.2 403/408 package shape — has not been read into this
+file. NT21 entry-point names are **not** recorded here: the taxonomy
+is still pre-release and the directory listing is truncated, so §3's
+`-2025-` entry-point suffixes have deliberately **not** been rolled to
+`-2026-`. Verify against the published release before doing so.
 
 Do not cite an RTS rule from memory. The SBR project page also publishes
 the current FAQ, practice guidance, conformance suite, taxonomy
@@ -401,10 +432,15 @@ The reasons:
   concepts (KvK IFRS entry points, AFM ESEF) are effectively already
   operating in a Calc 1.1 world for those concepts.
 
-Run Calc 1.0 only as a legacy / compatibility pass if the operative
-validator profile or filing channel still applies older FR-NL checks.
-Do not treat an older Calc 1.0 assumption as overriding the FY2025
-iXBRL RTS unless the current validator profile actually does so.
+Run Calc 1.0 (`--calc c10`) **as well**, as a separate pass. Calc 1.1
+is the RTS Annex III specification basis and the better *review*
+instrument, but the NT20 Filing Rules list XBRL 2.1 as the normative
+calculation basis, so the KvK deposit-acceptance test runs on Calc 1.0
+semantics (`validation.md` §4). The package must pass both: 1.1 tells
+you what is substantively wrong, 1.0 tells you whether KvK will accept
+it. Do not let a Calc 1.0 result override the RTS on *review*
+questions, and do not skip the 1.0 pass on the assumption that 1.1
+supersedes it. **Not re-verified against the NT21 Filing Rules.**
 
 ```bash
 # FY2025 KvK iXBRL RTS pass
@@ -647,10 +683,17 @@ The article is distinguished **only** by one boolean (both
 - art. 2:403 → `kvk:AnnualReportOfForeignGroupHeadForExemptionUnderArticle403` (rules G7-1-4_1 / G7-1-4_2)
 - art. 2:408 → `kvk:AnnualReportOfForeignGroupHeadForExemptionUnderArticle408` (rules G7-2-1_1 / G7-2-1_2; note the manual's G7-2-1_2 has a typo naming the 403 QName)
 
-**Timing (bi-temporal — see §2).** The 403 iXBRL route is operative for
-FY2025. The 408 iXBRL route + 408 boolean are mandatory only for
-**financial years starting on or after 2026-01-01**; FY2025 art. 2:408
-filings may still be submitted **by PDF email**.
+**Timing (bi-temporal — see §2).** The 403 iXBRL route is operative
+for FY2025 and later. The **408 route has slipped by two years**: per
+the SBR-domein Handelsregister FAQ of 10 July 2026 (Q2.2.4), an art.
+2:408 foreign-group-head report for a financial year beginning
+**before 2028-01-01** is deposited **by PDF e-mail in Pdf-formaat**,
+and the iXBRL obligation — following the same procedure as 403 — is
+only *expected* for years starting on or after 2028-01-01. So an
+FY2026 or FY2027 art. 2:408 deposit arriving as a PDF by e-mail is
+**correct, not a defect**. The `…UnderArticle408` boolean and the
+"Other" entry point below remain the right shape when a filer does
+submit 408 in iXBRL, and for when the FY2028 date arrives.
 
 Note: in the FY2025 403 example, `kvk:AuditorsReportFinancialStatementsPresent`
 is **`Ja`** — set it per the actual deposit, not by assuming the
@@ -773,9 +816,9 @@ editions of this file cited `nl-fr-nt20-kvk-ifrs-2025`; that name is
 the `NL-INLINE-2025*` names above (and their lowercase aliases), so the
 old name silently falls back to no disclosure system. Confirm the
 operative name in your build with `arelleCmdLine --plugins validate/NL
---showEnvironment`. Run a second pass with `--calc c10` only if the
-operative validator profile or filing channel still applies older
-Calc 1.0 checks. When validation is slow or intermittent, suspect
+--showEnvironment`. Run a second pass with `--calc c10` for the
+formal deposit-acceptance verdict (`validation.md` §4) — not merely
+"if the profile still checks it". When validation is slow or intermittent, suspect
 remote-taxonomy resolution before suspecting the package.
 
 ## 13. A pragmatic NL review pass — in order
@@ -797,11 +840,12 @@ walk this in order. Each step depends on the prior being clean.
    interpreting validation errors.
 4. **Run validation in the operative profile, offline.** §12. Capture
    the full log, including warnings. Run **Calc 1.1** (`--calc c11r`)
-   as the FY2025 KvK iXBRL RTS calculation basis (it handles iXBRL
+   as the applicable FY/RTS calculation basis — Annex III lists
+   Calculations 1.1 in both RTS 2025 and RTS 2026 (it handles iXBRL
    duplicate facts and surfaces the dual-statement cross-scope
-   inconsistencies Calc 1.0 hides). Run **Calc 1.0** (`--calc c10`)
-   only as a legacy / compatibility pass if the operative validator
-   profile still applies it (§4.2).
+   inconsistencies Calc 1.0 hides). Then run **Calc 1.0** (`--calc c10`) as a
+   separate pass for the deposit-acceptance verdict — the package must
+   pass both (§4.2, `validation.md` §4).
    Classify any cross-scope inconsistency by role-vs-context before
    treating it as a defect.
 5. **Classify each finding.** Route by code prefix using `SKILL.md`'s
@@ -909,6 +953,13 @@ Defer to and cite:
   `NL-INLINE-2025-GAAP-OTHER-PREVIEW`, and their aliases) — the operative
   reference when a `--disclosureSystem` name silently fails to bind —
   <https://github.com/Arelle/Arelle/blob/master/arelle/plugin/validate/NL/resources/config.xml>.
+- **RTS 2026 — SBR-domein Handelsregister**, final 10 July 2026, for
+  financial years beginning on or after 1 January 2026 —
+  <https://www.sbr-nl.nl/sites/default/files/2026-07/20260710_RTS_2026_NL_SBR-domein_Handelsregister.pdf>.
+- **FAQ — SBR-domein Handelsregister**, revision of 10 July 2026. Q2.2.4
+  governs the art. 2:403 / 2:408 foreign-group-head routes and Q2.2.5 the
+  three-year KVK-taxonomy window —
+  <https://www.sbr-nl.nl/sites/default/files/2026-07/20260710_FAQ_NL_SBR-domein_Handelsregister.pdf>.
 
 If the question concerns a rule version newer than what this file
 cites, or a code not listed in §5 / §6, say so and link the primary
