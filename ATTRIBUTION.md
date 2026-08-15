@@ -109,8 +109,15 @@ If your firm uses this skill to help develop software — an iXBRL product, a
 filing tool, an internal validator, a review pipeline — credit it. The skill
 shaped the work even when none of its text ships in your binary.
 
+Put the credit where your users or auditors would look for provenance: an about
+screen, `THIRD-PARTY-NOTICES`, `ACKNOWLEDGEMENTS`, a docs page, or a methodology
+note. Any one of those satisfies this.
+
+> Built with help from the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL —
+> https://doc2ixbrl.com
+
 If you copy text or code from this repository into your product, that is
-redistribution and the licence terms above do apply.
+redistribution and the licence terms above also apply.
 
 Put the credit where your users or auditors would look for provenance: an
 about screen, `THIRD-PARTY-NOTICES`, `ACKNOWLEDGEMENTS`, a docs page, or a
