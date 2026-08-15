@@ -156,14 +156,17 @@ and in the PR — an unexplained suppression is a rule deleted quietly.
   Clark-notation forms lxml needs for attribute access are derived from `NS`
   (e.g. `XSI_NIL`) rather than repeating the URI as a literal.
 
-**Known gap (booked, not hidden).** `pyrightconfig.json` declares a type-checking
-standard that CI does not currently run, and the tree does not currently pass it
-(two errors in `check_facts.py`: missing `lxml` stubs, and a `str | None` that is
-guarded at runtime but not narrowed for the checker). Creditor: the type gate.
-Maturity: when the `check_facts.py` robustness fixes land, since they touch the
-same code — tracked in the issues list. Until then, `pyrightconfig.json` is
-documentation of intent, not an enforced gate; do not read a clean CI as a clean
-type check.
+**Type gate.** `pyrightconfig.json` is enforced in CI and the tree passes it
+clean. `lxml-stubs` supplies the types `lxml` does not ship inline; without them
+the declared standard is unachievable rather than merely unmet. Run
+`.venv/bin/python -m pyright` before opening a PR if you touched `scripts/` or
+`tests/`.
+
+**Tests.** `tests/test_check_facts.py` covers `scripts/check_facts.py` with
+stdlib `unittest` — no runner dependency, matching the dependency-light rule
+above. Run `.venv/bin/python -m unittest discover -s tests -p 'test_*.py'`. A
+bug fix lands with a test that fails without it; two crashes shipped in this
+script precisely because it had no tests.
 
 ## How to contribute
 
@@ -188,7 +191,7 @@ When opening a PR, confirm:
 - `xmllint --noout` clean on `assets/`
 - Cross-file refs resolve
 - Vendor-neutral language preserved
-- If `scripts/` or `tests/` changed: `ruff check`, `ruff format --check`, and `shellcheck` all clean
+- If `scripts/` or `tests/` changed: `ruff check`, `ruff format --check`, `pyright`, `shellcheck`, and the unit tests all clean
 - No claim deleted without spec-citation justification
 - Honest-gap notes preserved or added where applicable
 

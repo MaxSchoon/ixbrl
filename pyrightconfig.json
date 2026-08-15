@@ -2,5 +2,12 @@
   "venvPath": ".",
   "venv": ".venv",
   "typeCheckingMode": "basic",
-  "reportMissingTypeStubs": "none"
+  "reportMissingTypeStubs": "none",
+  "extraPaths": [
+    "scripts"
+  ],
+  "include": [
+    "scripts",
+    "tests"
+  ]
 }
