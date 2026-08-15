@@ -908,7 +908,7 @@ Defer to and cite:
   disclosure-system names (`NL-INLINE-2025`,
   `NL-INLINE-2025-GAAP-OTHER-PREVIEW`, and their aliases) — the operative
   reference when a `--disclosureSystem` name silently fails to bind —
-  <https://github.com/Arelle/Arelle/tree/master/arelle/plugin/validate/NL>.
+  <https://github.com/Arelle/Arelle/blob/master/arelle/plugin/validate/NL/resources/config.xml>.
 
 If the question concerns a rule version newer than what this file
 cites, or a code not listed in §5 / §6, say so and link the primary
