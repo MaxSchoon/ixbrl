@@ -357,8 +357,11 @@ authoritative source is the Joint Filing Common Validation Checks — see
   `AccountsStatusAuditedOrUnaudited`, `LegalFormEntity`,
   `DescriptionPrincipalActivities`, plus `AccountsType` (FRS-2022) /
   `AccountsTypeFullOrAbbreviated` (pre-2022).
-- A `companieshouse.gov.uk` entity scheme makes
-  `UKCompaniesHouseRegisteredNumber` mandatory; **charities** need at
+- An `http://www.companieshouse.gov.uk/` entity scheme makes
+  `UKCompaniesHouseRegisteredNumber` mandatory. The scheme is that exact
+  URL — protocol, `www.` and trailing slash included. A bare domain does
+  not match, and the identifier will not be recognised (HMRC, *XBRL
+  tagging: context entity identifiers*). **Charities** need at
   least one of
   `CharityRegistrationNumber{EnglandWales, Scotland, NorthernIreland}`.
 
@@ -512,7 +515,7 @@ number at the gateway":
 | `JFCVC.3312` (+ `JFCVC.3312.atLeastOne`) | A mandatory concept is missing, or sits on a context whose dates don't align with `Start/EndDateForPeriodCoveredByReport`; the `atLeastOne` variant is the charity registration-number one-of |
 | `JFCVC.3314` | Inconsistent **duplicate fact** values (precision-aware) |
 | `JFCVC.3315` | A **generic-dimension member** used with no paired name/description item (or that item has no text) — see *Generic-dimension pairing* |
-| `JFCVC.3316` | The context entity identifier (scheme `companieshouse.gov.uk`) does not equal the `UKCompaniesHouseRegisteredNumber` fact |
+| `JFCVC.3316` | The context entity identifier (scheme `http://www.companieshouse.gov.uk/`) does not equal the `UKCompaniesHouseRegisteredNumber` fact |
 | `HMRC.5.3` | A negative numeric value whose `en` label lacks a bracketed negative term |
 | `HMRC.5.4` | `precision` attribute present on a numeric fact — HMRC requires `decimals`, not `precision` |
 | `HMRC.SG.4.5` | Insignificant non-zero digits vs the declared `decimals` |
@@ -672,6 +675,12 @@ say so and link the primary source. The cost of a wrong citation on a
 regulated filing is high.
 
 ## Sources
+
+- **HMRC, *XBRL tagging: context entity identifiers*** — the identifier
+  scheme URL table. Companies Act 2006 entities use
+  `http://www.companieshouse.gov.uk/` with the company registration
+  number; the protocol, `www.` and trailing slash are part of the value —
+  <https://www.gov.uk/government/publications/xbrl-tagging-context-entity-identifiers/xbrl-tagging-context-entity-identifiers>.
 
 Cite these, with version, before declaring a defect. Do not cite a rule
 from memory; the FRC suites and filing rules evolve annually. Each line
