@@ -24,10 +24,18 @@ Reference for Inline XBRL submissions to the U.S. Securities and Exchange Commis
 
 ## Vintage and applicability
 
-The **EDGAR Filer Manual, Volume II: EDGAR Filing** is authoritative.
-Filers must comply with whatever version is effective at submission
-date. As of writing, chapter 6 ("Interactive Data") is reissued
-effective **15 September 2025**.
+The **EDGAR Filer Manual, Volume II: EDGAR Filing** is authoritative,
+and filers must comply with whichever version is effective at
+**submission** date — not at period end, and not the one current when a
+report was drafted. The manual is reissued on EDGAR release cadence, so
+this is a live check, never a remembered fact.
+
+**Version 77**, deployed **16 March 2026** with EDGAR Release 26.1
+(adopting release 33-11411), is current as of 2026-08-15. Confirm the
+operative version at <https://www.sec.gov/submit-filings/edgar-filer-manual>
+before citing a chapter or section number: chapter 6 ("Interactive
+Data") is the Inline XBRL chapter, and its numbering moves between
+versions.
 
 ### Recent rule updates (last ~24 months)
 
@@ -245,6 +253,11 @@ Chapter 6 split: https://www.sec.gov/files/edgar/filermanual/efmvol2-c6.pdf
 EDGAR XBRL Guide (plain-language companion): https://www.sec.gov/files/edgar/filer-information/specifications/xbrl-guide.pdf
 
 ## Sources
+
+- **SEC, *EDGAR Filer Manual*** — the version index. Volume II Version 77
+  deployed 16 March 2026 (EDGAR Release 26.1, adopting release 33-11411);
+  always check this page for the version effective at submission date —
+  <https://www.sec.gov/submit-filings/edgar-filer-manual>.
 
 - **SEC, *Cybersecurity Risk Management … Small Entity Compliance Guide*** —
   establishes the two distinct Inline XBRL tagging dates: Form 10-K / 20-F for
