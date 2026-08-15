@@ -107,8 +107,10 @@ def check_file(path: Path) -> None:
         for key in REQUIRED_FRONT_MATTER:
             if key not in fm:
                 fail(f"{name}: front matter missing `{key}`")
+        # Validate unconditionally: `restructured_on:` with no value is a
+        # missing date, not an absent field, and `if stamp` let it through.
         stamp = fm.get("restructured_on", "")
-        if stamp and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", stamp):
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", stamp):
             fail(f"{name}: restructured_on `{stamp}` is not YYYY-MM-DD")
 
     if ATTRIBUTION_MARK not in text:

@@ -119,7 +119,14 @@ def check_reference_links() -> None:
     known = {p.relative_to(references).as_posix() for p in references.rglob("*.md")}
     basenames = {p.name for p in references.rglob("*.md")}
 
-    sources = [ROOT / "SKILL.md", *sorted(references.rglob("*.md"))]
+    # Every Markdown file in the repo, not just SKILL.md and references/. The
+    # docstring claimed repo-wide and the code did not deliver it, so a broken
+    # references/... link in README.md, CONTRIBUTING.md or .github/*.md passed.
+    sources = sorted(
+        p
+        for p in ROOT.rglob("*.md")
+        if ".venv" not in p.parts and "node_modules" not in p.parts
+    )
     checked = 0
     for src in sources:
         if not src.is_file():
