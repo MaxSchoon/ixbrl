@@ -1,6 +1,6 @@
 ---
 name: ixbrl
-description: Use for preparing, reviewing, validating, or debugging Inline XBRL (iXBRL) and XBRL filings. Trigger on iXBRL, XBRL, ESEF, EDGAR/EFM, UK FRC/HMRC/Companies House, Dutch SBR/KvK/AFM, Danish Erhvervsstyrelsen/ÅRL/Regnskab, Finnish PRH digital financial statements, French AMF, German E-Bilanz/Bundesanzeiger, Belgian NBB/Biztax, EBA/EIOPA DPM, IFRS, US-GAAP, EDINET, MCA, Arelle, taxonomy packages, report packages, extension taxonomies, anchoring, block or narrative tagging, fact mapping, contexts, units, decimals, transformation formats, calculation/linkbase/dimension errors, and validator codes such as FR-NL-*, EFM.6.*, ESEF.*, JFCVC.*, xbrldie:*, xbrldte:*, and xbrl.5.2.5.2. Use it to route to primary-source references, templates, and validation scripts.
+description: Use when preparing, reviewing, validating, or debugging Inline XBRL (iXBRL) or XBRL filings for any regulator. Covers ESEF, SEC EDGAR, and the major national regimes. Routes to primary-source references, scaffold templates, and Arelle validation scripts.
 license: see NOTICE
 ---
 
