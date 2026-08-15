@@ -109,9 +109,9 @@ defect.
 | ESEF report deposited **directly** at the Handelsregister | FY2026 | RTS 2026 art. 4(5): an in-scope issuer "kan hun ESEF-rapportage rechtstreeks deponeren bij het handelsregister". Two review-visible consequences: the entity identifier becomes the **LEI** with scheme `http://standards.iso.org/iso/17442` instead of the KvK number with `http://www.kvk.nl/kvk-id` (Annex IV pt 2), and `esef_cor:NotesAccountingPoliciesAndMandatoryTags` joins the start points (Annex IV Table 7). Filing with the AFM still discharges the KvK obligation (art. 2:394 lid 8 BW). |
 | art. 2:403 BW foreign-group-head report in iXBRL | FY2025 | Operative. Untagged group report + separate filing-data iXBRL document in one Report Package (§7.2). |
 | art. 2:408 BW foreign-group-head report in iXBRL | **Not before FY2028** | FAQ 2.2.4 (10 July 2026): for financial years beginning **before 2028-01-01** the 2:408 group report is deposited **by PDF e-mail**; the iXBRL obligation is only *expected* from FY2028. An FY2026 PDF-by-email 2:408 deposit is correct — do not flag it (§7.2). |
-| ESEF block-tagging for AFM (listed) IFRS notes | FY2022 | Distinct from KvK above. AFM listed AFRs follow ESMA Annex II Table 2, not KvK. |
+| ESEF block-tagging for AFM (listed) IFRS notes | FY2022 | Distinct from KvK above. AFM-listed AFRs follow ESMA Annex II Table 2, not KvK. |
 | Auditor's report (controleverklaring) required in package | Middelgroot + Groot, always (article 2:393 BW) | Klein/Micro: not required. art. 2:403 BW: group subsidiaries may be exempt — its absence on a Groot subsidiary is not automatically wrong. |
-| Calculation basis for KvK iXBRL Report Packages | FY2025 **and** FY2026 — **Calc 1.1**, listed in Annex III of both RTS 2025 and RTS 2026 (the specification set is unchanged between them) | Calc 1.1 uses OIM rounding semantics — it handles iXBRL's routinely-duplicate facts correctly and surfaces the dual-statement cross-scope inconsistencies that Calc 1.0 silently hides. Run Calc 1.0 only as a legacy / compatibility pass if the operative validator profile still checks it (§4.2). |
+| Calculation basis for KvK iXBRL Report Packages | FY2025 **and** FY2026 — **Calc 1.1**, listed in Annex III of both RTS 2025 and RTS 2026 (the specification set is unchanged between them) | Calc 1.1 uses OIM rounding semantics — it handles iXBRL's routinely-duplicate facts correctly and surfaces the dual-statement cross-scope inconsistencies that Calc 1.0 silently hides. Two verdicts are needed: use Calc 1.1 for **substantive review**, and run Calc 1.0 (`--calc c10`) as well for the **formal deposit-acceptance** verdict — the NT20 Filing Rules list XBRL 2.1 as the normative calculation basis, so the KvK acceptance test runs on Calc 1.0 semantics (`validation.md` §4). Running both is cheap. Not re-verified against the NT21 Filing Rules. |
 | Base (filer-facing) taxonomy release to tag against | Per financial year, three-year window | RTS 2026 Annex VI names the `2026-12-31` set for FY2026. FAQ 2.2.5 allows any of the **three most recent** KVK taxonomy versions, so an FY2026 report may be filed on the 2026, 2025 or 2024 set; older versions are rejected. **Checked 2026-08-15: `nltaxonomie.nl/kvk/2026-12-31/` returns 404** — the newest published filer-facing release is still `2025-12-31`. Resolve the live directory before assuming a 2026 schemaRef works. |
 | KVK taxonomy generation for the legacy **XBRL** channel | Per NT release | RTS 2026 ch. 3 Annex I supports NT21 (FY2026), NT20 (FY2025), NT19 (FY2024). **NT21 is pre-release as of 2026-08-15**: `nltaxonomie.nl/nt21/kvk/` holds only `20261209.a` (alfa) and `20261209.b` (bèta); the SBR release calendar puts final publication at 29-10-2026 and production at 09-12-2026. |
 | `validate/NL` disclosure system | Per NT release | Run `arelleCmdLine --plugins validate/NL --disclosureSystem` matching the NT generation in the report. There is **no `NL-INLINE-2026`** registered in Arelle as of 2026-08-15 — validate FY2026 packages with `NL-INLINE-2025` and say so in the report (§12). |
@@ -432,10 +432,15 @@ The reasons:
   concepts (KvK IFRS entry points, AFM ESEF) are effectively already
   operating in a Calc 1.1 world for those concepts.
 
-Run Calc 1.0 only as a legacy / compatibility pass if the operative
-validator profile or filing channel still applies older FR-NL checks.
-Do not treat an older Calc 1.0 assumption as overriding the FY2025
-iXBRL RTS unless the current validator profile actually does so.
+Run Calc 1.0 (`--calc c10`) **as well**, as a separate pass. Calc 1.1
+is the RTS Annex III specification basis and the better *review*
+instrument, but the NT20 Filing Rules list XBRL 2.1 as the normative
+calculation basis, so the KvK deposit-acceptance test runs on Calc 1.0
+semantics (`validation.md` §4). The package must pass both: 1.1 tells
+you what is substantively wrong, 1.0 tells you whether KvK will accept
+it. Do not let a Calc 1.0 result override the RTS on *review*
+questions, and do not skip the 1.0 pass on the assumption that 1.1
+supersedes it. **Not re-verified against the NT21 Filing Rules.**
 
 ```bash
 # FY2025 KvK iXBRL RTS pass
@@ -811,9 +816,9 @@ editions of this file cited `nl-fr-nt20-kvk-ifrs-2025`; that name is
 the `NL-INLINE-2025*` names above (and their lowercase aliases), so the
 old name silently falls back to no disclosure system. Confirm the
 operative name in your build with `arelleCmdLine --plugins validate/NL
---showEnvironment`. Run a second pass with `--calc c10` only if the
-operative validator profile or filing channel still applies older
-Calc 1.0 checks. When validation is slow or intermittent, suspect
+--showEnvironment`. Run a second pass with `--calc c10` for the
+formal deposit-acceptance verdict (`validation.md` §4) — not merely
+"if the profile still checks it". When validation is slow or intermittent, suspect
 remote-taxonomy resolution before suspecting the package.
 
 ## 13. A pragmatic NL review pass — in order
@@ -837,9 +842,9 @@ walk this in order. Each step depends on the prior being clean.
    the full log, including warnings. Run **Calc 1.1** (`--calc c11r`)
    as the FY2025 KvK iXBRL RTS calculation basis (it handles iXBRL
    duplicate facts and surfaces the dual-statement cross-scope
-   inconsistencies Calc 1.0 hides). Run **Calc 1.0** (`--calc c10`)
-   only as a legacy / compatibility pass if the operative validator
-   profile still applies it (§4.2).
+   inconsistencies Calc 1.0 hides). Then run **Calc 1.0** (`--calc c10`) as a
+   separate pass for the deposit-acceptance verdict — the package must
+   pass both (§4.2, `validation.md` §4).
    Classify any cross-scope inconsistency by role-vs-context before
    treating it as a defect.
 5. **Classify each finding.** Route by code prefix using `SKILL.md`'s
