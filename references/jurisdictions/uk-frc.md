@@ -357,11 +357,26 @@ authoritative source is the Joint Filing Common Validation Checks — see
   `AccountsStatusAuditedOrUnaudited`, `LegalFormEntity`,
   `DescriptionPrincipalActivities`, plus `AccountsType` (FRS-2022) /
   `AccountsTypeFullOrAbbreviated` (pre-2022).
-- An `http://www.companieshouse.gov.uk/` entity scheme makes
-  `UKCompaniesHouseRegisteredNumber` mandatory. The scheme is that exact
-  URL — protocol, `www.` and trailing slash included. A bare domain does
-  not match, and the identifier will not be recognised (HMRC, *XBRL
-  tagging: context entity identifiers*). **Charities** need at
+- **When the entity has a Companies House registration number** — which
+  includes LLPs, and normally includes charitable companies — the scheme
+  is `http://www.companieshouse.gov.uk/` and
+  `UKCompaniesHouseRegisteredNumber` becomes mandatory. That is the exact
+  value: lowercase `http`, `www.`, and the **trailing slash**. The slash
+  is part of the attribute value, so a bare domain is a *different
+  identifier*, not a lenient spelling of the same one (HMRC, *XBRL
+  tagging: context entity identifiers*). The same value serves Companies
+  House accounts and HMRC CT600 accounts and computations.
+
+  It is **not the only valid scheme**, and this section should not be read
+  as if it were. Unincorporated charities may use
+  `http://www.charitycommission.gov.uk/`; mutual societies
+  `http://mutuals.fsa.gov.uk/`; certain regulated insurers historically
+  `http://www.fsa.gov.uk/`; foreign entities their home-jurisdiction
+  scheme; and HMRC's residual scheme is `http://www.hmrc.gov.uk/` with
+  the UTR. A charitable *company* still normally uses its CRN as the
+  context entity identifier — charity registration is tagged separately.
+
+  **Charities** need at
   least one of
   `CharityRegistrationNumber{EnglandWales, Scotland, NorthernIreland}`.
 
