@@ -1,5 +1,8 @@
 # Advanced XBRL Specs — Generic Links, Functions Registry, Versioning
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0: attribution is required if you redistribute or adapt this file, and requested if you simply use it (see `ATTRIBUTION.md`).*
+
+
 Every namespace URI, element name, and arcrole below was verified against the specifications listed under **Sources**.
 
 ## Generic Links 1.0

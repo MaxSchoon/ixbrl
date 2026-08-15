@@ -1,5 +1,8 @@
 # XBRL Dimensions (XDT) — Hypercubes, Axes, and Dimensional Contexts
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0: attribution is required if you redistribute or adapt this file, and requested if you simply use it (see `ATTRIBUTION.md`).*
+
+
 A bare XBRL fact is one-dimensional (concept × context × unit). Real reporting is multi-dimensional — by segment, share class, maturity bucket, counterparty. **XBRL Dimensions 1.0** ("XDT") adds orthogonal slicing via hypercubes attached to primary items, with dimension values carried in the `xbrli:segment` or `xbrli:scenario` container. Every regulator (ESMA, SEC, EBA, EIOPA, KvK/SBR) builds on the same XDT model; only the placement policy and axis choices vary.
 
 ## The XDT model

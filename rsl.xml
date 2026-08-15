@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Really Simple Licensing (RSL) 1.0 — machine-readable licensing terms.
+  Specification: https://rslstandard.org/rsl
+
+  SCOPE. This file describes the CC BY 4.0 CONTENT only (SKILL.md, references/,
+  assets/, documentation). RSL's `payment type="attribution"` models exactly
+  that: permitted use conditioned on credit plus a working link.
+
+  It deliberately does NOT describe scripts/ and tests/. Those are Apache-2.0,
+  which imposes no attribution condition on USE — only on redistribution — so
+  expressing them as an attribution payment would misstate the licence. For the
+  code, and for the authoritative terms generally, read NOTICE and LICENSE.
+
+  Where this file and the licence texts differ, the licence texts govern.
+-->
+<rsl xmlns="https://rslstandard.org/rsl">
+
+  <content url="https://github.com/MaxSchoon/ixbrl">
+    <license>
+      <permits type="usage">all</permits>
+      <payment type="attribution">
+        <standard>https://creativecommons.org/licenses/by/4.0/</standard>
+      </payment>
+    </license>
+  </content>
+
+</rsl>

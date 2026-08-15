@@ -1,13 +1,125 @@
-iXBRL Skill — Third-Party Attribution Notices
-=============================================
+iXBRL Skill
+Copyright 2026 Max Schoon
 
-The software in this repository is licensed under the MIT License (see
-LICENSE).
+  Copyright holder      Max Schoon (natural person)
+  Trade name            Doc2iXBRL -- https://doc2ixbrl.com
+  Registered entity     Ontos B.V.
 
-This skill includes references to authoritative third-party documents
-(XBRL International specifications, ESMA Reporting Manuals, the SEC
-EDGAR Filer Manual, FASB / IFRS Foundation taxonomies, FRC, SBR
-Netherlands, EBA, EIOPA, and others). Those documents remain the
-property of their respective publishers and are cited under fair-use
-principles. Always verify the operative version of any cited rule
-against the publisher's primary source at filing date.
+Copyright is held by Max Schoon personally and has not been assigned to Ontos
+B.V.; "Doc2iXBRL" is the trade name under which the work is published and is the
+party to be named in attribution. The entity is recorded here so the chain of
+title is unambiguous, not because it holds the rights.
+
+================================================================================
+ATTRIBUTION NOTICE
+================================================================================
+
+This product includes the iXBRL Skill, made by Max Schoon, Founder, Doc2iXBRL
+(https://doc2ixbrl.com).
+
+WHAT THE LICENCES REQUIRE. Attribution is a condition when you REDISTRIBUTE or
+PUBLICLY SHARE this work or an adaptation of it. Apache-2.0 section 4(d)
+requires redistributions to carry the contents of this NOTICE. CC BY 4.0
+section 3(a) requires you to identify the creator, retain the copyright and
+licence notices, indicate whether you modified the work, and link to the source.
+
+WHAT IS REQUESTED BUT NOT LICENCE-REQUIRED. Crediting this skill in a review
+report, in a filing, or in software you built after reading it. Copyright does
+not reach mere use, and the regulatory rules described here are facts that
+nobody owns. We ask for that credit; we do not represent it as a legal
+obligation, and nothing in ATTRIBUTION.md adds a condition to these licences --
+Apache-2.0 section 4 does not permit a NOTICE file to modify the licence.
+
+ATTRIBUTION.md gives compliant attribution templates and per-context guidance.
+Machine-readable terms are in rsl.xml and llms.txt; where any of those differ
+from the licence texts, the licence texts govern.
+
+================================================================================
+LICENSING
+================================================================================
+
+This repository is dual-licensed by content type:
+
+  * Code -- scripts/, tests/, and any other source code:
+      Apache License 2.0. Full text in LICENSE.
+
+  * Content -- SKILL.md, references/, assets/, and the documentation:
+      Creative Commons Attribution 4.0 International (CC BY 4.0).
+      Full text in LICENSE-CONTENT.
+      Human-readable summary: https://creativecommons.org/licenses/by/4.0/
+
+Creative Commons advises against applying CC licences to software, and
+Apache-2.0 is a poor fit for prose, which is why the split exists.
+
+Scope manifest -- which licence covers what, exhaustively:
+
+  Apache-2.0 (code)
+    scripts/**            shell and Python
+    tests/**              Python
+    .github/workflows/**  CI workflow definitions
+    ruff.toml, pyrightconfig.json, requirements-dev.txt, .github/dependabot.yml
+
+  CC BY 4.0 (content)
+    SKILL.md, references/**, assets/**  (Markdown, XML, XSD, XHTML scaffolds)
+    README.md, CONTRIBUTING.md, and the other repository documentation
+
+  Neither (legal / metadata, reproduce verbatim)
+    LICENSE, LICENSE-CONTENT, LICENSES/**, NOTICE, ATTRIBUTION.md,
+    rsl.xml, llms.txt
+
+Apache-2.0 section 6 grants no trademark rights. "Doc2iXBRL" is not licensed to
+you by either licence. You may -- and must -- name it to give the attribution
+required above; you may not use it as your own product, service, or company
+name, or in a way that suggests endorsement.
+
+--------------------------------------------------------------------------------
+Relicensing history -- read this before assuming which terms apply
+--------------------------------------------------------------------------------
+
+This repository was published under the MIT License from its creation
+(2026-04-30) until the commit that added this file. The MIT text is preserved
+verbatim at LICENSES/MIT.txt. As of the relicensing commit:
+
+  * All current and future versions are licensed as set out above.
+  * Max Schoon's own historic contributions are ADDITIONALLY offered under
+    those terms to anyone obtaining them from this point forward.
+  * Versions published under MIT REMAIN available under MIT to anyone who
+    obtains a valid MIT copy -- including through this repository's git
+    history and through existing forks. Those MIT rights include making and
+    distributing further copies and derivatives.
+
+An MIT licence, once granted, cannot be revoked. Nothing here purports to
+withdraw those rights, and any statement to the contrary would be
+unenforceable.
+
+THIRD-PARTY CONTRIBUTIONS. Contributions by others were made under the MIT
+License per CONTRIBUTING.md as it then stood. Those contributions remain
+identified under MIT and are NOT represented as relicensed:
+
+  * references/nl-sbr.md -- sections contributed by @antonyvannieuwkoop
+    (pull request #2, merged 2026-08-15), (c) 2026 the contributor, MIT.
+
+Written relicensing consent will be sought before representing any third-party
+contribution, or its author's patent position, under Apache-2.0 or CC BY 4.0.
+A consent request for the contribution above was sent on 2026-08-15; until a
+written reply is recorded here, it remains MIT.
+
+================================================================================
+THIRD-PARTY ATTRIBUTION
+================================================================================
+
+This skill QUOTES AND CITES third-party documents: XBRL International
+specifications, ESMA Reporting Manuals, the SEC EDGAR Filer Manual, FASB and
+IFRS Foundation taxonomies, FRC guidance, SBR Netherlands / KvK, ERST, PRH,
+AMF, NBB, EBA and EIOPA publications. Each remains the property of its
+publisher and is governed by that publisher's own terms, which differ -- some
+permit reuse with attribution, some do not. Nothing here licenses you to reuse
+those documents; consult the publisher.
+
+The licences above extend only to this work's original expression, selection,
+arrangement and commentary, and only to rights the licensor actually holds.
+Regulatory rules are facts and are not subject to copyright: the licences do
+not, and cannot, reach the underlying obligations the regulators publish.
+
+Always verify the operative version of any cited rule against the publisher's
+primary source at filing date.

@@ -1,5 +1,8 @@
 # Finland — PRH digital financial statements (digitilinpäätös)
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0: attribution is required if you redistribute or adapt this file, and requested if you simply use it (see `ATTRIBUTION.md`).*
+
+
 Load this when the regulator is **PRH** (Patentti- ja rekisterihallitus /
 Finnish Patent and Registration Office) and the filing is a **digital
 financial statement** ("digitaalinen tilinpäätös", colloquially
