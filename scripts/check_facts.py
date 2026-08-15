@@ -21,7 +21,8 @@ Checks performed:
 Usage:
   python check_facts.py <ixbrl.xhtml>
 
-Exit code: 0 = clean, 1 = issues found (issues printed to stdout).
+Exit codes: 0 = clean; 1 = issues found, including a document that is not
+well-formed XML; 2 = usage error; 127 = lxml missing.
 """
 
 from __future__ import annotations
@@ -97,8 +98,16 @@ def secure_parser() -> etree.XMLParser:
 
 def check(path: Path) -> list[str]:
     parser = secure_parser()
-    tree = etree.parse(str(path), parser)
+    try:
+        tree = etree.parse(str(path), parser)
+    except etree.XMLSyntaxError as exc:
+        # The whole point of a pre-flight check is to be pointed at documents
+        # that may be broken. Report the breakage as the finding it is; a
+        # traceback tells the preparer nothing they can act on.
+        return [f"{path.name} is not well-formed XML: {exc}"]
     root = tree.getroot()
+    if root is None:
+        return [f"{path.name} parsed but has no root element"]
     issues: list[str] = []
 
     nf_facts, nn_facts, continuations = find_facts(root)
@@ -170,7 +179,14 @@ def check(path: Path) -> list[str]:
                     )
 
     # --- Continuation chains ---
-    cont_by_id = {c.get("id"): c for c in continuations if c.get("id")}
+    # Built with an explicit loop rather than a comprehension so the keys narrow
+    # to str: `.get("id")` returns `str | None`, and a truthiness filter inside a
+    # comprehension does not narrow the key type for a checker.
+    cont_by_id: dict[str, etree._Element] = {}
+    for continuation in continuations:
+        continuation_id = continuation.get("id")
+        if continuation_id:
+            cont_by_id[continuation_id] = continuation
     starters = nf_facts + nn_facts + list(continuations)
     targets = defaultdict(int)
     for el in starters:
@@ -190,28 +206,38 @@ def check(path: Path) -> list[str]:
             )
 
     next_ref = {cid: c.get("continuedAt") for cid, c in cont_by_id.items()}
+
+    # Walk iteratively, not recursively. @continuedAt is single-valued, so a
+    # continuation chain is a linked list rather than a branching tree — the
+    # recursion bought nothing and capped usable chain length at Python's
+    # recursion limit (~1000). Long narrative disclosures exceed that routinely,
+    # and the failure was a RecursionError traceback rather than a finding.
+    UNVISITED, IN_PROGRESS, DONE = 0, 1, 2
     state: dict[str, int] = {}
-    stack: list[str] = []
 
-    def visit_continuation(cid: str) -> None:
-        current_state = state.get(cid, 0)
-        if current_state == 1:
-            cycle = [*stack[stack.index(cid) :], cid] if cid in stack else [cid]
-            issues.append(f"continuation cycle detected: {' -> '.join(cycle)}")
-            return
-        if current_state == 2:
-            return
-
-        state[cid] = 1
-        stack.append(cid)
-        ref = next_ref.get(cid)
-        if ref in cont_by_id:
-            visit_continuation(ref)
-        stack.pop()
-        state[cid] = 2
+    def walk_chain(start: str) -> None:
+        path: list[str] = []
+        cid = start
+        while True:
+            current = state.get(cid, UNVISITED)
+            if current == IN_PROGRESS:
+                # Re-entered a node on the path we are currently walking.
+                cycle = [*path[path.index(cid) :], cid] if cid in path else [cid]
+                issues.append(f"continuation cycle detected: {' -> '.join(cycle)}")
+                break
+            if current == DONE:
+                break  # already resolved by an earlier chain
+            state[cid] = IN_PROGRESS
+            path.append(cid)
+            nxt = next_ref.get(cid)
+            if nxt is None or nxt not in cont_by_id:
+                break  # end of chain, or a dangling ref already reported above
+            cid = nxt
+        for node in path:
+            state[node] = DONE
 
     for cid in cont_by_id:
-        visit_continuation(cid)
+        walk_chain(cid)
 
     # --- Duplicate facts: same concept+context+unit, different value ---
     grouped: dict[tuple[str | None, str | None, str | None], list[etree._Element]] = (
