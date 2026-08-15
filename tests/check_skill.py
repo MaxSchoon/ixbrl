@@ -45,6 +45,17 @@ def fail(msg: str) -> None:
     print(f"::error::{msg}")
 
 
+def failures_since(mark: int) -> int:
+    """How many failures this check added, so it can report its own verdict.
+
+    A check must not print "OK" on a run where it just emitted ::error::. A CI
+    log that says OK two lines under its own error is exactly what gets skimmed
+    past, and it devalues the OK lines that are true. Scoping the count to each
+    check also stops one check's failure silencing another check's genuine pass.
+    """
+    return len(errors) - mark
+
+
 def parse_frontmatter(text: str) -> dict[str, str]:
     """Minimal `key: value` frontmatter parser (top-level scalars only)."""
     if not text.startswith("---"):
@@ -94,6 +105,7 @@ def check_skill() -> None:
 
 
 def check_asset_crossrefs() -> None:
+    mark = len(errors)
     schema = ASSETS / "extension-schema.xsd"
     if not schema.is_file():
         fail("assets/extension-schema.xsd is missing")
@@ -114,10 +126,13 @@ def check_asset_crossrefs() -> None:
                     f"{path.name}: xlink:href to extension-schema.xsd#{target} "
                     "has no matching id= in extension-schema.xsd"
                 )
-    print(
-        f"Asset cross-references OK "
-        f"({referenced} checked against {len(declared_ids)} ids)"
-    )
+    unresolved = failures_since(mark)
+    counts = f"{referenced} checked against {len(declared_ids)} ids"
+    if unresolved:
+        # Report the counts, not a verdict. They stay useful on a failing run.
+        print(f"Asset cross-references: {counts}, {unresolved} unresolved")
+    else:
+        print(f"Asset cross-references OK ({counts})")
 
 
 def check_attribution() -> None:
@@ -137,6 +152,7 @@ def check_attribution() -> None:
        in ATTRIBUTION.md, and this check exists to stop it drifting back into
        the default.
     """
+    mark = len(errors)
     for name in (
         "LICENSE",
         "LICENSE-CONTENT",
@@ -181,7 +197,7 @@ def check_attribution() -> None:
                 "(ATTRIBUTION.md — it breaks digests, signatures and hashes)"
             )
 
-    if not errors:
+    if not failures_since(mark):
         print("Attribution and licence surface OK")
 
 
