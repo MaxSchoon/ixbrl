@@ -253,7 +253,7 @@ the normative basis. See §4 above for the full discussion of which
 calculation verdict to apply when. For the dual-scope pattern, the
 auditor's report as a separate iXBRL document in the package, the
 per-fiscal-year cheatsheet, the size-class entry points, and the
-recurring deprecated-concept choices, see `references/nl-sbr.md`.
+recurring deprecated-concept choices, see `references/jurisdictions/nl-sbr.md`.
 
 ### 5.4 Core XBRL 2.1 and Inline XBRL
 

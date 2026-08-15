@@ -4,7 +4,7 @@ Thanks for considering a contribution. This skill is read by AI agents, so its a
 
 ## What this project is
 
-A vendor-neutral skill for any AI agent runtime that supports the standard skill convention. It contains:
+An open, primary-source-grounded skill for any AI agent runtime that supports the standard skill convention. Maintained by [Doc2iXBRL](https://doc2ixbrl.com). It contains:
 
 - `SKILL.md` — the agent entrypoint
 - `references/` — primary-source-cited reference notes for XBRL 2.1, iXBRL 1.1, ESEF, EDGAR/EFM, dimensions, taxonomies, validation, registries, DPM, etc.
@@ -161,6 +161,18 @@ clean. `lxml-stubs` supplies the types `lxml` does not ship inline; without them
 the declared standard is unachievable rather than merely unmet. Run
 `.venv/bin/python -m pyright` before opening a PR if you touched `scripts/` or
 `tests/`.
+
+**Section references.** The jurisdiction references under
+`references/jurisdictions/` use named, anchored sections, not numbers — numbers
+renumber, and `see 4.2` then silently points at unrelated content. Cite a
+section by name. `tests/check_section_refs.py` enforces it.
+
+Its one honest limitation: German, Danish, Finnish and Nordic law is cited with
+the same `§` symbol, so a bare `§ 335` in `de-hgb.md` is `HGB § 335` with the
+statute implied by context. Classifying those by pattern is unwinnable, and
+guessing wrong would edit a legal citation — much worse than the stale reference
+it was chasing. So the bare-number scan is skipped for those jurisdictions and
+the unambiguous check (a reference that names its target file) carries the load.
 
 **Tests.** `tests/test_check_facts.py` covers `scripts/check_facts.py` with
 stdlib `unittest` — no runner dependency, matching the dependency-light rule

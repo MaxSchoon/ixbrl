@@ -1,6 +1,6 @@
 # iXBRL Skill
 
-A vendor-neutral skill for working with **Inline XBRL (iXBRL)** and the
+An open, primary-source-grounded skill for working with **Inline XBRL (iXBRL)** and the
 underlying XBRL stack — covering the major regulators (SEC EDGAR, ESMA
 ESEF, UK FRC / Companies House / HMRC, Dutch SBR / KvK / AFM, EBA, EIOPA),
 the IFRS Accounting Taxonomy, FASB US-GAAP, and the Arelle validation
@@ -153,7 +153,7 @@ principles govern every change:
 1. **Source discipline.** Every new factual claim must cite a primary
    authoritative source — a spec section or a regulator publication URL the
    contributor has actually fetched.
-2. **Generality.** This is a public, vendor-neutral skill. No
+2. **Generality.** This is a public, openly licensed skill. No
    product-specific naming, no internal jargon, no jurisdiction-narrow
    shortcuts presented as universal.
 
