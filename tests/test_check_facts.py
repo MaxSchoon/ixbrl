@@ -52,10 +52,19 @@ class CheckFactsTestCase(unittest.TestCase):
 
     # ── issue #5 ────────────────────────────────────────────────────────────
     def test_malformed_xml_is_reported_not_raised(self):
-        """A document that will not parse is the finding, not a traceback."""
+        """A document that will not parse is the finding, not a traceback.
+
+        Asserts the whole diagnostic, not just that it was caught: a preparer
+        needs the file, the line and the column to act on it, and a test that
+        checks only the phrase would still pass if those were dropped.
+        """
         issues = self.run_on('<html xmlns="http://www.w3.org/1999/xhtml"><p>oops')
         self.assertEqual(len(issues), 1)
-        self.assertIn("not well-formed XML", issues[0])
+        finding = issues[0]
+        self.assertIn("not well-formed XML", finding)
+        self.assertIn(".xhtml", finding, "diagnostic must name the file")
+        self.assertRegex(finding, r"line \d+", "diagnostic must give a line")
+        self.assertRegex(finding, r"column \d+", "diagnostic must give a column")
 
     def test_empty_file_is_reported_not_raised(self):
         issues = self.run_on("")
