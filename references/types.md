@@ -1,5 +1,8 @@
 # QNames, SQNames, NCNames, Substitution Groups, and Item Types
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
+
+
 Every claim below is tied to a specification fetched live; URLs listed under **Sources**.
 
 ## NCName

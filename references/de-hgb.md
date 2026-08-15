@@ -1,5 +1,8 @@
 # Germany (Deutschland) — E-Bilanz, HGB Offenlegung, and the German ESEF layer
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
+
+
 Load this when the entity is German and the filing is one of three
 structured-reporting regimes: **E-Bilanz** (tax XBRL under § 5b EStG),
 **Offenlegung / Hinterlegung** (statutory publication of annual accounts

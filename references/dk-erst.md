@@ -1,5 +1,8 @@
 # Denmark — Erhvervsstyrelsen (DCCA) årsrapport iXBRL reference
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
+
+
 Load this when the regulator is **Erhvervsstyrelsen** (the Danish
 Business Authority / DCCA), when the filing is a Danish **årsrapport**
 (annual report) deposited through **Regnskab Indberet** (Regnskab Basis,

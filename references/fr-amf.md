@@ -1,5 +1,8 @@
 # France — ESEF via the AMF, and the honest map of what is *not* iXBRL
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
+
+
 Load this when the jurisdiction is **France**: a listed-issuer annual
 financial report filed with the **AMF** (Autorité des marchés
 financiers), the French statutory annual-accounts deposit, the *liasse

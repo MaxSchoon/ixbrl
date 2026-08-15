@@ -1,5 +1,8 @@
 # Validation Reference — Arelle, iXBRL, and the silent killers
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
+
+
 If a code or behaviour is not cited here, treat it as folklore until verified in source.
 
 ## 1. Arelle — the de facto reference processor

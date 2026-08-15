@@ -1,5 +1,8 @@
 # Data Point Model (DPM) — Banking and Insurance Supervisory Reporting
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
+
+
 The XBRL world has two architectures. Inline XBRL regimes (ESEF, EDGAR, KvK, FRC) start with a presentation tree of human-named concepts and embed facts in an HTML carrier. The **Data Point Model** (DPM) world starts with a relational metamodel of metrics × dimensions, rendering the same data as supervisory templates and an XBRL taxonomy. Banks file COREP/FINREP under DPM; insurers file Solvency II under DPM; pension funds file IORP under DPM. Different mental model, different tooling, same XBRL substrate.
 
 ## What DPM is and why it differs from financial-reporting taxonomies

@@ -1,5 +1,8 @@
 # SBR Dutch GAAP / KvK — the pragmatic reference
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
+
+
 Load this when the regulator is **KvK (Kamer van Koophandel)**, **AFM**
 (Dutch listed issuer, where ESEF rules dominate but SBR overlays apply),
 **Belastingdienst** (corporate income tax, VAT, ICP, payroll), or
