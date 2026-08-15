@@ -2,6 +2,9 @@
 
 This skill is made by **Max Schoon, Founder, Doc2iXBRL** — <https://doc2ixbrl.com>.
 
+Copyright is held by Max Schoon personally. *Doc2iXBRL* is the trade name and
+the party to name in attribution; *Ontos B.V.* is the registered entity.
+
 You are free to use it, commercially included.
 
 **Two different things are described below, and the difference matters.**

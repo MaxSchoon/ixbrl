@@ -1,6 +1,14 @@
 iXBRL Skill
 Copyright 2026 Max Schoon
-Attribution party / trade name: Doc2iXBRL -- https://doc2ixbrl.com
+
+  Copyright holder      Max Schoon (natural person)
+  Trade name            Doc2iXBRL -- https://doc2ixbrl.com
+  Registered entity     Ontos B.V.
+
+Copyright is held by Max Schoon personally and has not been assigned to Ontos
+B.V.; "Doc2iXBRL" is the trade name under which the work is published and is the
+party to be named in attribution. The entity is recorded here so the chain of
+title is unambiguous, not because it holds the rights.
 
 ================================================================================
 ATTRIBUTION NOTICE
@@ -93,6 +101,8 @@ identified under MIT and are NOT represented as relicensed:
 
 Written relicensing consent will be sought before representing any third-party
 contribution, or its author's patent position, under Apache-2.0 or CC BY 4.0.
+A consent request for the contribution above was sent on 2026-08-15; until a
+written reply is recorded here, it remains MIT.
 
 ================================================================================
 THIRD-PARTY ATTRIBUTION
