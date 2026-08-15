@@ -35,7 +35,12 @@ from markdown_it import MarkdownIt
 ROOT = Path(__file__).resolve().parent.parent
 JURISDICTIONS = ROOT / "references" / "jurisdictions"
 
-REQUIRED_FRONT_MATTER = ("reference_id", "jurisdiction", "verified_on")
+# `restructured_on`, deliberately not `verified_on`. This migration reorganised
+# the text; it did not re-ground any claim against a primary source. A date
+# field that says "verified" would assert currency the content does not have --
+# sec-edgar.md still describes an EFM volume superseded in March 2026. Content
+# currency lives in each file's Sources section, per claim, where it is honest.
+REQUIRED_FRONT_MATTER = ("reference_id", "jurisdiction", "restructured_on")
 START_HERE = "Start here"
 SOURCES = "Sources"
 ATTRIBUTION_MARK = "doc2ixbrl.com"
@@ -102,9 +107,9 @@ def check_file(path: Path) -> None:
         for key in REQUIRED_FRONT_MATTER:
             if key not in fm:
                 fail(f"{name}: front matter missing `{key}`")
-        stamp = fm.get("verified_on", "")
+        stamp = fm.get("restructured_on", "")
         if stamp and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", stamp):
-            fail(f"{name}: verified_on `{stamp}` is not YYYY-MM-DD")
+            fail(f"{name}: restructured_on `{stamp}` is not YYYY-MM-DD")
 
     if ATTRIBUTION_MARK not in text:
         fail(f"{name}: missing the licence attribution header (ATTRIBUTION.md)")

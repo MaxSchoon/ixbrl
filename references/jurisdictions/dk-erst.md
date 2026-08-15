@@ -1,7 +1,7 @@
 ---
 reference_id: dk-erst
 jurisdiction: DK
-verified_on: 2026-08-15
+restructured_on: 2026-08-15
 profiles:
   - id: arl-arsrapport
     section: profile-arl-arsrapport

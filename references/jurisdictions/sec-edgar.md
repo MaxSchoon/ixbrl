@@ -1,7 +1,7 @@
 ---
 reference_id: sec-edgar
 jurisdiction: US
-verified_on: 2026-08-15
+restructured_on: 2026-08-15
 profiles:
   - id: operating-company
     section: profile-operating-company

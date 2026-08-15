@@ -1,7 +1,7 @@
 ---
 reference_id: nl-sbr
 jurisdiction: NL
-verified_on: 2026-08-15
+restructured_on: 2026-08-15
 profiles:
   - id: kvk-ixbrl-annual-accounts
     section: profile-kvk-ixbrl-annual-accounts

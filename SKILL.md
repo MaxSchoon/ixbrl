@@ -266,7 +266,7 @@ prior being clean.
 For regime-specific review checklists, load:
 
 - **SBR Dutch GAAP / KvK / AFM** → `references/jurisdictions/nl-sbr.md` (end-to-end
-  review pass at §13).
+  review pass in *Review workflow*).
 - **ESEF (listed-issuer AFR)** → `references/esef.md`.
 - **SEC EFM** → `references/jurisdictions/sec-edgar.md`.
 

@@ -59,7 +59,13 @@ TRAILING_LAW = re.compile(r"^\s*[a-z]?\s*(?:ff\.?\s*)?[A-ZÅÄÖ][A-Za-zÅÄÖå
 
 # A § number immediately preceded by a .md filename cites that file.
 TARGETED = re.compile(
-    r"`(?:references/)?(?:jurisdictions/)?([a-z0-9-]+\.md)`[^§\n]{0,25}(§+\s?[\d.]+)"
+    # The separator may wrap a line -- hard-wrapped prose puts the filename and
+    # its section number on different lines -- but must not cross a blank line,
+    # which would pair a filename with an unrelated § further down. An earlier
+    # version forbade newlines entirely and missed three real stale references;
+    # a version that allowed any run of characters produced false positives.
+    r"`(?:references/)?(?:jurisdictions/)?([a-z0-9-]+\.md)`"
+    r"(?:[^§\n`]|\n(?!\s*\n)){0,40}(§+\s?[\d.]+)"
 )
 BARE = re.compile(r"§+\s?\d+(?:\.\d+)*")
 
@@ -113,6 +119,8 @@ def main() -> int:
         targeted_spans = set()
         for m in TARGETED.finditer(text):
             targeted_spans.add(m.start(2))
+            if is_citation(text, m.start(2), m.end(2)):
+                continue
             checked += 1
             target = m.group(1)
             if target in has_numbers and not has_numbers[target]:

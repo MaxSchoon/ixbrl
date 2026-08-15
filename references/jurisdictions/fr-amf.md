@@ -1,7 +1,7 @@
 ---
 reference_id: fr-amf
 jurisdiction: FR
-verified_on: 2026-08-15
+restructured_on: 2026-08-15
 profiles:
   - id: amf-esef
     section: profile-amf-esef

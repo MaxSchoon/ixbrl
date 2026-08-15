@@ -1,7 +1,7 @@
 ---
 reference_id: de-hgb
 jurisdiction: DE
-verified_on: 2026-08-15
+restructured_on: 2026-08-15
 profiles:
   - id: e-bilanz
     section: profile-e-bilanz

@@ -188,8 +188,8 @@ The Belastingdienst slice of NT20 (release `20251210.a`) was published
 ICP 2026 filings. The definitive iXBRL annual-reporting taxonomies for
 fiscal year 2025 were published **12 December 2025** for filing with the
 KvK. The pairing of fiscal year → NT release → Filing Rules version
-matters bi-temporally — see the cheatsheet in `references/jurisdictions/nl-sbr.md`
-§2 for the per-fiscal-year mapping, including which obligations cut in
+matters bi-temporally — see *Bi-temporal cheatsheet* in `references/jurisdictions/nl-sbr.md`
+for the per-fiscal-year mapping, including which obligations cut in
 when (block-tagging FY2026, digital-deposit obligations by size class).
 
 **Architecture:** The NT layers downward — BW2 (Civil Code Book 2) is the
@@ -239,7 +239,7 @@ inconsistencies that Calc 1.0 hides), then run `--calc c10`
 separately as the formal deposit-acceptance check, since NT20 Filing
 Rules still list XBRL 2.1 as the normative calculation basis. End-
 to-end review checklist in `references/jurisdictions/nl-sbr.md` *Review workflow*; calculation-
-verdict reasoning in §4.2.
+verdict reasoning in *Calculation linkbase scope-bleed*.
 
 **Download:**
 - https://www.sbr-nl.nl/werken-met-sbr/taxonomie/documentatie-nederlandse-taxonomie

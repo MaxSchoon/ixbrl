@@ -1,7 +1,7 @@
 ---
 reference_id: uk-frc
 jurisdiction: GB
-verified_on: 2026-08-15
+restructured_on: 2026-08-15
 profiles:
   - id: companies-house
     section: profile-companies-house

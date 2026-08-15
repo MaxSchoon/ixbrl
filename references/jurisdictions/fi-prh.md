@@ -1,7 +1,7 @@
 ---
 reference_id: fi-prh
 jurisdiction: FI
-verified_on: 2026-08-15
+restructured_on: 2026-08-15
 profiles:
   - id: fas-sbr
     section: profile-fas-sbr

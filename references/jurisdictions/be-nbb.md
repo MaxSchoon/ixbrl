@@ -1,7 +1,7 @@
 ---
 reference_id: be-nbb
 jurisdiction: BE
-verified_on: 2026-08-15
+restructured_on: 2026-08-15
 profiles:
   - id: nbb-cbso
     section: profile-nbb-cbso
