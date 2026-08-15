@@ -60,6 +60,11 @@ jobs:
       - name: Skill guardrails (size, description, references, asset cross-refs)
         run: python3 tests/check_skill.py
 
+      # No-op until references/jurisdictions/ exists; wired now so the gate is
+      # in place before the migration rather than added after it.
+      - name: Reference structure (profile-first shape)
+        run: .venv/bin/python tests/check_reference_structure.py
+
       - name: Scripts compile
         run: python3 -m py_compile scripts/check_facts.py
 
