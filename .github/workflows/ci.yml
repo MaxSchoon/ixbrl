@@ -47,6 +47,9 @@ jobs:
       - name: Format (ruff)
         run: .venv/bin/python -m ruff format --check scripts tests
 
+      - name: Types (pyright)
+        run: .venv/bin/python -m pyright
+
       # shellcheck is preinstalled on ubuntu-latest images.
       - name: Shell lint (shellcheck)
         run: shellcheck scripts/*.sh
@@ -67,6 +70,9 @@ jobs:
 
       - name: Scripts compile
         run: python3 -m py_compile scripts/check_facts.py
+
+      - name: Unit tests (check_facts)
+        run: .venv/bin/python -m unittest discover -s tests -p 'test_*.py' -v
 
       # Uses the venv (needs lxml). check_skill.py above deliberately stays on
       # system python3 — it is stdlib-only by design, so it runs before any install.
