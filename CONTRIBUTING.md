@@ -94,8 +94,10 @@ Run the local validation steps below before opening a PR and paste the output in
 ## Local validation
 
 ```bash
-# 0. Dev toolchain (only needed if you touch scripts/ or tests/)
-python3 -m pip install -r requirements-dev.txt
+# 0. Dev toolchain (only needed if you touch scripts/ or tests/).
+#    Use a venv — many systems mark the system Python as externally managed.
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements-dev.txt
 
 # 1. xmllint on all assets
 xmllint --noout assets/*.xml assets/*.xsd assets/*.xhtml
@@ -104,8 +106,8 @@ xmllint --noout assets/*.xml assets/*.xsd assets/*.xhtml
 python3 tests/check_skill.py
 
 # 3. Code gate — only if you changed scripts/ or tests/
-python3 -m ruff check scripts tests
-python3 -m ruff format --check scripts tests
+.venv/bin/python -m ruff check scripts tests
+.venv/bin/python -m ruff format --check scripts tests
 shellcheck scripts/*.sh
 
 # 4. Optional: full Arelle validation
