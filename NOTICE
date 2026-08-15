@@ -94,8 +94,15 @@ THIRD-PARTY CONTRIBUTIONS. Contributions by others were made under the MIT
 License per CONTRIBUTING.md as it then stood. Those contributions remain
 identified under MIT and are NOT represented as relicensed:
 
-  * references/nl-sbr.md -- sections contributed by @antonyvannieuwkoop
-    (pull request #2, merged 2026-08-15), (c) 2026 the contributor, MIT.
+  * references/jurisdictions/nl-sbr.md -- sections contributed by
+    @antonyvannieuwkoop (pull request #2, merged 2026-08-15),
+    (c) 2026 the contributor, MIT.
+
+    The use-credit condition above is imposed by the licensor over this work
+    as published. It does not, and cannot, extend to those third-party
+    sections for anyone relying on the contributor's MIT grant: MIT permits
+    use without a credit condition, and this project cannot add one to
+    someone else's grant. Written relicensing consent has been requested.
 
 Written relicensing consent will be sought before representing any third-party
 contribution, or its author's patent position, under Apache-2.0 or CC BY 4.0.
@@ -114,10 +121,8 @@ publisher and is governed by that publisher's own terms, which differ -- some
 permit reuse with attribution, some do not. Nothing here licenses you to reuse
 those documents; consult the publisher.
 
-The licences above extend only to this work's original expression, selection,
-arrangement and commentary, and only to rights the licensor actually holds.
-Regulatory rules are facts and are not subject to copyright: the licences do
-not, and cannot, reach the underlying obligations the regulators publish.
+Third-party publications remain governed by their own publishers' terms; this
+work's terms govern this work.
 
 Always verify the operative version of any cited rule against the publisher's
 primary source at filing date.

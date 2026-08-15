@@ -35,6 +35,7 @@ Update the `Sources` list at the end of the affected references/*.md.
 - [ ] Primary-source citation (spec section or pinned URL) for every new/changed claim
 - [ ] `Sources` list updated in the affected `references/*.md`
 - [ ] Language stays harness-neutral and product-independent (tool behaviour labelled as such)
+- [ ] Attribution language unweakened — no new text describing credit as optional, requested, or not required
 - [ ] `SKILL.md` still under 32 KiB and the frontmatter `description` under 1024 chars
 - [ ] Asset integrity, if `assets/` touched:
       `xmllint --noout assets/*.xml assets/*.xsd assets/*.xhtml`

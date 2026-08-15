@@ -39,6 +39,14 @@ MAX_DESCRIPTION_CHARS = 1024
 # wrapping can differ between a Markdown body and an XHTML attribute.
 ATTRIBUTION_PARTS = ("Max Schoon", "Doc2iXBRL", "doc2ixbrl.com")
 
+# `name="generator"` is only one spelling. XHTML permits single quotes and
+# whitespace around `=`, and attribute names are case-insensitive, so an
+# exact-string search is trivially bypassed -- in either direction: it would
+# miss a stamp that is present, and miss one that is absent.
+GENERATOR_META = re.compile(
+    r"""<meta\b[^>]*\bname\s*=\s*['\"]?generator['\"]?""", re.IGNORECASE
+)
+
 errors: list[str] = []
 
 
@@ -240,14 +248,19 @@ def check_attribution() -> None:
     if missing_headers:
         fail(f"references missing attribution header: {', '.join(missing_headers)}")
 
-    # Inverted: the scaffold must stay clean.
+    # The scaffold must CARRY the provenance stamp: it is the default under
+    # ATTRIBUTION.md, and a scaffold that quietly loses it teaches the wrong
+    # default to everyone who copies it. Matched by regex, because XHTML permits
+    # single quotes, spaces around "=", and any case.
     for scaffold in sorted(ASSETS.glob("*.xhtml")):
-        if 'name="generator"' in scaffold.read_text(encoding="utf-8"):
+        text = scaffold.read_text(encoding="utf-8")
+        if not GENERATOR_META.search(text):
             fail(
-                f"assets/{scaffold.name} carries a vendor generator stamp; "
-                "attribution must not be forced into a filing scaffold "
-                "(ATTRIBUTION.md — it breaks digests, signatures and hashes)"
+                f"assets/{scaffold.name} is missing the provenance stamp "
+                "(ATTRIBUTION.md — generated documents carry it by default)"
             )
+        elif "doc2ixbrl.com" not in text:
+            fail(f"assets/{scaffold.name} generator stamp lacks the source link")
 
     if not failures_since(mark):
         print("Attribution and licence surface OK")
