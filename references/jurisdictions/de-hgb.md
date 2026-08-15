@@ -74,7 +74,7 @@ Germany makes this acute on several axes at once:
   1 Jan 2022)** replaced the two-tier Bilanzkontrolle
   with single-tier BaFin enforcement.
 - **CSRD-UG** (German CSRD transposition) was **still not enacted** as of
-  the research window (early-mid 2026); do not assume a specific § 289b
+  the last check (2026-08-15); do not assume a specific § 289b
   ff. HGB text. See the *CSRD / ESRS* profile.
 
 State the regime, the reporting year, and the taxonomy/rule version
@@ -352,11 +352,33 @@ infringement procedure. A 2024 draft died with the Ampel coalition; a
 Referentenentwurf (10 Jul 2025) and a Regierungsentwurf of a
 **CSRD-Umsetzungsgesetz (CSRD-UG)** followed on 3 Sep 2025, incorporating
 the Omnibus "stop-the-clock" two-year deferral (Art. 96 Abs. 3/4 EGHGB-E).
-As of the research window (early-mid 2026) the CSRD-UG was **still not
-enacted**: Rechtsausschuss Änderungsanträge on 31 Mar 2026, public hearing
-13 Apr 2026, a SPD/CDU-CSU amendment folding in Omnibus I (Directive (EU)
-2026/470). The final enactment date and § 289b ff. HGB text are not yet
-fixed — an honest gap (*Coverage and known limitations*). Because no HGB
+**Checked 2026-08-15: the CSRD-UG was still not enacted.** The trail:
+Rechtsausschuss Änderungsanträge 31 Mar 2026, public hearing 13 Apr 2026,
+a CDU/CSU–SPD amendment folding in Omnibus I (Directive (EU) 2026/470).
+Note which directive did what: the **two-year "stop-the-clock" deferral**
+came from **Directive (EU) 2025/794**; **2026/470** is the later
+substantive Omnibus amendment. Attributing the deferral to 2026/470 is a
+common and consequential slip.
+No enactment or promulgation is on record. Official material still
+places the bill in Bundestag committee proceedings. This is the claim in
+this file most likely to change without notice — verify against the
+Bundesgesetzblatt rather than relying on this date.
+
+**Two cohorts, and they are easy to conflate.** Under the committee
+amendment the general post-Omnibus scope — more than **1,000** average
+employees **and** more than **EUR 450m** turnover, cumulative — applies
+from financial years beginning on or after **1 Jan 2027**. For
+**FY2025–26** only a narrower **first-wave PIE** population stays in
+scope: entities meeting both thresholds *and* the additional
+transitional conditions, excluding specified small and non-complex
+institutions and captive insurers.
+
+Do not read the two thresholds alone as triggering an FY2025 obligation.
+If the law is enacted after a covered FY2025 has closed, that
+transitional rule would apply retrospectively — the IDW objected on
+legal-certainty and constitutional grounds. The final enactment date and
+the operative § 289b ff. HGB text are not fixed (*Coverage and known
+limitations*). Because no HGB
 amendment passed, the pre-existing (NFRD-based) regime remains in force
 for FY2025; large German PIEs largely applied ESRS 1.0 voluntarily
 (advisory/chamber analysis, *Coverage and known limitations*).
@@ -564,7 +586,7 @@ current primary source:
   Format and non-XML incurs a fee, but the sources do **not** state XBRL is
   compulsory for all size classes. Treated here as **"default, not strictly
   mandatory."** A full-text § 11 URV / § 328 HGB reading was not obtained.
-- **CSRD-UG enactment.** Still a draft in the research window (RegE 3 Sep
+- **CSRD-UG enactment.** Still a draft as at 2026-08-15 (RegE 3 Sep
   2025; hearing 13 Apr 2026; Omnibus I folded in). The eventual adoption
   date and final § 289b ff. HGB text must be re-verified.
 - **Operator ESEF acceptance criteria.** The detailed "ESEF-Berichte
@@ -583,6 +605,15 @@ current primary source:
 ---
 
 ## Sources
+
+- **Bundestag committee amendment (Änderungsantrag der Fraktionen CDU/CSU
+  und SPD), 31 Mar 2026** — the source for the cumulative >1,000 employees
+  and >EUR 450m thresholds, the FY2027 general application date, and the
+  narrower FY2025–26 first-wave PIE transition —
+  <https://www.bundestag.de/resource/blob/1161158/21-6-73_AeA_KOA.pdf>.
+- **IDW Stellungnahme on that amendment, 7 Apr 2026** — the objection to
+  retrospective application on legal-certainty and constitutional grounds —
+  <https://www.idw.de/IDW/Medien/IDW-Schreiben/2026/IDW-Schreiben-CRSD-RegE-Aenderungsantrag-260407.pdf>.
 
 Regulator and gesetze-im-internet sources are primary; legal-database
 mirrors and advisory/professional analyses are marked *(tier 2)* / *(tier

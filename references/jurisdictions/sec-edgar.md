@@ -24,15 +24,23 @@ Reference for Inline XBRL submissions to the U.S. Securities and Exchange Commis
 
 ## Vintage and applicability
 
-The **EDGAR Filer Manual, Volume II: EDGAR Filing** is authoritative.
-Filers must comply with whatever version is effective at submission
-date. As of writing, chapter 6 ("Interactive Data") is reissued
-effective **15 September 2025**.
+The **EDGAR Filer Manual, Volume II: EDGAR Filing** is authoritative,
+and filers must comply with whichever version is effective at
+**submission** date — not at period end, and not the one current when a
+report was drafted. The manual is reissued on EDGAR release cadence, so
+this is a live check, never a remembered fact.
+
+**Version 77**, deployed **16 March 2026** with EDGAR Release 26.1
+(adopting release 33-11411), is current as of 2026-08-15. Confirm the
+operative version at <https://www.sec.gov/submit-filings/edgar-filer-manual>
+before citing a chapter or section number: chapter 6 ("Interactive
+Data") is the Inline XBRL chapter, and its numbering moves between
+versions.
 
 ### Recent rule updates (last ~24 months)
 
 - **Pay-Versus-Performance** — Release **34-95607**, adopted 25 August 2022, effective 11 October 2022. Compliance for proxy / information statements with fiscal years ending on or after **16 December 2022**. Each value in the PVP table is separately tagged; footnote, relationship, and Tabular List disclosures are block-text tagged. Smaller reporting companies provide Inline XBRL beginning the third PVP filing. Tagging uses the 2022Q4 ECD taxonomy.
-- **Cybersecurity Risk Management, Strategy, Governance, and Incident Disclosure** — Release **33-11216 / 34-97989**, adopted 26 July 2023. New Form 8-K Item 1.05 (and 6-K equivalent) for material cybersecurity incidents, due four business days after materiality determination. New Reg S-K Item 106 for annual-report disclosures. **All registrants** (including SRCs) must Inline-XBRL-tag the disclosures by **18 December 2024**.
+- **Cybersecurity Risk Management, Strategy, Governance, and Incident Disclosure** — Release **33-11216 / 34-97989**, adopted 26 July 2023. New Form 8-K Item 1.05 (and 6-K equivalent) for material cybersecurity incidents, due four business days after materiality determination. Annual-report disclosures sit at **Reg S-K Item 106 on Form 10-K** and at **Item 16K on Form 20-F** — not Item 106 on both. The Inline XBRL tagging obligation runs **one year after** each disclosure's own compliance date, so the two dates differ and must not be conflated: **Form 10-K Item 106 / Form 20-F Item 16K** are tagged for **fiscal years ending on or after 15 December 2024**, while **Form 8-K Item 1.05 / 6-K** (material-incident disclosures) are tagged from **18 December 2024**. Both apply to **all registrants subject to these rules, including SRCs** — the SRC extension applied to the incident *disclosure*, not to tagging. The rules do **not** reach every filer: eligible Form 40-F filers, asset-backed issuers, and registered investment companies are outside them.
 - **Tailored Shareholder Reports** — Release **33-11125**, adopted 26 October 2022. Open-end funds (Form N-1A) must transmit streamlined annual / semi-annual shareholder reports in Form N-CSR using Inline XBRL for transmittals on or after **24 July 2024**.
 - **EDGAR 25.2 / 2026 Taxonomies Updates** — annual taxonomy refreshes (US-GAAP 2025, SRT 2025, DEI 2026) became loadable in EDGAR through 2025–2026. Filers transitioning concept usage should anchor any extensions to the new base elements.
 
@@ -245,6 +253,17 @@ Chapter 6 split: https://www.sec.gov/files/edgar/filermanual/efmvol2-c6.pdf
 EDGAR XBRL Guide (plain-language companion): https://www.sec.gov/files/edgar/filer-information/specifications/xbrl-guide.pdf
 
 ## Sources
+
+- **SEC, *EDGAR Filer Manual*** — the version index. Volume II Version 77
+  deployed 16 March 2026 (EDGAR Release 26.1, adopting release 33-11411);
+  always check this page for the version effective at submission date —
+  <https://www.sec.gov/submit-filings/edgar-filer-manual>.
+
+- **SEC, *Cybersecurity Risk Management … Small Entity Compliance Guide*** —
+  establishes the two distinct Inline XBRL tagging dates: Form 10-K / 20-F for
+  fiscal years ending on or after 15 December 2024, Form 8-K / 6-K from
+  18 December 2024, both for all registrants including SRCs —
+  <https://www.sec.gov/resources-small-businesses/small-business-compliance-guides/cybersecurity-risk-management-strategy-governance-incident-disclosure>.
 
 - https://www.sec.gov/files/rules/final/2018/33-10514.pdf
 - https://www.sec.gov/newsroom/press-releases/2018-117

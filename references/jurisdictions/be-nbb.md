@@ -390,7 +390,7 @@ Per regime:
 1. **FSMA / ESEF (iXBRL) — covered by the generic ESEF plugin.** The AFR package
    validates like any other member state's; the Belgian layer (eCorporate, STORI,
    `.xbri`, deadlines) is **filing-mechanism policy, not encoded in Arelle**. Use
-   `--plugins inlineXbrlDocumentSet|validate/ESEF` (see `references/esef.md`).
+   `--plugins 'inlineXbrlDocumentSet|validate/ESEF'` (see `references/esef.md`).
 2. **NBB `be-gaap` and Biztax `be-tax` — no profile-aware plugin.** The
    statutory-model selection rules, fee/deadline logic, and specific-model
    PDF-only rule are **not encoded in Arelle** — enforce them in your pipeline.
@@ -415,7 +415,7 @@ arelleCmdLine \
 
 # FSMA ESEF AFR (Inline XBRL) — the ONLY Belgian iXBRL path
 arelleCmdLine \
-  --plugins inlineXbrlDocumentSet|validate/ESEF \
+  --plugins 'inlineXbrlDocumentSet|validate/ESEF' \
   -f afr-report-package.xbri --validate
 ```
 
