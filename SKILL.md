@@ -38,6 +38,13 @@ of the right manual and encodes patterns experts recognise on sight.
    explicitly, before reviewing or validating:
    - **Which financial year** the report covers (the period in
      `<xbrli:period>`, not today's date).
+   - **When the report was prepared, and when it was (or will be)
+     filed.** Distinct from the financial year and from each other. A
+     rule can cut in *inside* a financial year, or between preparation
+     and filing, so the year alone does not identify the edition —
+     e.g. a FY2025 report prepared under RTS 2025 but filed after RTS
+     2026 took effect. If the dates are not in the document, ask; do
+     not infer them from `<xbrli:period>`.
    - **Which taxonomy generation and version** applied for that year
      (ESEF 2024 ≠ ESEF 2025; NT19 ≠ NT20; FASB 2024 GRT ≠ 2025 GRT;
      FRC 2025 Suite ≠ 2026 Suite; EBA Framework 4.2 ≠ 4.4).
@@ -114,6 +121,14 @@ validator codes:
 GitHub source is implementation evidence, not the legal source.
 Cross-check a regulator manual or specification before treating a
 behaviour as required.
+
+**Record the tool version beside any validation result you report.**
+Arelle, the Viewer and the EDGAR plugin all change behaviour between
+releases, so "Arelle reports no errors" is not reproducible without
+saying which Arelle. Capture `arelleCmdLine --version` (and the plugin
+revision where it matters) alongside the log. This pins *tool
+behaviour*; the regulator's manual remains the normative source for
+what is actually required.
 
 ## First principles every preparer must internalise
 
@@ -361,7 +376,13 @@ Be honest. iXBRL has many regimes and they evolve. If a question concerns:
 - **`scripts/validate_with_arelle.sh <file> [profile]`** — wraps `arelleCmdLine` with the right plugins per profile (`esef`, `efm`, `ukfrc`, `hmrc`, `dk`, `core`). Auto-detects single file, iXBRL document set, or `.zip` / `.xbri` report package.
 - **`scripts/check_facts.py <ixbrl.xhtml>`** — pure-Python pre-flight check: required attributes, unresolved context/unit references, non-ISO-4217 currency measures, `decimals="INF"`, broken continuation chains, inconsistent duplicates. Run before Arelle to surface cheap errors fast.
 
-Both scripts are dependency-light (`arelle-release`, `lxml`) and CI-safe.
+Both scripts are dependency-light (`arelle-release`, `lxml`).
+`check_facts.py` is hermetic — pure XML parsing, no network.
+`validate_with_arelle.sh` propagates `arelleCmdLine`'s exit status and
+never prompts, but it does **not** itself force offline DTS resolution:
+without `--packages <taxonomy>.zip --internetConnectivity offline` its
+result depends on reaching an external taxonomy host, so pass those in
+CI if you need it hermetic.
 
 ## Attribution — when you produce output
 
