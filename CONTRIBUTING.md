@@ -94,17 +94,74 @@ Run the local validation steps below before opening a PR and paste the output in
 ## Local validation
 
 ```bash
+# 0. Dev toolchain (only needed if you touch scripts/ or tests/)
+python3 -m pip install -r requirements-dev.txt
+
 # 1. xmllint on all assets
 xmllint --noout assets/*.xml assets/*.xsd assets/*.xhtml
 
-# 2. Optional: full Arelle validation
+# 2. Skill guardrails (size, frontmatter, references, asset cross-refs)
+python3 tests/check_skill.py
+
+# 3. Code gate — only if you changed scripts/ or tests/
+python3 -m ruff check scripts tests
+python3 -m ruff format --check scripts tests
+shellcheck scripts/*.sh
+
+# 4. Optional: full Arelle validation
 ./scripts/validate_with_arelle.sh assets/ixbrl-skeleton.xhtml
 
-# 3. Optional: fact sanity check
+# 5. Optional: fact sanity check
 python3 scripts/check_facts.py assets/ixbrl-skeleton.xhtml
 ```
 
 Install `libxml2-utils` (Linux) or use the `xmllint` shipped with macOS. Arelle is optional.
+
+## Code conventions
+
+Most of this repo is prose and static assets. The small amount of code —
+`scripts/` and `tests/` — follows one shared standard so it can be read as one
+artifact rather than a file-by-file dialect.
+
+**Mechanical (enforced by CI; do not work around it).** `ruff` is both the
+linter and the formatter, configured in [`ruff.toml`](ruff.toml): ecosystem
+defaults, 88-column lines, `target-version = "py310"`. Config lives in a
+standalone file rather than `pyproject.toml` because this repo is a skill, not
+a distributable package — matching `pyrightconfig.json`. Run
+`python3 -m ruff check scripts tests` and `python3 -m ruff format scripts tests`
+before opening a PR. Shell scripts must be `shellcheck`-clean.
+
+Do not silence a finding with `# noqa`, a per-file ignore, or a loosened rule to
+make the gate pass. If a suppression is genuinely warranted, say why in the code
+and in the PR — an unexplained suppression is a rule deleted quietly.
+
+**Structural (convention, not tool-enforced).**
+
+- Scripts are standard-library-only where they can be. `scripts/check_facts.py`
+  depends on `lxml` and degrades with a clear message and exit `127` if it is
+  missing; `tests/check_skill.py` has no third-party dependency at all, so CI can
+  run it before installing anything.
+- Entry points end with `if __name__ == "__main__": raise SystemExit(main())`,
+  and `main()` returns the exit code rather than calling `exit` itself. Exit
+  codes: `0` clean, `1` issues found, `2` usage error, `127` missing dependency.
+- Checkers accumulate findings into a list and report them all at the end. They
+  do not stop at the first problem — a preparer fixing a filing wants the whole
+  list in one run.
+- Parsing untrusted input goes through a hardened parser (see `secure_parser()`
+  in `check_facts.py`); do not construct a bare `etree.XMLParser`.
+- Module-level constants are `UPPER_SNAKE`. Namespace URIs are declared once in
+  the module-level `NS` dict; `findall`/XPath take the prefix map, and the
+  Clark-notation forms lxml needs for attribute access are derived from `NS`
+  (e.g. `XSI_NIL`) rather than repeating the URI as a literal.
+
+**Known gap (booked, not hidden).** `pyrightconfig.json` declares a type-checking
+standard that CI does not currently run, and the tree does not currently pass it
+(two errors in `check_facts.py`: missing `lxml` stubs, and a `str | None` that is
+guarded at runtime but not narrowed for the checker). Creditor: the type gate.
+Maturity: when the `check_facts.py` robustness fixes land, since they touch the
+same code — tracked in the issues list. Until then, `pyrightconfig.json` is
+documentation of intent, not an enforced gate; do not read a clean CI as a clean
+type check.
 
 ## How to contribute
 
@@ -129,6 +186,7 @@ When opening a PR, confirm:
 - `xmllint --noout` clean on `assets/`
 - Cross-file refs resolve
 - Vendor-neutral language preserved
+- If `scripts/` or `tests/` changed: `ruff check`, `ruff format --check`, and `shellcheck` all clean
 - No claim deleted without spec-citation justification
 - Honest-gap notes preserved or added where applicable
 

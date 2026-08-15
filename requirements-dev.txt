@@ -1,0 +1,12 @@
+# Dev/CI toolchain, pinned so the standardization gate is reproducible — the
+# same reason the GitHub Actions in .github/workflows/ci.yml are SHA-pinned.
+# Dependabot bumps these (see .github/dependabot.yml, `pip` ecosystem).
+#
+# Nothing here is needed to *use* the skill; the skill itself is prose and
+# static assets. These are only for running the checks locally and in CI.
+
+# Standardization gate: linter + formatter for scripts/ and tests/ (ruff.toml).
+ruff==0.16.3
+
+# Runtime dependency of scripts/check_facts.py only.
+lxml==6.1.1

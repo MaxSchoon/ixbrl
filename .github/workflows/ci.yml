@@ -32,6 +32,21 @@ jobs:
       - name: Python version
         run: python3 --version
 
+      # Pinned in requirements-dev.txt so the gate is reproducible run to run.
+      # `python3 -m` avoids depending on pip's script dir being on PATH.
+      - name: Install dev toolchain (ruff, lxml)
+        run: python3 -m pip install --disable-pip-version-check -r requirements-dev.txt
+
+      - name: Lint (ruff)
+        run: python3 -m ruff check scripts tests
+
+      - name: Format (ruff)
+        run: python3 -m ruff format --check scripts tests
+
+      # shellcheck is preinstalled on ubuntu-latest images.
+      - name: Shell lint (shellcheck)
+        run: shellcheck scripts/*.sh
+
       - name: Install libxml2-utils (xmllint)
         run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libxml2-utils
 
@@ -43,9 +58,6 @@ jobs:
 
       - name: Scripts compile
         run: python3 -m py_compile scripts/check_facts.py
-
-      - name: Install check_facts dependency (lxml)
-        run: python3 -m pip install --upgrade lxml
 
       - name: Fact pre-flight smoke test (scaffold skeleton)
         run: python3 scripts/check_facts.py assets/ixbrl-skeleton.xhtml

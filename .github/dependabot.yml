@@ -12,3 +12,16 @@ updates:
     labels: ["dependencies", "github-actions"]
     commit-message:
       prefix: "ci"
+
+  # Keep the pinned dev/CI toolchain (ruff, lxml) current — same rationale as
+  # the actions group above: a pin only stays safe if something bumps it.
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      dev-toolchain:
+        patterns: ["*"]
+    labels: ["dependencies", "python"]
+    commit-message:
+      prefix: "chore"
