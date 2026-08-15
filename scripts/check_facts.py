@@ -45,6 +45,10 @@ NS = {
     "xhtml": "http://www.w3.org/1999/xhtml",
 }
 
+# lxml takes prefixes for XPath/findall but Clark notation for attribute
+# access, so derive the one from the other rather than repeating the URI.
+XSI_NIL = f"{{{NS['xsi']}}}nil"
+
 ISO_4217 = re.compile(r"^[A-Z]{3}$")
 
 
@@ -106,9 +110,7 @@ def check(path: Path) -> list[str]:
                 issues.append(f"ix:nonFraction missing @{attr} at line {el.sourceline}")
         decimals_present = bool(el.get("decimals"))
         precision_present = bool(el.get("precision"))
-        nil_value = (
-            el.get("{http://www.w3.org/2001/XMLSchema-instance}nil") or ""
-        ).lower()
+        nil_value = (el.get(XSI_NIL) or "").lower()
         nil_present = nil_value in {"true", "1"}
         present_count = sum((decimals_present, precision_present, nil_present))
         if present_count == 0:
@@ -150,15 +152,11 @@ def check(path: Path) -> list[str]:
     for el in nf_facts + nn_facts:
         cref = el.get("contextRef")
         if cref and cref not in defined_contexts:
-            issues.append(
-                f"contextRef='{cref}' not defined (line {el.sourceline})"
-            )
+            issues.append(f"contextRef='{cref}' not defined (line {el.sourceline})")
     for el in nf_facts:
         uref = el.get("unitRef")
         if uref and uref not in defined_units:
-            issues.append(
-                f"unitRef='{uref}' not defined (line {el.sourceline})"
-            )
+            issues.append(f"unitRef='{uref}' not defined (line {el.sourceline})")
 
     # --- Currency unit sanity ---
     for u in root.findall(".//xbrli:unit", NS):
@@ -198,7 +196,7 @@ def check(path: Path) -> list[str]:
     def visit_continuation(cid: str) -> None:
         current_state = state.get(cid, 0)
         if current_state == 1:
-            cycle = stack[stack.index(cid):] + [cid] if cid in stack else [cid]
+            cycle = [*stack[stack.index(cid) :], cid] if cid in stack else [cid]
             issues.append(f"continuation cycle detected: {' -> '.join(cycle)}")
             return
         if current_state == 2:
@@ -254,4 +252,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())
