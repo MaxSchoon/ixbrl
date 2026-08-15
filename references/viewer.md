@@ -1,5 +1,8 @@
 # Reviewing with the Arelle iXBRL Viewer
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. CC BY 4.0: if you use this material, including to build software, credit it (see `ATTRIBUTION.md`).*
+
+
 Use the Arelle iXBRL Viewer as the **visual review workbench**, not as
 a replacement for validation. The viewer is the tool that makes
 content-level defects visible — sign conventions, scope mis-tagging,

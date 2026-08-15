@@ -1,5 +1,8 @@
 # Belgium — NBB Central Balance Sheet Office, FSMA/ESEF, and Biztax
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. CC BY 4.0: if you use this material, including to build software, credit it (see `ATTRIBUTION.md`).*
+
+
 Load this when the filer is a **Belgian** entity and the regulator is the
 **National Bank of Belgium (NBB)** Central Balance Sheet Office (statutory annual
 accounts, `be-gaap` / `nbb-cbso`), the **FSMA** (listed-issuer AFR under ESEF), or

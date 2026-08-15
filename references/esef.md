@@ -1,5 +1,8 @@
 # European Single Electronic Format (ESEF) — Reference
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. CC BY 4.0: if you use this material, including to build software, credit it (see `ATTRIBUTION.md`).*
+
+
 Working reference for iXBRL annual financial reports under the EU ESEF mandate. Verify the operative version of every cited rule against the live source at filing date.
 
 ## 1. Legal basis

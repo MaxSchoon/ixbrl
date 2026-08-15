@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Really Simple Licensing (RSL) 1.0 — machine-readable licensing terms.
+  Specification: https://rslstandard.org/rsl
+
+  This file exists so that an AI system or automated agent can resolve this
+  work's licensing terms without parsing prose. It is a machine-readable
+  restatement of NOTICE and ATTRIBUTION.md; where they differ, those files and
+  the licence texts (LICENSE, LICENSE-CONTENT) govern.
+-->
+<rsl xmlns="https://rslstandard.org/rsl">
+
+  <!-- Content: SKILL.md, references/, assets/, documentation. CC BY 4.0. -->
+  <content url="https://github.com/MaxSchoon/ixbrl">
+    <license>
+      <permits type="usage">all</permits>
+      <payment type="attribution">
+        <standard>https://creativecommons.org/licenses/by/4.0/</standard>
+      </payment>
+      <legal type="terms">https://github.com/MaxSchoon/ixbrl/blob/main/ATTRIBUTION.md</legal>
+    </license>
+  </content>
+
+  <!-- Code: scripts/, tests/. Apache-2.0, whose §4(d) carries NOTICE. -->
+  <content url="https://github.com/MaxSchoon/ixbrl/tree/main/scripts">
+    <license>
+      <permits type="usage">all</permits>
+      <payment type="attribution">
+        <standard>https://www.apache.org/licenses/LICENSE-2.0</standard>
+      </payment>
+    </license>
+  </content>
+
+</rsl>

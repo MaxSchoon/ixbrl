@@ -112,7 +112,21 @@ without those dependencies — the references work on their own.
 
 ## License
 
-MIT — see [`LICENSE`](LICENSE). Third-party attribution notices are in
+Dual-licensed by content type: **Apache-2.0** for code (`scripts/`, `tests/`) —
+see [`LICENSE`](LICENSE) — and **CC BY 4.0** for content (`SKILL.md`,
+`references/`, `assets/`) — see [`LICENSE-CONTENT`](LICENSE-CONTENT).
+
+Both require attribution. If you use this skill — to review filings, to generate
+report packages, or to build software — credit it:
+
+> Uses the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — https://doc2ixbrl.com
+
+Exact rules per context, including when *not* to stamp a filing, are in
+[`ATTRIBUTION.md`](ATTRIBUTION.md). Machine-readable terms: [`rsl.xml`](rsl.xml)
+(RSL 1.0) and [`llms.txt`](llms.txt).
+
+Previously published under MIT; see [`NOTICE`](NOTICE) for the relicensing
+history and what it does and does not change. Third-party notices are in
 [`NOTICE`](NOTICE).
 
 ## Disclaimer

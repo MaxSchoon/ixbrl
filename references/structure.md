@@ -1,5 +1,8 @@
 # XBRL Structural Model — DTS, XLink, Linkbases, OIM
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. CC BY 4.0: if you use this material, including to build software, credit it (see `ATTRIBUTION.md`).*
+
+
 ## Mental model: linkbases are directed graphs
 
 Every XBRL linkbase is a **directed graph**.

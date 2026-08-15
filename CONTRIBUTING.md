@@ -213,4 +213,11 @@ For security or filing-integrity concerns (a scaffold producing apparently-valid
 
 ## License
 
-By contributing you agree your contribution is licensed under the repository's MIT License.
+By contributing you agree your contribution is licensed under this
+repository's terms: **Apache-2.0** for code (`scripts/`, `tests/`) and
+**CC BY 4.0** for content (`SKILL.md`, `references/`, `assets/`). See
+[`NOTICE`](NOTICE).
+
+Contributions merged before the relicensing commit were made under the MIT
+License, which permits sublicensing; they are redistributed under the terms
+above with the original notice retained.

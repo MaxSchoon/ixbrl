@@ -9,6 +9,9 @@ break the agent contract or the runnable scaffolds:
   2. Every `references/*.md` linked from SKILL.md actually exists.
   3. Asset cross-references resolve: every `xlink:href="extension-schema.xsd#X"`
      in assets/ matches an `id="X"` declared in extension-schema.xsd.
+  4. The licence attribution required by ATTRIBUTION.md is actually present:
+     in SKILL.md, in NOTICE, and as the generator meta in the iXBRL skeleton.
+     A licence obligation nobody checks is one that quietly rots away.
 
 Run: python3 tests/check_skill.py
 Exits non-zero (and prints `::error::` annotations for GitHub Actions) on any
@@ -28,6 +31,11 @@ SKILL = ROOT / "SKILL.md"
 # 32 KiB — the common harness ceiling for an auto-loaded SKILL.md.
 MAX_SKILL_BYTES = 32 * 1024
 MAX_DESCRIPTION_CHARS = 1024
+
+# The credit string the licence requires (ATTRIBUTION.md § The credit string).
+# Checked as three parts rather than one literal so that punctuation and line
+# wrapping can differ between a Markdown body and an XHTML attribute.
+ATTRIBUTION_PARTS = ("Max Schoon", "Doc2iXBRL", "doc2ixbrl.com")
 
 errors: list[str] = []
 
@@ -112,9 +120,42 @@ def check_asset_crossrefs() -> None:
     )
 
 
+def check_attribution() -> None:
+    """Fail if the licence-required attribution has gone missing."""
+    targets = [
+        (ROOT / "SKILL.md", "SKILL.md"),
+        (ROOT / "NOTICE", "NOTICE"),
+        (ASSETS / "ixbrl-skeleton.xhtml", "assets/ixbrl-skeleton.xhtml"),
+    ]
+    for path, label in targets:
+        if not path.is_file():
+            fail(f"{label} is missing; attribution cannot be verified")
+            continue
+        text = path.read_text(encoding="utf-8")
+        missing = [part for part in ATTRIBUTION_PARTS if part not in text]
+        if missing:
+            fail(f"{label} is missing required attribution: {', '.join(missing)}")
+
+    skeleton = ASSETS / "ixbrl-skeleton.xhtml"
+    if skeleton.is_file() and 'name="generator"' not in skeleton.read_text(
+        encoding="utf-8"
+    ):
+        fail("assets/ixbrl-skeleton.xhtml has no generator meta (ATTRIBUTION.md §2)")
+
+    for name in ("LICENSE", "LICENSE-CONTENT", "NOTICE", "ATTRIBUTION.md"):
+        if not (ROOT / name).is_file():
+            fail(f"{name} is missing")
+
+    # Report the verdict only when it is one. Printing "OK" on a run that just
+    # emitted ::error:: is the defect tracked in issue #7; do not add another.
+    if not errors:
+        print("Attribution and licence files OK")
+
+
 def main() -> int:
     check_skill()
     check_asset_crossrefs()
+    check_attribution()
     if errors:
         print(f"\n{len(errors)} guardrail failure(s).")
         return 1

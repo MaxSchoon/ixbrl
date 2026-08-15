@@ -1,13 +1,82 @@
-iXBRL Skill — Third-Party Attribution Notices
-=============================================
+iXBRL Skill
+Copyright 2026 Max Schoon / Doc2iXBRL
+https://doc2ixbrl.com
 
-The software in this repository is licensed under the MIT License (see
-LICENSE).
+================================================================================
+REQUIRED ATTRIBUTION
+================================================================================
 
-This skill includes references to authoritative third-party documents
-(XBRL International specifications, ESMA Reporting Manuals, the SEC
-EDGAR Filer Manual, FASB / IFRS Foundation taxonomies, FRC, SBR
-Netherlands, EBA, EIOPA, and others). Those documents remain the
-property of their respective publishers and are cited under fair-use
-principles. Always verify the operative version of any cited rule
-against the publisher's primary source at filing date.
+This product includes the iXBRL Skill, made by Max Schoon, Founder, Doc2iXBRL
+(https://doc2ixbrl.com).
+
+Both licences covering this work require attribution, and this NOTICE file is
+the mechanism. Apache-2.0 section 4(d) requires that redistributions of this
+work, or of any derivative work, carry the contents of this NOTICE. CC BY 4.0
+section 3(a) requires that you identify the creator, retain the copyright and
+licence notices, and link to the source.
+
+The exact credit strings, and what "attribution" means for an AI agent that
+loads this skill or generates an iXBRL Report Package with it, are specified in
+ATTRIBUTION.md. Machine-readable licensing terms are in rsl.xml and llms.txt.
+
+================================================================================
+LICENSING
+================================================================================
+
+This repository is dual-licensed by content type:
+
+  * Code -- scripts/, tests/, and any other source code:
+      Apache License 2.0. Full text in LICENSE.
+
+  * Content -- SKILL.md, references/, assets/, and the documentation:
+      Creative Commons Attribution 4.0 International (CC BY 4.0).
+      Full text in LICENSE-CONTENT.
+      Human-readable summary: https://creativecommons.org/licenses/by/4.0/
+
+Creative Commons advises against applying CC licences to software, and
+Apache-2.0 is a poor fit for prose, which is why the split exists. Where a file
+could be read as either, the file's own header governs; absent a header, treat
+executable files as code and everything else as content.
+
+Apache-2.0 section 6 grants no trademark rights. "Doc2iXBRL" is not licensed to
+you by either licence. You may -- and must -- name it to give the attribution
+required above; you may not use it as your own product, service, or company
+name, or in a way that suggests endorsement.
+
+--------------------------------------------------------------------------------
+Relicensing history -- read this before assuming which terms apply
+--------------------------------------------------------------------------------
+
+This repository was published under the MIT License from its creation
+(2026-04-30) until the commit that added this file. As of that commit:
+
+  * All current and future versions are licensed as set out above.
+  * All previously published versions are ALSO offered under these terms, at
+    the copyright holder's election, to anyone obtaining them from this point
+    forward.
+
+An MIT licence, once granted, cannot be revoked. Anyone who obtained a copy of
+this work under MIT before that commit retains their MIT rights in that copy,
+permanently. Nothing here purports to withdraw those rights, and any statement
+to the contrary would be unenforceable. If you obtained this work under MIT and
+wish to rely on MIT for that copy, you may.
+
+Contributions merged before the relicensing commit were made under the MIT
+License per CONTRIBUTING.md. MIT permits sublicensing, so those contributions
+are redistributed here under the terms above with the original notice retained.
+
+================================================================================
+THIRD-PARTY ATTRIBUTION
+================================================================================
+
+This skill cites authoritative third-party documents (XBRL International
+specifications, ESMA Reporting Manuals, the SEC EDGAR Filer Manual, FASB / IFRS
+Foundation taxonomies, FRC, SBR Netherlands, KvK, Erhvervsstyrelsen, PRH, AMF,
+NBB, EBA, EIOPA, and others). Those documents remain the property of their
+respective publishers and are cited under fair-use principles. Always verify the
+operative version of any cited rule against the publisher's primary source at
+filing date.
+
+Regulatory rules are facts and are not themselves subject to copyright. The
+licences above cover this work's expression, selection, arrangement, and
+commentary -- not the underlying obligations the regulators publish.

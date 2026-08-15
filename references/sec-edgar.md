@@ -1,5 +1,8 @@
 # SEC EDGAR iXBRL Reference
 
+*Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. CC BY 4.0: if you use this material, including to build software, credit it (see `ATTRIBUTION.md`).*
+
+
 Reference for Inline XBRL submissions to the U.S. Securities and Exchange Commission. Verify the operative version of every cited rule against the EDGAR Filer Manual at filing date.
 
 ## 1. Who must file in iXBRL
