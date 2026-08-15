@@ -1,7 +1,21 @@
+---
+reference_id: uk-frc
+jurisdiction: GB
+verified_on: 2026-08-15
+profiles:
+  - id: companies-house
+    section: profile-companies-house
+  - id: hmrc-ct600
+    section: profile-hmrc-ct600
+  - id: fca-uksef
+    section: profile-fca-uksef
+  - id: irish-revenue-ros
+    section: profile-irish-revenue-ros
+---
+
 # UK FRC Suite — Companies House, HMRC CT600, FCA/UKSEF (and Irish Revenue)
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0: attribution is required if you redistribute or adapt this file, and requested if you simply use it (see `ATTRIBUTION.md`).*
-
 
 Load this when the regulator is **Companies House** (UK statutory
 accounts), **HM Revenue & Customs** (Corporation Tax CT600 accounts +
@@ -12,6 +26,8 @@ FRS 105 / UK IFRS / Charities / UKSEF / Irish Revenue Extension). For a
 UK-listed issuer's ESEF-shaped obligation, read `esef.md` for the
 tagging mechanics and return here for the UK-specific DTR / NSM /
 UKSEF overlay.
+
+## Start here — choose a filing profile
 
 Four receivers, **one taxonomy family**: Companies House, HMRC, the FCA
 and Irish Revenue all consume the **same FRC taxonomy suites**, but each
@@ -24,7 +40,14 @@ behalf), but charitable-company iXBRL accounts still flow through the
 gates — there is no separate Charity Commission iXBRL channel — so it is a
 fifth stakeholder, not a fifth iXBRL gate. [see `taxonomies.md` §4]
 
-## 1. First: which receiver, and which FRC suite vintage?
+| Situation | Profile | Section |
+|---|---|---|
+| Filing UK statutory accounts to the company register in iXBRL | Companies House | [Profile: Companies House](#profile-companies-house) |
+| Filing a Company Tax Return — accounts **and** computations | HMRC CT600 | [Profile: HMRC CT600](#profile-hmrc-ct600) |
+| Publishing a listed issuer's annual financial report on a UK regulated market | FCA / NSM / UKSEF | [Profile: FCA / UKSEF / NSM](#profile-fca-uksef) |
+| Filing an Irish Corporation Tax return with iXBRL financial statements | Irish Revenue (ROS) | [Profile: Irish Revenue (ROS)](#profile-irish-revenue-ros) |
+
+## Vintage and applicability
 
 The FRC publishes an **annual taxonomy suite** — the 2022, 2023, 2024,
 2025 and 2026 suites. The same accounts content can pass or fail on
@@ -53,12 +76,7 @@ before reviewing or validating, pin four things:
 | CT Computational taxonomy (2021 / 2023 / 2024 / 2025 current) | **HMRC** | The tax computation attached to a CT600 |
 | Detailed Profit & Loss (DPL) taxonomy | **HMRC** | The detailed P&L, tagged in the accounts **or** the computation, not both (§4) |
 
-The only accepted **non-UK** accounts taxonomy for HMRC is **US GAAP**;
-accounts prepared under a standard with no HMRC-supported taxonomy are
-filed as PDF. ["Taxonomies accepted by HMRC", GOV.UK; COM60040, HMRC
-COTAX Manual]
-
-## 2. Bi-temporal cheatsheet (which rule applied when)
+### Bi-temporal cheatsheet — which rule applied when
 
 For each rule, ask: *was this in force when this report was prepared?*
 Do not apply a 2028 mandate or a 2026-suite concept change to a 2024
@@ -80,7 +98,7 @@ The FRC's own version policy: **only two suite versions should be in
 use at once — the latest and the penultimate** — to satisfy HMRC full
 tagging. ["2026 FRC Taxonomy Suite", FRC]
 
-### 2.1 The 2026 suite changed the audit-report tag set — a converter trap
+### The 2026 suite changed the audit-report tag set — a converter trap
 
 The 2026 FRC suite (v1.0.0, 18 Nov 2025), effective at Companies House
 with the April 2026 release, **removed** audit concepts including
@@ -100,7 +118,22 @@ forum post states this as a proposal to be "confirmed ... next month";
 re-verify against a later CH confirmation before treating omission as a
 hard-reject defect. [CH XML Gateway Forum, 22 Dec 2025]
 
-## 3. Companies House — voluntary today, software-only from April 2028
+### What the 2026 suite ships
+
+The 2026 suite (v1.0.0, 18 Nov 2025) contains UK IFRS, FRS 101/102, UKSEF,
+Irish, and Charities taxonomies (changelog + Excel mapping files:
+red=deletion, green=addition, yellow=change, orange=deprecated). 2026
+content changes: UKEB-endorsed IFRS 7 amendments, FRED 85 amendments,
+extra revenue-disaggregation dimensions, the audit-report overhaul (§2.1),
+an updated SORPS dimension, Charities SORP 2026. Supporting docs (FRC
+documentation page): Developer Guide 2026, Accounts Taxonomies Design
+2026, UKSEF Tagging Guide 2025 v2.1, UKSEF Conformance Suite v2.0,
+Consistency Checks, Yeti Viewer Guide. ["2026 FRC Taxonomy Suite"; FRC
+documentation page]
+
+<a id="profile-companies-house"></a>
+
+## Profile: Companies House — voluntary today, software-only from April 2028
 
 Today CH accepts accounts through **web filing, paper, and software
 (iXBRL via the CH XML gateway)** in parallel; software filing is
@@ -130,7 +163,9 @@ file your company's information", GOV.UK; GOV.UK news 9 June 2026; ICAEW]
 > scope, but it is **not confirmed for 2028**. [GOV.UK news; "Using
 > software to file your company's information"]
 
-## 4. HMRC CT600 — iXBRL accounts + computations, full tagging, DPL, long periods
+<a id="profile-hmrc-ct600"></a>
+
+## Profile: HMRC CT600 — iXBRL accounts + computations, full tagging, DPL, long periods
 
 Since **1 April 2011** all Company Tax Returns for accounting periods
 ending on/after 1 April 2010 must be filed online via CT Online Services,
@@ -143,6 +178,11 @@ accounts and computations must be fully tagged because the taxonomy used
 contains appropriate XBRL tags." The FRC taxonomies carry **no separate
 minimum-tagging list** for HMRC. ["Taxonomies accepted by HMRC"]
 
+The only accepted **non-UK** accounts taxonomy for HMRC is **US GAAP**;
+accounts prepared under a standard with no HMRC-supported taxonomy are
+filed as PDF. ["Taxonomies accepted by HMRC", GOV.UK; COM60040, HMRC
+COTAX Manual]
+
 **PDF fallbacks / exceptions** (COM60040): unincorporated charities /
 clubs / societies may file **accounts** in iXBRL *or* PDF (return still
 online, any computation iXBRL); smaller-charity accounts (combined income
@@ -150,7 +190,7 @@ online, any computation iXBRL); smaller-charity accounts (combined income
 HMRC-supported taxonomy** go as PDF; the **group accounts** of group
 companies need not be iXBRL-tagged.
 
-### 4.1 Long periods of account — separate computations, cross-document match
+### Long periods of account — separate computations, cross-document match
 
 For a **long period of account**, separate computations must be provided
 for **each accounting period** within it. A tax computation is **not
@@ -165,7 +205,7 @@ onward): `CompanyName`, `TaxDistrict`, `TaxReference`,
 `PeriodOfAccountStartDate`, `PeriodOfAccountEndDate`,
 `StartOfPeriodCoveredByReturn`, `EndOfPeriodCoveredByReturn`. [Same]
 
-### 4.2 Detailed Profit & Loss (DPL)
+### Detailed Profit & Loss (DPL)
 
 For APs ending on/after 1 April 2014, any Detailed P&L — whether it
 appears in the accounts or in the computation — **must** be tagged with
@@ -181,7 +221,7 @@ Online Service"]
 > confirm only the DPL dates and the accounts-OR-computation rule. Fetch
 > the DPL user guide before asserting the stronger wording.
 
-### 4.3 CT technical mechanics and taxonomy-version enforcement
+### CT technical mechanics and taxonomy-version enforcement
 
 iXBRL instances are inserted into the CT600 XML package, an **IRmark** is
 calculated over the package, and it is posted over HTTP; testing is via
@@ -203,7 +243,84 @@ Taxonomy-version rejection codes at the HMRC gateway:
 > treat as corroborated-not-fully-fetched. **3318/3320** and **1606/1607**
 > are directly supported by fetched Tier-1 evidence.
 
-## 5. Filer classification — what changes which absences are defects
+<a id="profile-fca-uksef"></a>
+
+## Profile: FCA / UKSEF / National Storage Mechanism
+
+Under the FCA Disclosure Guidance and Transparency Rules, issuers with
+transferable securities on UK regulated markets must **prepare, publish
+and file** annual financial reports (AFRs): the **whole AFR in XHTML**,
+and where it contains **IFRS consolidated** statements, those tagged in
+iXBRL using a "generally accepted taxonomy" — the primary statements
+**and** the notes. ["Company annual financial reporting in electronic
+format", FCA]
+
+- **Legal home:** the onshored TD ESEF Regulation was **revoked 29 July
+  2023**; requirements relocated into **DTR 4.1.15R–4.1.23G**,
+  supplemented by Technical Note **TN/507.2** (July 2025); obligations
+  **unchanged from ESEF**. [FCA page; TN/507.2]
+- **Filing channel:** AFRs filed in the **National Storage Mechanism**
+  (DTR 6.2.2R). A PDF alone does **not** satisfy DTR 4.1; the PIP route
+  (DTR 6.2.3G) does **not** apply. [FCA page]
+- **Exemptions:** public-sector issuers (DTR 4.4.1); debt ≥ **EUR
+  100,000** denomination (DTR 4.4.2). **Notes block-tagging** since
+  **FY2022** (PS20/14). [FCA page]
+- **"Generally accepted taxonomy"** (DTR 4.1.18R / 4.1.8R(2)) = one based
+  on an up-to-date IFRS Accounting Taxonomy. **ESEF-2024** (Reg (EU)
+  2025/19) is required for AFR deadlines **from 30 April 2026** (FY on/after
+  1 Jan 2025); ESEF-2022 before. Outdated/omitted taxonomies are
+  **rejected by the NSM**. [TN/507.2]
+
+### UKSEF — the optional multi-target document
+
+**UKSEF is optional.** The FRC reissues the latest ESEF taxonomy annually
+**alongside** the FRC taxonomies, so a company can prepare a
+**multi-target document** — one iXBRL file satisfying *both* the FCA
+(ESEF-style IFRS tagging) and Companies House (FRC UK tags). UKSEF
+(introduced 2022) lets one filing serve both regulators; NSM switchover
+dates are announced each year in the FCA Filing Manual. For AFR tagging
+mechanics (anchoring, block tagging, hidden facts, report-package layout)
+read `esef.md` — UKSEF inherits the ESEF model. UK overlay: consolidated
+**UKSEF** data may use **minimum tagging** where regulations permit;
+otherwise accounts are fully tagged. ["2026 FRC Taxonomy Suite";
+"Structured Digital Reporting: Insights 2025/26", FRC]
+
+> **Honest gap.** Whether the FRC's promised **UKSEF 2026** guidance
+> ("early 2026") is published, and whether it changes the joint FCA + CH
+> mandatory-tag list, was **not verified**. The FRC documentation page
+> still lists **UKSEF Tagging Guide 2025 v2.1** and **Conformance Suite
+> v2.0** (both 12 Mar 2025) as current. [FRC documentation page]
+
+<a id="profile-irish-revenue-ros"></a>
+
+## Profile: Irish Revenue (ROS) — a separate disclosure system
+
+Irish Revenue is modelled as a **distinct** disclosure system, not merely
+the FRC accounts taxonomy: the installed Arelle release ships a separate
+`plugin/validate/ROS` ("Validate ROS" v1.0), registering one disclosure
+system whose names string is `ROS (Ireland)|ROS|ros`, validationType
+`ROS`, defaultLanguage English, with a `rules/ros.py` module and a
+`resources/config.xml`. [Arelle `validate/ROS`]
+
+The FRC 2026 suite ships a separate **"Irish Revenue Taxonomies 2026"**
+zip (2.9 MB, 18 Nov 2025). The Irish Revenue Extension "enables electronic
+tagging of Irish accounts to support the Irish Revenue Commissioners'
+requirement for iXBRL financial statements as part of the Corporation Tax
+return", updated in line with the FRC suite; the Tagging Guide 2026 covers
+the Republic of Ireland (FRS 101/102/105 and IFRS) in a dedicated Irish
+Taxonomy section (2.3). ["2026 FRC Taxonomy Suite"; XBRL Tagging Guide
+2026]
+
+> **Honest gap.** Irish Revenue's own iXBRL CT filing rules and phase-in
+> thresholds (Revenue eBrief / Tax and Duty Manual) were **not fetched**.
+> ROS coverage here rests on the FRC Irish Revenue Extension description,
+> the Tagging Guide's ROI scope, and the Arelle ROS plugin. Fetch
+> Revenue.ie's iXBRL guidance for the ROI mandate scope and thresholds.
+
+## Jurisdiction-specific invariants
+
+### Filer classification — what changes which absences are defects
+
 
 Two classifiers drive the mandatory-item and audit-concept logic: the
 **accounting framework** and the **audit / regime status**. Both are
@@ -222,6 +339,7 @@ Status classifiers the validator branches on: **audited vs audit-exempt**
 **abridged/abbreviated**, **small vs medium regime**, **group vs
 single**, **LLP vs company**, plus a separate **charity** path. [Arelle
 `validate/UK` — see §8]
+
 
 Mandatory items (implementation evidence, Arelle `validate/UK`;
 authoritative source is the Joint Filing Common Validation Checks — §8):
@@ -249,53 +367,7 @@ additionally key off the
 `CharityAuditCarriedOutInAccordanceWithCharitiesAct2011Truefalse`
 Boolean. [Arelle `validate/UK`]
 
-## 6. FCA / UKSEF / National Storage Mechanism
-
-Under the FCA Disclosure Guidance and Transparency Rules, issuers with
-transferable securities on UK regulated markets must **prepare, publish
-and file** annual financial reports (AFRs): the **whole AFR in XHTML**,
-and where it contains **IFRS consolidated** statements, those tagged in
-iXBRL using a "generally accepted taxonomy" — the primary statements
-**and** the notes. ["Company annual financial reporting in electronic
-format", FCA]
-
-- **Legal home:** the onshored TD ESEF Regulation was **revoked 29 July
-  2023**; requirements relocated into **DTR 4.1.15R–4.1.23G**,
-  supplemented by Technical Note **TN/507.2** (July 2025); obligations
-  **unchanged from ESEF**. [FCA page; TN/507.2]
-- **Filing channel:** AFRs filed in the **National Storage Mechanism**
-  (DTR 6.2.2R). A PDF alone does **not** satisfy DTR 4.1; the PIP route
-  (DTR 6.2.3G) does **not** apply. [FCA page]
-- **Exemptions:** public-sector issuers (DTR 4.4.1); debt ≥ **EUR
-  100,000** denomination (DTR 4.4.2). **Notes block-tagging** since
-  **FY2022** (PS20/14). [FCA page]
-- **"Generally accepted taxonomy"** (DTR 4.1.18R / 4.1.8R(2)) = one based
-  on an up-to-date IFRS Accounting Taxonomy. **ESEF-2024** (Reg (EU)
-  2025/19) is required for AFR deadlines **from 30 April 2026** (FY on/after
-  1 Jan 2025); ESEF-2022 before. Outdated/omitted taxonomies are
-  **rejected by the NSM**. [TN/507.2]
-
-### 6.1 UKSEF — the optional multi-target document
-
-**UKSEF is optional.** The FRC reissues the latest ESEF taxonomy annually
-**alongside** the FRC taxonomies, so a company can prepare a
-**multi-target document** — one iXBRL file satisfying *both* the FCA
-(ESEF-style IFRS tagging) and Companies House (FRC UK tags). UKSEF
-(introduced 2022) lets one filing serve both regulators; NSM switchover
-dates are announced each year in the FCA Filing Manual. For AFR tagging
-mechanics (anchoring, block tagging, hidden facts, report-package layout)
-read `esef.md` — UKSEF inherits the ESEF model. UK overlay: consolidated
-**UKSEF** data may use **minimum tagging** where regulations permit;
-otherwise accounts are fully tagged. ["2026 FRC Taxonomy Suite";
-"Structured Digital Reporting: Insights 2025/26", FRC]
-
-> **Honest gap.** Whether the FRC's promised **UKSEF 2026** guidance
-> ("early 2026") is published, and whether it changes the joint FCA + CH
-> mandatory-tag list, was **not verified**. The FRC documentation page
-> still lists **UKSEF Tagging Guide 2025 v2.1** and **Conformance Suite
-> v2.0** (both 12 Mar 2025) as current. [FRC documentation page]
-
-## 7. FRC XBRL Tagging Guide 2026 (v13.0) — the numbered RULEs, and the closed-taxonomy inversion
+### FRC XBRL Tagging Guide 2026 (v13.0) — the numbered RULEs, and the closed-taxonomy inversion
 
 The authority for markup is the **"XBRL Tagging Guide – FRC Taxonomies
 2026" v13.0**, dated 18 November 2025. It covers FRS 101/102/105,
@@ -327,7 +399,7 @@ defined as components of a section total, on a typed "analysis"
 dimension); 2.5 **Welsh** labels; Appendix A is the generic-dimension-tag
 catalogue. [XBRL Tagging Guide 2026]
 
-### 7.1 The structural inversion vs ESEF — extensions are discouraged
+### The structural inversion vs ESEF — extensions are discouraged
 
 The most important architectural difference for anyone arriving from ESEF
 or SEC work. **The FRC suite is effectively closed:** "The FRC taxonomies
@@ -342,23 +414,37 @@ when a generic dimension tag or analysis item expresses the line (check
 Appendix A first), and there is **no wider/narrower anchoring
 obligation** — almost nothing to anchor. [XBRL Tagging Guide 2026]
 
-The 2026 suite (v1.0.0, 18 Nov 2025) contains UK IFRS, FRS 101/102, UKSEF,
-Irish, and Charities taxonomies (changelog + Excel mapping files:
-red=deletion, green=addition, yellow=change, orange=deprecated). 2026
-content changes: UKEB-endorsed IFRS 7 amendments, FRED 85 amendments,
-extra revenue-disaggregation dimensions, the audit-report overhaul (§2.1),
-an updated SORPS dimension, Charities SORP 2026. Supporting docs (FRC
-documentation page): Developer Guide 2026, Accounts Taxonomies Design
-2026, UKSEF Tagging Guide 2025 v2.1, UKSEF Conformance Suite v2.0,
-Consistency Checks, Yeti Viewer Guide. ["2026 FRC Taxonomy Suite"; FRC
-documentation page]
+### Generic-dimension pairing — the JFCVC.3315 pattern
 
-## 8. Validation — how to run each gate
+A recurring UK-specific defect: a **generic dimension member** is used to
+enumerate an officer, subsidiary, segment, or share class, but the
+paired **name/description** fact is missing. `JFCVC.3315` flags it. The
+machine form of the rule (Arelle `GENERIC_DIMENSION_VALIDATIONS`):
+
+| Generic member(s) | Requires |
+|---|---|
+| `Director1..40`, `CompanySecretary1..2`, `Trustee1..20`, `PartnerLLP1..20`, `Chairman`, `ChiefExecutive` | `NameEntityOfficer` |
+| `Subsidiary1..200` | `NameSubsidiary` |
+| `Associate` / `JointVenture` | `NameAssociate` / `NameJointVenture` |
+| `ReportableOperatingSegment` / `ProductService` / `MajorCustomer` | `NameIndividualSegment` |
+| `OrdinaryShareClass` / `PreferenceShareClass` / `DeferredShareClass` / `OtherShareClass` | `DescriptionShareType` |
+| `PensionPlan` | `NameDefinedContributionPlan` \| `NameDefinedBenefitPlan` |
+
+[Arelle `validate/UK`]
+
+**Welsh handling.** A bilingual text-validation table matches the required
+Companies-Act statements (s.477/s.480 exemptions, directors'/members'
+acknowledgements, small/micro-regime statements) in **English OR Welsh**,
+selected by `ReportPrincipalLanguage=Welsh`. Do not flag a missing English
+statement when the report is Welsh and the Welsh statement is present.
+[Arelle `validate/UK`; Tagging Guide §2.5]
+
+## Validation
 
 There are **three** UK gates plus the Irish one, and they emit different
 codes. Keep straight which is which.
 
-### 8.1 Companies House — the public XBRL Company Accounts Validator
+### Companies House — the public XBRL Company Accounts Validator
 
 CH runs a public three-stage validator (XBRL v2.1): [CH XBRL Validator
 Help]
@@ -387,7 +473,7 @@ software", GOV.UK]
 > read** (the file is an ODT, not fetched); only its version/metadata was
 > verified. Download the ODT to enumerate the 2026 CH business rules.
 
-### 8.2 HMRC / Companies House — the Joint Filing Common Validation Checks (Arelle `validate/UK`)
+### HMRC / Companies House — the Joint Filing Common Validation Checks (Arelle `validate/UK`)
 
 Run the bundled wrapper — its `hmrc`/`ukfrc` profiles load the
 `validate/UK` plugin **and select the `hmrc` disclosure system** (the
@@ -438,141 +524,9 @@ number at the gateway":
 > current JFCVC PDF and CH TIS v5.9 before treating any emitted code as
 > the exact code a live gateway returns.
 
-### 8.3 Irish Revenue (ROS) — a separate disclosure system
+## Review workflow
 
-Irish Revenue is modelled as a **distinct** disclosure system, not merely
-the FRC accounts taxonomy: the installed Arelle release ships a separate
-`plugin/validate/ROS` ("Validate ROS" v1.0), registering one disclosure
-system whose names string is `ROS (Ireland)|ROS|ros`, validationType
-`ROS`, defaultLanguage English, with a `rules/ros.py` module and a
-`resources/config.xml`. [Arelle `validate/ROS`]
-
-The FRC 2026 suite ships a separate **"Irish Revenue Taxonomies 2026"**
-zip (2.9 MB, 18 Nov 2025). The Irish Revenue Extension "enables electronic
-tagging of Irish accounts to support the Irish Revenue Commissioners'
-requirement for iXBRL financial statements as part of the Corporation Tax
-return", updated in line with the FRC suite; the Tagging Guide 2026 covers
-the Republic of Ireland (FRS 101/102/105 and IFRS) in a dedicated Irish
-Taxonomy section (2.3). ["2026 FRC Taxonomy Suite"; XBRL Tagging Guide
-2026]
-
-> **Honest gap.** Irish Revenue's own iXBRL CT filing rules and phase-in
-> thresholds (Revenue eBrief / Tax and Duty Manual) were **not fetched**.
-> ROS coverage here rests on the FRC Irish Revenue Extension description,
-> the Tagging Guide's ROI scope, and the Arelle ROS plugin. Fetch
-> Revenue.ie's iXBRL guidance for the ROI mandate scope and thresholds.
-
-## 9. Generic-dimension pairing — the JFCVC.3315 pattern
-
-A recurring UK-specific defect: a **generic dimension member** is used to
-enumerate an officer, subsidiary, segment, or share class, but the
-paired **name/description** fact is missing. `JFCVC.3315` flags it. The
-machine form of the rule (Arelle `GENERIC_DIMENSION_VALIDATIONS`):
-
-| Generic member(s) | Requires |
-|---|---|
-| `Director1..40`, `CompanySecretary1..2`, `Trustee1..20`, `PartnerLLP1..20`, `Chairman`, `ChiefExecutive` | `NameEntityOfficer` |
-| `Subsidiary1..200` | `NameSubsidiary` |
-| `Associate` / `JointVenture` | `NameAssociate` / `NameJointVenture` |
-| `ReportableOperatingSegment` / `ProductService` / `MajorCustomer` | `NameIndividualSegment` |
-| `OrdinaryShareClass` / `PreferenceShareClass` / `DeferredShareClass` / `OtherShareClass` | `DescriptionShareType` |
-| `PensionPlan` | `NameDefinedContributionPlan` \| `NameDefinedBenefitPlan` |
-
-[Arelle `validate/UK`]
-
-**Welsh handling.** A bilingual text-validation table matches the required
-Companies-Act statements (s.477/s.480 exemptions, directors'/members'
-acknowledgements, small/micro-regime statements) in **English OR Welsh**,
-selected by `ReportPrincipalLanguage=Welsh`. Do not flag a missing English
-statement when the report is Welsh and the Welsh statement is present.
-[Arelle `validate/UK`; Tagging Guide §2.5]
-
-## 10. FRC "Structured Digital Reporting: Insights 2025/26" — design against these
-
-Published 20 May 2026 (review of 30 UK listed companies' 2024/25 digital
-annual reports plus market-wide CODEx analysis), the FRC's nine recurring
-findings are the failure modes a converter should pre-empt:
-["Structured Digital Reporting: Insights 2025/26", FRC]
-
-1. **Inconsistent level of tagging** — one high-level tag where
-   nested/multiple tags are required.
-2. **Accounting meaning** — tags chosen by label wording not meaning;
-   identical figures tagged inconsistently.
-3. **Unnecessary custom extensions** where standard tags exist (APMs,
-   equity movements, cash-flow) — the §7.1 point in the wild.
-4. **Anchoring too broad / conceptually weak** (UKSEF/ESEF side).
-5. **EPS scaling errors** (£45 vs 45 pence) — "one of the most common".
-6. **Website availability / accessibility** of the SDR.
-7. **Validation errors/warnings not investigated / resolved.**
-8. **Filing timeliness / NSM publication failures.**
-9. **UK-specific mandatory tags applied inconsistently** — omitted, or
-   **group tags on parent-only disclosures** (some UKSEF mandatory tags
-   are group-level, some parent-only). Counterpart to RULE 4.25.1
-   (company vs group, §7): audit each such tag's scope.
-
-## 11. Stakeholders and governance — the UK institutional map
-
-The UK has **no single "SBR" agency** the way the Netherlands has
-SBR-Nederland. The closest analogue is the **FRC-authored one-taxonomy-family
-programme** run jointly with the two receivers: Companies House and HMRC
-operate a **Joint Filing** arrangement (a shared FRC taxonomy plus the Joint
-Filing Common Validation Checks, §8.2), so one markup serves both the
-statutory-accounts and CT-accounts gates. Who does what:
-
-| Institution | Role | Detail |
-|---|---|---|
-| **Companies House** (business register / publication organ) | Maintains the statutory register; receives and publishes company accounts | §1, §3, §8.1 |
-| **HM Revenue & Customs** (tax authority) | Structured-filing regime: CT600 iXBRL accounts + computations; **owns** the CT computational and DPL taxonomies | §1, §4 |
-| **Financial Reporting Council (FRC)** (standards setter + taxonomy author/governance) | Sets UK GAAP (FRS 100–105); authors and governs the **annual** FRC taxonomy suite (latest + penultimate in use at once), published at `frc.org.uk` | §1, §7 |
-| **UK Endorsement Board (UKEB)** (IFRS adoption) | Established **26 Mar 2021**; delegated statutory IFRS-adoption functions from **21 May 2021** (SI 2021/609); endorses and adopts IFRS "for use in the UK" — the standards the UK-IFRS taxonomy tags | [SI 2021/609; UKEB] |
-| **Financial Conduct Authority (FCA)** (securities regulator / NCA) | DTR + National Storage Mechanism for listed-issuer AFRs; UKSEF | §6 |
-| **Bank of England / PRA** (financial-sector overlay) | Prudential returns from banks + insurers in **DPM-based XBRL** (EBA-taxonomy lineage) via the **BEEDS** portal — dimensional XBRL, **not iXBRL** and not the FRC accounts pipeline; the FCA collects its own via **RegData** | [BoE Regulatory reporting] |
-| **Charity Commission** (fifth stakeholder) | Registers/regulates charities; charitable-company iXBRL accounts still flow through the CH/HMRC gates, not a separate channel | §1 |
-
-**How they interlock.** FRC authors the taxonomies → CH and HMRC consume them
-under Joint Filing → **UKEB** supplies the endorsed-IFRS content the UK-IFRS
-taxonomy expresses → **FCA** overlays DTR/NSM (UKSEF reuses the FRC's annual
-ESEF reissue, §6.1) → **PRA/Bank of England** runs a **parallel**
-prudential-XBRL pipeline that never touches the accounts taxonomies.
-Governance note: the planned replacement of the FRC by the **Audit, Reporting
-and Governance Authority (ARGA)** was **shelved in January 2026**; the FRC
-remains the regulator (to be put on a statutory footing when parliamentary
-time allows), so treat "ARGA" in older material as not-yet-existing. [XBRL
-International, Feb 2026]
-
-## 12. Relation to EU/ESEF reporting — post-Brexit divergence
-
-The UK is a **third country**; it keeps ESEF's *substance* without the EU
-instrument. §6 has the DTR/NSM/UKSEF mechanics — this is the EU-relationship
-summary only.
-
-- **Transposition history.** Pre-Brexit the UK transposed the Transparency
-  Directive and onshored the ESEF RTS. The **onshored TD ESEF Regulation was
-  revoked 29 July 2023**; the obligation relocated *unchanged* into **DTR
-  4.1.15R–4.1.23G** (§6). The substance of ESEF survives; the EU instrument
-  does not.
-- **Coexistence with the national format.** **UKSEF is the bridge** (§6.1): the
-  FRC reissues the ESEF taxonomy annually **alongside** the FRC suite, so one
-  multi-target iXBRL file satisfies both the FCA (ESEF-style IFRS tagging) and
-  Companies House (FRC UK tags). The UK still **tracks EU ESEF taxonomy
-  versions** — **ESEF-2024** (Reg (EU) 2025/19) is the FCA "generally accepted
-  taxonomy" for AFR deadlines from 30 Apr 2026 (§6).
-- **CSRD / ESRS trajectory — divergent.** The UK is **outside CSRD**. Its own
-  path is **UK SRS S1/S2**, issued **25 Feb 2026** by DBT (based on the ISSB's
-  IFRS S1/S2) for **voluntary** use; the FCA consulted (Jan 2026) on mandating
-  UK SRS S2 for listed issuers, phased from 1 Jan 2027. There is **no UK digital
-  mark-up mandate for sustainability reporting** — UK iXBRL under DTR 4.1 stays
-  **financial-statements-only** (IFRS consolidated, §6). On the EU side,
-  **Directive (EU) 2026/470** (Omnibus I, of 24 Feb 2026; in force 18 Mar 2026)
-  amends Accounting Directive **Art. 29d** to expressly provide that, **until**
-  the mark-up rules are adopted into Delegated Reg (EU) 2019/815, undertakings
-  are **not required to mark up** their sustainability reporting — i.e. ESEF
-  sustainability tagging is **suspended** EU-side (recital 24). **Net:** neither
-  the UK nor the EU currently mandates sustainability-report mark-up — the UK
-  has enacted no mandate; the EU has one but suspended it pending the RTS.
-  [Directive (EU) 2026/470; UK SRS S1/S2, GOV.UK]
-
-## 13. A pragmatic UK review pass — in order
+### A pragmatic UK review pass — in order
 
 Each step depends on the prior being clean.
 
@@ -605,7 +559,101 @@ Each step depends on the prior being clean.
 10. **Content review**: rendered statements — EPS scaling (§10 finding 5),
     signs, company-vs-group scope (finding 9). See `conversion.md` §10.
 
-## 14. Primary sources
+### FRC "Structured Digital Reporting: Insights 2025/26" — design against these
+
+Published 20 May 2026 (review of 30 UK listed companies' 2024/25 digital
+annual reports plus market-wide CODEx analysis), the FRC's nine recurring
+findings are the failure modes a converter should pre-empt:
+["Structured Digital Reporting: Insights 2025/26", FRC]
+
+1. **Inconsistent level of tagging** — one high-level tag where
+   nested/multiple tags are required.
+2. **Accounting meaning** — tags chosen by label wording not meaning;
+   identical figures tagged inconsistently.
+3. **Unnecessary custom extensions** where standard tags exist (APMs,
+   equity movements, cash-flow) — the §7.1 point in the wild.
+4. **Anchoring too broad / conceptually weak** (UKSEF/ESEF side).
+5. **EPS scaling errors** (£45 vs 45 pence) — "one of the most common".
+6. **Website availability / accessibility** of the SDR.
+7. **Validation errors/warnings not investigated / resolved.**
+8. **Filing timeliness / NSM publication failures.**
+9. **UK-specific mandatory tags applied inconsistently** — omitted, or
+   **group tags on parent-only disclosures** (some UKSEF mandatory tags
+   are group-level, some parent-only). Counterpart to RULE 4.25.1
+   (company vs group, §7): audit each such tag's scope.
+
+## Authorities and governance
+
+The UK has **no single "SBR" agency** the way the Netherlands has
+SBR-Nederland. The closest analogue is the **FRC-authored one-taxonomy-family
+programme** run jointly with the two receivers: Companies House and HMRC
+operate a **Joint Filing** arrangement (a shared FRC taxonomy plus the Joint
+Filing Common Validation Checks, §8.2), so one markup serves both the
+statutory-accounts and CT-accounts gates. Who does what:
+
+| Institution | Role | Detail |
+|---|---|---|
+| **Companies House** (business register / publication organ) | Maintains the statutory register; receives and publishes company accounts | §1, §3, §8.1 |
+| **HM Revenue & Customs** (tax authority) | Structured-filing regime: CT600 iXBRL accounts + computations; **owns** the CT computational and DPL taxonomies | §1, §4 |
+| **Financial Reporting Council (FRC)** (standards setter + taxonomy author/governance) | Sets UK GAAP (FRS 100–105); authors and governs the **annual** FRC taxonomy suite (latest + penultimate in use at once), published at `frc.org.uk` | §1, §7 |
+| **UK Endorsement Board (UKEB)** (IFRS adoption) | Established **26 Mar 2021**; delegated statutory IFRS-adoption functions from **21 May 2021** (SI 2021/609); endorses and adopts IFRS "for use in the UK" — the standards the UK-IFRS taxonomy tags | [SI 2021/609; UKEB] |
+| **Financial Conduct Authority (FCA)** (securities regulator / NCA) | DTR + National Storage Mechanism for listed-issuer AFRs; UKSEF | §6 |
+| **Bank of England / PRA** (financial-sector overlay) | Prudential returns from banks + insurers in **DPM-based XBRL** (EBA-taxonomy lineage) via the **BEEDS** portal — dimensional XBRL, **not iXBRL** and not the FRC accounts pipeline; the FCA collects its own via **RegData** | [BoE Regulatory reporting] |
+| **Charity Commission** (fifth stakeholder) | Registers/regulates charities; charitable-company iXBRL accounts still flow through the CH/HMRC gates, not a separate channel | §1 |
+
+**How they interlock.** FRC authors the taxonomies → CH and HMRC consume them
+under Joint Filing → **UKEB** supplies the endorsed-IFRS content the UK-IFRS
+taxonomy expresses → **FCA** overlays DTR/NSM (UKSEF reuses the FRC's annual
+ESEF reissue, §6.1) → **PRA/Bank of England** runs a **parallel**
+prudential-XBRL pipeline that never touches the accounts taxonomies.
+Governance note: the planned replacement of the FRC by the **Audit, Reporting
+and Governance Authority (ARGA)** was **shelved in January 2026**; the FRC
+remains the regulator (to be put on a statutory footing when parliamentary
+time allows), so treat "ARGA" in older material as not-yet-existing. [XBRL
+International, Feb 2026]
+
+### Relation to EU/ESEF reporting — post-Brexit divergence
+
+The UK is a **third country**; it keeps ESEF's *substance* without the EU
+instrument. §6 has the DTR/NSM/UKSEF mechanics — this is the EU-relationship
+summary only.
+
+- **Transposition history.** Pre-Brexit the UK transposed the Transparency
+  Directive and onshored the ESEF RTS. The **onshored TD ESEF Regulation was
+  revoked 29 July 2023**; the obligation relocated *unchanged* into **DTR
+  4.1.15R–4.1.23G** (§6). The substance of ESEF survives; the EU instrument
+  does not.
+- **Coexistence with the national format.** **UKSEF is the bridge** (§6.1): the
+  FRC reissues the ESEF taxonomy annually **alongside** the FRC suite, so one
+  multi-target iXBRL file satisfies both the FCA (ESEF-style IFRS tagging) and
+  Companies House (FRC UK tags). The UK still **tracks EU ESEF taxonomy
+  versions** — **ESEF-2024** (Reg (EU) 2025/19) is the FCA "generally accepted
+  taxonomy" for AFR deadlines from 30 Apr 2026 (§6).
+- **CSRD / ESRS trajectory — divergent.** The UK is **outside CSRD**. Its own
+  path is **UK SRS S1/S2**, issued **25 Feb 2026** by DBT (based on the ISSB's
+  IFRS S1/S2) for **voluntary** use; the FCA consulted (Jan 2026) on mandating
+  UK SRS S2 for listed issuers, phased from 1 Jan 2027. There is **no UK digital
+  mark-up mandate for sustainability reporting** — UK iXBRL under DTR 4.1 stays
+  **financial-statements-only** (IFRS consolidated, §6). On the EU side,
+  **Directive (EU) 2026/470** (Omnibus I, of 24 Feb 2026; in force 18 Mar 2026)
+  amends Accounting Directive **Art. 29d** to expressly provide that, **until**
+  the mark-up rules are adopted into Delegated Reg (EU) 2019/815, undertakings
+  are **not required to mark up** their sustainability reporting — i.e. ESEF
+  sustainability tagging is **suspended** EU-side (recital 24). **Net:** neither
+  the UK nor the EU currently mandates sustainability-report mark-up — the UK
+  has enacted no mandate; the EU has one but suspended it pending the RTS.
+  [Directive (EU) 2026/470; UK SRS S1/S2, GOV.UK]
+
+## Coverage and known limitations
+
+If the question concerns a receiver, rule version, or code not covered
+here — or the April 2028 tagging scope, DPL "sole source" wording, the
+JFCVC PDF numbering, UKSEF 2026 guidance, the CH TIS v5.9 rule content,
+or Irish Revenue's own thresholds (all flagged as honest gaps above) —
+say so and link the primary source. The cost of a wrong citation on a
+regulated filing is high.
+
+## Sources
 
 Cite these, with version, before declaring a defect. Do not cite a rule
 from memory; the FRC suites and filing rules evolve annually. Each line
@@ -678,10 +726,3 @@ notes what the source establishes; section refs point to the detail.
   Accounting Directive Art. 29d to suspend sustainability mark-up until Reg
   (EU) 2019/815 is updated (recital 24); §12.
   <https://eur-lex.europa.eu/eli/dir/2026/470/oj/eng>
-
-If the question concerns a receiver, rule version, or code not covered
-here — or the April 2028 tagging scope, DPL "sole source" wording, the
-JFCVC PDF numbering, UKSEF 2026 guidance, the CH TIS v5.9 rule content,
-or Irish Revenue's own thresholds (all flagged as honest gaps above) —
-say so and link the primary source. The cost of a wrong citation on a
-regulated filing is high.

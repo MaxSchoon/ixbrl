@@ -1,7 +1,23 @@
+---
+reference_id: de-hgb
+jurisdiction: DE
+verified_on: 2026-08-15
+profiles:
+  - id: e-bilanz
+    section: profile-e-bilanz
+  - id: offenlegung
+    section: profile-offenlegung
+  - id: esef
+    section: profile-esef
+  - id: esrs
+    section: profile-esrs
+---
+
 # Germany (Deutschland) — E-Bilanz, HGB Offenlegung, and the German ESEF layer
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0: attribution is required if you redistribute or adapt this file, and requested if you simply use it (see `ATTRIBUTION.md`).*
 
+## Start here — choose a filing profile
 
 Load this when the entity is German and the filing is one of three
 structured-reporting regimes: **E-Bilanz** (tax XBRL under § 5b EStG),
@@ -15,7 +31,14 @@ report-package layout, `ESEF.*` codes) stay in `esef.md`; for bank/insurer
 prudential DPM reporting use `dpm.md`. This file carries **only the German
 jurisdiction layer**.
 
-## Table of contents
+| Situation | Profile | Section |
+|---|---|---|
+| Tax balance sheet and P&L to the Finanzverwaltung under § 5b EStG, transmitted over ELSTER/ERiC as a plain XBRL 2.1 instance | E-Bilanz | [Profile: E-Bilanz](#profile-e-bilanz) |
+| Statutory publication or permanent deposit of annual accounts with the Unternehmensregister (XML/XBRL default; Word/PDF for a fee) | Offenlegung / Hinterlegung | [Profile: Offenlegung / Hinterlegung](#profile-offenlegung) |
+| Listed Inlandsemittent publishing a Jahresfinanzbericht — the only Inline XBRL regime in Germany | ESEF, German layer | [Profile: ESEF](#profile-esef) |
+| Sustainability reporting under CSRD / ESRS for a German undertaking | CSRD / ESRS — mark-up suspended | [Profile: CSRD / ESRS](#profile-esrs) |
+
+### Section index (legacy numbering, superseded by the profiles above)
 
 1. Which regime? — the three-way split and the bi-temporal warning
 2. Regime A — E-Bilanz (§ 5b EStG): scope, exemptions, transmission
@@ -33,28 +56,7 @@ jurisdiction layer**.
 
 ---
 
-## 1. Which regime? — the three-way split and the bi-temporal warning
-
-Germany runs **three separate structured-reporting regimes** with
-different legal bases, formats, taxonomies, recipients, and validators. A
-converter product must serve them differently; conflating them is the
-first and most expensive mistake.
-
-| | **A — E-Bilanz** | **B — Offenlegung / Hinterlegung** | **C — ESEF** |
-|---|---|---|---|
-| Legal basis | § 5b EStG | §§ 325 ff. HGB | § 114 WpHG · § 328 Abs. 1 HGB |
-| Purpose | Tax balance sheet + P&L to the Finanzverwaltung | Statutory publication of annual accounts | Listed-issuer annual financial report |
-| Format | **plain XBRL 2.1** instance | **XML/XBRL default** (Word/PDF accepted with a fee) | **XHTML + iXBRL** |
-| Taxonomy | HGB-Taxonomie (fiscal entry point) | HGB / IFRS / US-GAAP | ESEF core (Del. Reg. (EU) 2019/815) |
-| Recipient | Länder-Finanzämter via ELSTER/ERiC | Unternehmensregister via Publikations-Plattform | Unternehmensregister; supervised by BaFin |
-| Validator | ERiC (no Arelle plugin) | register-operator intake checks (no Arelle plugin) | Arelle ESEF plugin |
-
-**The iXBRL point.** Only regime C is Inline XBRL. Regime A is
-transmitted "in Form eines XBRL-Datensatzes" — a plain XBRL instance, not
-iXBRL (BMF Grundlagen-Schreiben zu § 5b EStG). Regime B defaults to plain
-XML/XBRL on the HGB taxonomy. Do not build an iXBRL pipeline for E-Bilanz
-or ordinary HGB Offenlegung; build it for the listed-issuer ESEF path and
-route its generic mechanics to `esef.md`.
+## Vintage and applicability
 
 **Bi-temporal warning.** As in every regime, the rules in force *when a
 report was prepared* are not necessarily the rules in force today.
@@ -80,7 +82,11 @@ explicitly before you call anything a defect.
 
 ---
 
-## 2. Regime A — E-Bilanz (§ 5b EStG): scope, exemptions, transmission
+<a id="profile-e-bilanz"></a>
+
+## Profile: E-Bilanz (§ 5b EStG)
+
+### Scope, exemptions, transmission
 
 **Legal basis.** § 5b EStG requires taxpayers determining profit under
 § 4 Abs. 1, § 5 or § 5a EStG to transmit the *content* of the balance
@@ -124,9 +130,7 @@ over ELSTER (eSteuer.de FAQ). There is no web upload and no Arelle gate on
 this path — the authoritative validator is ERiC against the BMF-adopted
 taxonomy version (§10).
 
----
-
-## 3. Regime A — the HGB taxonomy family and its yearly cadence
+### The HGB taxonomy family and its yearly cadence
 
 **Author and blessing.** The E-Bilanz data schema is the **HGB-Taxonomie**,
 authored by **XBRL Deutschland e.V.** and adopted by the BMF as the amtlich
@@ -172,7 +176,11 @@ not a fourth filing regime.
 
 ---
 
-## 4. Regime B — Offenlegung / Hinterlegung (§§ 325 ff. HGB)
+<a id="profile-offenlegung"></a>
+
+## Profile: Offenlegung / Hinterlegung (§§ 325 ff. HGB)
+
+### Legal basis, filing point, and the Hinterlegung option
 
 **Legal basis.** § 325 HGB: the legal representatives of a
 Kapitalgesellschaft must file the festgestellter Jahresabschluss,
@@ -205,9 +213,7 @@ public disclosure. The choice is one-way — once it opts for publication it
 cannot convert back. The register body checks only *fristgemäß / vollzählig*
 (timeliness/completeness), not content correctness (§ 329 HGB).
 
----
-
-## 5. Regime B — accepted formats, size classes, and enforcement
+### Accepted formats, size classes, and enforcement
 
 **Accepted formats.** § 11 URV (Unternehmensregisterverordnung) designates
 **XML** as the "maßgebliches Übermittlungsformat" for
@@ -263,7 +269,9 @@ and from BaFin:
 
 ---
 
-## 6. Regime C — the German ESEF layer (§ 114 WpHG / § 328 HGB, BaFin)
+<a id="profile-esef"></a>
+
+## Profile: ESEF — the German listed-issuer layer (§ 114 WpHG / § 328 HGB, BaFin)
 
 This is the only iXBRL regime. For anchoring, block tagging, the
 Reporting Manual, report-package layout, and `ESEF.*` codes, use
@@ -332,7 +340,9 @@ as the deeper German cut, not a duplicate.
 
 ---
 
-## 7. CSRD / ESRS — the German transposition state and the Omnibus effect
+<a id="profile-esrs"></a>
+
+## Profile: CSRD / ESRS — the German transposition state and the Omnibus effect
 
 **Germany was and remains late.** The CSRD (Directive (EU) 2022/2464)
 should have been transposed by **6 Jul 2024**; missing it triggered an EU
@@ -367,45 +377,32 @@ attempt mandatory ESRS iXBRL mark-up for German filers in 2026.**
 
 ---
 
-## 8. Stakeholders and governance (who does what)
+## Jurisdiction-specific invariants
 
-The three regimes are run by different bodies; a filer who sends the right
-file to the wrong body gets nowhere.
+### Which regime? — the three-way split
 
-- **Bundesanzeiger Verlag GmbH, Köln** — a single private operator that is
-  **both** the Betreiber des Bundesanzeigers **and** "die das
-  Unternehmensregister führende Stelle" (beliehene Stelle). Runs the
-  Publikations-Plattform that ingests **all** Offenlegung / Hinterlegung
-  and ESEF filings and performs the HGB-XBRL intake validation.
-- **Unternehmensregister** — statutory filing point since DiRUG (1 Aug
-  2022) for Geschäftsjahre beginning after 31 Dec 2021; the Bundesanzeiger
-  remains the point for earlier years.
-- **Finanzverwaltung (Länder-Finanzämter) under the BMF** — receives
-  E-Bilanz via ELSTER/ERiC. The **BMF** issues the annual
-  taxonomy-adopting BMF-Schreiben (§ 51 Abs. 4 Nr. 1b EStG).
-- **XBRL Deutschland e.V.** (`de.xbrl.org`, `info@xbrl.de`) — authors the
-  **HGB-Taxonomie** (GCD + GAAP + BRA + special modules) used for **both**
-  E-Bilanz and Offenlegung; versions at `www.esteuer.de` and `de.xbrl.org`.
-- **DiFin (Digitaler Finanzbericht)** — joint XBRL Deutschland / banks /
-  Finanzverwaltung programme for structured annual-account exchange; drives
-  the `relevanceDiFin` attribute from v6.6.
-- **DRSC (Deutsches Rechnungslegungs Standards Committee e.V.)** —
-  national accounting standards body; active in the CSRD-UG consultation.
-  It does **not** author the XBRL taxonomies.
-- **BaFin** — securities NCA: WpHG oversight of Inlandsemittenten,
-  ESEF/financial-reporting enforcement, and the **sole Bilanzkontrolle
-  authority** since FISG.
-- **Bundesamt für Justiz (BfJ, Bonn)** — runs the § 335 HGB Ordnungsgeld
-  and § 334 HGB Bußgeld procedures; distinct from the register operator and
-  from BaFin.
-- **Financial-sector overlays** — special taxonomies (FI for credit
-  institutions under RechKredV, INS for insurers, KHBV/PBV forms) attach to
-  both E-Bilanz and Offenlegung. Bank **prudential** reporting runs on the
-  **EBA DPM**, a separate regime — see `dpm.md`.
+Germany runs **three separate structured-reporting regimes** with
+different legal bases, formats, taxonomies, recipients, and validators. A
+converter product must serve them differently; conflating them is the
+first and most expensive mistake.
 
----
+| | **A — E-Bilanz** | **B — Offenlegung / Hinterlegung** | **C — ESEF** |
+|---|---|---|---|
+| Legal basis | § 5b EStG | §§ 325 ff. HGB | § 114 WpHG · § 328 Abs. 1 HGB |
+| Purpose | Tax balance sheet + P&L to the Finanzverwaltung | Statutory publication of annual accounts | Listed-issuer annual financial report |
+| Format | **plain XBRL 2.1** instance | **XML/XBRL default** (Word/PDF accepted with a fee) | **XHTML + iXBRL** |
+| Taxonomy | HGB-Taxonomie (fiscal entry point) | HGB / IFRS / US-GAAP | ESEF core (Del. Reg. (EU) 2019/815) |
+| Recipient | Länder-Finanzämter via ELSTER/ERiC | Unternehmensregister via Publikations-Plattform | Unternehmensregister; supervised by BaFin |
+| Validator | ERiC (no Arelle plugin) | register-operator intake checks (no Arelle plugin) | Arelle ESEF plugin |
 
-## 9. Relation to EU reporting (how the national formats coexist with ESEF)
+**The iXBRL point.** Only regime C is Inline XBRL. Regime A is
+transmitted "in Form eines XBRL-Datensatzes" — a plain XBRL instance, not
+iXBRL (BMF Grundlagen-Schreiben zu § 5b EStG). Regime B defaults to plain
+XML/XBRL on the HGB taxonomy. Do not build an iXBRL pipeline for E-Bilanz
+or ordinary HGB Offenlegung; build it for the listed-issuer ESEF path and
+route its generic mechanics to `esef.md`.
+
+### Relation to EU reporting (how the national formats coexist with ESEF)
 
 - **Transparency Directive (2004/109/EC) → ESEF.** § 114 WpHG and § 328 HGB
   transpose the ESEF format (Del. Reg. (EU) 2019/815) for Inlandsemittenten,
@@ -430,7 +427,7 @@ expect a separate HGB-XBRL deposit alongside the ESEF filing.
 
 ---
 
-## 10. Validation how-to — and the honest Arelle gap
+## Validation — and the honest Arelle gap
 
 The installed **arelle-release is version 2.41.6**; its `plugin/validate`
 directory ships exactly **CIPC, DBA, EBA, EDINET, ESEF, FERC, NL, ROS, UK**
@@ -468,7 +465,7 @@ arelle-release 2.41.6 — §12.)
 
 ---
 
-## 11. A pragmatic German review pass — in order
+## Review workflow — a pragmatic German review pass, in order
 
 Walk this in order; each step depends on the prior being clean.
 
@@ -504,7 +501,45 @@ Walk this in order; each step depends on the prior being clean.
 
 ---
 
-## 12. Honest gaps
+## Authorities and governance (who does what)
+
+The three regimes are run by different bodies; a filer who sends the right
+file to the wrong body gets nowhere.
+
+- **Bundesanzeiger Verlag GmbH, Köln** — a single private operator that is
+  **both** the Betreiber des Bundesanzeigers **and** "die das
+  Unternehmensregister führende Stelle" (beliehene Stelle). Runs the
+  Publikations-Plattform that ingests **all** Offenlegung / Hinterlegung
+  and ESEF filings and performs the HGB-XBRL intake validation.
+- **Unternehmensregister** — statutory filing point since DiRUG (1 Aug
+  2022) for Geschäftsjahre beginning after 31 Dec 2021; the Bundesanzeiger
+  remains the point for earlier years.
+- **Finanzverwaltung (Länder-Finanzämter) under the BMF** — receives
+  E-Bilanz via ELSTER/ERiC. The **BMF** issues the annual
+  taxonomy-adopting BMF-Schreiben (§ 51 Abs. 4 Nr. 1b EStG).
+- **XBRL Deutschland e.V.** (`de.xbrl.org`, `info@xbrl.de`) — authors the
+  **HGB-Taxonomie** (GCD + GAAP + BRA + special modules) used for **both**
+  E-Bilanz and Offenlegung; versions at `www.esteuer.de` and `de.xbrl.org`.
+- **DiFin (Digitaler Finanzbericht)** — joint XBRL Deutschland / banks /
+  Finanzverwaltung programme for structured annual-account exchange; drives
+  the `relevanceDiFin` attribute from v6.6.
+- **DRSC (Deutsches Rechnungslegungs Standards Committee e.V.)** —
+  national accounting standards body; active in the CSRD-UG consultation.
+  It does **not** author the XBRL taxonomies.
+- **BaFin** — securities NCA: WpHG oversight of Inlandsemittenten,
+  ESEF/financial-reporting enforcement, and the **sole Bilanzkontrolle
+  authority** since FISG.
+- **Bundesamt für Justiz (BfJ, Bonn)** — runs the § 335 HGB Ordnungsgeld
+  and § 334 HGB Bußgeld procedures; distinct from the register operator and
+  from BaFin.
+- **Financial-sector overlays** — special taxonomies (FI for credit
+  institutions under RechKredV, INS for insurers, KHBV/PBV forms) attach to
+  both E-Bilanz and Offenlegung. Bank **prudential** reporting runs on the
+  **EBA DPM**, a separate regime — see `dpm.md`.
+
+---
+
+## Coverage and known limitations
 
 Per the skill's honest-gap discipline, what could not be pinned to a
 current primary source:
@@ -537,7 +572,7 @@ current primary source:
 
 ---
 
-## 13. Primary sources
+## Sources
 
 Regulator and gesetze-im-internet sources are primary; legal-database
 mirrors and advisory/professional analyses are marked *(tier 2)* / *(tier
