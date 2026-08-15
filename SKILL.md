@@ -31,49 +31,40 @@ of the right manual and encodes patterns experts recognise on sight.
    - Bank or insurer supervisory return → **EBA / EIOPA DPM**, see `references/taxonomies.md`
    - IFRS digital financial statements (no jurisdictional overlay) → **IFRS Accounting Taxonomy**, see `references/taxonomies.md`
 2. **Pin the operative rules to the reporting period — bi-temporal.**
-   Taxonomies and filing rules are *versioned per year*, and the rules
-   in force when a report was prepared are not necessarily the rules in
-   force today. Before reviewing or validating, state explicitly:
-   - **Which financial year** the report covers (use the period in
+   Taxonomies and filing rules are *versioned per year*; the rules in
+   force when a report was prepared are not necessarily today's. State
+   explicitly, before reviewing or validating:
+   - **Which financial year** the report covers (the period in
      `<xbrli:period>`, not today's date).
    - **Which taxonomy generation and version** applied for that year
      (ESEF 2024 ≠ ESEF 2025; NT19 ≠ NT20; FASB 2024 GRT ≠ 2025 GRT;
-     FRC 2025 Suite ≠ 2026 Suite; EBA Reporting Framework 4.2 ≠ 4.4).
+     FRC 2025 Suite ≠ 2026 Suite; EBA Framework 4.2 ≠ 4.4).
    - **Which Filing Rules / Filer Manual edition** applied (ESEF
-     Reporting Manual editions, SEC EDGAR Filer Manual volume/version,
+     Reporting Manual edition, SEC EDGAR Filer Manual volume/version,
      SBR Filing Rules NT-generation supplement).
-   Confirm against `references/taxonomies.md` (entry-point catalogue),
-   `references/nl-sbr.md` §2 (Dutch bi-temporal cheatsheet), and the
-   regulator's published cut-in dates. **Do not apply current-year
-   rules retroactively to a prior-year filing** — e.g. KvK Dutch GAAP
-   notes block-tagging is voluntary from FY2026 (mandatory date still
-   an open "202X" pending ESMA), so declaring its absence on a FY2024
-   deposit a defect would itself be the defect.
+   Confirm against `references/taxonomies.md`, the regime reference you
+   selected in step 1 (for NL, `references/nl-sbr.md` §2), and the
+   regulator's published cut-in dates. **Never apply
+   current-year rules retroactively** — calling a prior-year filing
+   defective for missing a rule that did not yet bind is itself the
+   defect.
 3. **Choose your validation profile.** Use `scripts/validate_with_arelle.sh
    <file> [profile]` (`esef`, `efm`, `ukfrc`, `hmrc`, `dk`, `core`). Run
    `core` first to isolate XBRL 2.1 violations from jurisdictional ones.
-4. **Prepare an Arelle iXBRL Viewer for review.** When reviewing a
-   local iXBRL file or document set, generate a viewer with the Arelle
-   iXBRL Viewer plugin before doing the content-level review. The
-   full preparation command (single file, document set, stub viewer
-   mode), version-pinning guidance, and the per-step review checklist
+4. **Prepare an Arelle iXBRL Viewer for review.** For a local file or
+   document set, generate a viewer before the content-level review.
+   Preparation commands, version pinning, and the per-step checklist
    live in `references/viewer.md`.
 5. **Use the live filing corpus for real examples.** For ESEF, UKSEF,
-   and Ukraine filings, use <https://filings.xbrl.org/> before and
-   after authoring:
-   - Filter the index by **Country** (for example `NL` for the
-     Netherlands, or another listed country) to inspect filings from the
-     relevant market.
-   - Open the Inline XBRL viewer to compare how facts, continuations,
-     hidden facts, labels, dimensions, and note block tags appear in a
-     real report.
-   - Download or inspect the xBRL-JSON and XBRL Report Package when you
-     need concrete examples of fact values, contexts, units, taxonomy
-     package layout, and validation messages.
-   - Treat the corpus as evidence, not as authority: the repository is
-     not complete, and many included filings have validation errors or
-     warnings. Use it to learn market practice, then validate against
-     the operative regulator rules.
+   and Ukraine filings use <https://filings.xbrl.org/>, before and
+   after authoring. Filter by **Country** to reach the relevant market;
+   open the Inline XBRL viewer to see how facts, continuations, hidden
+   facts, labels, dimensions, and block tags look in a real report; and
+   inspect the xBRL-JSON and Report Package for concrete contexts,
+   units, package layout, and validation messages. Treat the corpus as
+   evidence, not authority — it is incomplete and many filings in it
+   carry errors or warnings. Learn market practice there, then validate
+   against the operative regulator rules.
 
 ## How to use the references
 
@@ -107,21 +98,19 @@ of them up front.
 
 ## GitHub source repositories to use
 
-Prefer the live source repositories when debugging tooling behaviour,
-checking option names, or tracing validator codes:
+Prefer live source when debugging tooling behaviour, option names, or
+validator codes:
 
-- **Arelle core:** <https://github.com/Arelle/Arelle>. Use for CLI,
-  plugin loading, report packages, Inline XBRL processing, and
-  source-level issue searches.
-- **Arelle iXBRL Viewer:** <https://github.com/Arelle/ixbrl-viewer>.
-  Contains the `iXBRLViewerPlugin` and the browser `ixbrlviewer.js`
-  application, plus samples and tests.
-- **Arelle EDGAR plugin:** <https://github.com/Arelle/EDGAR> —
-  SEC/EFM-specific plugin behaviour lives here, not in Arelle core.
+- **Arelle core:** <https://github.com/Arelle/Arelle> — CLI, plugin
+  loading, report packages, Inline XBRL processing.
+- **Arelle iXBRL Viewer:** <https://github.com/Arelle/ixbrl-viewer> —
+  `iXBRLViewerPlugin` and the browser `ixbrlviewer.js`.
+- **Arelle EDGAR plugin:** <https://github.com/Arelle/EDGAR> — SEC/EFM
+  behaviour lives here, not in Arelle core.
 
-For normative reporting obligations, GitHub source is implementation
-evidence, not the legal source. Cross-check against the regulator manual
-or specification before treating a behaviour as required.
+GitHub source is implementation evidence, not the legal source.
+Cross-check a regulator manual or specification before treating a
+behaviour as required.
 
 ## First principles every preparer must internalise
 
@@ -425,17 +414,15 @@ Be honest. iXBRL has many regimes and they evolve. If a question concerns:
 ## Bundled scripts
 
 - **`scripts/validate_with_arelle.sh <file> [profile]`** — wraps `arelleCmdLine` with the right plugins per profile (`esef`, `efm`, `ukfrc`, `hmrc`, `dk`, `core`). Auto-detects single file, iXBRL document set, or `.zip` / `.xbri` report package.
-- **`scripts/check_facts.py <ixbrl.xhtml>`** — pure-Python pre-flight sanity check. Catches: required attributes (`contextRef`, `unitRef`, `decimals`/`precision`), unresolved context/unit references, non-ISO-4217 currency measures, `decimals="INF"` abuse, broken continuation chains, inconsistent duplicate facts. Run before Arelle to surface cheap-to-detect errors fast.
+- **`scripts/check_facts.py <ixbrl.xhtml>`** — pure-Python pre-flight check: required attributes, unresolved context/unit references, non-ISO-4217 currency measures, `decimals="INF"`, broken continuation chains, inconsistent duplicates. Run before Arelle to surface cheap errors fast.
 
 Both scripts are dependency-light (`arelle-release`, `lxml`) and CI-safe.
 
 ## Editing this skill
 
-This file is loaded into agent runtimes with real size limits — Codex
-CLI caps project documentation files at 32 KiB by default and silently
-truncates beyond that, and Anthropic limits the YAML frontmatter
-`description` to 1024 characters. Before adding substantive content,
-prefer extending a file in `references/` (loaded only when this body
-points the agent at it) over expanding `SKILL.md`. See `CONTRIBUTING.md`
-§"Size discipline" for the full rules and the `wc -c` check to run
+This file is loaded into agent runtimes with hard size limits: 32 KiB
+for the body (silently truncated beyond), 1024 characters for the
+frontmatter `description`. Put substantive content in `references/`,
+which loads only when this body points the agent at it. Full rules and
+the `wc -c` check: `CONTRIBUTING.md` §"Size discipline"
 before merging.
