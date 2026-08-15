@@ -10,3 +10,8 @@ ruff==0.16.3
 
 # Runtime dependency of scripts/check_facts.py only.
 lxml==6.1.1
+
+# CommonMark parser for the reference-structure and move-integrity gates.
+# These must not use line-oriented regex: the reference files contain `#` shell
+# comments inside bash fences, which a regex heading matcher miscounts.
+markdown-it-py==4.2.0
