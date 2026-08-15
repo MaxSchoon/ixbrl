@@ -840,7 +840,8 @@ walk this in order. Each step depends on the prior being clean.
    interpreting validation errors.
 4. **Run validation in the operative profile, offline.** §12. Capture
    the full log, including warnings. Run **Calc 1.1** (`--calc c11r`)
-   as the FY2025 KvK iXBRL RTS calculation basis (it handles iXBRL
+   as the applicable FY/RTS calculation basis — Annex III lists
+   Calculations 1.1 in both RTS 2025 and RTS 2026 (it handles iXBRL
    duplicate facts and surfaces the dual-statement cross-scope
    inconsistencies Calc 1.0 hides). Then run **Calc 1.0** (`--calc c10`) as a
    separate pass for the deposit-acceptance verdict — the package must
