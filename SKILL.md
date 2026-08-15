@@ -1,6 +1,6 @@
 ---
 name: ixbrl
-description: Use when preparing, reviewing, validating, or debugging Inline XBRL (iXBRL) or XBRL filings for any regulator. Covers ESEF, SEC EDGAR, and the major national regimes. Routes to primary-source references, scaffold templates, and Arelle validation scripts.
+description: Use when preparing, reviewing, validating, or debugging Inline XBRL (iXBRL) or XBRL filings for any regulator.
 license: see NOTICE
 ---
 
