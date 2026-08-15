@@ -8,7 +8,7 @@ unfamiliar regime, and when a validator passes but the numbers look wrong.
 
 Truths that, when violated, produce silent failures no validator catches early.
 
-### 1. The `decimals` ↔ rendering ↔ value relationship
+## 1. The `decimals` ↔ rendering ↔ value relationship
 
 `ix:nonFraction` carries three numbers in tension: **rendered text**
 (what the reader sees), **canonical XBRL value** (what the consumer
@@ -21,7 +21,7 @@ parses), and **declared accuracy** (`decimals`).
 
 Audit rule: canonical value = `transform(rendered_text) × 10^scale × (sign == "-" ? -1 : 1)`. If that doesn't match the natural-language number the reader sees, it's a tagging defect.
 
-### 2. Sign convention, balance type, and `preferredLabel` are three different things
+## 2. Sign convention, balance type, and `preferredLabel` are three different things
 
 The single most common substantive error in ESEF filings.
 
@@ -31,17 +31,17 @@ The single most common substantive error in ESEF filings.
 
 Rule of thumb: never flip a fact's sign to fix visible parentheses. Tag the as-reported absolute value with `sign="-"` iff the value is negative; let preferred-label roles handle display.
 
-### 3. Period type is concept-driven, not document-driven
+## 3. Period type is concept-driven, not document-driven
 
 Balance-sheet concepts (assets, liabilities, equity) are **instant** — `<xbrli:instant>YYYY-MM-DD</xbrli:instant>`. Income statement, OCI, cash-flow, and changes-in-equity flows are **duration** — `<xbrli:startDate>` + `<xbrli:endDate>`.
 
 Mismatching period type to concept class causes `xbrldie:PrimaryItemDimensionallyInvalidError` or schema validation failures. Respect the concept's declared `periodType`.
 
-### 4. Identifier scheme constancy
+## 4. Identifier scheme constancy
 
 Every `<xbrli:identifier scheme="...">` in an instance must use the **same scheme URI**: ESEF → LEI scheme (`http://standard.iso.org/iso/17442`); SEC → CIK scheme (`http://www.sec.gov/CIK`); SBR → KvK scheme. Mixing schemes silently produces "duplicate fact" errors because consumers treat differently-scheme'd entities as different.
 
-### 5. Dimensions and axes — XDT is the substrate of every regime
+## 5. Dimensions and axes — XDT is the substrate of every regime
 
 XBRL Dimensions 1.0 ("XDT") makes a fact say more than "this amount, this period". Hypercubes attached to primary items declare which dimensions (taxonomy practice calls them **axes**) apply; the fact's dimensional context lives in `xbrli:segment` or `xbrli:scenario` carrying `xbrldi:explicitMember` (taxonomy-defined members) or `xbrldi:typedMember` (open-ended typed values).
 
@@ -56,7 +56,7 @@ Minimum rules:
 
 See `references/dimensions.md` for the full arcrole table, error codes, explicit-vs-typed contrast, and per-regime axis examples (IFRS, US-GAAP / SRT / DEI, SBR, EBA DPM).
 
-### 6. Anchoring is mandatory only in some regimes — but always good practice
+## 6. Anchoring is mandatory only in some regimes — but always good practice
 
 - **ESEF:** anchor every primary-statement extension to the **closest wider** IFRS/ESEF base concept (Reporting Manual 1.4.1), plus to **each** narrower base concept when the extension combines two or more (RTS Annex IV §9(b)). Pure subtotals are exempt from wider anchoring (§10) but must still participate in the calculation linkbase. **Never anchor to an abstract concept** (`ESEF.3.3.1.ExtensionConceptAnchoredToAbstractConcept`).
 - **SEC EDGAR:** strongly recommended; EFM and SEC Sample Letter require using base concepts before extensions; IFRS foreign private issuers must anchor under the SEC's IFRS entry-point rules.
@@ -64,11 +64,11 @@ See `references/dimensions.md` for the full arcrole table, error codes, explicit
 
 When in doubt, anchor wider.
 
-### 7. Block tagging is structured narrative, not a screenshot
+## 7. Block tagging is structured narrative, not a screenshot
 
 Where note-block tagging is required (ESEF Article 6, mandatory from FY2022; analogous regimes elsewhere), an `ix:nonNumeric escape="true"` element wraps the entire note's XHTML. The escaped XHTML *is* the fact value — preserve tables, lists, headings, and ensure machine-readability after extraction (Reporting Manual 2.2.6). Empty or whitespace-only block tags are valid syntactically but useless and often trip downstream formula assertions.
 
-### 8. The hidden section is for facts that exist, not for facts you're embarrassed by
+## 8. The hidden section is for facts that exist, not for facts you're embarrassed by
 
 `ix:hidden` carries facts required in XBRL but with no natural visible rendering (notably SEC `dei:` cover-page facts). ESEF and EFM both require any hidden fact whose value also appears as visible text to be linked via the `-esef-ix-hidden` (ESEF) or `-sec-ix-hidden` (SEC) CSS style. Do not put numeric/transformable facts in `ix:hidden` to suppress them — ESEF forbids it (`ESEF.2.4.1.transformableElementIncludedInHiddenSection`).
 
