@@ -50,10 +50,10 @@ prudential regulator. Statutory accounts and tax are not XBRL at all.
 |---|---|---|---|
 | Listed-issuer RFA / DEU-valant-RFA with **IFRS consolidated** accounts | AMF — **ONDE**, archived on **info-financiere.fr** | XHTML **+ Inline XBRL** (ESEF) | **Yes — the core French iXBRL market** |
 | Listed-issuer RFA **not** IFRS-consolidated | AMF — ONDE | Plain **XHTML, no XBRL** | No — XHTML formatting, not tagging |
-| Statutory annual accounts (*dépôt des comptes annuels*) | **INPI Guichet unique** | **PDF** (or paper deposit) | **No mandate** (honest negative, §3) |
-| Corporate tax + accounting schedules (*liasse fiscale*) | **DGFiP** via **EDI-TDFC** | **UN/EDIFACT** (INFENT) | **No — EDIFACT, not XBRL** (§4) |
-| Banking / insurance supervisory reporting | **ACPR** via **OneGate** | plain **xBRL** on EBA/EIOPA **DPM** | Not *inline* → `references/dpm.md` (§5) |
-| Sustainability statement (CSRD / ESRS) tagging | AMF (future, *rapport de gestion*) | XHTML + iXBRL — **not yet mandatory** | Prepare-ahead only (§6) |
+| Statutory annual accounts (*dépôt des comptes annuels*) | **INPI Guichet unique** | **PDF** (or paper deposit) | **No mandate** (honest negative; see the *Statutory annual accounts — PDF via INPI* profile) |
+| Corporate tax + accounting schedules (*liasse fiscale*) | **DGFiP** via **EDI-TDFC** | **UN/EDIFACT** (INFENT) | **No — EDIFACT, not XBRL** (see the *Tax — the liasse fiscale via EDI-TDFC* profile) |
+| Banking / insurance supervisory reporting | **ACPR** via **OneGate** | plain **xBRL** on EBA/EIOPA **DPM** | Not *inline* → `references/dpm.md` (see the *Banking / insurance — ACPR DPM/xBRL via OneGate* profile) |
+| Sustainability statement (CSRD / ESRS) tagging | AMF (future, *rapport de gestion*) | XHTML + iXBRL — **not yet mandatory** | Prepare-ahead only (see the *CSRD / ESRS digital tagging* profile) |
 
 If the task is a row that is not an iXBRL job, say so and route to the
 right non-XBRL channel rather than attempting Inline XBRL validation.
@@ -62,7 +62,7 @@ right non-XBRL channel rather than attempting Inline XBRL validation.
 
 **Taxonomy version to pin.** The applicable text now cites Reg.
 2019/815 **as amended by Reg. (UE) 2025/19** (taxonomy update) [S5] —
-the same amendment as `references/esef.md` §1. The 2025-taxonomy amendment is now
+the same amendment as `references/esef.md` §1; the 2025-taxonomy amendment is now
 **adopted and in force**: **Commission Delegated Regulation (EU)
 2026/283** of 12 Dec 2025 (OJ 18 Mar 2026) — 2025 IFRS taxonomy, IFRS
 18/19 elements, a **Calculations 1.1** validity requirement — applying
@@ -305,14 +305,19 @@ France is an EU Member State; the France layer sits on the EU rails in
 
 - **ESEF / Transparency-Directive transposition.** ESEF applies through
   the AMF as NCA under the TD (2004/109/CE, rev. 2013/50/UE), with
-  info-financiere.fr as France's TD storage mechanism (§2). No national
+  info-financiere.fr as France's TD storage mechanism (see the *Listed
+  issuers — ESEF filed via the AMF* profile). No national
   *inline* format competes with ESEF — unlike the Dutch SBR/KvK route,
   France adds only document-typology and deposit mechanics on top of the
-  common ESEF rules (§2, `references/esef.md`).
+  common ESEF rules (see the *Listed issuers — ESEF filed via the AMF*
+  profile, `references/esef.md`).
 - **Coexistence with national structured regimes.** The non-ESEF French
-  structured filings (EDI-TDFC tax §4; ACPR DPM §5; INPI PDF §3) are
+  structured filings (EDI-TDFC tax, see the *Tax — the liasse fiscale via
+  EDI-TDFC* profile; ACPR DPM, see the *Banking / insurance — ACPR
+  DPM/xBRL via OneGate* profile; INPI PDF, see the *Statutory annual
+  accounts — PDF via INPI* profile) are
   **not** iXBRL and do not overlap ESEF — they coexist on separate rails
-  (§1, §10).
+  (see *Regime map* and *Stakeholders and governance*).
 - **CSRD / ESRS trajectory — now expressly suspended.** **Directive (EU)
   2026/470** (Omnibus I, in force 18 Mar 2026) amends CSRD Art. 29d to
   suspend sustainability mark-up until Reg. 2019/815 is updated, and lets
@@ -320,7 +325,8 @@ France is an EU Member State; the France layer sits on the EU rails in
   report; the 2024 EFRAG taxonomy must first be reworked against the
   Amended ESRS (approved 28 Nov 2025) [S30][S31]. Not a live French
   obligation — build toward it, do not tell an issuer it is mandatory
-  (§6, §8).
+  (see the *CSRD / ESRS digital tagging* profile and *What an iXBRL
+  product can serve today*).
 
 ## Validation
 
@@ -360,42 +366,52 @@ they interlock. Detail lives in the sections cited — this is only the map.
 - **Business register & publication organ — INPI + BODACC.** The **INPI**
   runs the *Registre national des entreprises* and the Guichet unique
   that receives the *dépôt des comptes annuels* and keys structured data
-  out of the deposited PDFs (§3). Official publicity of acts registered
+  out of the deposited PDFs (see the *Statutory annual accounts — PDF via
+  INPI* profile). Official publicity of acts registered
   in the RNE — including account deposits — is given by the **BODACC**
   (*Bulletin officiel des annonces civiles et commerciales*, bodacc.fr)
   [S32]. No filer-facing XBRL layer sits here.
 - **Digital-business-reporting programme — no SBR-Nederland analogue.**
   France has **no** single national SBR programme on one taxonomy; the
-  nearest actor is **XBRL France** (loi-1901 jurisdiction body, §7), and
-  structured filing is split by domain across the DGFiP (§4) and ACPR
-  (§5). State this gap rather than imply an SBR equivalent [S19].
+  nearest actor is **XBRL France** (loi-1901 jurisdiction body, see
+  *France-specific XBRL history*), and structured filing is split by
+  domain across the DGFiP (see the *Tax — the liasse fiscale via
+  EDI-TDFC* profile) and ACPR (see the *Banking / insurance — ACPR
+  DPM/xBRL via OneGate* profile). State this gap rather than imply an SBR
+  equivalent [S19].
 - **Accounting standards setter — ANC.** The *Autorité des normes
   comptables* sets French GAAP (the PCG, Règlement ANC 2014-03); lineage
-  CNC→CRC→ANC (§7) [S21].
+  CNC→CRC→ANC (see *France-specific XBRL history*) [S21].
 - **Taxonomy author / governance.** For the only inline mandate, **ESMA**
   authors the ESEF RTS taxonomy the Commission adopts into Reg. 2019/815,
   on an **annual IFRS-taxonomy cadence**, published in the EU Official
-  Journal / ESMA's ESEF pages (§2, §9). The legacy French **TCA** (XBRL
-  France) is **no longer maintained** (§7) [S20].
+  Journal / ESMA's ESEF pages (see the *Listed issuers — ESEF filed via
+  the AMF* profile and *Arelle / validation notes*). The legacy French
+  **TCA** (XBRL France) is **no longer maintained** (see
+  *France-specific XBRL history*) [S20].
 - **Tax authority (structured filing) — DGFiP.** Runs the *liasse
-  fiscale* via EDI-TDFC in UN/EDIFACT — structured but not XBRL (§4).
+  fiscale* via EDI-TDFC in UN/EDIFACT — structured but not XBRL (see the
+  *Tax — the liasse fiscale via EDI-TDFC* profile).
 - **Securities regulator (NCA) — AMF.** France's Transparency-Directive
   NCA; receives ESEF filings on ONDE and archives them on
-  info-financiere.fr (§2).
+  info-financiere.fr (see the *Listed issuers — ESEF filed via the AMF*
+  profile).
 - **Financial-sector overlay — ACPR (Banque de France).** Collects
   banking/insurance prudential reporting as plain xBRL on the EBA/EIOPA
-  DPM via OneGate (§5).
+  DPM via OneGate (see the *Banking / insurance — ACPR DPM/xBRL via
+  OneGate* profile).
 
 They interlock only loosely: AMF/ESEF, DGFiP/EDI-TDFC, ACPR/DPM and
 INPI/PDF are **separate rails** on different formats with no unifying
 digital-reporting institution — which is why this file routes each
-obligation to its own channel (§1).
+obligation to its own channel (see *Regime map*).
 
 ### France-specific XBRL history (context, mostly legacy)
 
 - **XBRL France** is a *loi-1901* non-profit founded 2005, the French
   Jurisdiction of XBRL International and a founding XBRL Europe member;
-  it remains active on the ESG front (§6) [S19][S26].
+  it remains active on the ESG front (see the *CSRD / ESRS digital
+  tagging* profile) [S19][S26].
 - Its historic French-GAAP taxonomy — *Taxonomie Comptes Annuels* (TCA)
   **v3.0, 31/12/2010**, built on the *Plan Comptable Général* (Règlement
   CRC 99-03), CNC-conformant labels — has a **no-longer-active** working
@@ -403,8 +419,8 @@ obligation to its own channel (§1).
 - Historic fact: the TCA **was** used by **Infogreffe** for
   dematerialised XBRL deposit of *comptes sociaux* — France once had a
   live statutory-accounts XBRL channel — now **superseded** since
-  Infogreffe stopped processing formalities and INPI accepts PDF (§3)
-  [S20][S10].
+  Infogreffe stopped processing formalities and INPI accepts PDF (see
+  the *Statutory annual accounts — PDF via INPI* profile) [S20][S10].
 - Framework context: the PCG is **Règlement ANC n° 2014-03**; the
   standard-setter lineage is CNC (1957) + CRC (1998) → **ANC**
   (ordonnance du 22 janvier 2009) [S21][S22]. **No current mandatory
@@ -437,7 +453,8 @@ obligation to its own channel (§1).
   trigger) is not fixed; ESMA said "not before 2026" with a
   30-June-keyed phase-in [S25].
 - **French-language ESEF labels.** No AMF-specific French-label rule was
-  located; `references/esef.md` §5 general guidance stands (§2).
+  located; `references/esef.md` §5 general guidance stands (see the
+  *Listed issuers — ESEF filed via the AMF* profile).
 - **INPI XBRL roadmap.** INPI keys structured data out of PDFs [S11];
   no announced plan to move filers to structured/XBRL submission was
   found — treated as absent, not confirmed-absent-by-statement.
@@ -448,7 +465,8 @@ obligation to its own channel (§1).
   (Omnibus I, in force 18 Mar 2026) suspends the sustainability mark-up
   until Reg. 2019/815 is updated, and the underlying taxonomy must be
   reworked against the Amended ESRS (SRB approval 28 Nov 2025) — so no
-  mandatory ESRS tagging profile exists yet [S30][S31] (§6, §11).
+  mandatory ESRS tagging profile exists yet [S30][S31] (see the *CSRD /
+  ESRS digital tagging* profile and *Relation to EU reporting*).
 
 ## Sources
 

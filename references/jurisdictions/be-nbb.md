@@ -82,7 +82,8 @@ accounts** — not the upload date. Before you validate or review, pin:
   2025). Do not validate a FY2024-closing set against the 26.0 framework.
 - **The assessment year** for Biztax — `be-tax` is versioned `be-tax-YYYY-04-30`,
   the return-form model fixed each year by Royal Decree.
-- **The financial year for ESEF / ESRS** (§9) — the CSRD phase-in moved twice
+- **The financial year for ESEF / ESRS** (see *CSRD / ESRS in Belgium and the
+  Omnibus I effect on digital tagging*) — the CSRD phase-in moved twice
   (stop-the-clock, then Omnibus I); applying a later wave's obligation to an
   earlier year is itself the defect.
 
@@ -123,7 +124,8 @@ a **minus sign** rather than parentheses where possible.
 **Name / owner:** "Belgian financial reporting taxonomy", NBB–CBSO,
 `xbrl.be@nbb.be`. **Specification:** XBRL 2.1 (2003-12-31). The **DTS is
 self-contained** (no external XBRL taxonomies), which matters for offline
-validation (§12). Earlier generations declared FRTA 1.0 (2005-11-07) compliance.
+validation (see *Validation*). Earlier generations declared FRTA 1.0
+(2005-11-07) compliance.
 
 **Version history to pin against:**
 
@@ -190,7 +192,7 @@ applicable CBSO taxonomy, and satisfy the legal **arithmetic and logical
 controls** published in the Belgian Bulletin — shipped as **Formula linkbase
 assertions** (separate lists for companies vs associations/foundations) plus
 technical constraints. Those shipped Formula linkbases *are* the legal control
-set (§12).
+set (see *Validation*).
 
 **Language.** Filings are in **Dutch, French, or German** per the company's
 region; NBB forms and labels come in four languages (`en`/`fr`/`nl`/`de`).
@@ -363,11 +365,13 @@ channels:
   format; there is no EU-mandated iXBRL for unlisted entities' annual accounts.
 - **Transparency Directive 2004/109/EC + ESEF RTS (Delegated Regulation (EU)
   2019/815)** land at **FSMA / eCorporate / STORI** — the only Belgian iXBRL
-  regime. Generic ESEF mechanics → `references/esef.md`; Belgian overlay → §7.
+  regime. Generic ESEF mechanics → `references/esef.md`; Belgian overlay → the
+  *FSMA / ESEF* profile.
 - **CSRD (Directive (EU) 2022/2464)** flows through the WVV/CSA and FSMA
   supervision (Law of 2 December 2024, stop-the-clock Law of 12 December 2025,
   Omnibus I Directive (EU) 2026/470), with ESRS **mark-up suspended** pending the
-  updated ESEF RTS (§9).
+  updated ESEF RTS (see *CSRD / ESRS in Belgium and the Omnibus I effect on
+  digital tagging*).
 - **The regimes never substitute for each other.** A listed issuer files ESEF with
   the **FSMA** (not the NBB); an unlisted entity files `be-gaap` XBRL with the
   **NBB**; **both** file `be-tax` with **FPS Finance**. One group may produce all
@@ -425,36 +429,42 @@ intermittent validation stalls.
 Walk this in order; each step depends on the prior being clean.
 
 1. **Identify the regime** — NBB annual accounts, FSMA/ESEF AFR, or Biztax return
-   (§1). State it back before opening the file.
+   (see *Start here — choose a filing profile*). State it back before opening
+   the file.
 2. **Confirm format matches regime** — iXBRL/XHTML → FSMA only; `.xbrl` XBRL 2.1 →
    NBB; `.biztax` XBRL 2.1 → FPS Finance. An iXBRL file bound for the NBB or Biztax
-   is wrong on its face (§2).
+   is wrong on its face (see *The critical split: iXBRL vs classic XBRL 2.1*).
 3. **Pin the version to the reference date** — `nbb-cbso` framework by closing
    date; `be-tax-YYYY-04-30` by assessment year; ESEF/ESRS by financial year
-   against the current phase-in (§3, §9).
+   against the current phase-in (see *Vintage and applicability* and *CSRD /
+   ESRS in Belgium and the Omnibus I effect on digital tagging*).
 4. **NBB: format eligibility** — XBRL only if standard model + euro (or authorised
    foreign currency) + not a foreign company; specific-model entities (credit
    institutions, insurers, health funds, collecting societies) file **PDF**; 50 MB
-   cap (§6).
+   cap (see *Accepted formats, controls, decimals, language, fees*).
 5. **NBB: model / entry point** — with/without capital, size class, associations
    vs companies; `schemaRef` must point to the matching `m0x-f` entry point;
-   respect micro-model date limits (§5).
+   respect micro-model date limits (see *The `be-gaap` taxonomy — versions,
+   architecture, model / entry-point matrix*).
 6. **Validate in the operative profile** — NBB/Biztax: generic XBRL 2.1 +
    Dimensions + Formula with the matching taxonomy package; FSMA: `validate/ESEF`.
-   Capture all messages (§12).
+   Capture all messages (see *Validation*).
 7. **Read Formula assertions as legal controls** — for NBB/Biztax the shipped
    Formula linkbase *is* the arithmetic/logical control set; a failed assertion is
    a legal control failure, not a style warning.
 8. **Biztax: batch atomicity** — a `.biztax` package (≤25 returns) is rejected
-   whole if any one return fails; validate each before bundling (§8).
+   whole if any one return fails; validate each before bundling (see the
+   *Biztax* profile).
 9. **FSMA: apply the ESEF checklist** (`references/esef.md`), then the Belgian mechanics —
    `.xbri`, ESEF as main document, PDF only as attachment, one ZIP per language,
-   deadline of the earlier of AGM − 30 days or year-end + 4 months (§7).
+   deadline of the earlier of AGM − 30 days or year-end + 4 months (see the
+   *FSMA / ESEF* profile).
 10. **CSRD/ESRS: do not require sustainability mark-up** — suspended pending the
-    updated ESEF RTS; confirm the live RTS before flagging its absence (§9).
+    updated ESEF RTS; confirm the live RTS before flagging its absence (see
+    *CSRD / ESRS in Belgium and the Omnibus I effect on digital tagging*).
 11. **State every defect with its version and instrument** — no `FR-BE-*` code
     family exists; cite the RD, CCA/WVV article, technical guide, or FSMA FAQ by
-    name, never a fabricated Belgian error code (§12).
+    name, never a fabricated Belgian error code (see *Validation*).
 
 ## Authorities and governance
 
@@ -480,7 +490,8 @@ The institutional map a Belgian filing product must hold in its head:
 - **NBB, prudential hat** — also the banks/insurers prudential supervisor running
   separate **EBA/EIOPA DPM supervisory reporting (OneGate)**, distinct from the
   CBSO regime (see `references/dpm.md`). Consequence: specific-model financial entities file
-  their **CBSO annual accounts as PDF**, not `be-gaap` XBRL (§6).
+  their **CBSO annual accounts as PDF**, not `be-gaap` XBRL (see *Accepted
+  formats, controls, decimals, language, fees*).
 - **XBRL Belgium** — XBRL International jurisdiction since 15 July 2006, hosted by
   the NBB.
 

@@ -68,6 +68,9 @@ jobs:
       - name: Reference structure (profile-first shape)
         run: .venv/bin/python tests/check_reference_structure.py
 
+      - name: Section cross-references resolve
+        run: .venv/bin/python tests/check_section_refs.py
+
       - name: Scripts compile
         run: python3 -m py_compile scripts/check_facts.py
 

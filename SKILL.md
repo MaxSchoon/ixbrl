@@ -60,7 +60,8 @@ of the right manual and encodes patterns experts recognise on sight.
      Reporting Manual edition, SEC EDGAR Filer Manual volume/version,
      SBR Filing Rules NT-generation supplement).
    Confirm against `references/taxonomies.md`, the regime reference you
-   selected in step 1 (for NL, `references/jurisdictions/nl-sbr.md` §2), and the
+   selected in step 1 (for NL, see *Bi-temporal cheatsheet (which rule applied
+   when)* in `references/jurisdictions/nl-sbr.md`), and the
    regulator's published cut-in dates. **Never apply
    current-year rules retroactively** — calling a prior-year filing
    defective for missing a rule that did not yet bind is itself the
@@ -212,7 +213,8 @@ prior being clean.
    explicitly before opening the file in earnest.
 2. **Pin the filer's classification.** For Dutch SBR, the entity-size
    class (Micro / Klein / Middelgroot / Groot) changes which absences
-   count as defects — see `references/jurisdictions/nl-sbr.md` §3. For SEC filings,
+   count as defects — see *Entry point by entity-size class (Title 9 Book 2 BW)*
+   in `references/jurisdictions/nl-sbr.md`. For SEC filings,
    the filer category (LAF / AF / NAF / SRC) drives DEI requirements.
    For ESEF, IFRS vs national-GAAP issuer drives which extension
    patterns are normal.
@@ -223,7 +225,8 @@ prior being clean.
    dual-statement cross-scope inconsistencies that Calc 1.0 hides),
    then run `--calc c10` separately as the formal deposit-acceptance
    check — NT20 Filing Rules still list XBRL 2.1 as normative. See
-   `nl-sbr.md` §4.2 for why both passes earn their keep. For ESEF run
+   *Calculation linkbase scope-bleed — and why Calc 1.1 is the RTS basis* in
+   `nl-sbr.md` for why both passes earn their keep. For ESEF run
    `--calc c11r` if the issuer's taxonomy has Calc 1.1 arcroles, else
    `c10`; for SEC EFM use the EDGAR plugin defaults. Capture **all**
    messages, including warnings; some Filing Rules surface as
@@ -257,7 +260,8 @@ prior being clean.
    `META-INF/reportPackage.json` present and consistent; for
    jurisdictions that require it, the
    auditor's report packaged as a separate tagged iXBRL document
-   (Dutch SBR, see `references/jurisdictions/nl-sbr.md` §7).
+   (Dutch SBR, see *The auditor's report (controleverklaring) in the package* in
+   `references/jurisdictions/nl-sbr.md`).
 
 For regime-specific review checklists, load:
 
@@ -298,12 +302,12 @@ When the user shows you a validator error, route by code prefix:
 
 - `ESEF.2.x.*` → iXBRL/instance-construction issue. See the table in `references/esef.md` §8 and the duplicated/expanded table in `references/validation.md` §5.1.
 - `ESEF.3.x.*` → extension-taxonomy issue (anchoring, labels, link roles). Same references.
-- `EFM.6.05.*` → SEC iXBRL syntax/DEI/decimals issue. See `references/jurisdictions/sec-edgar.md` §7 and `references/validation.md` §5.2.
+- `EFM.6.05.*` → SEC iXBRL syntax/DEI/decimals issue. See *Common EFM error and warning codes* in `references/jurisdictions/sec-edgar.md` and `references/validation.md` §5.2.
 - `EFM.6.08.*` → SEC industry-overlay (ECD, RXP, OEF, CEF) linkbase issue.
-- `FR-NL-*` / `FG-NL-*` → SBR Filing Rules / Filing Guidelines (taxonomy-agnostic). The most common are encoding (1.01–1.05), missing `xml:lang` (2.03), `link:schemaRef` placement (2.04), `xbrli:forever` use (3.04), `precision` usage (5.06), `xsi:nil` on facts (5.07), footnotes (6.01). See `references/jurisdictions/nl-sbr.md` §6 and `references/validation.md` §5.3.
-- `NL-KVK.*` → KvK-specific Filing Rules supplement (layered on top of FR-NL-). Recurring deposit blockers: `4.4.2.5` mixed-scope ELR missing for a dual-scope concept; `4.4.6.1` usable concepts not applied by tagged facts; `3.4.1.3` transformable element in `ix:hidden`. See `references/jurisdictions/nl-sbr.md` §5 and §4 for the dual-scope pattern, and the duplicated/expanded table in `references/validation.md` §5.3.
-- `JFCVC.*` / HMRC gateway `1606`/`1607`/`331x` → UK CH/HMRC joint filing checks (Arelle `validate/UK`). See `references/jurisdictions/uk-frc.md` §8-§9.
-- Danish `TH*`/`TR*`/`TM*`/`FR<n>` codes or a Fejl/Advis verdict → ERST Regnskab Indberet controls. See `references/jurisdictions/dk-erst.md` §6-§8, §12-§14.
+- `FR-NL-*` / `FG-NL-*` → SBR Filing Rules / Filing Guidelines (taxonomy-agnostic). The most common are encoding (1.01–1.05), missing `xml:lang` (2.03), `link:schemaRef` placement (2.04), `xbrli:forever` use (3.04), `precision` usage (5.06), `xsi:nil` on facts (5.07), footnotes (6.01). See *FR-NL- / FG-NL- — SBR Filing Rules / Filing Guidelines* in `references/jurisdictions/nl-sbr.md`, and `references/validation.md` §5.3.
+- `NL-KVK.*` → KvK-specific Filing Rules supplement (layered on top of FR-NL-). Recurring deposit blockers: `4.4.2.5` mixed-scope ELR missing for a dual-scope concept; `4.4.6.1` usable concepts not applied by tagged facts; `3.4.1.3` transformable element in `ix:hidden`. See *Recurring KvK deposit-blocker patterns* and *The dual-scope pattern (consolidated + separate)* in `references/jurisdictions/nl-sbr.md`, and the duplicated/expanded table in `references/validation.md` §5.3.
+- `JFCVC.*` / HMRC gateway `1606`/`1607`/`331x` → UK CH/HMRC joint filing checks (Arelle `validate/UK`). See *Validation* and *Generic-dimension pairing — the JFCVC.3315 pattern* in `references/jurisdictions/uk-frc.md`.
+- Danish `TH*`/`TR*`/`TM*`/`FR<n>` codes or a Fejl/Advis verdict → ERST Regnskab Indberet controls. See `references/jurisdictions/dk-erst.md` — *iXBRL format rules — one self-contained XHTML*, the *IFRS filers* profile, *Mandatory structured fields, CVR contexts, and periods*, and *Validation*.
 - `xbrl.5.2.5.2` → calculation inconsistency. Either fix the data or move to Calc 1.1 if the regulator accepts it. See `references/validation.md` §4.
 - `xbrldie:*` (instance-level) → dimensional context error. See `references/dimensions.md` §"Dimensional validity errors".
 - `xbrldte:*` (taxonomy/DTS-level) → hypercube/dimension/domain wiring error in the linkbases. See `references/dimensions.md` §"Dimensional validity errors".
@@ -347,7 +351,7 @@ Rules:
 - Wire concepts into a presentation link with appropriate `preferredLabel` roles on subtotal arcs.
 - Wire calculation links with `weight="1"` when parent and child share the same `balance`, `weight="-1"` when they are opposite (XBRL 2.1 §5.1.1.2). Give every subtotal a summation network covering *all* of its children.
 
-See `references/esef.md` §5 for ESEF specifics and `references/jurisdictions/sec-edgar.md` §4 for EFM specifics.
+See `references/esef.md` §5 for ESEF specifics and *Custom (extension) elements* in `references/jurisdictions/sec-edgar.md` for EFM specifics.
 
 ## Generating a Report Package
 

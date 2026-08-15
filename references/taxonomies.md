@@ -165,7 +165,7 @@ versions should be in active use simultaneously.
   mandate confirmed 9 June 2026 (moved from the paused April-2027 date) —
   web and paper accounts routes close; small/micro P&L with a
   publication opt-out; abridged accounts abolished. See
-  `references/jurisdictions/uk-frc.md` §3.
+  `references/jurisdictions/uk-frc.md` the *Companies House* profile.
 
 **Deep dive:** for the receiver-by-receiver filing rules, bi-temporal
 cheatsheet, validation gates (CH validator, Arelle `validate/UK` JFCVC /
@@ -202,7 +202,7 @@ deposits; AFM extends ESEF/IFRS for listed-issuer AFRs.
   medium, large (different disclosure depths under Title 9 Book 2 BW).
   The size class is itself a tagged fact (`bw2-titel9:LegalEntitySize`)
   and the entry point choice is concept-bearing — it changes which
-  concepts are in-DTS. See `references/jurisdictions/nl-sbr.md` §3 for the
+  concepts are in-DTS. See `references/jurisdictions/nl-sbr.md` *Entry point by entity-size class* for the
   size-class table.
 - KvK IFRS entry points where the entity reports under IFRS but files at
   the trade register.
@@ -219,7 +219,7 @@ deposits; AFM extends ESEF/IFRS for listed-issuer AFRs.
 A recurring source of "looks tagged, isn't bound" defects is picking
 the wrong namespace for a concept that exists in only one (e.g.
 `rj:PayablesBanksCurrent` vs `bw2-titel9:PayablesBanksCurrent`).
-`references/jurisdictions/nl-sbr.md` §9 lists the high-frequency mis-bindings.
+`references/jurisdictions/nl-sbr.md` *Recurring Dutch concept choices that are syntactically valid but wrong* lists the high-frequency mis-bindings.
 
 **Filing scope:** All Dutch legal entities required to file annual
 accounts at the KvK; all VPB taxpayers; all AFR filers under ESEF for
@@ -229,7 +229,7 @@ Dutch listed issuers.
 deposit-quality validation, download the operative NT packages and
 pass them to Arelle via `--packages` so the DTS resolves offline —
 remote fetches against `nltaxonomie.nl` are a recurring source of
-flaky validation. See `references/jurisdictions/nl-sbr.md` §12.
+flaky validation. See `references/jurisdictions/nl-sbr.md` *Validation — offline DTS resolution*.
 
 **Validator / review:** Use `--plugins validate/NL` with the
 disclosure system matching the NT generation in the report. For SBR
@@ -238,7 +238,7 @@ duplicate facts and surfaces the dual-statement cross-scope
 inconsistencies that Calc 1.0 hides), then run `--calc c10`
 separately as the formal deposit-acceptance check, since NT20 Filing
 Rules still list XBRL 2.1 as the normative calculation basis. End-
-to-end review checklist in `references/jurisdictions/nl-sbr.md` §13; calculation-
+to-end review checklist in `references/jurisdictions/nl-sbr.md` *Review workflow*; calculation-
 verdict reasoning in §4.2.
 
 **Download:**
@@ -299,7 +299,7 @@ version.
 
 **Issuer / Jurisdiction:** Erhvervsstyrelsen (Danish Business Authority / DCCA), which runs the Regnskab Indberet platform and publishes filed data on `www.data.virk.dk`. Statute: Årsregnskabsloven (ÅRL, lovbek. nr. 1057 af 23/09/2024); filing rules: BEK nr. 859 af 18/06/2025 (indsendelsesbekendtgørelsen).
 
-**Versioning:** Annual ÅRL taxonomy generations (`20241001`, `20251001`, …). Inline XBRL is mandatory for the årsrapport from **balance date on/after 2025-01-01** — bi-temporal, keyed to the balance date not the filing date. The pairing of balance date → taxonomy generation → Kontroller version matters; see the cheatsheet in `references/jurisdictions/dk-erst.md` §2.
+**Versioning:** Annual ÅRL taxonomy generations (`20241001`, `20251001`, …). Inline XBRL is mandatory for the årsrapport from **balance date on/after 2025-01-01** — bi-temporal, keyed to the balance date not the filing date. The pairing of balance date → taxonomy generation → Kontroller version matters; see the cheatsheet in *Vintage and applicability* in `references/jurisdictions/dk-erst.md`.
 
 **Architecture:** Root URL `http://archprod.service.eogs.dk/taxonomy/`, `{yyyymmdd}/{component}` layout. Modular three-letter namespaces: `gsd` (general + submission data), `arr` (auditor's reports), `mrv` (management's review), `sob` (statement of boards), `fsa` (financial statements), `dst`/`tax`/`eogs`, plus `tch`/`cmn` common schemas with `da`/`en` label linkbases.
 

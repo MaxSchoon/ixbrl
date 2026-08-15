@@ -162,6 +162,18 @@ the declared standard is unachievable rather than merely unmet. Run
 `.venv/bin/python -m pyright` before opening a PR if you touched `scripts/` or
 `tests/`.
 
+**Section references.** The jurisdiction references under
+`references/jurisdictions/` use named, anchored sections, not numbers — numbers
+renumber, and `see 4.2` then silently points at unrelated content. Cite a
+section by name. `tests/check_section_refs.py` enforces it.
+
+Its one honest limitation: German, Danish, Finnish and Nordic law is cited with
+the same `§` symbol, so a bare `§ 335` in `de-hgb.md` is `HGB § 335` with the
+statute implied by context. Classifying those by pattern is unwinnable, and
+guessing wrong would edit a legal citation — much worse than the stale reference
+it was chasing. So the bare-number scan is skipped for those jurisdictions and
+the unambiguous check (a reference that names its target file) carries the load.
+
 **Tests.** `tests/test_check_facts.py` covers `scripts/check_facts.py` with
 stdlib `unittest` — no runner dependency, matching the dependency-light rule
 above. Run `.venv/bin/python -m unittest discover -s tests -p 'test_*.py'`. A
