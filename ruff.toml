@@ -1,0 +1,15 @@
+# Ruff is the standardization gate for this repo's Python (see CONTRIBUTING.md
+# § Code conventions). Config lives here rather than in pyproject.toml because
+# this repo is a skill, not a distributable package — matching pyrightconfig.json,
+# which is standalone for the same reason.
+
+# ubuntu-latest ships 3.10+; CI relies on the system python3 with no setup-python.
+target-version = "py310"
+line-length = 88  # ruff/black default; the code already sits under it bar two lines
+
+[lint]
+# Mainstream, low-churn selection: pycodestyle, pyflakes, import order, bugbear,
+# pyupgrade, simplify, comprehensions, ruff's own checks. Deliberately excludes
+# the opinionated families (ANN, TRY, EM, ARG) — they would force a dialect on a
+# 380-line surface without catching anything the gate below does not already.
+select = ["E", "W", "F", "I", "B", "UP", "SIM", "C4", "RUF"]

@@ -19,14 +19,14 @@ separately.
 from __future__ import annotations
 
 import re
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 ASSETS = ROOT / "assets"
 SKILL = ROOT / "SKILL.md"
 
-MAX_SKILL_BYTES = 32 * 1024  # 32 KiB — common harness ceiling for an auto-loaded SKILL.md
+# 32 KiB — the common harness ceiling for an auto-loaded SKILL.md.
+MAX_SKILL_BYTES = 32 * 1024
 MAX_DESCRIPTION_CHARS = 1024
 
 errors: list[str] = []
@@ -106,7 +106,10 @@ def check_asset_crossrefs() -> None:
                     f"{path.name}: xlink:href to extension-schema.xsd#{target} "
                     "has no matching id= in extension-schema.xsd"
                 )
-    print(f"Asset cross-references OK ({referenced} checked against {len(declared_ids)} ids)")
+    print(
+        f"Asset cross-references OK "
+        f"({referenced} checked against {len(declared_ids)} ids)"
+    )
 
 
 def main() -> int:
