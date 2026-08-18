@@ -27,11 +27,22 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 import check_facts
 from check_facts import truncates_nonzero_digits
 
+# `ixt` and the concept prefixes must be DECLARED, not merely written. A
+# transformation name and a concept name are both QNames, and the checker
+# resolves them through the in-scope namespaces. Fixtures that used an
+# undeclared prefix were exercising unresolved names and proved nothing about
+# the resolved path.
+IXT_NS = "http://www.xbrl.org/inlineXBRL/transformation/2022-02-16"
+ENTITY_NS = "http://example.com/entity"
 NS_DECL = (
     'xmlns="http://www.w3.org/1999/xhtml" '
     'xmlns:ix="http://www.xbrl.org/2013/inlineXBRL" '
     'xmlns:xbrli="http://www.xbrl.org/2003/instance" '
-    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
+    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+    f'xmlns:ixt="{IXT_NS}" '
+    f'xmlns:e="{ENTITY_NS}" '
+    f'xmlns:f="{ENTITY_NS}" '
+    'xmlns:fake="http://example.com/not-the-registry"'
 )
 
 
@@ -563,13 +574,17 @@ class CheckFactsTestCase(unittest.TestCase):
         """
         for ch in "'\u0060\u00b4\u2019\u2032":
             with self.subTest(char=hex(ord(ch))):
-                self.assertEqual(
-                    self.defects(
-                        self._fact(
-                            f"1{ch}234.56", "2", ' format="ixt:num-dot-decimal-apos"'
-                        )
-                    ),
-                    [],
+                # Assert the value was DECODED, not merely that no defect was
+                # reported: filtering notes out would let a decline pass here.
+                # decimals="-2" truncates 1234.56, so a verdict proves the
+                # separator was read and the value understood.
+                issues = self.run_on(
+                    self._fact(
+                        f"1{ch}234.56", "-2", ' format="ixt:num-dot-decimal-apos"'
+                    )
+                )
+                self.assertTrue(
+                    any("1234.56" in i for i in issues), f"not decoded: {issues}"
                 )
         for ch in "\u02bc\uff07":
             with self.subTest(declined=hex(ord(ch))):
@@ -608,6 +623,113 @@ class CheckFactsTestCase(unittest.TestCase):
                 check_facts.canonical_fact_text("10000000000000000000000000000.1"),
                 check_facts.canonical_fact_text("10000000000000000000000000000.2"),
             )
+
+    def _dup(self, *facts):
+        return doc(CONTEXT_AND_UNIT + "".join(facts))
+
+    def _nf(self, name, decimals, value, extra=""):
+        return (
+            f'<ix:nonFraction name="{name}" contextRef="c1" unitRef="u1"'
+            f' decimals="{decimals}"{extra}>{value}</ix:nonFraction>'
+        )
+
+    def test_transformation_namespace_must_be_the_registry(self):
+        """@format is a QName; the local part alone does not identify it.
+
+        `fake:num-dot-decimal` is a different name in a different namespace and
+        must be declined, not decoded as the registry transformation.
+        """
+        issues = self.run_on(
+            self._fact("1,234.56", "0", ' format="fake:num-dot-decimal"')
+        )
+        self.assertTrue(any(i.startswith("NOTE") for i in issues), f"got {issues}")
+        self.assertFalse(
+            any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+            f"got {issues}",
+        )
+
+    def test_malformed_transformation_input_is_declined(self):
+        """Text that does not fit the grammar yields no value at all.
+
+        Runs of separators, or one in a leading or trailing position, are not
+        a grouping. Stripping them anyway would invent a number.
+        """
+        for text in ("1,,234.56", ",234", "1,234,", "1.2.3", "12a4"):
+            with self.subTest(text=text):
+                issues = self.run_on(
+                    self._fact(text, "0", ' format="ixt:num-dot-decimal"')
+                )
+                self.assertTrue(
+                    any(i.startswith("NOTE") for i in issues), f"{text}: {issues}"
+                )
+
+    def test_concept_identity_is_the_expanded_name(self):
+        """Two prefixes bound to one namespace name the same concept.
+
+        Comparing the lexical QName treated e:A and f:A as unrelated, so an
+        inconsistency between them went unreported.
+        """
+        issues = self.run_on(
+            self._dup(self._nf("e:A", "0", "5"), self._nf("f:A", "0", "6"))
+        )
+        self.assertTrue(any("inconsistent" in i for i in issues), f"got {issues}")
+
+    def test_duplicate_group_with_an_undecodable_member_is_declined(self):
+        """Consistency is unknown, so it must be neither asserted nor denied.
+
+        Reporting an inconsistency would compare a decoded value against raw
+        text; staying silent would imply the group was checked and agreed.
+        """
+        issues = self.run_on(
+            self._dup(
+                self._nf("e:A", "0", "5"),
+                self._nf("e:A", "0", "12 34", ' format="ixt:num-unit-decimal"'),
+            )
+        )
+        self.assertFalse(any("inconsistent" in i for i in issues), f"got {issues}")
+        self.assertTrue(
+            any("duplicate-fact group" in i for i in issues), f"got {issues}"
+        )
+
+    def test_duplicate_consistency_is_modulo_decimals(self):
+        """The same amount tagged at different roundings is not a disagreement.
+
+        This is the behaviour the module docstring claims, and the exact-value
+        comparison it replaced did not provide it.
+        """
+        agreeing = [
+            (self._nf("e:A", "0", "5"), self._nf("e:A", "2", "5.00")),
+            (self._nf("e:A", "-3", "45000"), self._nf("e:A", "INF", "45000")),
+            (self._nf("e:A", "-3", "45000"), self._nf("e:A", "0", "45200")),
+        ]
+        for facts in agreeing:
+            with self.subTest(facts=facts):
+                issues = self.run_on(self._dup(*facts))
+                self.assertFalse(
+                    any("inconsistent" in i for i in issues), f"got {issues}"
+                )
+
+    def test_touching_intervals_are_not_consistent(self):
+        """5 and 6 at decimals=0 describe [4.5, 5.5) and [5.5, 6.5).
+
+        They touch but share no value. Treating both bounds as closed would
+        call adjacent whole numbers consistent.
+        """
+        issues = self.run_on(
+            self._dup(self._nf("e:A", "0", "5"), self._nf("e:A", "0", "6"))
+        )
+        self.assertTrue(any("inconsistent" in i for i in issues), f"got {issues}")
+
+    def test_directory_argument_is_a_usage_error(self):
+        """exists() is true for a directory, which then raised in the parser."""
+        argv, stderr = sys.argv, sys.stderr
+        sys.argv = ["check_facts.py", str(Path(__file__).parent)]
+        sys.stderr = io.StringIO()
+        try:
+            code = check_facts.main()
+        finally:
+            sys.argv, sys.stderr = argv, stderr
+        self.assertEqual(code, 2)
 
     def test_unresolved_context_is_flagged(self):
         body = (
