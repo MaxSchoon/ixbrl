@@ -911,6 +911,37 @@ class CheckFactsTestCase(unittest.TestCase):
             with self.subTest(text=text):
                 self.assertEqual(self.defects(self._fact(text, "INF")), [])
 
+    def test_unresolved_unit_is_flagged(self):
+        """A unitRef with no matching xbrli:unit is a defect.
+
+        A mutation sweep found this check had no test at all: deleting it left
+        the suite green. Its sibling contextRef check was covered.
+        """
+        body = (
+            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1"'
+            ' unitRef="nope" decimals="0">5</ix:nonFraction>'
+        )
+        issues = self.run_on(doc(body))
+        self.assertTrue(
+            any("unitRef='nope' not defined" in i for i in issues), f"got {issues}"
+        )
+
+    def test_missing_required_references_are_flagged(self):
+        """contextRef and unitRef are both required on a numeric fact."""
+        for missing, present in (
+            ("contextRef", 'unitRef="u1"'),
+            ("unitRef", 'contextRef="c1"'),
+        ):
+            with self.subTest(missing=missing):
+                body = (
+                    CONTEXT_AND_UNIT + f'<ix:nonFraction name="e:A" {present}'
+                    ' decimals="0">5</ix:nonFraction>'
+                )
+                issues = self.run_on(doc(body))
+                self.assertTrue(
+                    any(f"missing @{missing}" in i for i in issues), f"got {issues}"
+                )
+
     def test_unresolved_context_is_flagged(self):
         body = (
             CONTEXT_AND_UNIT
