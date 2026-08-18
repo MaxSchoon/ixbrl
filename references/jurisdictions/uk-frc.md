@@ -425,7 +425,7 @@ detected from the instance, not assumed.
 | FRS 102 (incl. Section 1A small) | FRS 102 | Common small/medium UK GAAP path |
 | FRS 101 | FRS 101 | Reduced-disclosure IFRS-based |
 | UK-adopted IFRS | UK IFRS | Listed + voluntary IFRS adopters |
-| Charities (FRS 102 SORP) | Charities | Adds charity registration + audit Boolean (see *The 2026 suite changed the audit-report tag set*) |
+| Charities (FRS 102 SORP) | Charities | Adds charity registration (except Academy Trusts) + audit Boolean (see *The 2026 suite changed the audit-report tag set*) |
 
 Status classifiers the validator branches on: **audited vs audit-exempt**
 (with/without accountants' report), **dormant**, **micro-entity**,
@@ -479,7 +479,17 @@ absence a defect:
   principal activities, plus at least one of
   `CharityRegistrationNumber{EnglandWales, Scotland, NorthernIreland}`;
   `AccountsTypeFullOrAbbreviated` is **not** mandatory there, but if
-  present must equal `FullAccounts`. [CH TIS for accounts v5.9]
+  present must equal `FullAccounts`. **Academy Trusts are the exception
+  to the charity number.** They are charitable companies exempt from
+  registration with the Charity Commission, with the Department for
+  Education as principal regulator, and they report under the Charities
+  SORP (FRS 102) using the `AcademyTrust` member of the Legal Form of
+  Entity dimension, added to the Charities taxonomy for that purpose.
+  With the 2024 suite, TIS v5.9 records that "Companies House filing
+  rules have also been amended to allow Academy Trusts to file
+  electronically by removing the mandatory Charity number requirement".
+  `UKCompaniesHouseRegisteredNumber` still applies. [CH TIS for accounts
+  v5.9]
 - **Divergences to hold in mind**, since they are the reason the split
   matters. `LegalFormEntity`: always mandatory at HMRC, LLP-only at CH.
   `DescriptionPrincipalActivities`: always mandatory at HMRC, CIC34-only

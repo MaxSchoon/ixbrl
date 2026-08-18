@@ -41,11 +41,11 @@ All from base `http://www.xbrl.org/2009/role/`:
 
 > **Honest gap note:** A `negatedVerboseLabel` was not present in the
 > registry contents fetched. Treat its existence as unverified; the
-> verified negated set is the six above plus
-> `netLabel` / `negatedNetLabel`. The LRR also intentionally does not
-> register `*PeriodEndTotalLabel`-style negated variants; instead it
-> offers `positivePeriodEndTotalLabel`,
-> `negativePeriodEndTotalLabel`, etc.
+> verified set is the six negated roles above plus `netLabel`, which
+> is listed here because it pairs with `negatedNetLabel` and not
+> because it negates a sign. The LRR also does not register
+> `*PeriodEndTotalLabel`-style negated variants; instead it offers
+> `positivePeriodEndTotalLabel`, `negativePeriodEndTotalLabel`, etc.
 
 ### Other LRR roles (verified)
 

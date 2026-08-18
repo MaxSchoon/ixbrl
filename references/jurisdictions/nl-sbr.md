@@ -467,9 +467,15 @@ Run Calc 1.0 (`--calc c10`) **as well**, as a separate pass. Calc 1.1
 is the RTS Annex III specification basis and the better *review*
 instrument, but the NT20 Filing Rules list XBRL 2.1 as the normative
 calculation basis, so the KvK deposit-acceptance test runs on Calc 1.0
-semantics (`references/validation.md` §4). The package must pass both: 1.1 tells
-you what is substantively wrong, 1.0 tells you whether KvK will accept
-it. Do not let a Calc 1.0 result override the RTS on *review*
+semantics (`references/validation.md` §4). Read the two logs for
+different questions: 1.1 tells you what is substantively wrong, 1.0
+tells you what the KvK acceptance test will see. Neither log is a
+pass/fail gate on its own. XBRL Calculations 1.1 §3.1 states that
+calculation inconsistency errors do not render a report invalid, and
+the note in XBRL Calculations 1.1 §4.1 extends that to XBRL 2.1
+consistency checking. Clear every in-scope inconsistency and document
+each cross-scope one; a non-empty calc log is not by itself a
+rejection. Do not let a Calc 1.0 result override the RTS on *review*
 questions, and do not skip the 1.0 pass on the assumption that 1.1
 supersedes it. **Not re-verified against the NT21 Filing Rules.**
 
@@ -894,8 +900,10 @@ walk this in order. Each step depends on the prior being clean.
    Calculations 1.1 in both RTS 2025 and RTS 2026 (it handles iXBRL
    duplicate facts and surfaces the dual-statement cross-scope
    inconsistencies Calc 1.0 hides). Then run **Calc 1.0** (`--calc c10`) as a
-   separate pass for the deposit-acceptance verdict: the package must
-   pass both (*Calculation linkbase scope-bleed, and why Calc 1.1 is
+   separate pass for the deposit-acceptance verdict. Clear every
+   in-scope inconsistency in either log and document each cross-scope
+   one; a non-empty calc log is not by itself a rejection
+   (*Calculation linkbase scope-bleed, and why Calc 1.1 is
    the RTS basis*, `references/validation.md` §4).
    Classify any cross-scope inconsistency by role-vs-context before
    treating it as a defect.

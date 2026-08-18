@@ -92,12 +92,18 @@ Recommendation (22 June 2009) governs how implementations are tested.
 
 ### Function categories with verified examples
 
-Three function namespaces are present in the registry:
+Five function namespaces are present in the registry. Three hold
+Recommendation status:
 
 - `xfi`: XBRL Functions for Instances. Verified namespace URI: **`http://www.xbrl.org/2008/function/instance`**.
-- `xff`: XBRL Formula Functions (a smaller library, e.g., uncovered-aspect helpers).
-- `xfm`: XBRL math functions added 29 October 2018 (REC).
-- `f:` and `r:` are newer OIM-era functions in Candidate Recommendation status.
+- `xff`: XBRL Formula Functions (a smaller library, e.g., uncovered-aspect helpers). Verified namespace URI: **`http://www.xbrl.org/2010/function/formula`**.
+- `xfm`: XBRL math functions added 29 October 2018. Verified namespace URI: **`http://www.xbrl.org/2008/function/math`**.
+
+Two were added for the Open Information Model and stand at Candidate
+Recommendation status:
+
+- `f`: fact-level functions. Verified namespace URI: **`https://xbrl.org/CR/2024-02-14/function/fact`**.
+- `r`: report-level functions. Verified namespace URI: **`https://xbrl.org/CR/2024-02-14/function/report`**.
 
 Function categories with verified QNames and signatures (each lifted
 directly from the registry table):

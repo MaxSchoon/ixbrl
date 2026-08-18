@@ -540,11 +540,16 @@ route its generic mechanics to `references/esef.md`.
   2022/2464) amends 2013/34/EU and is the still-pending German CSRD-UG
   (see the *CSRD / ESRS* profile).
 - **ESRS trajectory.** ESRS are a directly-applicable delegated regulation
-  (Del. Reg. (EU) 2023/2772) needing no national transposition, so they
-  bind in-scope German undertakings even while the CSRD-UG lags. Omnibus I
-  (Directive (EU) 2026/470) reforms ESRS and **suspends the digital mark-up
-  requirement** until the ESEF RTS is updated (see the *CSRD / ESRS*
-  profile).
+  (Del. Reg. (EU) 2023/2772) needing no national transposition, but that is
+  standard-level applicability, not a German filing obligation. Art. 1 names
+  the standards undertakings use "in accordance with Articles 19a and 29a of
+  Directive 2013/34/EU"; the duty sits in those directive articles and
+  Germany has not transposed them. No German undertaking is therefore
+  obliged to report under ESRS until the CSRD-UG is in force. For FY2025 the
+  pre-existing NFRD-based regime governs and ESRS use is voluntary (see the
+  *CSRD / ESRS* profile). Omnibus I (Directive (EU) 2026/470) reforms ESRS
+  and **suspends the digital mark-up requirement** until the ESEF RTS is
+  updated.
 
 **The coexistence rule (practitioner takeaway).** A **non-listed HGB
 entity** files **E-Bilanz** (plain XBRL 2.1 → Finanzverwaltung) **and**
@@ -865,7 +870,8 @@ what the source establishes.
 - DRSC, CSRD-UG Anhörung & Änderungsantrag,
   <https://www.drsc.de/news/csrd-umsetzungsgesetz-oeffentliche-anhoerung-aenderungsantrag/>:
   CSRD-UG status; Änderungsanträge 31 Mar 2026; hearing 13 Apr 2026;
-  CSRD deadline was 6 Jul 2024; ESRS directly applicable.
+  CSRD deadline was 6 Jul 2024; ESRS apply directly to undertakings already
+  in scope, and specify duties the CSRD creates.
 - *(tier 2, professional chamber)* WPK, Q&A CSRD-UG (7 Jan 2026),
   <https://www.wpk.de/fileadmin/documents/Wissen/Nachhaltigkeit/WPK_Nachhaltigkeit_CSRD_Fragen_Antworten_Anwendung_Umsetzung_07-01-2026.pdf>:
   RegE 3 Sep 2025; Omnibus deferral in Art. 96 Abs. 3/4 EGHGB-E.

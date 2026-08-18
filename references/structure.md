@@ -247,7 +247,7 @@ instance-side pointers:
   - `http://www.xbrl.org/2003/role/labelLinkbaseRef`
   - `http://www.xbrl.org/2003/role/referenceLinkbaseRef`
 - **`link:roleRef`**: declares any custom `xlink:role` URIs used by the instance's footnote links. Points at the `link:roleType` declaration in a schema.
-- **`link:arcroleRef`**: same role for custom arcroles used in the instance's footnote arcs.
+- **`link:arcroleRef`**: declares any custom `xlink:arcrole` URIs used by the instance's footnote arcs. Points at the `link:arcroleType` declaration in a schema.
 
 In an Inline XBRL document, these four elements live inside
 `ix:references` in the host XHTML's `<head>` and behave identically to

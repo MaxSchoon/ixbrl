@@ -71,9 +71,11 @@ zip / manifest, lets you `--saveInstance` to extract the underlying
 XBRL instance for downstream XBRL-only validators.
 
 **`OimTaxonomy` / report-package handling**: Taxonomy package + report
-package loading. Arelle understands `.zip` report packages with
-`META-INF/taxonomyPackage.xml`, `META-INF/reports.json`, and the
-`reports/` folder.
+package loading. Arelle understands `.zip`, `.xbr` and `.xbri` report
+packages: the `reports/` folder under the single top-level directory,
+`META-INF/reportPackage.json` (mandatory for `.xbr` and `.xbri`,
+optional for `.zip`), and `META-INF/taxonomyPackage.xml` when the
+package doubles as a taxonomy package.
 
 **`transforms/`**: Inline XBRL Transformation Registry implementations
 (TR1–TR5).
@@ -186,7 +188,7 @@ work but not in itself a defect. Distinguish them by reading the
 | `ESEF.2.1.4.multipleIdentifiers` | Different `<xbrli:identifier>` values across contexts | Mixed parent + subsidiary LEI | Keep one identifier per report |
 | `ESEF.2.2.1.precisionAttributeUsed` | `precision` attribute on a numeric fact | Hand-edited XBRL | Use `decimals` exclusively |
 | `ESEF.2.2.2.percentGreaterThan100` | Percentage fact > 1 (or > 100 depending on scale) | Filer wrote `25` for 25% on a `pure`-typed concept that requires `0.25` | Apply `xbrli:pure` scaling correctly |
-| `ESEF.2.2.3.incorrectTransformationRuleApplied` | `format` does not transform the displayed text to the declared datatype | Wrong TR registry version, comma-vs-dot locale mismatch | Pick the correct `ixt:numdotdecimal` / `ixt:numcomadot` etc. |
+| `ESEF.2.2.3.incorrectTransformationRuleApplied` | `format` does not transform the displayed text to the declared datatype | Wrong TR registry version, comma-vs-dot locale mismatch | Pick the correct `ixt:num-dot-decimal` / `ixt:num-comma-decimal` etc. |
 | `ESEF.2.2.4.inconsistentDuplicateNumericFactInInlineXbrlDocument` | Same concept+context+unit reported with different numeric values | Tagging the same number twice with rounding drift | Make values equal at their declared `decimals` |
 | `ESEF.2.2.4.inconsistentDuplicateNonnumericFactInInlineXbrlDocument` | Two non-numeric facts with same context but different text | Translation block tagged twice | Use a single tag and a continuation chain |
 | `ESEF.2.2.5.roundedValueBelowScaleNotNull` | Scaled fact rounds to zero but underlying value non-zero | Aggressive `scale="6"` on an immaterial line | Tag at finer scale, or omit |
@@ -289,7 +291,7 @@ tooling).
 10. **Identifier scheme drift across contexts.** Mixing LEI and CIK schemes in different contexts of the same instance. ESEF requires a single LEI scheme; SEC requires a single CIK scheme.
 11. **Footnotes vs `ix:footnote` element confusion.** Visual footnotes in the rendered XHTML are not XBRL footnotes. The XBRL footnote model is `ix:footnote` plus a fact-footnote arc. Visual footnotes carry zero validation weight.
 12. **Empty / whitespace-only `ix:nonNumeric` blocks.** Tagged paragraph with only whitespace is technically valid but useless and frequently trips formula assertions.
-13. **Format mismatches (TR transformation against value).** `format="ixt:numcomadot"` on a number rendered with thousands-dot and decimal-comma. Triggers `ESEF.2.2.3`.
+13. **Format mismatches (TR transformation against value).** `format="ixt:num-dot-decimal"` on a number rendered with thousands-dot and decimal-comma. Triggers `ESEF.2.2.3`.
 14. **Currency mismatch between `unitRef` and reported currency.** EUR-presenting filing tagging revenue with a USD `xbrli:unit`. SEC catches via `EFM.6.05.42`.
 15. **Wrong namespace for shared concepts.** A concept exists in exactly one namespace. Using a jurisdiction-extension version when the core concept exists makes the calc tree fail.
 16. **`decimals` that does not match the reported value.** `INF` asserts the value is exact, so on a rounded figure it is a lie, and the EDGAR XBRL Guide section 6.6.4 reserves it for exactly reported amounts. The machine-checkable half is the converse: a finite `decimals` that zeroes a non-zero digit triggers `EFM.6.05.37` (Guide section 9.5) and equivalent ESEF inconsistency checks. Note the test is asymmetric, so a `decimals` finer than the value's accuracy is conformant.
@@ -303,7 +305,7 @@ tooling).
 24. **Negative values on credit-balance concepts ignored.** Tagging a credit-balance concept with the same sign as a debit-balance concept inverts arithmetic in any downstream consumer. Look up `balance` on the concept declaration and align the sign.
 25. **Linkbase arc `from`/`to` pointing at a QName instead of the loc label.** An XLink extended-link arc references the `xlink:label` of a `link:loc`, *not* the concept's QName or href. Authoring a `definitionArc`/`presentationArc`/`calculationArc` with `xlink:from="kvk_LineItemsInConsolidatedFinancialStatementsPlaceholder"` (the resolved concept name) instead of the locator's actual label (e.g. `placeholder_consolidated_loc`, `statement_root_loc`) yields `xbrl.3.5.3.9.2:arcResource` ("attribute 'from' has no matching loc or resource label") and, downstream, `xbrldie:PrimaryItemDimensionallyInvalidError` because the intended domain-member relationship never forms. Beware: audit/dump scripts often *resolve* loc labels to their href localnames for readability, which hides the real label. Read the raw `xlink:label` before reusing it as an arc endpoint.
 26. **Tagging a concept that does not exist in the operative DTS.** A fact whose `name` is a plausible-but-nonexistent QName, either a concept invented from memory (`bw2-titel9:Result` when only `rj:Result` exists) or the right local name under the wrong prefix (`rj:PayablesBanksCurrent` vs `bw2-titel9:PayablesBanksCurrent`), is **unbound**: Arelle reports `ix11.12.1.2:missingReferences` ("Instance fact missing schema definition") and any locator referencing it fails with `xbrl.3.5.4:hrefIdNotFound` + `xbrl.5.2.6.1:definitionLinkLocTarget`. This is worse than a warning; the fact carries no concept semantics at all. Never guess a QName: confirm the exact prefix *and* local name against the operative taxonomy schema (e.g. grep the `*-cor.xsd` in Arelle's cache, or check the namespace a sibling/twin fact already uses) before tagging. The cheapest catch is to validate early; `missingReferences` surfaces immediately.
-27. **Forgetting `META-INF/taxonomyPackage.xml` in the report package.** Without it Arelle cannot locate the taxonomy and validation aborts immediately.
+27. **Omitting `META-INF/taxonomyPackage.xml` from a package whose report resolves its taxonomy through a catalog.** Report Packages 1.0 makes only the `reports/` directory mandatory (§4.7). The taxonomy manifest is required when the package is also a taxonomy package (§4.6), and without it `META-INF/catalog.xml` is ignored (§6), so an absolute `schemaRef` into the bundled extension taxonomy never resolves. A package whose report references only public taxonomy URLs needs no manifest. ESEF is stricter: Arelle validates every ESEF submission as a taxonomy package and aborts loading with `ESEF.RTS.Annex.III.3.missingOrInvalidTaxonomyPackage` when the manifest is missing or invalid.
 
 ## 7. Conformance suites and test material
 
@@ -325,7 +327,7 @@ order. Skipping a step is how filings reach the regulator broken.
 1. **Validate against the base XBRL spec.** Run Arelle with no jurisdiction plugin, just `--validate`. Catches XBRL 2.1 schema, linkbase, dimension and units violations (`xbrl.*`, `xbrldie:*`).
 2. **Validate against the jurisdiction's filer-manual rules.** Add `--plugins validate/ESEF` (with `--disclosureSystem esef-2024`), `validate/EFM`, `validate/UK`, `validate/EBA`, `validate/NL` as appropriate. This is where `ESEF.*`, `EFM.*`, `UKFRC.*` codes appear.
 3. **Run formula assertions.** Many regulators ship Formula 1.0 linkbases. Verify with `--formulaAsserResultCounts` that the count of unsatisfied assertions is zero.
-4. **Verify report-package structure.** Confirm `META-INF/taxonomyPackage.xml` (and `META-INF/reports.json` for newer packages), correct file extensions (`.xhtml`, not `.html`), correct naming, and that the report file lives under the expected `reports/` path.
+4. **Verify report-package structure.** Confirm the `reports/` directory under the single top-level directory, `META-INF/reportPackage.json` where the extension is `.xbr` or `.xbri`, `META-INF/taxonomyPackage.xml` where the package ships a taxonomy or a catalog remapping, correct file extensions (`.xhtml`, not `.html`), and correct naming.
 5. **Hash and seal.** For regulators that require cryptographic sealing (KvK Digipoort/SBR; some EBA flows), produce the digest after step 4 and sign. Do not seal before the prior steps are clean.
 
 ## Sources
@@ -340,6 +342,7 @@ order. Skipping a step is how filings reach the regulator broken.
 - https://specifications.xbrl.org/spec-group-index-formula.html
 - https://specifications.xbrl.org/work-product-index-inline-xbrl-inline-xbrl-1.1.html
 - https://specifications.xbrl.org/work-product-index-group-base-spec-base-spec.html
+- https://specifications.xbrl.org/work-product-index-taxonomy-packages-report-packages-1.0.html
 - https://www.esma.europa.eu/document/esef-conformance-suite-2025
 - https://www.esma.europa.eu/document/esef-reporting-manual
 - https://www.sec.gov/files/edgar/filer-information/specifications/xbrl-guide.pdf
