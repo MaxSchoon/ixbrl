@@ -141,27 +141,78 @@ class CheckFactsTestCase(unittest.TestCase):
         issues = self.run_on(doc(body))
         self.assertTrue(any("missing @decimals" in i for i in issues))
 
-    def test_decimals_inf_on_an_exact_value_is_allowed(self):
-        """SEC prescribes INF for exact amounts, so this must NOT be flagged.
+    def _fact(self, value, decimals, extra=""):
+        return doc(
+            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1"'
+            f' unitRef="u1" decimals="{decimals}"{extra}>{value}</ix:nonFraction>'
+        )
 
-        EDGAR XBRL Guide section 6.6.4 gives INF as the correct decimals value
-        for an exact monetary, percentage or basis-point amount. Flagging every
-        INF reported a defect against conformant filings.
+    def test_edgar_guide_truncation_examples(self):
+        """The worked table from EDGAR XBRL Guide section 9.5, verbatim.
+
+        Fact text -2345.67 against each decimals value, with the Result column
+        the guide itself gives. These are the authority for EFM 6.5.37, so if
+        the checker disagrees with any row, the checker is wrong.
         """
-        body = (
-            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
-            ' decimals="INF">1234.56</ix:nonFraction>'
-        )
-        self.assertEqual(self.run_on(doc(body)), [])
+        cases = [
+            ("INF", False),
+            ("2", False),
+            ("0", True),
+            ("-2", True),
+            ("-3", True),
+            ("-6", True),
+        ]
+        for decimals, should_flag in cases:
+            with self.subTest(decimals=decimals):
+                issues = self.run_on(self._fact("-2345.67", decimals))
+                flagged = any("6.5.37" in i for i in issues)
+                self.assertEqual(flagged, should_flag, f"got {issues}")
 
-    def test_decimals_inf_on_a_rounded_value_is_flagged(self):
-        """The actual defect EFM 6.05.48 names: INF asserting a rounded figure."""
-        body = (
-            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
-            ' decimals="INF">45000</ix:nonFraction>'
-        )
-        issues = self.run_on(doc(body))
-        self.assertTrue(any("INF" in i for i in issues), f"got {issues}")
+    def test_decimals_finer_than_the_value_is_allowed(self):
+        """The guide states the check is asymmetric.
+
+        "a value such as 1,000,000 may have a decimals attribute with any value
+        greater than -6". Zeroing digits that are already zero loses nothing,
+        so only coarsening is an error. The previous version of this checker
+        flagged exactly these conformant values.
+        """
+        for decimals in ("INF", "0", "-3", "-5", "-6"):
+            with self.subTest(decimals=decimals):
+                self.assertEqual(self.run_on(self._fact("1000000", decimals)), [])
+
+    def test_decimals_coarser_than_the_value_is_flagged(self):
+        """-7 would zero the leading 1 of 1,000,000."""
+        issues = self.run_on(self._fact("1000000", "-7"))
+        self.assertTrue(any("6.5.37" in i for i in issues), f"got {issues}")
+
+    def test_exact_value_with_inf_is_never_flagged(self):
+        """INF is prescribed for an exact amount (guide section 6.6.4)."""
+        for value in ("1234.56", "45000", "0.0325", "1000000"):
+            with self.subTest(value=value):
+                self.assertEqual(self.run_on(self._fact(value, "INF")), [])
+
+    def test_scale_is_applied_before_the_check(self):
+        """@scale changes the reported value, so it changes the verdict.
+
+        Text 45 with scale=3 reports 45000. decimals=-3 zeroes nothing there
+        and must pass; decimals=-6 would zero the 45 and must fail.
+        """
+        self.assertEqual(self.run_on(self._fact("45", "-3", ' scale="3"')), [])
+        issues = self.run_on(self._fact("45", "-6", ' scale="3"'))
+        self.assertTrue(any("6.5.37" in i for i in issues), f"got {issues}")
+
+    def test_unreadable_value_is_not_judged(self):
+        """A value this script cannot parse must produce no truncation verdict.
+
+        @format may name a transformation from the registry that is not
+        implemented here. Guessing would produce confident nonsense.
+        """
+        issues = self.run_on(self._fact("twelve thousand", "-3"))
+        self.assertFalse(any("6.5.37" in i for i in issues), f"got {issues}")
+
+    def test_thousands_separators_are_read(self):
+        issues = self.run_on(self._fact("1,234.56", "-2"))
+        self.assertTrue(any("6.5.37" in i for i in issues), f"got {issues}")
 
     def test_unresolved_context_is_flagged(self):
         body = (

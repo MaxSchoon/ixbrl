@@ -1,15 +1,15 @@
 # Contributing to the iXBRL Skill
 
-Thanks for considering a contribution. This skill is read by AI agents, so its accuracy directly affects the quality of iXBRL filings produced by people who rely on it. Contributions are welcome from anyone — filers, regulators, taxonomy authors, validation engineers, accountants, auditors.
+Thanks for considering a contribution. This skill is read by AI agents, so its accuracy directly affects the quality of iXBRL filings produced by people who rely on it. Contributions are welcome from anyone: filers, regulators, taxonomy authors, validation engineers, accountants, auditors.
 
 ## What this project is
 
 An open, primary-source-grounded skill for any AI agent runtime that supports the standard skill convention. Maintained by [Doc2iXBRL](https://doc2ixbrl.com). It contains:
 
-- `SKILL.md` — the agent entrypoint
-- `references/` — primary-source-cited reference notes for XBRL 2.1, iXBRL 1.1, ESEF, EDGAR/EFM, dimensions, taxonomies, validation, registries, DPM, etc.
-- `assets/` — runnable scaffolds (iXBRL skeleton, schema, linkbases, taxonomy package, catalog)
-- `scripts/` — local validation helpers
+- `SKILL.md`: the agent entrypoint
+- `references/`: primary-source-cited reference notes for XBRL 2.1, iXBRL 1.1, ESEF, EDGAR/EFM, dimensions, taxonomies, validation, registries, DPM, etc.
+- `assets/`: runnable scaffolds (iXBRL skeleton, schema, linkbases, taxonomy package, catalog)
+- `scripts/`: local validation helpers
 
 There are no harness-specific assumptions in this repo. Do not introduce them.
 
@@ -121,21 +121,21 @@ Install `libxml2-utils` (Linux) or use the `xmllint` shipped with macOS. Arelle 
 
 ## Code conventions
 
-Most of this repo is prose and static assets. The small amount of code —
-`scripts/` and `tests/` — follows one shared standard so it can be read as one
-artifact rather than a file-by-file dialect.
+Most of this repo is prose and static assets. The small amount of code
+(`scripts/` and `tests/`) follows one shared standard so it can be read as
+one artifact rather than a file-by-file dialect.
 
 **Mechanical (enforced by CI; do not work around it).** `ruff` is both the
 linter and the formatter, configured in [`ruff.toml`](ruff.toml): ecosystem
 defaults, 88-column lines, `target-version = "py310"`. Config lives in a
 standalone file rather than `pyproject.toml` because this repo is a skill, not
-a distributable package — matching `pyrightconfig.json`. Run
+a distributable package. This matches `pyrightconfig.json`. Run
 `python3 -m ruff check scripts tests` and `python3 -m ruff format scripts tests`
 before opening a PR. Shell scripts must be `shellcheck`-clean.
 
 Do not silence a finding with `# noqa`, a per-file ignore, or a loosened rule to
 make the gate pass. If a suppression is genuinely warranted, say why in the code
-and in the PR — an unexplained suppression is a rule deleted quietly.
+and in the PR; an unexplained suppression is a rule deleted quietly.
 
 **Structural (convention, not tool-enforced).**
 
@@ -147,7 +147,7 @@ and in the PR — an unexplained suppression is a rule deleted quietly.
   and `main()` returns the exit code rather than calling `exit` itself. Exit
   codes: `0` clean, `1` issues found, `2` usage error, `127` missing dependency.
 - Checkers accumulate findings into a list and report them all at the end. They
-  do not stop at the first problem — a preparer fixing a filing wants the whole
+  do not stop at the first problem; a preparer fixing a filing wants the whole
   list in one run.
 - Parsing untrusted input goes through a hardened parser (see `secure_parser()`
   in `check_facts.py`); do not construct a bare `etree.XMLParser`.
@@ -163,19 +163,19 @@ the declared standard is unachievable rather than merely unmet. Run
 `tests/`.
 
 **Section references.** The jurisdiction references under
-`references/jurisdictions/` use named, anchored sections, not numbers — numbers
+`references/jurisdictions/` use named, anchored sections, not numbers. Numbers
 renumber, and `see 4.2` then silently points at unrelated content. Cite a
 section by name. `tests/check_section_refs.py` enforces it.
 
 Its one honest limitation: German, Danish, Finnish and Nordic law is cited with
 the same `§` symbol, so a bare `§ 335` in `de-hgb.md` is `HGB § 335` with the
 statute implied by context. Classifying those by pattern is unwinnable, and
-guessing wrong would edit a legal citation — much worse than the stale reference
+guessing wrong would edit a legal citation, much worse than the stale reference
 it was chasing. So the bare-number scan is skipped for those jurisdictions and
 the unambiguous check (a reference that names its target file) carries the load.
 
 **Tests.** `tests/test_check_facts.py` covers `scripts/check_facts.py` with
-stdlib `unittest` — no runner dependency, matching the dependency-light rule
+stdlib `unittest`: no runner dependency, matching the dependency-light rule
 above. Run `.venv/bin/python -m unittest discover -s tests -p 'test_*.py'`. A
 bug fix lands with a test that fails without it; two crashes shipped in this
 script precisely because it had no tests.
@@ -211,25 +211,25 @@ When opening a PR, confirm:
 
 The initial release was built via independent multi-agent review: a creator drafted, an independent reviewer audited, a fixer applied corrections, and a fresh auditor re-verified. The discipline catches the kind of plausible-sounding-but-wrong text that single-pass review misses.
 
-If your change touches normative content (spec interpretations, validation rules, scaffold semantics), running a similar review locally — even just two agents from different vendors — is encouraged. Note the review process in your PR description; it makes the reviewer's job easier and helps build trust in the change.
+If your change touches normative content (spec interpretations, validation rules, scaffold semantics), running a similar review locally, even just two agents from different vendors, is encouraged. Note the review process in your PR description; it makes the reviewer's job easier and helps build trust in the change.
 
 ## Reporting bugs and gaps
 
 Issues are most actionable when labeled by kind:
 
-- **Spec-citation correction** — "file says X but the spec actually says Y"
-- **Regulator update** — "ESEF 2026 changed Z, need to update files A and B"
-- **Scaffold regression** — "asset no longer passes xmllint / Arelle"
-- **Trigger misfire** — "skill triggers on X but shouldn't / doesn't trigger on Y but should"
-- **Bug report** — anything else
-- **Enhancement** — proposals for new content or structure
+- **Spec-citation correction**: "file says X but the spec actually says Y"
+- **Regulator update**: "ESEF 2026 changed Z, need to update files A and B"
+- **Scaffold regression**: "asset no longer passes xmllint / Arelle"
+- **Trigger misfire**: "skill triggers on X but shouldn't / doesn't trigger on Y but should"
+- **Bug report**: anything else
+- **Enhancement**: proposals for new content or structure
 
 For security or filing-integrity concerns (a scaffold producing apparently-valid output that fails regulator validation), email contact@doc2ixbrl.com before filing publicly.
 
 ## License
 
-**Attribution is a condition of use.** Anyone who uses this skill — to review
-filings, generate report packages, or build software with it — must credit
+**Attribution is a condition of use.** Anyone who uses this skill (to review
+filings, generate report packages, or build software with it) must credit
 Doc2iXBRL. See [`ATTRIBUTION.md`](ATTRIBUTION.md). Changes must not weaken that
 obligation or reintroduce language describing credit as optional or requested.
 
@@ -239,6 +239,6 @@ repository's terms: **Apache-2.0** for code (`scripts/`, `tests/`) and
 [`NOTICE`](NOTICE).
 
 Contributions merged before the relicensing commit were made under the MIT
-License. They remain identified under MIT — see `NOTICE` § Relicensing history,
-which names them — and are not represented as relicensed. Written consent will
+License. They remain identified under MIT (see `NOTICE` § Relicensing history,
+which names them) and are not represented as relicensed. Written consent will
 be sought before doing so. The MIT text is preserved at `LICENSES/MIT.txt`.

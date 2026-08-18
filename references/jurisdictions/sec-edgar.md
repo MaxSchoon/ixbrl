@@ -15,7 +15,7 @@ profiles:
 
 Reference for Inline XBRL submissions to the U.S. Securities and Exchange Commission. Verify the operative version of every cited rule against the EDGAR Filer Manual at filing date.
 
-## Start here — choose a filing profile
+## Start here: choose a filing profile
 
 | Situation | Profile | Section |
 |---|---|---|
@@ -26,7 +26,7 @@ Reference for Inline XBRL submissions to the U.S. Securities and Exchange Commis
 
 The **EDGAR Filer Manual, Volume II: EDGAR Filing** is authoritative,
 and filers must comply with whichever version is effective at
-**submission** date — not at period end, and not the one current when a
+**submission** date, not at period end, and not the one current when a
 report was drafted. The manual is reissued on EDGAR release cadence, so
 this is a live check, never a remembered fact.
 
@@ -39,10 +39,10 @@ versions.
 
 ### Recent rule updates (last ~24 months)
 
-- **Pay-Versus-Performance** — Release **34-95607**, adopted 25 August 2022, effective 11 October 2022. Compliance for proxy / information statements with fiscal years ending on or after **16 December 2022**. Each value in the PVP table is separately tagged; footnote, relationship, and Tabular List disclosures are block-text tagged. Smaller reporting companies provide Inline XBRL beginning the third PVP filing. Tagging uses the 2022Q4 ECD taxonomy.
-- **Cybersecurity Risk Management, Strategy, Governance, and Incident Disclosure** — Release **33-11216 / 34-97989**, adopted 26 July 2023. New Form 8-K Item 1.05 (and 6-K equivalent) for material cybersecurity incidents, due four business days after materiality determination. Annual-report disclosures sit at **Reg S-K Item 106 on Form 10-K** and at **Item 16K on Form 20-F** — not Item 106 on both. The Inline XBRL tagging obligation runs **one year after** each disclosure's own compliance date, so the two dates differ and must not be conflated: **Form 10-K Item 106 / Form 20-F Item 16K** are tagged for **fiscal years ending on or after 15 December 2024**, while **Form 8-K Item 1.05 / 6-K** (material-incident disclosures) are tagged from **18 December 2024**. Both apply to **all registrants subject to these rules, including SRCs** — the SRC extension applied to the incident *disclosure*, not to tagging. The rules do **not** reach every filer: eligible Form 40-F filers, asset-backed issuers, and registered investment companies are outside them.
-- **Tailored Shareholder Reports** — Release **33-11125**, adopted 26 October 2022. Open-end funds (Form N-1A) must transmit streamlined annual / semi-annual shareholder reports in Form N-CSR using Inline XBRL for transmittals on or after **24 July 2024**.
-- **EDGAR 25.2 / 2026 Taxonomies Updates** — annual taxonomy refreshes (US-GAAP 2025, SRT 2025, DEI 2026) became loadable in EDGAR through 2025–2026. Filers transitioning concept usage should anchor any extensions to the new base elements.
+- **Pay-Versus-Performance**: Release **34-95607**, adopted 25 August 2022, effective 11 October 2022. Compliance for proxy / information statements with fiscal years ending on or after **16 December 2022**. Each value in the PVP table is separately tagged; footnote, relationship, and Tabular List disclosures are block-text tagged. Smaller reporting companies provide Inline XBRL beginning the third PVP filing. Tagging uses the 2022Q4 ECD taxonomy.
+- **Cybersecurity Risk Management, Strategy, Governance, and Incident Disclosure**: Release **33-11216 / 34-97989**, adopted 26 July 2023. New Form 8-K Item 1.05 (and 6-K equivalent) for material cybersecurity incidents, due four business days after materiality determination. Annual-report disclosures sit at **Reg S-K Item 106 on Form 10-K** and at **Item 16K on Form 20-F**, not Item 106 on both. The Inline XBRL tagging obligation runs **one year after** each disclosure's own compliance date, so the two dates differ and must not be conflated: **Form 10-K Item 106 / Form 20-F Item 16K** are tagged for **fiscal years ending on or after 15 December 2024**, while **Form 8-K Item 1.05 / 6-K** (material-incident disclosures) are tagged from **18 December 2024**. Both apply to **all registrants subject to these rules, including SRCs**. The SRC extension applied to the incident *disclosure*, not to tagging. The rules do **not** reach every filer: eligible Form 40-F filers, asset-backed issuers, and registered investment companies are outside them.
+- **Tailored Shareholder Reports**: Release **33-11125**, adopted 26 October 2022. Open-end funds (Form N-1A) must transmit streamlined annual / semi-annual shareholder reports in Form N-CSR using Inline XBRL for transmittals on or after **24 July 2024**.
+- **EDGAR 25.2 / 2026 Taxonomies Updates**: annual taxonomy refreshes (US-GAAP 2025, SRT 2025, DEI 2026) became loadable in EDGAR through 2025–2026. Filers transitioning concept usage should anchor any extensions to the new base elements.
 
 Note: Release **33-11038** is the *proposed* cybersecurity rule
 (March 2022). The final cybersecurity rule is **33-11216**. The
@@ -97,13 +97,13 @@ A submission package combines exactly one US-GAAP (or IFRS for FPIs)
 version plus DEI plus SRT plus any utility taxonomies it dimensionally
 references.
 
-- **US-GAAP Financial Reporting Taxonomy** (FASB) — core balance-sheet, income-statement, cash-flow, footnote elements. 2025 version mirrors FASB release of 16 December 2024.
-- **DEI (Document and Entity Information)** — entity identity, document type, period, amendment flag, filer category. The 2026 DEI taxonomy adds `NYSETX` for NYSE Texas to the exchange data type.
-- **SRT (SEC Reporting Taxonomy)** — schedules, ranges, disposal groups; cross-cutting across US GAAP and IFRS filers.
-- **ECD (Executive Compensation Disclosure)** — Pay-Versus-Performance and clawback disclosures (Reg S-K Item 402(v) and 10D-1). 2022Q4 ECD is the operative PVP version.
-- **COUNTRY, CURRENCY, EXCH, STPR, NAICS, SIC, SNJ** — utility code-list taxonomies.
-- **RR, OEF, CEF, VIP, FND** — fund taxonomies.
-- **RXP** — Resource Extraction Payments.
+- **US-GAAP Financial Reporting Taxonomy** (FASB): core balance-sheet, income-statement, cash-flow, footnote elements. 2025 version mirrors FASB release of 16 December 2024.
+- **DEI (Document and Entity Information)**: entity identity, document type, period, amendment flag, filer category. The 2026 DEI taxonomy adds `NYSETX` for NYSE Texas to the exchange data type.
+- **SRT (SEC Reporting Taxonomy)**: schedules, ranges, disposal groups; cross-cutting across US GAAP and IFRS filers.
+- **ECD (Executive Compensation Disclosure)**: Pay-Versus-Performance and clawback disclosures (Reg S-K Item 402(v) and 10D-1). 2022Q4 ECD is the operative PVP version.
+- **COUNTRY, CURRENCY, EXCH, STPR, NAICS, SIC, SNJ**: utility code-list taxonomies.
+- **RR, OEF, CEF, VIP, FND**: fund taxonomies.
+- **RXP**: Resource Extraction Payments.
 
 ### Custom (extension) elements
 
@@ -113,7 +113,7 @@ Extensions are declared in the filer's company schema
 - Declared in the filer's namespace, with a stable PascalCase name (no spaces).
 - Standard Label and (where applicable) Terse, Verbose, Negated, or Period-Start/End labels in a label linkbase.
 - Wired into a presentation linkbase under the appropriate parent and given a calculation-linkbase relationship if the value participates in an arithmetic roll-up.
-- **Anchored** to the closest base-taxonomy element via a `widerNarrower` (or comparable) definition-linkbase relationship — the SEC equivalent of ESEF anchoring; enforced for IFRS filers under the IFRS-Taxonomy entry-point rules.
+- **Anchored** to the closest base-taxonomy element via a `widerNarrower` (or comparable) definition-linkbase relationship (the SEC equivalent of ESEF anchoring); enforced for IFRS filers under the IFRS-Taxonomy entry-point rules.
 
 The EFM and EDGAR XBRL Guide explicitly require filers to use a base
 element when one is "available and appropriate" before creating an
@@ -145,15 +145,25 @@ have at least one occurrence outside `ix:hidden`.
 
 ### Decimals, units, and signs
 
-EFM 6.5.16 and the EDGAR XBRL Guide:
+EDGAR XBRL Guide sections 9.5 and 6.6.4, validated by EFM 6.5.17 and 6.5.37:
 
-- Every numeric `ix:nonFraction` carries a `decimals` attribute. `precision` is not allowed.
-- The literal `INF` is permitted for `decimals`, but **only where the reported
-  amount is exact**. The EDGAR XBRL Guide gives `INF` as the correct value for
-  an exactly stated monetary amount, percentage or basis-point figure. Anything
-  the filer rounded takes a finite integer instead (`-3` thousands, `-6`
-  millions, `0` whole units, `2` pennies). `INF` on a rounded value asserts a
-  precision the figure does not have and trips `EFM.6.05.48`.
+- Every numeric `ix:nonFraction` carries a `decimals` attribute. `precision` is
+  not allowed (`EFM.6.05.17`).
+- The literal `INF` is permitted for `decimals`. Guide section 6.6.4 gives `INF`
+  as the correct value for an exactly reported monetary amount, percentage or
+  basis-point figure; a rounded amount takes a finite integer instead (`-3`
+  thousands, `-6` millions, `0` whole units, `2` pennies).
+- A finite `decimals` must not zero out a non-zero digit of the reported value
+  (`EFM.6.05.37`). Guide section 9.5: "If the decimals attribute of a numeric
+  fact is not INF, then the value is interpreted as if certain digits were zero.
+  An instance must not contain usage that cause non-zero digits to be interpreted
+  as zero." So `-2345.67` may carry `decimals="2"` or `"INF"`, but `"0"`, `"-2"`,
+  `"-3"` and `"-6"` are each an error.
+- The test is **asymmetric**, and this is the part most often got wrong: a
+  `decimals` finer than the value's own accuracy is fine, because zeroing digits
+  that are already zero loses nothing. The guide's own example is that 1,000,000
+  "may have a decimals attribute with any value greater than -6". Do not flag
+  `INF` merely because a figure ends in zeros.
 - Monetary values use ISO 4217 currency codes as the unit (`iso4217:USD`).
 - Per-share values use a divide unit such as `iso4217:USD / xbrli:shares`.
 - A calculation linkbase is required for facts that roll up arithmetically. Calculation inconsistencies are reported as warnings.
@@ -164,7 +174,7 @@ EFM 6.5.16 and the EDGAR XBRL Guide:
 ### Submission, test filing, and the validator stack
 
 - **Test submissions**: filers may submit non-public test filings via EDGAR Online Forms / EDGAR Filer System to exercise the EDGAR Renderer/Previewer before live filing.
-- **Public Test Suite**: the SEC's **Interactive Data Public Test Suite** (https://www.sec.gov/structureddata/osdinteractivedatatestsuite) — categorized corpus of small XBRL instances exercising each validation check; used to certify preparation software.
+- **Public Test Suite**: the SEC's **Interactive Data Public Test Suite** (https://www.sec.gov/structureddata/osdinteractivedatatestsuite), a categorized corpus of small XBRL instances exercising each validation check; used to certify preparation software.
 - **Validator stack**: EDGAR uses **Arelle** (https://arelle.org) with the EDGAR plugin (the SEC's EDGAR Renderer is itself an Arelle distribution). The plugin combines the `EFM` validation profile with `FRTA` (Financial Reporting Taxonomy Architecture) checks. EDGAR plugin source on GitHub.
 - **Financial Report Viewer**: renders embedded facts at https://www.sec.gov/cgi-bin/viewer and on EDGAR full-text search.
 - **Dissemination**: accepted submissions are publicly disseminated within minutes via EDGAR full-text search and the bulk Public Dissemination Service.
@@ -178,8 +188,9 @@ Codes verbatim, with the EFM section that drives them:
 | EFM.6.05.01 | CIK / identifier convention violation | 6.5.1 |
 | EFM.6.05.11 | Duplicate or equivalent units must be deduplicated | 6.5.11 |
 | EFM.6.05.14 | Hidden cover-page fact not referenced via `-sec-ix-hidden` | 6.5.14 |
-| EFM.6.05.16 | `decimals` required on numeric facts; `precision` not permitted | 6.5.16 |
-| EFM.6.05.48 | `decimals="INF"` on a value whose rendered text is rounded | 6.5.48 |
+| EFM.6.05.16 | `href`/`src` attribute scheme restrictions on embedded content | 6.5.16 |
+| EFM.6.05.17 | Numeric fact carries `precision` instead of `decimals` | 6.5.17 |
+| EFM.6.05.37 | A finite `decimals` truncates non-zero digits of the value | 6.5.37 |
 | EFM.6.05.20 | Required DEI element missing (e.g., `dei:AmendmentFlag`) | 6.5.20 |
 | EFM.6.05.21 | Required DEI per document type (e.g., `EntityRegistrantName`) | 6.5.21 |
 | EFM.6.05.34 | Inline XBRL submission / well-formedness violation | 6.5.34 |
@@ -236,26 +247,27 @@ positions on officer certifications or auditor assurance.
   Do not change, delete, or summarize data elements merely because the
   tag layer is machine-readable; choose the appropriate standard tag
   unless an extension is required. SEC staff guidance clarifies that
-  identical visual appearance is not the test — content consistency is.
+  identical visual appearance is not the test; content consistency is.
 
 ## Authorities and governance
 
 Most-cited iXBRL rules:
 
-- **EFM 6.4** — Submission of Interactive Data (which forms, attachment names, EX-101 vs. embedded iXBRL).
-- **EFM 6.5** — *Syntax of Instances*. Master section for Inline XBRL syntax checks.
-- **EFM 6.5.14** — Cover-page facts in `ix:hidden` must be referenced elsewhere via `-sec-ix-hidden` style.
-- **EFM 6.5.16** — Numeric facts must carry `decimals`, not `precision`.
-- **EFM 6.5.48** — `decimals="INF"` must not be paired with a rendered value
-  that has been rounded. `INF` itself is allowed, and is the prescribed value
-  for an exact amount.
-- **EFM 6.5.20 / 6.5.21** — Required DEI facts present for the document type.
-- **EFM 6.5.34** — Inline XBRL submission-level validation (well-formedness of inline document and XHTML host).
-- **EFM 6.5.40** — DEI completeness for the relevant taxonomy version (`EntitySmallBusiness`, `EntityEmergingGrowthCompany`, etc.).
-- **EFM 6.5.42** — Use of deprecated concepts triggers a warning.
-- **EFM 6.5.48** — Address-component DEI elements used to tag the registrant address block.
-- **EFM 6.6.x** — Syntax of Inline Documents (`ix:nonNumeric`, `ix:nonFraction`, `ix:hidden`, `ix:references`, `ix:relationship`, transformation registries, XHTML wrapper).
-- **EFM 6.11.x / 6.12.x** — Custom (extension) taxonomy structure: schema, presentation, calculation, definition, label linkbases.
+- **EFM 6.4**: Submission of Interactive Data (which forms, attachment names, EX-101 vs. embedded iXBRL).
+- **EFM 6.5**: *Syntax of Instances*. Master section for Inline XBRL syntax checks.
+- **EFM 6.5.14**: Cover-page facts in `ix:hidden` must be referenced elsewhere via `-sec-ix-hidden` style.
+- **EFM 6.5.16**: Scheme restrictions on `href` and `src` attributes.
+- **EFM 6.5.17**: Numeric facts must carry `decimals`, not `precision`.
+- **EFM 6.5.37**: A non-nil numeric fact value must not be truncated by its
+  `decimals` attribute. There is no separate rule prohibiting `INF`; guidance on
+  choosing `decimals` is Guide section 6.6.4, formerly EFM v68 section 6.6.32.
+- **EFM 6.5.20 / 6.5.21**: Required DEI facts present for the document type.
+- **EFM 6.5.34**: Inline XBRL submission-level validation (well-formedness of inline document and XHTML host).
+- **EFM 6.5.40**: DEI completeness for the relevant taxonomy version (`EntitySmallBusiness`, `EntityEmergingGrowthCompany`, etc.).
+- **EFM 6.5.42**: Use of deprecated concepts triggers a warning.
+- **EFM 6.5.48**: Address-component DEI elements used to tag the registrant address block.
+- **EFM 6.6.x**: Syntax of Inline Documents (`ix:nonNumeric`, `ix:nonFraction`, `ix:hidden`, `ix:references`, `ix:relationship`, transformation registries, XHTML wrapper).
+- **EFM 6.11.x / 6.12.x**: Custom (extension) taxonomy structure: schema, presentation, calculation, definition, label linkbases.
 
 Volume II PDF: https://www.sec.gov/files/edgar/filermanual/efmvol2.pdf
 Chapter 6 split: https://www.sec.gov/files/edgar/filermanual/efmvol2-c6.pdf
@@ -263,15 +275,15 @@ EDGAR XBRL Guide (plain-language companion): https://www.sec.gov/files/edgar/fil
 
 ## Sources
 
-- **SEC, *EDGAR Filer Manual*** — the version index. Volume II Version 77
+- **SEC, *EDGAR Filer Manual***: the version index. Volume II Version 77
   deployed 16 March 2026 (EDGAR Release 26.1, adopting release 33-11411);
-  always check this page for the version effective at submission date —
+  always check this page for the version effective at submission date.
   <https://www.sec.gov/submit-filings/edgar-filer-manual>.
 
-- **SEC, *Cybersecurity Risk Management … Small Entity Compliance Guide*** —
+- **SEC, *Cybersecurity Risk Management … Small Entity Compliance Guide***:
   establishes the two distinct Inline XBRL tagging dates: Form 10-K / 20-F for
   fiscal years ending on or after 15 December 2024, Form 8-K / 6-K from
-  18 December 2024, both for all registrants including SRCs —
+  18 December 2024, both for all registrants including SRCs.
   <https://www.sec.gov/resources-small-businesses/small-business-compliance-guides/cybersecurity-risk-management-strategy-governance-incident-disclosure>.
 
 - https://www.sec.gov/files/rules/final/2018/33-10514.pdf

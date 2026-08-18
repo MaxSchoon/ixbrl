@@ -15,7 +15,7 @@ Thanks for using the iXBRL skill. Here is how to get help.
 ## Found a bug, a wrong rule, or a misfiring trigger?
 
 Open an [issue](https://github.com/MaxSchoon/ixbrl/issues/new/choose) and pick
-the template that fits — spec-citation correction, regulator update, scaffold
+the template that fits: spec-citation correction, regulator update, scaffold
 regression, trigger misfire, or enhancement. The templates ask for the
 primary-source citation that every factual change needs (see
 [`CONTRIBUTING.md`](CONTRIBUTING.md)).
@@ -23,7 +23,7 @@ primary-source citation that every factual change needs (see
 ## Security or filing-integrity concerns
 
 **Do not open a public issue.** A scaffold or rule that would produce an
-apparently-valid but non-compliant filing is reported privately — see
+apparently-valid but non-compliant filing is reported privately. See
 [`SECURITY.md`](SECURITY.md).
 
 ## What support is and isn't

@@ -1,11 +1,11 @@
-# Validation Reference — Arelle, iXBRL, and the silent killers
+# Validation Reference: Arelle, iXBRL, and the silent killers
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
 
 If a code or behaviour is not cited here, treat it as folklore until verified in source.
 
-## 1. Arelle — the de facto reference processor
+## 1. Arelle: the de facto reference processor
 
 **Arelle** is the open-source XBRL platform (desktop, REST, CLI, Python library) that ESMA, the SEC, HMRC, the UK FRC, the Dutch KvK ecosystem and most commercial XBRL tools either embed or benchmark against. When a regulator says "the file did not validate", in practice that means "Arelle (or a derivative) emitted an error code".
 
@@ -44,38 +44,38 @@ XHTML, or an instance XBRL.
 
 ## 2. Plugins relevant to iXBRL
 
-**`validate/ESEF`** — ESMA's European Single Electronic Format
+**`validate/ESEF`**: ESMA's European Single Electronic Format
 validator. Implements the full numbered ruleset (`ESEF.2.x`,
 `ESEF.3.x`, `ESEF.4.x`) plus UKSEF / UK FRC overlays (`UK.ESEF.*`,
 `UKFRC.*`, `UKFRC22.*`). Mandatory for European listed-issuer work.
 
-**`validate/EFM` (Arelle/EDGAR repo)** — The SEC's EDGAR Filer Manual
+**`validate/EFM` (Arelle/EDGAR repo)**: The SEC's EDGAR Filer Manual
 validator. As of mid-2025 the SEC consolidated validator, renderer,
 transforms, and HTM validator into https://github.com/Arelle/EDGAR,
 maintained by SEC staff (CC0-1.0). Newer rules (us-gaap/2025+) are
 implemented in XULE / DQCRT; older rules remain in Python.
 
-**`validate/UK` (HMRC + UK FRC)** — UK regulator validation including
+**`validate/UK` (HMRC + UK FRC)**: UK regulator validation including
 UKSEF and UK FRC entry-point requirements.
 
-**`validate/EBA`** — European Banking Authority validator for COREP /
+**`validate/EBA`**: European Banking Authority validator for COREP /
 FINREP / Resolution / Supervisory Benchmarking. Drives the
 formula-linkbase-heavy DPM rules.
 
-**`validate/NL`** — Netherlands-specific validations supporting SBR
+**`validate/NL`**: Netherlands-specific validations supporting SBR
 (KvK iXBRL deposits, Nederlandse Taxonomie reporting rules).
 
-**`inlineXbrlDocumentSet`** — Mandatory plumbing for iXBRL. Treats one
+**`inlineXbrlDocumentSet`**: Mandatory plumbing for iXBRL. Treats one
 or more XHTML files as a single Inline XBRL Document Set (IXDS), reads
 zip / manifest, lets you `--saveInstance` to extract the underlying
 XBRL instance for downstream XBRL-only validators.
 
-**`OimTaxonomy` / report-package handling** — Taxonomy package + report
+**`OimTaxonomy` / report-package handling**: Taxonomy package + report
 package loading. Arelle understands `.zip` report packages with
 `META-INF/taxonomyPackage.xml`, `META-INF/reports.json`, and the
 `reports/` folder.
 
-**`transforms/`** — Inline XBRL Transformation Registry implementations
+**`transforms/`**: Inline XBRL Transformation Registry implementations
 (TR1–TR5).
 
 ## 3. Formula linkbase
@@ -83,10 +83,10 @@ package loading. Arelle understands `.zip` report packages with
 **XBRL Formula 1.0** lets a taxonomy author ship machine-checkable
 business rules far beyond what XBRL 2.1 calculation arcs can express:
 
-- **Value assertions** — boolean expressions over fact sets ("revenue minus cost-of-sales equals gross profit, ±0.5 unit").
-- **Existence assertions** — fact-presence rules ("if `IncomeTaxExpense` is reported, `EffectiveTaxRate` must exist for the same period").
-- **Consistency assertions** — bind a calculated formula output to a reported fact and require they match within tolerance.
-- **Variables, filters, generic-message linkbases** — composable building blocks.
+- **Value assertions**: boolean expressions over fact sets ("revenue minus cost-of-sales equals gross profit, ±0.5 unit").
+- **Existence assertions**: fact-presence rules ("if `IncomeTaxExpense` is reported, `EffectiveTaxRate` must exist for the same period").
+- **Consistency assertions**: bind a calculated formula output to a reported fact and require they match within tolerance.
+- **Variables, filters, generic-message linkbases**: composable building blocks.
 
 Regulators ship formula linkbases as part of their taxonomy /
 conformance suite. ESMA distributes them inside the ESEF Conformance
@@ -97,12 +97,12 @@ assertion failures through the standard logging pipeline; verify with
 
 ## 4. Calculations 1.1 vs 1.0
 
-**Calculation 1.0** — original `summation-item` mechanism baked into
+**Calculation 1.0**: original `summation-item` mechanism baked into
 XBRL 2.1. XML-syntactic parent-child arcs with `weight` attributes;
 brittle in the face of dimensional facts, nil values, duplicates, and
 rounding/`decimals` mismatches.
 
-**Calculations 1.1** — XBRL Recommendation 14 February 2024. Provides
+**Calculations 1.1**: XBRL Recommendation 14 February 2024. Provides
 "improved handling of rounded and duplicate facts, particularly
 relevant to Inline XBRL-based reporting" and updates calculation
 functionality to leverage Open Information Model semantics rather than
@@ -110,7 +110,7 @@ the XML syntactic definitions of XBRL 2.1.
 
 Practical implications:
 
-- Reporting in OIM-semantic terms means duplicate facts (which iXBRL produces routinely — same concept tagged in multiple places) no longer trip false calc errors when their values agree within their declared precision.
+- Reporting in OIM-semantic terms means duplicate facts (which iXBRL produces routinely when the same concept is tagged in multiple places) no longer trip false calc errors when their values agree within their declared precision.
 - Rounding tolerance is computed from the strictest declared `decimals` across the operands.
 - Calc 1.1 is opt-in: the taxonomy must declare a `calculation-1.1` arcrole.
 
@@ -119,15 +119,15 @@ primarily on calc 1.0 with rounding consistency rules layered on top
 via EFM checks; the IFRS Taxonomy began publishing 1.1 calc
 relationships from the 2024 release.
 
-**Dual statement sets — the cross-scope binding rule.** A
+**Dual statement sets: the cross-scope binding rule.** A
 calculation network lives in an extended-link role, but the link role
 only *groups* the arcs; it does **not** restrict which contexts they
 apply to. A summation-item network is evaluated for **every** context in
 which its summation concept has a fact. So when an entity files both a
 consolidated and a separate (company-only) statement set that share base
-concepts — `bw2-titel9:Assets`, `AssetsCurrent`, `Liabilities`,
+concepts (`bw2-titel9:Assets`, `AssetsCurrent`, `Liabilities`,
 `NetResultAfterTax`, distinguished only by a member such as
-`FinancialStatementsTypeAxis` Consolidated/Separate — the
+`FinancialStatementsTypeAxis` Consolidated/Separate), the
 "BalanceSheetConsolidated" network is *also* bound against the separate
 contexts (and vice versa), where its children follow a different
 structure. Calc 1.1 round-to-nearest reports these as
@@ -141,28 +141,27 @@ The architecture is **inherent to dual full-tagging** and is not
 removable without mis-tagging (you cannot invent a separate-scope
 subtotal that does not exist). Two different verdicts are needed:
 
-- **For substantive review of an SBR Dutch GAAP 2025 filing — prefer
+- **For substantive review of an SBR Dutch GAAP 2025 filing, prefer
   Calc 1.1** (`--calc c11r`). Calc 1.1 uses OIM rounding semantics
   rather than XBRL 2.1 fact-level decimals, so iXBRL's routinely-
   duplicate facts (the same number tagged in a summary and a
   footnote) no longer fire false calc errors when their values agree
   within their declared precision. The cross-scope warnings Calc 1.0
-  hides carry real information about the dual-statement architecture
-  — they're "diagnostic" in the sense that not every one is a defect
-  to fix, but they tell you the dual-scope structure is in play and
-  any *in-scope* inconsistency in the same log is a real arithmetic
-  gap.
-- **For the formal deposit-acceptance verdict — run Calc 1.0
+  hides carry real information about the dual-statement architecture;
+  they're "diagnostic" in the sense that not every one is a defect to
+  fix, but they tell you the dual-scope structure is in play and any
+  *in-scope* inconsistency in the same log is a real arithmetic gap.
+- **For the formal deposit-acceptance verdict, run Calc 1.0
   separately** (`--calc c10`). NT20 Filing Rules list XBRL 2.1 as the
   normative calculation basis (Calculations 1.1 is not referenced;
   Calculations 2.0 had a 2019 requirements note only, no specification),
   so the KvK acceptance test runs on Calc 1.0 semantics. The package
-  must pass Calc 1.0 as well — running both is cheap.
+  must pass Calc 1.0 as well; running both is cheap.
 
 Before concluding a calc is "broken," classify each inconsistency:
 *in-scope* (role-scope == context-scope) is a real arithmetic gap to
 fix; *cross-scope* (role-scope ≠ context-scope) is the dual-statement
-artefact — useful information that the dual-scope architecture is at
+artefact, useful information that the dual-scope architecture is at
 work but not in itself a defect. Distinguish them by reading the
 `context …` and `link role …` fields of each message.
 
@@ -219,7 +218,7 @@ work but not in itself a defect. Distinguish them by reading the
 | `EFM.6.05.36` | Calculation-link inconsistency at the declared decimals | Sum of children does not match parent within tolerance | Fix the data, or revisit `decimals` |
 | `EFM.6.05.42` | `xbrli:unit` for a monetary fact does not match the reporting currency declared in DEI | USD-typed unit on a EUR filing | Use the matching ISO-4217 unit |
 | `EFM.6.05.45` | Required DEI cover-page tag missing or invalid | `EntityRegistrantName` / `DocumentPeriodEndDate` etc. missing | Tag the missing DEI element |
-| `EFM.6.05.48` | Fact with `decimals="INF"` and a non-exact textual representation | Filer rounded but kept INF | Lower `decimals` to match the rendered scale |
+| `EFM.6.05.37` | A finite `decimals` truncates non-zero digits of the reported value | `decimals="-3"` on a value of 2,345.67 | Raise `decimals` so no non-zero digit is zeroed, or report the rounded figure |
 | `EFM.6.08.x` | Linkbase validations for industry taxonomies (`cef`, `ecd`, `oef`, `rxp`, `vip`, `sro`, `spac`) | Wrong relationships for the relevant SEC industry overlay | Repair presentation/calculation/definition arcs against the industry config |
 
 ### 5.3 SBR Dutch GAAP / KvK (NL-KVK.* and FR-NL- / FG-NL-)
@@ -245,7 +244,7 @@ applies across SBR channels (KvK, Belastingdienst, DNB).
 | `FR-NL-6.01` | Footnote model / arcrole violation | Visual footnote not wired as `ix:footnote` | Use the iXBRL footnote model with fact-footnote arc |
 
 For **SBR Dutch GAAP 2025 review work, prefer Calc 1.1** (`--calc
-c11r`) — it handles iXBRL duplicate facts and dimensional alignment
+c11r`). It handles iXBRL duplicate facts and dimensional alignment
 correctly and surfaces the dual-statement cross-scope inconsistencies
 Calc 1.0 hides. Run `--calc c10` separately as the formal
 deposit-acceptance check, because NT20 Filing Rules list XBRL 2.1 as
@@ -267,7 +266,7 @@ recurring deprecated-concept choices, see `references/jurisdictions/nl-sbr.md`.
 
 ## 6. Anti-patterns and pitfalls
 
-The silent killers — Arelle either flags them only at the very end,
+The silent killers: Arelle either flags them only at the very end,
 weakly, or not at all (and you learn from the regulator's downstream
 tooling).
 
@@ -275,8 +274,8 @@ tooling).
 2. **Calc inconsistencies from `decimals` mismatches.** Parent at `decimals="-3"` and child at `decimals="0"`: the calc engine takes the looser `-3` and rounds. Drift accumulates. Reconcile decimals across calc tree levels.
 3. **Missing `decimals` on scaled facts.** Scaling `1,234` thousand to "1.234" with no `decimals` is an EFM violation (`EFM.6.05.34`) and an ESEF nonconformance.
 4. **Same fact value reported with conflicting `decimals` across documents.** Multi-XHTML iXBRL document sets often tag the same revenue concept twice with different `decimals`. Triggers `ESEF.2.2.4` if values disagree once rounded.
-5. **Continuation chain ordering and forking.** `ix:continuation` is a strict singly-linked chain — every continuation referenced exactly once, no loops. Two facts pointing to the same continuation, or a continuation pointing back into the chain, breaks iXBRL 1.1.
-6. **`ix:hidden` facts with no transformable rendering elsewhere.** ESEF requires every `ix:hidden` fact to be surfaced visibly somewhere — for transformable types via a normal ix tag, for non-transformable types via the `-esef-ix-hidden` style mechanism.
+5. **Continuation chain ordering and forking.** `ix:continuation` is a strict singly-linked chain: every continuation referenced exactly once, no loops. Two facts pointing to the same continuation, or a continuation pointing back into the chain, breaks iXBRL 1.1.
+6. **`ix:hidden` facts with no transformable rendering elsewhere.** ESEF requires every `ix:hidden` fact to be surfaced visibly somewhere: for transformable types via a normal ix tag, for non-transformable types via the `-esef-ix-hidden` style mechanism.
 7. **Extension elements with no anchoring (or anchored to abstract).** Every ESEF extension concept must be anchored to a base-taxonomy concept that is *not* abstract. This is the single most common ESEF.3.x error category.
 8. **Duplicate facts (same concept + context + unit, different value).** XBRL 2.1 forbids this; iXBRL inherits the rule. Often comes from tagging both a summary table and a footnote disclosing the same number.
 9. **Wrong period type (instant vs duration).** Tagging "Cash at year-end" as a duration fact, or "Revenue" as an instant fact. Match the concept's declared `periodType`.
@@ -286,7 +285,7 @@ tooling).
 13. **Format mismatches (TR transformation against value).** `format="ixt:numcomadot"` on a number rendered with thousands-dot and decimal-comma. Triggers `ESEF.2.2.3`.
 14. **Currency mismatch between `unitRef` and reported currency.** EUR-presenting filing tagging revenue with a USD `xbrli:unit`. SEC catches via `EFM.6.05.42`.
 15. **Wrong namespace for shared concepts.** A concept exists in exactly one namespace. Using a jurisdiction-extension version when the core concept exists makes the calc tree fail.
-16. **`decimals="INF"` on a rounded value.** Asserts the value is exact. If the underlying ledger has more digits, INF is a lie. Triggers `EFM.6.05.48` and equivalent ESEF inconsistency checks.
+16. **`decimals` that does not match the reported value.** `INF` asserts the value is exact, so on a rounded figure it is a lie, and the EDGAR XBRL Guide section 6.6.4 reserves it for exactly reported amounts. The machine-checkable half is the converse: a finite `decimals` that zeroes a non-zero digit triggers `EFM.6.05.37` (Guide section 9.5) and equivalent ESEF inconsistency checks. Note the test is asymmetric, so a `decimals` finer than the value's accuracy is conformant.
 17. **Tuples used in ESEF reports.** Forbidden (`ESEF.2.4.1.tupleElementUsed`). Migrate to dimensional facts.
 18. **External CSS / JS / `<script>` references.** Forbidden in both ESEF (`ESEF.2.5.1`, `ESEF.2.5.4`) and SEC EFM. Inline everything; sanitise the HTML at generation time.
 19. **`xml:base` / HTML `<base>` smuggled into the report.** Trips `ESEF.2.4.2.htmlOrXmlBaseUsed`. Most commonly introduced by frontend rendering frameworks. Strip in the iXBRL serialiser.
@@ -295,21 +294,21 @@ tooling).
 22. **Subtotal arcs without `preferredLabel="totalLabel"`.** Triggers `ESEF.3.4.4.missingPreferredLabelRole`.
 23. **Mismatched `id` references across the iXBRL document set.** Each fact `id` must be unique across the IXDS, not only within a single XHTML file.
 24. **Negative values on credit-balance concepts ignored.** Tagging a credit-balance concept with the same sign as a debit-balance concept inverts arithmetic in any downstream consumer. Look up `balance` on the concept declaration and align the sign.
-25. **Linkbase arc `from`/`to` pointing at a QName instead of the loc label.** An XLink extended-link arc references the `xlink:label` of a `link:loc`, *not* the concept's QName or href. Authoring a `definitionArc`/`presentationArc`/`calculationArc` with `xlink:from="kvk_LineItemsInConsolidatedFinancialStatementsPlaceholder"` (the resolved concept name) instead of the locator's actual label (e.g. `placeholder_consolidated_loc`, `statement_root_loc`) yields `xbrl.3.5.3.9.2:arcResource` ("attribute 'from' has no matching loc or resource label") and, downstream, `xbrldie:PrimaryItemDimensionallyInvalidError` because the intended domain-member relationship never forms. Beware: audit/dump scripts often *resolve* loc labels to their href localnames for readability, which hides the real label — read the raw `xlink:label` before reusing it as an arc endpoint.
-26. **Tagging a concept that does not exist in the operative DTS.** A fact whose `name` is a plausible-but-nonexistent QName — a concept invented from memory (`bw2-titel9:Result` when only `rj:Result` exists), or the right local name under the wrong prefix (`rj:PayablesBanksCurrent` vs `bw2-titel9:PayablesBanksCurrent`) — is **unbound**: Arelle reports `ix11.12.1.2:missingReferences` ("Instance fact missing schema definition") and any locator referencing it fails with `xbrl.3.5.4:hrefIdNotFound` + `xbrl.5.2.6.1:definitionLinkLocTarget`. This is worse than a warning — the fact carries no concept semantics at all. Never guess a QName: confirm the exact prefix *and* local name against the operative taxonomy schema (e.g. grep the `*-cor.xsd` in Arelle's cache, or check the namespace a sibling/twin fact already uses) before tagging. The cheapest catch is to validate early — `missingReferences` surfaces immediately.
+25. **Linkbase arc `from`/`to` pointing at a QName instead of the loc label.** An XLink extended-link arc references the `xlink:label` of a `link:loc`, *not* the concept's QName or href. Authoring a `definitionArc`/`presentationArc`/`calculationArc` with `xlink:from="kvk_LineItemsInConsolidatedFinancialStatementsPlaceholder"` (the resolved concept name) instead of the locator's actual label (e.g. `placeholder_consolidated_loc`, `statement_root_loc`) yields `xbrl.3.5.3.9.2:arcResource` ("attribute 'from' has no matching loc or resource label") and, downstream, `xbrldie:PrimaryItemDimensionallyInvalidError` because the intended domain-member relationship never forms. Beware: audit/dump scripts often *resolve* loc labels to their href localnames for readability, which hides the real label. Read the raw `xlink:label` before reusing it as an arc endpoint.
+26. **Tagging a concept that does not exist in the operative DTS.** A fact whose `name` is a plausible-but-nonexistent QName, either a concept invented from memory (`bw2-titel9:Result` when only `rj:Result` exists) or the right local name under the wrong prefix (`rj:PayablesBanksCurrent` vs `bw2-titel9:PayablesBanksCurrent`), is **unbound**: Arelle reports `ix11.12.1.2:missingReferences` ("Instance fact missing schema definition") and any locator referencing it fails with `xbrl.3.5.4:hrefIdNotFound` + `xbrl.5.2.6.1:definitionLinkLocTarget`. This is worse than a warning; the fact carries no concept semantics at all. Never guess a QName: confirm the exact prefix *and* local name against the operative taxonomy schema (e.g. grep the `*-cor.xsd` in Arelle's cache, or check the namespace a sibling/twin fact already uses) before tagging. The cheapest catch is to validate early; `missingReferences` surfaces immediately.
 27. **Forgetting `META-INF/taxonomyPackage.xml` in the report package.** Without it Arelle cannot locate the taxonomy and validation aborts immediately.
 
 ## 7. Conformance suites and test material
 
-- **ESEF Conformance Suite (latest)** — https://www.esma.europa.eu/document/esef-conformance-suite-2024
-- **ESEF Reporting Manual** — https://www.esma.europa.eu/document/esef-reporting-manual
-- **Inline XBRL 1.1 conformance suite** — https://www.xbrl.org/2020/inlineXBRL-1.1-conformanceSuite-2020-04-08.zip
-- **XBRL 2.1 base conformance suite** — https://specifications.xbrl.org/work-product-index-group-base-spec-base-spec.html
-- **Calculations 1.1 spec + tests** — https://specifications.xbrl.org/work-product-index-calculations-2-calculations-1-1.html
-- **SEC EDGAR XBRL Guide** — https://www.sec.gov/files/edgar/filer-information/specifications/xbrl-guide.pdf
-- **Arelle/EDGAR repository** — https://github.com/Arelle/EDGAR
-- **SBR Netherlands** — https://www.sbr-nl.nl/
-- **EBA reporting framework** — https://www.eba.europa.eu/risk-and-data-analysis/reporting-frameworks/dpm-data-dictionary
+- **ESEF Conformance Suite (latest)**: https://www.esma.europa.eu/document/esef-conformance-suite-2024
+- **ESEF Reporting Manual**: https://www.esma.europa.eu/document/esef-reporting-manual
+- **Inline XBRL 1.1 conformance suite**: https://www.xbrl.org/2020/inlineXBRL-1.1-conformanceSuite-2020-04-08.zip
+- **XBRL 2.1 base conformance suite**: https://specifications.xbrl.org/work-product-index-group-base-spec-base-spec.html
+- **Calculations 1.1 spec + tests**: https://specifications.xbrl.org/work-product-index-calculations-2-calculations-1-1.html
+- **SEC EDGAR XBRL Guide**: https://www.sec.gov/files/edgar/filer-information/specifications/xbrl-guide.pdf
+- **Arelle/EDGAR repository**: https://github.com/Arelle/EDGAR
+- **SBR Netherlands**: https://www.sbr-nl.nl/
+- **EBA reporting framework**: https://www.eba.europa.eu/risk-and-data-analysis/reporting-frameworks/dpm-data-dictionary
 
 ## 8. Validation workflow recommendation
 

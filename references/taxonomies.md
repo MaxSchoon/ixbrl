@@ -9,7 +9,7 @@ The major XBRL/iXBRL taxonomies in active use globally for statutory and supervi
 
 ## 1. IFRS Accounting Taxonomy
 
-**Issuer / Jurisdiction:** IFRS Foundation (IASB) — global standard-setter
+**Issuer / Jurisdiction:** IFRS Foundation (IASB), global standard-setter
 for IFRS Accounting Standards.
 
 **Purpose:** Digital expression of presentation and disclosure
@@ -104,14 +104,14 @@ the SEC formally "accepts" each annual release for use in EDGAR filings.
 Until acceptance, the prior year's taxonomy applies.
 
 **Common namespaces:**
-- `us-gaap` — FASB-authored core US GAAP concepts.
-- `srt` — SEC Reporting Taxonomy: cross-cutting concepts (schedules,
+- `us-gaap`: FASB-authored core US GAAP concepts.
+- `srt`: SEC Reporting Taxonomy. Cross-cutting concepts (schedules,
   ranges, disposal groups) used across US GAAP and IFRS filers with the
   SEC.
-- `dei` — Document and Entity Information (filer identity, period,
+- `dei`: Document and Entity Information (filer identity, period,
   document type, EntityCentralIndexKey, etc.). Authored under SEC
   oversight.
-- `country`, `currency`, `exch`, `naics`, `sic`, `stpr` — code-list
+- `country`, `currency`, `exch`, `naics`, `sic`, `stpr`: code-list
   reference taxonomies.
 
 **2025 content additions:** New elements for SEC Release Nos. 33-11070 /
@@ -143,16 +143,16 @@ released 18 October 2024. FRC guidance: only the latest and penultimate
 versions should be in active use simultaneously.
 
 **Taxonomies in the Suite:**
-- **UK IFRS** — UK companies preparing accounts under UK-adopted IFRS.
-- **FRS 101** — Reduced Disclosure Framework (subsidiaries of IFRS
+- **UK IFRS:** UK companies preparing accounts under UK-adopted IFRS.
+- **FRS 101:** Reduced Disclosure Framework (subsidiaries of IFRS
   groups).
-- **FRS 102** — UK and Ireland GAAP (the dominant SME taxonomy).
-- **UKSEF** — UK Single Electronic Format, the UK's post-Brexit successor
+- **FRS 102:** UK and Ireland GAAP (the dominant SME taxonomy).
+- **UKSEF:** UK Single Electronic Format, the UK's post-Brexit successor
   extending ESEF for FCA listed-issuer filings.
-- **Charities Taxonomy** — for charities reporting under the Charities
+- **Charities Taxonomy:** for charities reporting under the Charities
   FRS 102 SORP. Mandatory for large charities (income > £6.5m); refreshed
   for SORP 2026 in the 2026 suite.
-- **Irish Extension** — Irish Revenue iXBRL filing of Corporation Tax
+- **Irish Extension:** Irish Revenue iXBRL filing of Corporation Tax
   accounts.
 
 **Filing scope:**
@@ -162,8 +162,8 @@ versions should be in active use simultaneously.
 - Charity Commission / HMRC for charities meeting the threshold.
 - FCA for UKSEF AFR filings of premium- and standard-listed issuers.
 - **Companies House April 2028 (ECCTA):** software-only iXBRL accounts
-  mandate confirmed 9 June 2026 (moved from the paused April-2027 date) —
-  web and paper accounts routes close; small/micro P&L with a
+  mandate confirmed 9 June 2026 (moved from the paused April-2027 date).
+  Web and paper accounts routes close; small/micro P&L with a
   publication opt-out; abridged accounts abolished. See
   `references/jurisdictions/uk-frc.md` the *Companies House* profile.
 
@@ -179,8 +179,8 @@ design, and the end-to-end review checklist, see `references/jurisdictions/uk-fr
 
 ## 5. Dutch SBR / Nederlandse Taxonomie (NT)
 
-**Issuer / Jurisdiction:** SBR Nederland — joint programme of Dutch
-government, Belastingdienst, KvK, DNB, AFM, CBS, and the banks.
+**Issuer / Jurisdiction:** SBR Nederland (joint programme of Dutch
+government, Belastingdienst, KvK, DNB, AFM, CBS, and the banks).
 
 **Versioning:** Annual NT releases, currently in the **NT20** generation.
 The Belastingdienst slice of NT20 (release `20251210.a`) was published
@@ -188,11 +188,11 @@ The Belastingdienst slice of NT20 (release `20251210.a`) was published
 ICP 2026 filings. The definitive iXBRL annual-reporting taxonomies for
 fiscal year 2025 were published **12 December 2025** for filing with the
 KvK. The pairing of fiscal year → NT release → Filing Rules version
-matters bi-temporally — see *Bi-temporal cheatsheet* in `references/jurisdictions/nl-sbr.md`
+matters bi-temporally; see *Bi-temporal cheatsheet* in `references/jurisdictions/nl-sbr.md`
 for the per-fiscal-year mapping, including which obligations cut in
 when (block-tagging FY2026, digital-deposit obligations by size class).
 
-**Architecture:** The NT layers downward — BW2 (Civil Code Book 2) is the
+**Architecture:** The NT layers downward: BW2 (Civil Code Book 2) is the
 core; RJ (Raad voor de Jaarverslaggeving) extends it for Dutch GAAP
 application guidance; KvK applies BW2/RJ (and IFRS) for trade-register
 deposits; AFM extends ESEF/IFRS for listed-issuer AFRs.
@@ -201,7 +201,7 @@ deposits; AFM extends ESEF/IFRS for listed-issuer AFRs.
 - KvK Dutch GAAP entry points by company-size class: micro, small,
   medium, large (different disclosure depths under Title 9 Book 2 BW).
   The size class is itself a tagged fact (`bw2-titel9:LegalEntitySize`)
-  and the entry point choice is concept-bearing — it changes which
+  and the entry point choice is concept-bearing. It changes which
   concepts are in-DTS. See `references/jurisdictions/nl-sbr.md` *Entry point by entity-size class* for the
   size-class table.
 - KvK IFRS entry points where the entity reports under IFRS but files at
@@ -211,9 +211,9 @@ deposits; AFM extends ESEF/IFRS for listed-issuer AFRs.
   payroll, and ICP returns.
 
 **Namespaces (complementary, not interchangeable):**
-- `bw2-titel9:` — Civil Code Title 9 core concepts.
-- `rj:` — RJ extension concepts including cash-flow statement detail.
-- `kvk:` — KvK metadata and entity-size dimensions.
+- `bw2-titel9:` Civil Code Title 9 core concepts.
+- `rj:` RJ extension concepts including cash-flow statement detail.
+- `kvk:` KvK metadata and entity-size dimensions.
 - IFRS namespaces where applicable.
 
 A recurring source of "looks tagged, isn't bound" defects is picking
@@ -227,13 +227,13 @@ Dutch listed issuers.
 
 **Hosting:** Canonical schemas live at `nltaxonomie.nl`. For
 deposit-quality validation, download the operative NT packages and
-pass them to Arelle via `--packages` so the DTS resolves offline —
-remote fetches against `nltaxonomie.nl` are a recurring source of
+pass them to Arelle via `--packages` so the DTS resolves offline.
+Remote fetches against `nltaxonomie.nl` are a recurring source of
 flaky validation. See `references/jurisdictions/nl-sbr.md` *Validation — offline DTS resolution*.
 
 **Validator / review:** Use `--plugins validate/NL` with the
 disclosure system matching the NT generation in the report. For SBR
-Dutch GAAP 2025 work prefer `--calc c11r` (Calc 1.1 — handles iXBRL
+Dutch GAAP 2025 work prefer `--calc c11r` (Calc 1.1: handles iXBRL
 duplicate facts and surfaces the dual-statement cross-scope
 inconsistencies that Calc 1.0 hides), then run `--calc c10`
 separately as the formal deposit-acceptance check, since NT20 Filing
@@ -245,7 +245,7 @@ verdict reasoning in *Calculation linkbase scope-bleed*.
 - https://www.sbr-nl.nl/werken-met-sbr/taxonomie/documentatie-nederlandse-taxonomie
 - https://www.sbr-nl.nl/werken-met-sbr/taxonomie/architectuur-en-ontwikkelingen
 
-## 6. EBA & EIOPA — Data Point Model (DPM) for Banking and Insurance
+## 6. EBA & EIOPA: Data Point Model (DPM) for Banking and Insurance
 
 **Issuer / Jurisdiction:** European Banking Authority (EBA) for banking;
 European Insurance and Occupational Pensions Authority (EIOPA) for
@@ -260,7 +260,7 @@ database. From 2025–2026 onward EBA is migrating to **DPM 2.0**, and
 reports referencing periods ≥ 31 March 2026 must be filed in **xBRL-CSV**
 (replacing xBRL-XML for these high-volume datasets).
 
-### EBA — COREP / FINREP
+### EBA: COREP / FINREP
 
 **Current version:** The EBA Reporting Frameworks page currently
 publishes **Reporting Framework 4.4** as the latest release, with 4.2
@@ -280,7 +280,7 @@ under CRR/CRD.
 - https://www.eba.europa.eu/risk-and-data-analysis/reporting-frameworks
 - https://www.eba.europa.eu/risk-and-data-analysis/reporting-frameworks/reporting-framework-42
 
-### EIOPA — Solvency II and IORP
+### EIOPA: Solvency II and IORP
 
 **Current version:** The EIOPA "DPM and XBRL" page currently references
 **Solvency II Taxonomy 2.9.1 PWD** (with DPM Dictionary, Annotated
@@ -295,15 +295,15 @@ version.
 
 **Download:** https://www.eiopa.europa.eu/tools-and-data/supervisory-reporting-dpm-and-xbrl_en
 
-## 7. Denmark — ÅRL Taxonomy / DCCA (Erhvervsstyrelsen)
+## 7. Denmark: ÅRL Taxonomy / DCCA (Erhvervsstyrelsen)
 
 **Issuer / Jurisdiction:** Erhvervsstyrelsen (Danish Business Authority / DCCA), which runs the Regnskab Indberet platform and publishes filed data on `www.data.virk.dk`. Statute: Årsregnskabsloven (ÅRL, lovbek. nr. 1057 af 23/09/2024); filing rules: BEK nr. 859 af 18/06/2025 (indsendelsesbekendtgørelsen).
 
-**Versioning:** Annual ÅRL taxonomy generations (`20241001`, `20251001`, …). Inline XBRL is mandatory for the årsrapport from **balance date on/after 2025-01-01** — bi-temporal, keyed to the balance date not the filing date. The pairing of balance date → taxonomy generation → Kontroller version matters; see the cheatsheet in *Vintage and applicability* in `references/jurisdictions/dk-erst.md`.
+**Versioning:** Annual ÅRL taxonomy generations (`20241001`, `20251001`, …). Inline XBRL is mandatory for the årsrapport from **balance date on/after 2025-01-01** (bi-temporal, keyed to the balance date not the filing date). The pairing of balance date → taxonomy generation → Kontroller version matters; see the cheatsheet in *Vintage and applicability* in `references/jurisdictions/dk-erst.md`.
 
 **Architecture:** Root URL `http://archprod.service.eogs.dk/taxonomy/`, `{yyyymmdd}/{component}` layout. Modular three-letter namespaces: `gsd` (general + submission data), `arr` (auditor's reports), `mrv` (management's review), `sob` (statement of boards), `fsa` (financial statements), `dst`/`tax`/`eogs`, plus `tch`/`cmn` common schemas with `da`/`en` label linkbases.
 
-**Entry points:** ÅRL schema files selected by balance-sheet form (account vs report) × income-statement form (by nature vs by function) plus disclosure set. IFRS filers use the ÅRL taxonomy **plus** ESEF (§ 17 stk. 3 — the DK-IFRS taxonomy is phased out). Financial-sector entities use Finanstilsynet's **DKFIN** taxonomy (embedded in ÅRL, mandatory FY2025, eight entry points by entity type).
+**Entry points:** ÅRL schema files selected by balance-sheet form (account vs report) × income-statement form (by nature vs by function) plus disclosure set. IFRS filers use the ÅRL taxonomy **plus** ESEF (§ 17 stk. 3: the DK-IFRS taxonomy is phased out). Financial-sector entities use Finanstilsynet's **DKFIN** taxonomy (embedded in ÅRL, mandatory FY2025, eight entry points by entity type).
 
 **Channels:** Regnskab Basis (guided web-keying), Regnskab Special (file upload), or system-til-system (API). The filer submits **one Inline XBRL file**; the platform derives the XBRL instance(s) server-side.
 
@@ -313,11 +313,11 @@ version.
 
 **Hosting / validation:** Validate with the Arelle `validate/DBA` plugin (`--disclosureSystem arl-2025-multi-target-preview`, or `dkfin-2024-multi-target-preview` for financial-sector filings). Rule authority is ERST's Kontroller corpus (Fejl = blocking, Advis = advisory). See `references/jurisdictions/dk-erst.md` for the full deep-dive.
 
-## 8. Finland — PRH Digital Financial Statements
+## 8. Finland: PRH Digital Financial Statements
 
-**Issuer / Jurisdiction:** Finnish limited companies (osakeyhtiö) and co-operatives (osuuskunta) file statutory financial statements with the **Finnish Trade Register** (kaupparekisteri), operated by **PRH** (Patentti- ja rekisterihallitus), as a **digital financial statement** (digitaalinen tilinpäätös / *digitilinpäätös*): Inline XBRL in XHTML, filed as a plain **ZIP of XHTML** (max 200 MB) — **not** an `.xbri` report package, which PRH cannot receive. Statutory basis: Accounting Act (Kirjanpitolaki 1336/1993) ch. 7 ss. 22–25; operative technical requirements in two PRH decisions **PRH/1087/01/2026** (technical filing) and **PRH/1088/01/2026** (PRH identifiers / taxonomy adoption), both in force 24.6.2026.
+**Issuer / Jurisdiction:** Finnish limited companies (osakeyhtiö) and co-operatives (osuuskunta) file statutory financial statements with the **Finnish Trade Register** (kaupparekisteri), operated by **PRH** (Patentti- ja rekisterihallitus), as a **digital financial statement** (digitaalinen tilinpäätös / *digitilinpäätös*): Inline XBRL in XHTML, filed as a plain **ZIP of XHTML** (max 200 MB), **not** an `.xbri` report package, which PRH cannot receive. Statutory basis: Accounting Act (Kirjanpitolaki 1336/1993) ch. 7 ss. 22–25; operative technical requirements in two PRH decisions **PRH/1087/01/2026** (technical filing) and **PRH/1088/01/2026** (PRH identifiers / taxonomy adoption), both in force 24.6.2026.
 
-**Two-stage mandate:** digital (XHTML) filing has been **mandatory for sustainability-reporting (CSRD-scope) companies since FY2025**; structured **taxonomy markup** (PRH identifiers) is mandatory only for **periods starting on/after 1 Jan 2026** — FY2025 permitted untagged XHTML. **Law 555/2026** (in force 30.6.2026) narrowed CSRD scope to turnover >€450M AND >1,000 employees (or a voluntary ESRS committer), for periods starting on/after 1.7.2026 (opt-in from 1.1.2026). Filing is voluntary "for the time being" for all other limited companies.
+**Two-stage mandate:** digital (XHTML) filing has been **mandatory for sustainability-reporting (CSRD-scope) companies since FY2025**; structured **taxonomy markup** (PRH identifiers) is mandatory only for **periods starting on/after 1 Jan 2026**. FY2025 permitted untagged XHTML. **Law 555/2026** (in force 30.6.2026) narrowed CSRD scope to turnover >€450M AND >1,000 employees (or a voluntary ESRS committer), for periods starting on/after 1.7.2026 (opt-in from 1.1.2026). Filing is voluntary "for the time being" for all other limited companies.
 
 **Taxonomy families, by accounting basis:**
 
@@ -329,42 +329,42 @@ version.
 
 Mixed basis: IFRS consolidated + FAS parent → consolidated tagged with IFRS, parent with SBR.
 
-**Validation:** no Arelle FI/PRH disclosure system exists (`arelle/plugin/validate/` ships CIPC, DBA, EBA, EDINET, ESEF, FERC, NL, ROS, UK only); the FAS/SBR gate is core XBRL 2.1 + iXBRL 1.1 + SBR taxonomy-package resolution plus PRH's own intake-API checks — no published FI rule-code catalogue. The IFRS/ESEF re-use path validates as ESEF. See `references/jurisdictions/fi-prh.md` for the full regime, packaging, filing channels, and review checklist.
+**Validation:** no Arelle FI/PRH disclosure system exists (`arelle/plugin/validate/` ships CIPC, DBA, EBA, EDINET, ESEF, FERC, NL, ROS, UK only); the FAS/SBR gate is core XBRL 2.1 + iXBRL 1.1 + SBR taxonomy-package resolution plus PRH's own intake-API checks. There is no published FI rule-code catalogue. The IFRS/ESEF re-use path validates as ESEF. See `references/jurisdictions/fi-prh.md` for the full regime, packaging, filing channels, and review checklist.
 
-## 9. France — AMF / ESEF (and the non-XBRL regimes)
+## 9. France: AMF / ESEF (and the non-XBRL regimes)
 
-- **Listed issuers (AMF) — ESEF.** France's Transparency-Directive NCA is the AMF. RFA / DEU-valant-RFA with IFRS consolidated accounts filed exclusively in ESEF since FY2021 (from 1 Jan 2022), deposited on the ONDE extranet (issuer or *diffuseur professionnel*), archived on info-financiere.fr; Instruction AMF DOC-2007-03 (v. 02/2025) is the deposit rulebook. Same ESEF base taxonomy as every EU NCA (Reg. 2019/815 as amended by 2025/19; 2025 taxonomy RTS + Calc 1.1 for FYs from 1 Jan 2026, early FY2025). See `references/jurisdictions/fr-amf.md`.
-- **Statutory annual accounts — no XBRL.** *Dépôt des comptes annuels* is PDF via the INPI Guichet unique since 1 Jan 2023; INPI keys structured data out of the PDFs downstream. No filer-facing XBRL taxonomy (the historic XBRL France TCA / Infogreffe path is retired).
-- **Tax — no XBRL.** The *liasse fiscale* is UN/EDIFACT (INFENT) via EDI-TDFC to the DGFiP, not XBRL.
-- **Banking / insurance — DPM.** ACPR collects EBA/EIOPA DPM xBRL via OneGate (xBRL-XML → xBRL-CSV from 03/2026); see `references/dpm.md`.
+- **Listed issuers (AMF): ESEF.** France's Transparency-Directive NCA is the AMF. RFA / DEU-valant-RFA with IFRS consolidated accounts filed exclusively in ESEF since FY2021 (from 1 Jan 2022), deposited on the ONDE extranet (issuer or *diffuseur professionnel*), archived on info-financiere.fr; Instruction AMF DOC-2007-03 (v. 02/2025) is the deposit rulebook. Same ESEF base taxonomy as every EU NCA (Reg. 2019/815 as amended by 2025/19; 2025 taxonomy RTS + Calc 1.1 for FYs from 1 Jan 2026, early FY2025). See `references/jurisdictions/fr-amf.md`.
+- **Statutory annual accounts: no XBRL.** *Dépôt des comptes annuels* is PDF via the INPI Guichet unique since 1 Jan 2023; INPI keys structured data out of the PDFs downstream. No filer-facing XBRL taxonomy (the historic XBRL France TCA / Infogreffe path is retired).
+- **Tax: no XBRL.** The *liasse fiscale* is UN/EDIFACT (INFENT) via EDI-TDFC to the DGFiP, not XBRL.
+- **Banking / insurance: DPM.** ACPR collects EBA/EIOPA DPM xBRL via OneGate (xBRL-XML → xBRL-CSV from 03/2026); see `references/dpm.md`.
 - **CSRD / ESRS.** EFRAG ESRS Set 1 XBRL taxonomy exists (Aug 2024) but tagging is expressly suspended by Directive (EU) 2026/470 (Omnibus I) pending an updated ESEF RTS.
 
-## 10. Germany — HGB / E-Bilanz / ESEF (three regimes)
+## 10. Germany: HGB / E-Bilanz / ESEF (three regimes)
 
 Germany runs three structured-reporting regimes; only ESEF is Inline
 XBRL. Deep dive: `references/jurisdictions/de-hgb.md`.
 
-- **E-Bilanz** (§ 5b EStG) — plain XBRL 2.1 on the **HGB-Taxonomie**
+- **E-Bilanz** (§ 5b EStG): plain XBRL 2.1 on the **HGB-Taxonomie**
   (author: XBRL Deutschland e.V.; blessed by BMF). GCD + GAAP modules;
   fiscal entry point "GAAP steuerlicher Einzelabschluss"; sector modules
   (FI/RechKredV, INS, KHBV/PBV). Yearly versions by dated BMF-Schreiben:
   **v6.9** (WJ beginning after 31 Dec 2025), **v6.10** (WJ after 31 Dec
   2026). Published at esteuer.de / de.xbrl.org. Transmitted via
-  ELSTER/ERiC to the Finanzverwaltung — no Arelle gate.
-- **HGB Offenlegung** (§§ 325 ff. HGB) — plain XML/XBRL default
+  ELSTER/ERiC to the Finanzverwaltung. No Arelle gate.
+- **HGB Offenlegung** (§§ 325 ff. HGB): plain XML/XBRL default
   (Word/PDF accepted with a conversion fee, § 11 URV) to the
   Unternehmensregister via the Bundesanzeiger-Verlag Publikations-
   Plattform. Accepts HGB/IFRS/US-GAAP taxonomies; operator intake
   validation, not an Arelle plugin. *(Current Offenlegung taxonomy
-  version vs the E-Bilanz v6.9/6.10 line unconfirmed — honest gap.)*
-- **ESEF** (§ 114 WpHG / § 328 Abs. 1 HGB) — XHTML/iXBRL under Del.
+  version vs the E-Bilanz v6.9/6.10 line unconfirmed. Honest gap.)*
+- **ESEF** (§ 114 WpHG / § 328 Abs. 1 HGB): XHTML/iXBRL under Del.
   Reg. (EU) 2019/815 for listed Inlandsemittenten; NCA is **BaFin**
   (sole Bilanzkontrolle authority since FISG). Use the ESEF core
-  taxonomy and Arelle ESEF plugin — see `references/esef.md`.
+  taxonomy and Arelle ESEF plugin; see `references/esef.md`.
 
-## 11. Belgium — NBB / FSMA / Biztax (three regimes)
+## 11. Belgium: NBB / FSMA / Biztax (three regimes)
 
-Three distinct structured-reporting regimes — do not conflate them; only the ESEF path is Inline XBRL. See `references/jurisdictions/be-nbb.md`.
+Three distinct structured-reporting regimes. Do not conflate them; only the ESEF path is Inline XBRL. See `references/jurisdictions/be-nbb.md`.
 
 | Regime | Taxonomy | Owner | Format | Current version | Who files |
 |---|---|---|---|---|---|
@@ -376,23 +376,23 @@ NBB `be-gaap` models: with-capital `m02-f`/`m01-f`/`m07-f`, without-capital `m82
 
 ## 12. Other Notable Taxonomies
 
-**Japan — EDINET (FSA).** The Financial Services Agency of Japan operates
+**Japan: EDINET (FSA).** The Financial Services Agency of Japan operates
 EDINET for electronic disclosure of statutory filings (annual securities
 reports, quarterly reports, prospectuses) by listed Japanese issuers, in
 XBRL since 2008. https://disclosure2.edinet-fsa.go.jp/
 
-**Spain — CNMV IPP.** Comisión Nacional del Mercado de Valores receives
+**Spain: CNMV IPP.** Comisión Nacional del Mercado de Valores receives
 Periodic Public Information in XBRL from listed issuers, originating with
 Circular 1/2005 and updated through Circular 5/2015 and Circular 3/2018.
 CNMV also acts as the national ESEF officer for Spanish issuers.
 https://www.cnmv.es/Portal/xbrl/xbrl
 
-**Australia — SBR (cross-agency).** SBR AU Taxonomy (XBRL-based) reused
+**Australia: SBR (cross-agency).** SBR AU Taxonomy (XBRL-based) reused
 across the ATO and other agencies for tax, super (SuperStream), and
 business reporting.
 https://www.sbr.gov.au/digital-service-providers/sbr-implementation-support-products/sbr-au-taxonomy
 
-**India — MCA.** Ministry of Corporate Affairs maintains the C&I
+**India: MCA.** Ministry of Corporate Affairs maintains the C&I
 Taxonomy (Indian GAAP / IND-AS) and Costing Taxonomy used for filing
 financial statements via e-form AOC-4 XBRL. Mandatory for listed
 companies, their Indian subsidiaries, companies with paid-up capital

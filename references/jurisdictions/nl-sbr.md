@@ -11,11 +11,11 @@ profiles:
     section: profile-kvk-408-foreign-group-head-pdf
 ---
 
-# SBR Dutch GAAP / KvK — the pragmatic reference
+# SBR Dutch GAAP / KvK: the pragmatic reference
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
-## Start here — choose a filing profile
+## Start here: choose a filing profile
 
 Load this when the regulator is **KvK (Kamer van Koophandel)**, **AFM**
 (Dutch listed issuer, where ESEF rules dominate but SBR overlays apply),
@@ -28,9 +28,9 @@ namespaces. For ESEF-only listed-issuer questions, prefer
 |---|---|---|
 | An NL legal entity deposits its own adopted annual accounts (NL-GAAP or IFRS, Micro to Groot) with the Handelsregister as an iXBRL Report Package | KvK Handelsregister iXBRL annual accounts | [Profile: KvK Handelsregister iXBRL annual accounts](#profile-kvk-ixbrl-annual-accounts) |
 | A foreign parent's group annual report is deposited to support an NL subsidiary's art. 2:403 BW exemption (FY2025 onward, iXBRL) | art. 2:403 foreign group head report in iXBRL | [Profile: art. 2:403 foreign group head report in iXBRL](#profile-kvk-403-foreign-group-head) |
-| A foreign parent's group annual report supports an art. 2:408 BW consolidation exemption for a financial year beginning before 2028-01-01 — **no XBRL: PDF by e-mail** | art. 2:408 foreign group head report by PDF e-mail | [Profile: art. 2:408 foreign group head report by PDF e-mail (before FY2028)](#profile-kvk-408-foreign-group-head-pdf) |
-| A Dutch listed issuer files an Annual Financial Report with the AFM under ESEF | (out of scope here — ESEF overlay) | see `references/esef.md`; SBR-specific overlays are in [Vintage and applicability](#vintage-and-applicability) and the KvK profile above |
-| A DNB prudential return or a Belastingdienst (jenv/BD) filing | (out of scope here — DPM / tax domain) | see `references/dpm.md` and [Authorities and governance](#authorities-and-governance) |
+| A foreign parent's group annual report supports an art. 2:408 BW consolidation exemption for a financial year beginning before 2028-01-01 (**no XBRL: PDF by e-mail**) | art. 2:408 foreign group head report by PDF e-mail | [Profile: art. 2:408 foreign group head report by PDF e-mail (before FY2028)](#profile-kvk-408-foreign-group-head-pdf) |
+| A Dutch listed issuer files an Annual Financial Report with the AFM under ESEF | (out of scope here: ESEF overlay) | see `references/esef.md`; SBR-specific overlays are in [Vintage and applicability](#vintage-and-applicability) and the KvK profile above |
+| A DNB prudential return or a Belastingdienst (jenv/BD) filing | (out of scope here: DPM / tax domain) | see `references/dpm.md` and [Authorities and governance](#authorities-and-governance) |
 
 <a id="vintage-and-applicability"></a>
 
@@ -41,13 +41,13 @@ namespaces. For ESEF-only listed-issuer questions, prefer
 Dutch SBR is an annual taxonomy generation: **NT19**, **NT20**, **NT21**
 etc. Filing Rules also evolve. The same iXBRL package can pass or fail
 on **identical content** depending on which generation it was prepared
-against — so before reviewing or validating, pin:
+against. So before reviewing or validating, pin:
 
 1. **The reporting period** (read from `<xbrli:period>`, not today's date).
 2. **The filing channel.** KvK deposits flow through Digipoort or a
    commercial SBR Portal; AFM ESEF filings flow through the AFM loket.
    Re-read the operative `FilingRules-*.pdf` on sbr-nl.nl before
-   declaring an iXBRL package "wrong" — many "errors" are the
+   declaring an iXBRL package "wrong"; many "errors" are the
    difference between the rules you remembered and the rules in force.
 3. **The entry point** (= which schema is in `link:schemaRef`). Entry
    point choice is concept-bearing: it determines which concepts are
@@ -63,7 +63,7 @@ both bind to a `bw2-titel9:` / `rj:` / `kvk:` family of prefixes. They
 look alike but resolve to *different* schema URIs, and concepts that
 exist in one may not exist in the other:
 
-- **SBR-domein Handelsregister filer-facing taxonomy** — the one KvK
+- **SBR-domein Handelsregister filer-facing taxonomy.** The one KvK
   iXBRL annual accounts actually use. Schema URIs of the form
   `https://www.nltaxonomie.nl/bw2-titel9/<release-date>/bw2-titel9-cor`,
   `https://www.nltaxonomie.nl/rj/<release-date>/rj-cor`,
@@ -71,7 +71,7 @@ exist in one may not exist in the other:
   as separate ZIPs from sbr-nl.nl (e.g. `bw2-titel9-2025_taxonomie.zip`,
   `rj-2025_taxonomie.zip`, `kvk-2025_taxonomie.zip`). For FY2025 the
   release date is `2025-12-31`.
-- **NT20 SBR-domein technical taxonomy** — the one that imports the
+- **NT20 SBR-domein technical taxonomy.** The one that imports the
   filer-facing taxonomy and carries the SBR-domein technical
   infrastructure (jenv slice, BD slice, formula linkbases, validation
   artefacts). Schema URIs of the form
@@ -114,13 +114,13 @@ publish `META-INF/reports.json`. KvK FY2025 example packages use xBRI.
 ### Bi-temporal cheatsheet (which rule applied when)
 
 For each rule, ask: *was this in force when this report was prepared?*
-Do not apply 2026 rules to a 2024 filing — and do not apply 2025 rules
+Do not apply 2026 rules to a 2024 filing, and do not apply 2025 rules
 to a 2026 one. Two RTS generations are in circulation: **RTS 2025**
 (final 31 October 2025, financial years beginning on or after
 2025-01-01) and **RTS 2026** (final 10 July 2026, financial years
 beginning on or after 2026-01-01). Both may be applied early to
 earlier financial years, so an FY2025 report prepared under RTS 2026
-is not wrong — establish which the preparer targeted before calling a
+is not wrong; establish which the preparer targeted before calling a
 defect.
 
 | Rule | Applies from | Notes |
@@ -128,16 +128,16 @@ defect.
 | KvK Groot-class **must** deposit digitally (SBR Report Package) | FY2025 | Earlier years allowed paper for Groot. Don't insist on iXBRL for a FY2023 Groot deposit. |
 | KvK Middelgroot must deposit digitally | FY2017 onward | Stable for years. |
 | KvK Klein / Microbedrijf must deposit digitally | FY2016 / FY2017 | Stable for years. |
-| Notes / management report / other-information block-tagging for KvK iXBRL | Not yet fixed — **not sooner than two years** after ESMA's definitive block-tagging requirements take effect | RTS 2026 Annex II point 2 still writes the date as `1 januari 20XX`, and *widened* the lag: RTS 2025 said one year after ESMA's amended approach, RTS 2026 says "niet eerder voorzien dan twee jaar na invoering van de definitieve ESMA-vereisten", adding XBRL International best-practice work as a second dependency. Voluntary block-tagging before that date remains **not permitted**. Check the current RTS / FAQ before requiring it. |
-| ESEF report deposited **directly** at the Handelsregister | Not a FY2026 change — the route already stood under RTS 2025 | Article 4 is textually identical in RTS 2025 and RTS 2026, so art. 4(5) — an in-scope issuer "kan hun ESEF-rapportage rechtstreeks deponeren bij het handelsregister" — is a standing rule, not a new one. Do not tell a filer this route opens with FY2026. Two review-visible consequences: the entity identifier becomes the **LEI** with scheme `http://standards.iso.org/iso/17442` instead of the KvK number with `http://www.kvk.nl/kvk-id` (Annex IV pt 2), and `esef_cor:NotesAccountingPoliciesAndMandatoryTags` joins the start points (Annex IV Table 7). Filing with the AFM still discharges the KvK obligation (art. 2:394 lid 8 BW). |
+| Notes / management report / other-information block-tagging for KvK iXBRL | Not yet fixed: **not sooner than two years** after ESMA's definitive block-tagging requirements take effect | RTS 2026 Annex II point 2 still writes the date as `1 januari 20XX`, and *widened* the lag: RTS 2025 said one year after ESMA's amended approach, RTS 2026 says "niet eerder voorzien dan twee jaar na invoering van de definitieve ESMA-vereisten", adding XBRL International best-practice work as a second dependency. Voluntary block-tagging before that date remains **not permitted**. Check the current RTS / FAQ before requiring it. |
+| ESEF report deposited **directly** at the Handelsregister | Not a FY2026 change; the route already stood under RTS 2025 | Article 4 is textually identical in RTS 2025 and RTS 2026, so art. 4(5), an in-scope issuer "kan hun ESEF-rapportage rechtstreeks deponeren bij het handelsregister", is a standing rule, not a new one. Do not tell a filer this route opens with FY2026. Two review-visible consequences: the entity identifier becomes the **LEI** with scheme `http://standards.iso.org/iso/17442` instead of the KvK number with `http://www.kvk.nl/kvk-id` (Annex IV pt 2), and `esef_cor:NotesAccountingPoliciesAndMandatoryTags` joins the start points (Annex IV Table 7). Filing with the AFM still discharges the KvK obligation (art. 2:394 lid 8 BW). |
 | art. 2:403 BW foreign-group-head report in iXBRL | FY2025 | Operative. Untagged group report + separate filing-data iXBRL document in one Report Package (see the *art. 2:403 foreign group head report in iXBRL* profile). |
-| art. 2:408 BW foreign-group-head report in iXBRL | **Not before FY2028** | FAQ 2.2.4 (10 July 2026): for financial years beginning **before 2028-01-01** the 2:408 group report is deposited **by PDF e-mail**; the iXBRL obligation is only *expected* from FY2028. An FY2026 PDF-by-email 2:408 deposit is correct — do not flag it (see the *art. 2:408 foreign group head report by PDF e-mail (before FY2028)* profile). |
+| art. 2:408 BW foreign-group-head report in iXBRL | **Not before FY2028** | FAQ 2.2.4 (10 July 2026): for financial years beginning **before 2028-01-01** the 2:408 group report is deposited **by PDF e-mail**; the iXBRL obligation is only *expected* from FY2028. An FY2026 PDF-by-email 2:408 deposit is correct; do not flag it (see the *art. 2:408 foreign group head report by PDF e-mail (before FY2028)* profile). |
 | ESEF block-tagging for AFM (listed) IFRS notes | FY2022 | Distinct from KvK above. AFM-listed AFRs follow ESMA Annex II Table 2, not KvK. |
-| Auditor's report (controleverklaring) required in package | Middelgroot + Groot, always (article 2:393 BW) | Klein/Micro: not required. art. 2:403 BW: group subsidiaries may be exempt — its absence on a Groot subsidiary is not automatically wrong. |
-| Calculation basis for KvK iXBRL Report Packages | FY2025 **and** FY2026 — **Calc 1.1**, listed in Annex III of both RTS 2025 and RTS 2026 (the specification set is unchanged between them) | Calc 1.1 uses OIM rounding semantics — it handles iXBRL's routinely-duplicate facts correctly and surfaces the dual-statement cross-scope inconsistencies that Calc 1.0 silently hides. Two verdicts are needed: use Calc 1.1 for **substantive review**, and run Calc 1.0 (`--calc c10`) as well for the **formal deposit-acceptance** verdict — the NT20 Filing Rules list XBRL 2.1 as the normative calculation basis, so the KvK acceptance test runs on Calc 1.0 semantics (`references/validation.md` §4). Running both is cheap. Not re-verified against the NT21 Filing Rules. |
-| Base (filer-facing) taxonomy release to tag against | Per financial year, three-year window | RTS 2026 Annex VI names the `2026-12-31` set for FY2026. FAQ 2.2.5 allows any of the **three most recent** KVK taxonomy versions, so an FY2026 report may be filed on the 2026, 2025 or 2024 set; older versions are rejected. **Checked 2026-08-15: `nltaxonomie.nl/kvk/2026-12-31/` returns 404** — the newest published filer-facing release is still `2025-12-31`. Resolve the live directory before assuming a 2026 schemaRef works. |
+| Auditor's report (controleverklaring) required in package | Middelgroot + Groot, always (article 2:393 BW) | Klein/Micro: not required. art. 2:403 BW: group subsidiaries may be exempt; its absence on a Groot subsidiary is not automatically wrong. |
+| Calculation basis for KvK iXBRL Report Packages | FY2025 **and** FY2026: **Calc 1.1**, listed in Annex III of both RTS 2025 and RTS 2026 (the specification set is unchanged between them) | Calc 1.1 uses OIM rounding semantics; it handles iXBRL's routinely-duplicate facts correctly and surfaces the dual-statement cross-scope inconsistencies that Calc 1.0 silently hides. Two verdicts are needed: use Calc 1.1 for **substantive review**, and run Calc 1.0 (`--calc c10`) as well for the **formal deposit-acceptance** verdict: the NT20 Filing Rules list XBRL 2.1 as the normative calculation basis, so the KvK acceptance test runs on Calc 1.0 semantics (`references/validation.md` §4). Running both is cheap. Not re-verified against the NT21 Filing Rules. |
+| Base (filer-facing) taxonomy release to tag against | Per financial year, three-year window | RTS 2026 Annex VI names the `2026-12-31` set for FY2026. FAQ 2.2.5 allows any of the **three most recent** KVK taxonomy versions, so an FY2026 report may be filed on the 2026, 2025 or 2024 set; older versions are rejected. **Checked 2026-08-15: `nltaxonomie.nl/kvk/2026-12-31/` returns 404.** The newest published filer-facing release is still `2025-12-31`. Resolve the live directory before assuming a 2026 schemaRef works. |
 | KVK taxonomy generation for the legacy **XBRL** channel | Per NT release | RTS 2026 ch. 3 Annex I supports NT21 (FY2026), NT20 (FY2025), NT19 (FY2024). **NT21 is pre-release as of 2026-08-15**: `nltaxonomie.nl/nt21/kvk/` holds only `20261209.a` (alfa) and `20261209.b` (bèta); the SBR release calendar puts final publication at 29-10-2026 and production at 09-12-2026. |
-| `validate/NL` disclosure system | Per NT release | Run `arelleCmdLine --plugins validate/NL --disclosureSystem` matching the NT generation in the report. There is **no `NL-INLINE-2026`** registered in Arelle as of 2026-08-15 — validate FY2026 packages with `NL-INLINE-2025` and say so in the report (see *Validation — offline DTS resolution and `nltaxonomie.nl`*). |
+| `validate/NL` disclosure system | Per NT release | Run `arelleCmdLine --plugins validate/NL --disclosureSystem` matching the NT generation in the report. There is **no `NL-INLINE-2026`** registered in Arelle as of 2026-08-15; validate FY2026 packages with `NL-INLINE-2025` and say so in the report (see *Validation: offline DTS resolution and `nltaxonomie.nl`*). |
 
 When uncertain, **state the rule version you are applying** before
 declaring a defect. "This violates the NT20 KvK Filing Rule X for
@@ -155,7 +155,7 @@ October 2025 for financial years beginning on or after 1 January 2025.
 The **2026 RTS** was finalised on **10 July 2026** for financial years
 beginning on or after 1 January 2026, and may be applied to earlier
 years. Article numbering and the Annex I–VI layout are unchanged
-between them. **Article 4 itself did not change** — its text is
+between them. **Article 4 itself did not change**: its text is
 identical in both RTS, so the ESEF-direct deposit route of art. 4(5) is
 a standing rule rather than an FY2026 delta. The substantive deltas sit
 in the Annexes: the LEI identifier and the `esef_cor` notes start point
@@ -164,10 +164,10 @@ lag (Annex II pt 2), and the rolled base-taxonomy set (Annex VI).
 
 The RTS is not the same thing as the Reporting Manual (RM):
 
-- **RTS** — the technical filing requirements: format, package,
+- **RTS.** The technical filing requirements: format, package,
   mandatory markup, valid taxonomy/specification set, and extension
   taxonomy constraints.
-- **RM** — preparer guidance for applying those requirements in an
+- **RM.** Preparer guidance for applying those requirements in an
   actual iXBRL annual report.
 
 RTS points that matter in review:
@@ -199,7 +199,7 @@ RTS points that matter in review:
   Registry 1.0, Data Type Registry 1.x, Link Role Registry 2.0, XBRL
   2.1, Dimensions 1.0, **Calculations 1.1**, Taxonomy Packages 1.0,
   and Report Package 1.0. This list is **identical in RTS 2025 and RTS
-  2026** — the specification set did not move for FY2026.
+  2026**; the specification set did not move for FY2026.
 - Annex IV is the core markup rulebook: use the core-taxonomy element
   with the closest / narrowest accounting meaning; create an extension
   only when the core taxonomy would misrepresent the disclosure; give
@@ -213,10 +213,11 @@ RTS points that matter in review:
 **Honest gaps in this section (checked 2026-08-15).** The RTS 2026
 delta list above is a comparison of the two final texts, not the
 publisher's own track-changes document, so small Annex IV wording
-changes may be missing. The Reporting Manual 2026 — whose chapter 7
+changes may be missing. The Reporting Manual 2026, whose chapter 7
 governs the 403/408 package shape (see the *art. 2:403 foreign group
-head report in iXBRL* profile) — has not been read into this file. NT21 entry-point names are **not** recorded here: the taxonomy
-is still pre-release and the directory listing is truncated, so the
+head report in iXBRL* profile), has not been read into this file.
+NT21 entry-point names are **not** recorded here: the taxonomy is
+still pre-release and the directory listing is truncated, so the
 *Entry point by entity-size class (Title 9 Book 2 BW)* table's
 `-2025-` entry-point suffixes have deliberately **not** been rolled to
 `-2026-`. Verify against the published release before doing so.
@@ -273,9 +274,9 @@ set and a **company-only (separate)** statement set in one report.
 Both use the same base concepts (`bw2-titel9:Assets`,
 `bw2-titel9:AssetsCurrent`, `bw2-titel9:Liabilities`,
 `bw2-titel9:NetResultAfterTax`) and are distinguished only by an
-explicit dimension member on **`bw2-titel9:FinancialStatementsTypeAxis`**
-— `bw2-titel9:ConsolidatedMember` vs `bw2-titel9:SeparateMember`. This
-is where SBR Dutch GAAP filings most often go wrong — not because of
+explicit dimension member on **`bw2-titel9:FinancialStatementsTypeAxis`**:
+`bw2-titel9:ConsolidatedMember` vs `bw2-titel9:SeparateMember`. This
+is where SBR Dutch GAAP filings most often go wrong, not because of
 one rule, but because three independent invariants must hold
 simultaneously.
 
@@ -326,12 +327,12 @@ placeholder roles for this purpose:
 
 Use the entry point that matches the accounting-basis mix:
 
-- **NL-GAAP consolidated + NL-GAAP company** — import the NL-GAAP
+- **NL-GAAP consolidated + NL-GAAP company.** Import the NL-GAAP
   extension entry point and wire line items into the consolidated and,
   if tagged, separate NL-GAAP placeholders.
-- **IFRS consolidated + IFRS company** — import the IFRS extension entry
+- **IFRS consolidated + IFRS company.** Import the IFRS extension entry
   point and wire the two scopes into the IFRS placeholders.
-- **IFRS consolidated + NL-GAAP company** — import the IFRS extension
+- **IFRS consolidated + NL-GAAP company.** Import the IFRS extension
   entry point: it is designed to discover both IFRS and NL-GAAP concepts
   and to support IFRS consolidated statements with NL-GAAP company
   statements.
@@ -397,8 +398,8 @@ surface through placeholder concepts such as:
 Both are confirmed members of `kvk-cor.xsd` in the FY2025 release. An
 extension concept reported in both scopes must be wired into **both**
 relevant placeholder domain-member trees via the extension's definition
-linkbase. Forgetting one of them — typically because an extension
-concept was added late without re-wiring the dual-scope arcs — fires a
+linkbase. Forgetting one of them (typically because an extension
+concept was added late without re-wiring the dual-scope arcs) fires a
 KvK-specific filing-rule error of the form
 `extensionTaxonomyLineItemNotLinkedToDesignatedPlaceholder` and
 downstream `xbrldie:PrimaryItemDimensionallyInvalidError` against the
@@ -406,15 +407,15 @@ unwired scope's contexts.
 
 The RM/taxonomy architecture also defines two gatekeeper roles:
 
-- `[990080]` — line items to be reported as non-dimensional. These are
+- `[990080]`: line items to be reported as non-dimensional. These are
   not valid with dimensions.
-- `[990090]` — line items that may be reported dimensionally only when
+- `[990090]`: line items that may be reported dimensionally only when
   the preparer's extension explicitly allows that use.
 
 The consolidated/separate placeholders are for the single
 financial-statements-type axis only. If a fact also uses another axis
-— for example an equity-class axis in the statement of changes in
-equity — build a proper extension definition role for that
+(for example an equity-class axis in the statement of changes in
+equity), build a proper extension definition role for that
 multi-dimensional schedule rather than relying only on the KVK
 placeholder.
 
@@ -422,7 +423,7 @@ Practitioner reports describe an additional extension-side compatibility
 role (often called something like
 `MixedScopeFinancialStatementsCompatibility`) used by some filer
 extensions to declare which concepts are legitimately reportable across
-both scopes. The KvK base taxonomy does not define this role — it
+both scopes. The KvK base taxonomy does not define this role; it
 appears in filer-extension architectures. Whether you must wire it
 depends on the extension framework your tooling uses; check the
 extension's `*_def.xml` for the actual extended-link roles in use
@@ -432,10 +433,10 @@ Fix pattern: treat dual-scope placeholder membership as derived from
 one source predicate so the two arcs cannot drift apart, and document
 the extension's compatibility-role convention (if any) alongside it.
 
-### Calculation linkbase scope-bleed — and why Calc 1.1 is the RTS basis
+### Calculation linkbase scope-bleed, and why Calc 1.1 is the RTS basis
 
 A `link:calculationLink` is grouped by extended-link role but is **not**
-context-scoped — XBRL 2.1 binds every contributing item present in
+context-scoped: XBRL 2.1 binds every contributing item present in
 **every** context where the summation concept also has a fact. So a
 "BalanceSheetConsolidated" network binds against separate contexts too,
 where the children may legitimately differ. Under Calc 1.1 round-to-
@@ -454,7 +455,7 @@ The reasons:
   calc errors when their values agree within their declared precision.
 - The cross-scope inconsistencies Calc 1.0 hides are real information
   about the dual-statement architecture. "Diagnostic" does not mean
-  "noise" — it means the inconsistency does not need to be fixed *if*
+  "noise"; it means the inconsistency does not need to be fixed *if*
   it is a cross-scope artefact, and it does need to be fixed if it
   isn't.
 - The IFRS Accounting Taxonomy began publishing Calc 1.1 relationships
@@ -490,11 +491,11 @@ Before concluding a calc network is broken, classify each
 inconsistency by reading the `context …` and `link role …` fields:
 *in-scope* (role-scope == context-scope) is a real arithmetic gap to
 fix; *cross-scope* (role-scope ≠ context-scope) is the dual-statement
-artefact — useful information that the dual-scope architecture is in
+artefact: useful information that the dual-scope architecture is in
 play, but not in itself a defect. See `references/validation.md` §4 for the full
 binding-rule discussion.
 
-### Per-scope value-correctness — what Arelle won't catch
+### Per-scope value-correctness: what Arelle won't catch
 
 Arelle validates linkbase wiring, not whether the values map to the
 correct scope. A converter can put consolidated values into the
@@ -503,7 +504,7 @@ content pass; the cheapest signals:
 
 - Identical grand-totals across consolidated and separate scopes
   (`Equity`, `Assets`, `Revenue`). Possible, but rare. Flag for review.
-- `Equity == Assets` in either scope — usually means liabilities were
+- `Equity == Assets` in either scope. Usually means liabilities were
   not tagged into that scope, or were tagged into the wrong scope.
 - Subsidiaries-only concepts (`InvestmentsInParticipatingInterestsInGroupCompanies`)
   populated in the consolidated scope but not the separate scope.
@@ -517,7 +518,7 @@ KvK-specific validations on top of the SBR Filing Rules. The
 authoritative code list lives in the operative
 `KVK Business Rules NT20` PDF and the SBR-domein Handelsregister
 **Reporting Manual** and **RTS**. Re-check those for the exact rule
-numbers that apply to a given filing — they evolve per release and
+numbers that apply to a given filing; they evolve per release and
 this skill must not invent specific numbers it cannot cite.
 
 The recurring deposit-blocker **patterns** (what gets caught, not the
@@ -525,24 +526,24 @@ exact rule code) are:
 
 | Pattern | Typical root cause | Fix |
 |---|---|---|
-| `extensionTaxonomyLineItemNotLinkedToDesignatedPlaceholder` — an extension concept is missing from one of the `kvk:LineItemsIn{Consolidated,Separate}FinancialStatementsPlaceholder` domain-member trees | Concept added to one scope's placeholder but not the other (dual-scope drift) | Wire the concept into both placeholders via the extension `*_def.xml`; derive both arcs from one source predicate (see *Placeholder membership across both scopes*) |
-| `usableConceptsNotAppliedByTaggedFacts` — a concept exists in the extension presentation/definition linkbase but is never tagged in the instance | Over-inclusive linkbase (concept stayed after a tagging redesign) | Remove the unused concept from the linkbase **or** add the missing fact |
-| `transformableElementIncludedInHiddenSection` — a numeric / transformable fact is emitted into `ix:hidden` | Convenience hiding of facts that don't fit visually | Render visibly; only non-transformable required-metadata facts belong in `ix:hidden` |
-| `missingRelevantPlaceholder` — a primary statement roots on an extension abstract rather than the official Title 9 / RJ root (e.g. `bw2-titel9:BalanceSheetTitle`, `bw2-titel9:IncomeStatementTitle`, `rj:CashFlowStatementTitle`) | Generator emitted its own abstract root | Replace the root with the operative placeholder |
-| `extensionTaxonomyWrongFilesStructure` — calculation linkbase file exists but contains no `link:calculationArc` | Empty calc linkbase emitted as a placeholder | Either populate the calc linkbase or remove the file from the package |
+| `extensionTaxonomyLineItemNotLinkedToDesignatedPlaceholder`: an extension concept is missing from one of the `kvk:LineItemsIn{Consolidated,Separate}FinancialStatementsPlaceholder` domain-member trees | Concept added to one scope's placeholder but not the other (dual-scope drift) | Wire the concept into both placeholders via the extension `*_def.xml`; derive both arcs from one source predicate (see *Placeholder membership across both scopes*) |
+| `usableConceptsNotAppliedByTaggedFacts`: a concept exists in the extension presentation/definition linkbase but is never tagged in the instance | Over-inclusive linkbase (concept stayed after a tagging redesign) | Remove the unused concept from the linkbase **or** add the missing fact |
+| `transformableElementIncludedInHiddenSection`: a numeric / transformable fact is emitted into `ix:hidden` | Convenience hiding of facts that don't fit visually | Render visibly; only non-transformable required-metadata facts belong in `ix:hidden` |
+| `missingRelevantPlaceholder`: a primary statement roots on an extension abstract rather than the official Title 9 / RJ root (e.g. `bw2-titel9:BalanceSheetTitle`, `bw2-titel9:IncomeStatementTitle`, `rj:CashFlowStatementTitle`) | Generator emitted its own abstract root | Replace the root with the operative placeholder |
+| `extensionTaxonomyWrongFilesStructure`: calculation linkbase file exists but contains no `link:calculationArc` | Empty calc linkbase emitted as a placeholder | Either populate the calc linkbase or remove the file from the package |
 
 For the exact rule code that fired (the
 `NL-KVK.<n>.<n>.<n>...` identifier), quote the validator log line
 verbatim and look the code up in the operative Filing Rules /
-Business Rules PDF — do not paraphrase from memory.
+Business Rules PDF. Do not paraphrase from memory.
 
 Two non-Filing-Rule signals routinely surface in NL reviews:
 
-- `xbrl.4.8.2:sharesFactUnit-notSharesMeasure` — share-count concepts
+- `xbrl.4.8.2:sharesFactUnit-notSharesMeasure`: share-count concepts
   (`bw2-titel9:ShareCapital*`, `bw2-titel9:ShareCapitalNumberSharesIssue`)
   tagged with a currency unit instead of `xbrli:shares`. Audit every
   `xbrli:sharesItemType` concept's unit.
-- `xbrldie:PrimaryItemDimensionallyInvalidError` — the concept is
+- `xbrldie:PrimaryItemDimensionallyInvalidError`: the concept is
   missing from one of the `kvk:LineItemsIn{Consolidated,Separate}FinancialStatementsPlaceholder`
   domain-member trees, so its fact's dimensional context is invalid.
 
@@ -553,11 +554,11 @@ auditor's report is **part of the deposit**, not optional commentary.
 The 2025 KvK taxonomy provides two related concepts:
 
 - **`bw2-titel9:AuditorsReportFinancialStatements`** (`xsd:element`
-  declared in `bw2-titel9-cor.xsd`) — the text-block concept carrying
+  declared in `bw2-titel9-cor.xsd`): the text-block concept carrying
   the auditor's report content. Tagged as `ix:nonNumeric escape="true"`
   in iXBRL with the controleverklaring's XHTML as the fact value.
 - **`kvk:AuditorsReportFinancialStatementsPresent`** (declared in
-  `kvk-cor.xsd`) — a boolean flag asserting whether the auditor's
+  `kvk-cor.xsd`): a boolean flag asserting whether the auditor's
   report is included in the deposit. In the operative FY2025 Groot
   example package this fact is tagged in the KvK-metadata iXBRL
   document with `format="ixt:fixed-true"` and value `"Ja"` when
@@ -621,12 +622,12 @@ for an engagement.
 Reviewer checks:
 
 - The package uses `META-INF/reportPackage.json` (xBRI 2023) or
-  `META-INF/reports.json` (Report Packages 1.0) — both are present in
+  `META-INF/reports.json` (Report Packages 1.0); both are present in
   the wild. Single-file iXBRL deposits without a manifest are not
   acceptable for KvK Groot.
 - The `kvk:AuditorsReportFinancialStatementsPresent` flag matches the
   filer's actual situation (`Ja` when the controleverklaring is in the
-  deposit; `Nee` when it is legitimately absent — e.g. art. 2:403 BW
+  deposit; `Nee` when it is legitimately absent, e.g. art. 2:403 BW
   group-subsidiary exemption, or a Klein/Micro entity).
 - When the controleverklaring text is included, the
   `bw2-titel9:AuditorsReportFinancialStatements` fact's escaped XHTML
@@ -638,15 +639,15 @@ Reviewer checks:
   NBA Alert 50 before assuming the auditor has consented to that new
   publication or provided assurance over the XBRL markings.
 - The auditor's report concept appears in **some** presentation link in
-  the extension — orphaned-tagged facts trip `validate/NL`
+  the extension; orphaned-tagged facts trip `validate/NL`
   equivalents of `ESEF.3.4.6.UsableConceptsNotIncludedInPresentationLink`.
 - For art. 2:403 BW group-subsidiary exemption filings, the absence of
-  the auditor's report on a Groot entity is not automatically wrong —
-  cross-check the management report / 403-statement before flagging.
+  the auditor's report on a Groot entity is not automatically wrong.
+  Cross-check the management report / 403-statement before flagging.
   The 403-exemption KvK example package on sbr-nl.nl
   (`403_voorbeeld-2025-12-31-nl.xbri`) shows the canonical pattern.
 
-### Presentation linkbase — what KvK reviewers actually look at
+### Presentation linkbase: what KvK reviewers actually look at
 
 This is the area where converters drift fastest from review expectation.
 
@@ -675,7 +676,7 @@ This is the area where converters drift fastest from review expectation.
 
 <a id="profile-kvk-403-foreign-group-head"></a>
 
-## Profile: art. 2:403 foreign group head report in iXBRL — a DIFFERENT package shape
+## Profile: art. 2:403 foreign group head report in iXBRL, a DIFFERENT package shape
 
 When a **foreign parent's group annual report** is deposited to support
 an NL entity's exemption (art. 2:403 group exemption, or art. 2:408
@@ -690,7 +691,7 @@ the official FY2025 example
   filing-data document** that carries all the markup.
 - META-INF contains **only `reportPackage.json`** (xBRI 2023). **No
   `catalog.xml`, no `taxonomyPackage.xml`, no filer extension
-  taxonomy** — the *First: which Nederlandse Taxonomie applies?* /
+  taxonomy.** The *First: which Nederlandse Taxonomie applies?* /
   *The auditor's report (controleverklaring) in the package* layout
   above is the *Groot own-accounts* shape, wrong for this case.
 - `link:schemaRef` → the KvK **"Other" entry point**, FY-dated: FY2025
@@ -719,35 +720,36 @@ The article is distinguished **only** by one boolean (both
 - art. 2:408 → `kvk:AnnualReportOfForeignGroupHeadForExemptionUnderArticle408` (rules G7-2-1_1 / G7-2-1_2; note the manual's G7-2-1_2 has a typo naming the 403 QName)
 
 Note: in the FY2025 403 example, `kvk:AuditorsReportFinancialStatementsPresent`
-is **`Ja`** — set it per the actual deposit, not by assuming the
+is **`Ja`**; set it per the actual deposit, not by assuming the
 exemption implies the auditor's report is absent.
 
 Validate this package type with
 `--disclosureSystem NL-INLINE-2025-GAAP-OTHER-PREVIEW`
-(see *Validation — offline DTS resolution and `nltaxonomie.nl`*).
+(see *Validation: offline DTS resolution and `nltaxonomie.nl`*).
 
 <a id="profile-kvk-408-foreign-group-head-pdf"></a>
 
 ## Profile: art. 2:408 foreign group head report by PDF e-mail (before FY2028)
 
-**Timing (bi-temporal — see *Bi-temporal cheatsheet (which rule applied
-when)*).** The 403 iXBRL route is operative for FY2025 and later. The **408 route has slipped by two years**: per
-the SBR-domein Handelsregister FAQ of 10 July 2026 (Q2.2.4), an art.
-2:408 foreign-group-head report for a financial year beginning
-**before 2028-01-01** is deposited **by PDF e-mail in Pdf-formaat**,
-and the iXBRL obligation — following the same procedure as 403 — is
-only *expected* for years starting on or after 2028-01-01. So an
-FY2026 or FY2027 art. 2:408 deposit arriving as a PDF by e-mail is
-**correct, not a defect**. The `…UnderArticle408` boolean and the
+**Timing (bi-temporal; see *Bi-temporal cheatsheet (which rule applied
+when)*).** The 403 iXBRL route is operative for FY2025 and later. The
+**408 route has slipped by two years**: per the SBR-domein
+Handelsregister FAQ of 10 July 2026 (Q2.2.4), an art. 2:408
+foreign-group-head report for a financial year beginning **before
+2028-01-01** is deposited **by PDF e-mail in Pdf-formaat**, and the
+iXBRL obligation (following the same procedure as 403) is only
+*expected* for years starting on or after 2028-01-01. So an FY2026 or
+FY2027 art. 2:408 deposit arriving as a PDF by e-mail is **correct,
+not a defect**. The `…UnderArticle408` boolean and the
 "Other" entry point below remain the right shape when a filer does
 submit 408 in iXBRL, and for when the FY2028 date arrives.
 
 ## Jurisdiction-specific invariants
 
-### FR-NL- / FG-NL- — SBR Filing Rules / Filing Guidelines
+### FR-NL- / FG-NL- (SBR Filing Rules / Filing Guidelines)
 
 These rules are taxonomy-agnostic (they apply across NT generations
-and across SBR channels — KvK, Belastingdienst, DNB). The high-frequency
+and across SBR channels: KvK, Belastingdienst, DNB). The high-frequency
 **rule families** are:
 
 | Family | Topic |
@@ -756,14 +758,14 @@ and across SBR channels — KvK, Belastingdienst, DNB). The high-frequency
 | Language | Non-numeric facts carry `xml:lang` for the report language |
 | `link:schemaRef` | Placement and count |
 | Period | `xbrli:forever` periods forbidden; times stripped from instant periods |
-| Numeric attributes | `precision` forbidden — use `decimals`; `decimals="INF"` not allowed for rounded values |
-| `xsi:nil` | `xsi:nil="true"` on a reported fact forbidden — omit the fact instead |
+| Numeric attributes | `precision` forbidden. Use `decimals`; `decimals="INF"` not allowed for rounded values |
+| `xsi:nil` | `xsi:nil="true"` on a reported fact forbidden. Omit the fact instead |
 | Footnotes | Specific model and arcroles |
 
 The exact code numbers (`FR-NL-x.xx`, `FG-NL-x.xx`) and the rule prose
 live in the operative Filing Rules / Filing Guidelines PDF on
 sbr-nl.nl. When a validator log cites a code, look the code up in the
-PDF rather than paraphrasing from memory — the numbering has shifted
+PDF rather than paraphrasing from memory: the numbering has shifted
 between releases, and a renumbered rule is no longer the rule you
 remembered.
 
@@ -793,7 +795,7 @@ extract the underlying XBRL instance and grep for missing-reference
 warnings (`ix11.12.1.2:missingReferences`, `xbrl.3.5.4:hrefIdNotFound`)
 before any content review.
 
-### Sign and balance — the Dutch flavour
+### Sign and balance: the Dutch flavour
 
 Two SBR-specific traps on top of the universal rules in
 `SKILL.md` §"First principles":
@@ -811,14 +813,14 @@ Two SBR-specific traps on top of the universal rules in
   to compensate for the calc weight; one of the two will be wrong on
   the other side.
 
-### Concept-period class — the silent mis-map
+### Concept-period class: the silent mis-map
 
 `bw2-titel9:CashAndCashEquivalents` is declared `periodType="instant"`.
 A converter that tags the opening cash balance as a fact in the
 **cash flow statement** with the duration context of the year produces
 an instant-on-duration mis-map. The XBRL primary item is dimensionally
 invalid only when a hypercube is wired against the alternate period
-type — otherwise the validator may stay silent and the fact looks
+type; otherwise the validator may stay silent and the fact looks
 right in the viewer.
 
 Reviewer rule: walk every fact in the cash flow statement and the
@@ -826,7 +828,7 @@ statement of changes in equity. Instant-period concepts there are
 suspect unless the SoCE convention explicitly permits them (opening
 and closing equity positions are instants by design).
 
-## Validation — offline DTS resolution and `nltaxonomie.nl`
+## Validation: offline DTS resolution and `nltaxonomie.nl`
 
 The canonical NT schemas live at `nltaxonomie.nl`. Arelle validating
 KvK packages against an online cache can stall, intermittently fail,
@@ -851,20 +853,21 @@ arelleCmdLine \
 
 The operative `validate/NL` disclosure systems for FY2025 are
 **`NL-INLINE-2025`** (an entity's own NL-GAAP / NL-IFRS accounts) and
-**`NL-INLINE-2025-GAAP-OTHER-PREVIEW`** (the KvK "Other" entry point —
+**`NL-INLINE-2025-GAAP-OTHER-PREVIEW`** (the KvK "Other" entry point,
 used for the foreign-group-head 403/408 filings in the *art. 2:403
-foreign group head report in iXBRL* profile). Earlier
-editions of this file cited `nl-fr-nt20-kvk-ifrs-2025`; that name is
-**not** registered in Arelle — the `validate/NL` `config.xml` declares
-the `NL-INLINE-2025*` names above (and their lowercase aliases), so the
+foreign group head report in iXBRL* profile). Earlier editions of this
+file cited `nl-fr-nt20-kvk-ifrs-2025`; that name is **not** registered
+in Arelle: the `validate/NL` `config.xml` declares the
+`NL-INLINE-2025*` names above (and their lowercase aliases), so the
 old name silently falls back to no disclosure system. Confirm the
 operative name in your build with `arelleCmdLine --plugins validate/NL
---showEnvironment`. Run a second pass with `--calc c10` for the
-formal deposit-acceptance verdict (`references/validation.md` §4) — not merely
-"if the profile still checks it". When validation is slow or intermittent, suspect
-remote-taxonomy resolution before suspecting the package.
+--showEnvironment`. Run a second pass with `--calc c10` for the formal
+deposit-acceptance verdict (`references/validation.md` §4), not merely
+"if the profile still checks it". When validation is slow or
+intermittent, suspect remote-taxonomy resolution before suspecting the
+package.
 
-## Review workflow — a pragmatic NL review pass, in order
+## Review workflow: a pragmatic NL review pass, in order
 
 When a user says "please review my SBR Dutch GAAP report package",
 walk this in order. Each step depends on the prior being clean.
@@ -885,20 +888,20 @@ walk this in order. Each step depends on the prior being clean.
    consolidated/separate dimensions and placeholder roles before
    interpreting validation errors.
 4. **Run validation in the operative profile, offline.**
-   *Validation — offline DTS resolution and `nltaxonomie.nl`*. Capture
+   *Validation: offline DTS resolution and `nltaxonomie.nl`*. Capture
    the full log, including warnings. Run **Calc 1.1** (`--calc c11r`)
-   as the applicable FY/RTS calculation basis — Annex III lists
+   as the applicable FY/RTS calculation basis: Annex III lists
    Calculations 1.1 in both RTS 2025 and RTS 2026 (it handles iXBRL
    duplicate facts and surfaces the dual-statement cross-scope
    inconsistencies Calc 1.0 hides). Then run **Calc 1.0** (`--calc c10`) as a
-   separate pass for the deposit-acceptance verdict — the package must
-   pass both (*Calculation linkbase scope-bleed — and why Calc 1.1 is
+   separate pass for the deposit-acceptance verdict: the package must
+   pass both (*Calculation linkbase scope-bleed, and why Calc 1.1 is
    the RTS basis*, `references/validation.md` §4).
    Classify any cross-scope inconsistency by role-vs-context before
    treating it as a defect.
 5. **Classify each finding.** Route by code prefix using `SKILL.md`'s
    common-error decision tree. Distinguish dual-scope artefacts
-   (see *Calculation linkbase scope-bleed — and why Calc 1.1 is the RTS
+   (see *Calculation linkbase scope-bleed, and why Calc 1.1 is the RTS
    basis*) from real arithmetic defects, and rule violations from style
    warnings.
 6. **Concept-binding pass.** *Recurring Dutch concept choices that are
@@ -907,13 +910,13 @@ walk this in order. Each step depends on the prior being clean.
    surface validation errors and changes the meaning of every
    downstream check.
 7. **Per-scope value pass.**
-   *Per-scope value-correctness — what Arelle won't catch*. For
+   *Per-scope value-correctness: what Arelle won't catch*. For
    consolidated + separate filings, sample a dozen line items and confirm the value belongs in the
    scope it appears in. No validator catches this for you.
-8. **Sign and period class.** *Sign and balance — the Dutch flavour*,
-   *Concept-period class — the silent mis-map*. Walk the IS, CF, and SoCE.
+8. **Sign and period class.** *Sign and balance: the Dutch flavour*,
+   *Concept-period class: the silent mis-map*. Walk the IS, CF, and SoCE.
 9. **Presentation pass.**
-   *Presentation linkbase — what KvK reviewers actually look at*.
+   *Presentation linkbase: what KvK reviewers actually look at*.
    Roots on official placeholders, IS/CF flat, BS nested, every tagged fact placed somewhere.
 10. **Package shape.** *The auditor's report (controleverklaring) in
    the package*. Auditor's report present if size class
@@ -927,7 +930,7 @@ walk this in order. Each step depends on the prior being clean.
     is faithful to the source document; you can.
 
 When a finding is unclear, **quote the validator log line verbatim**
-and route by the code prefix in step 4 — that is the cheapest way to
+and route by the code prefix in step 4; that is the cheapest way to
 distinguish a real defect from a known artefact.
 
 <a id="authorities-and-governance"></a>
@@ -936,17 +939,17 @@ distinguish a real defect from a known artefact.
 
 Which body owns a stack layer decides who you cite when it is wrong.
 
-- **Business register — KvK (Kamer van Koophandel).** Statutory filing
+- **Business register: KvK (Kamer van Koophandel).** Statutory filing
   destination: art. 2:394 BW requires depositing the annual report with KvK.
   KvK owns only KvK-specific concepts, link roles, and the jaarverantwoording
-  entry points — not the accounting concepts.
-- **Digital-reporting programme — SBR, run by Logius.** Logius manages the
+  entry points, not the accounting concepts.
+- **Digital-reporting programme: SBR, run by Logius.** Logius manages the
   Nederlandse Taxonomie (NT) and provides **Digipoort** (the exchange
-  gateway). Governance is public-private — the **SBR Beraad** (decision board,
-  chaired by the Rijksregisseur), the **SBR Platform**, and the
+  gateway). Governance is public-private: the **SBR Beraad** (decision
+  board, chaired by the Rijksregisseur), the **SBR Platform**, and the
   **Expertgroepen**, with changes routed through **Requests for Comment
   (RFC)**.
-- **Standards setter — Raad voor de Jaarverslaggeving (RJ).** Issues the
+- **Standards setter: Raad voor de Jaarverslaggeving (RJ).** Issues the
   Richtlijnen (Dutch GAAP detail); the legislature owns Title 9 Book 2 BW.
   RJ's annual bundle (Sep–Dec) paces the NT release cycle.
 - **Taxonomy governance / releasekalender.** A new NT ships annually (dates on
@@ -956,7 +959,7 @@ Which body owns a stack layer decides who you cite when it is wrong.
   bank credit/vastgoed (BT/VT) → SBR Nexus.
 - **Tax / prudential / securities authorities.** **Belastingdienst** is the
   largest requesting party (jenv/BD slice). **DNB** runs a parallel
-  SBR/XBRL prudential domain on the European Filing Rules (like EBA/EIOPA —
+  SBR/XBRL prudential domain on the European Filing Rules (like EBA/EIOPA,
   `references/dpm.md`). **AFM** regulates listed issuers (ESEF).
 
 ### Relation to EU reporting
@@ -971,7 +974,7 @@ Several "KvK" rules are EU law wearing a local label.
   adopted by the EU** and another EU member state's GAAP (the latter reduced
   to Annex II point 3 metadata tagging; see *What the RTS requires when
   both scopes are present*).
-- **Register interconnection — BRIS.** KvK connects to the EU **Business
+- **Register interconnection: BRIS.** KvK connects to the EU **Business
   Registers Interconnection System** (Reg. (EU) 2015/884; EUID), so deposits
   are discoverable across member-state registers.
 - **DNB ↔ EU supervisors.** DNB's XBRL returns feed the EBA/ECB/EIOPA/SRB DPM
@@ -982,52 +985,52 @@ Verify any EU-law citation against the operative RTS first.
 ## Coverage and known limitations
 
 This file concentrates the parts of Dutch SBR practice that catch out
-preparers and reviewers in the field — not the canonical Filing Rules
+preparers and reviewers in the field, not the canonical Filing Rules
 prose (which is at <https://www.sbr-nl.nl/>). Treat it as the
 "experienced KvK reviewer's checklist", not as a substitute for the
 official Filing Rules.
 
-## Sources — when to escalate to primary sources
+## Sources: when to escalate to primary sources
 
 This file is a reviewer's working reference, not the legal source.
 Defer to and cite:
 
 - **SBR-domein Handelsregister project page** for the current RTS, RM,
   FAQ, conformance suite, taxonomy packages, and example `.xbri`
-  filings — <https://www.sbr-nl.nl/sbr-domeinen/handelsregister/uitbreiding-elektronische-deponering-handelsregister>
+  filings: <https://www.sbr-nl.nl/sbr-domeinen/handelsregister/uitbreiding-elektronische-deponering-handelsregister>
 - **RTS SBR-domein Handelsregister** for FY2025 iXBRL / XBRL filing
   requirements, Annex II mandatory markups, Annex III specifications,
   and Annex IV markup / extension rules.
 - **Reporting Manual SBR-domein Handelsregister** and **KVK taxonomy
   documentation** for practical iXBRL construction, consolidated /
   separate placeholders, contexts, extension DRS, and examples.
-- **SBR Nederland Filing Rules (FR-NL- / FG-NL-)** — <https://www.sbr-nl.nl/>
-- **KvK Filing Rules supplements (NL-KVK.*)** — published with each
+- **SBR Nederland Filing Rules (FR-NL- / FG-NL-)**: <https://www.sbr-nl.nl/>
+- **KvK Filing Rules supplements (NL-KVK.*)**, published with each
   NT generation; the PDF lives in the same documentation tree.
 - **Title 9 Book 2 BW** for legal disclosure obligations
   (`wetten.overheid.nl`).
 - **Richtlijnen voor de Jaarverslaggeving (RJ)** for Dutch GAAP
   application detail.
 - **NBA Alert 50** for external-accountant consent, scope, and
-  controleverklaring wording in SBR Report Package situations —
+  controleverklaring wording in SBR Report Package situations:
   <https://www.nba.nl/wet--en-regelgeving/alerts/nba-alert-50/>.
 - **AFM ESEF guidance** for listed-issuer filings (then return to
   `references/esef.md`).
 - **Arelle `validate/NL` plugin `config.xml`** for the registered
   disclosure-system names (`NL-INLINE-2025`,
-  `NL-INLINE-2025-GAAP-OTHER-PREVIEW`, and their aliases) — the operative
-  reference when a `--disclosureSystem` name silently fails to bind —
+  `NL-INLINE-2025-GAAP-OTHER-PREVIEW`, and their aliases), the operative
+  reference when a `--disclosureSystem` name silently fails to bind:
   <https://github.com/Arelle/Arelle/blob/master/arelle/plugin/validate/NL/resources/config.xml>.
-- **RTS 2026 — SBR-domein Handelsregister**, final 10 July 2026, for
-  financial years beginning on or after 1 January 2026 —
+- **RTS 2026 SBR-domein Handelsregister**, final 10 July 2026, for
+  financial years beginning on or after 1 January 2026:
   <https://www.sbr-nl.nl/sites/default/files/2026-07/20260710_RTS_2026_NL_SBR-domein_Handelsregister.pdf>.
-- **FAQ — SBR-domein Handelsregister**, revision of 10 July 2026. Q2.2.4
+- **FAQ SBR-domein Handelsregister**, revision of 10 July 2026. Q2.2.4
   governs the art. 2:403 / 2:408 foreign-group-head routes and Q2.2.5 the
-  three-year KVK-taxonomy window —
+  three-year KVK-taxonomy window:
   <https://www.sbr-nl.nl/sites/default/files/2026-07/20260710_FAQ_NL_SBR-domein_Handelsregister.pdf>.
 
 If the question concerns a rule version newer than what this file
 cites, or a code not listed in *Recurring KvK deposit-blocker patterns* or
-*FR-NL- / FG-NL- — SBR Filing Rules / Filing Guidelines*, say so and
+*FR-NL- / FG-NL- (SBR Filing Rules / Filing Guidelines)*, say so and
 link the primary
 source. The cost of a wrong citation on a regulated filing is high.

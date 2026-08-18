@@ -11,8 +11,8 @@ Checks performed:
     treated as XHTML; flag if it does not parse.
   - Continuation chains (continuedAt → ix:continuation@id) form a tree
     with no cycles, no dangling references, and a single root per chain.
-  - decimals="INF" only where the reported value is exact. SEC prescribes INF
-    for exact amounts; the defect is INF on a value that has been rounded.
+  - A finite @decimals does not zero out non-zero digits of the reported
+    value (EDGAR XBRL Guide 9.5, validation EFM 6.5.37).
   - All contextRef values resolve to a defined xbrli:context.
   - All unitRef values resolve to a defined xbrli:unit.
   - Currency unit measures match ISO 4217 alpha-3 patterns.
@@ -54,25 +54,63 @@ XSI_NIL = f"{{{NS['xsi']}}}nil"
 ISO_4217 = re.compile(r"^[A-Z]{3}$")
 
 
-def _looks_rounded(text: str | None) -> bool:
-    """Does this rendered value look like it was rounded rather than exact?
+def fact_value(el: etree._Element) -> Decimal | None:
+    """The numeric value an ix:nonFraction reports, or None if undecidable.
 
-    `decimals="INF"` is not forbidden -- the EDGAR XBRL Guide section 6.6.4
-    prescribes it for exact monetary, percentage and basis-point amounts. The
-    real defect, which EFM 6.05.48 names, is INF on a value that was rounded:
-    the filer asserts exactness the figure does not have.
-
-    Distinguishing the two from the rendered text alone is not decidable in
-    general, so this errs towards silence: it flags only trailing-zero
-    magnitudes, where rounding is the overwhelmingly likely explanation. A
-    value with any significant low-order digit is treated as exact and passes.
+    The reported value is the rendered text adjusted by @scale and @sign, so
+    all three are needed before any arithmetic rule can be applied to it.
+    Returns None whenever the text cannot be read as a number with confidence:
+    @format may name a transformation from the registry that this script does
+    not implement, and guessing at one would produce confident nonsense. A
+    check that cannot see the value must decline to judge it.
     """
+    text = (el.text or "").strip()
     if not text:
+        return None
+    # Thousands separators and ordinary whitespace are safe to drop; anything
+    # else left over means the transformation is not one we can read.
+    cleaned = re.sub(r"[\s,\u00a0]", "", text)
+    try:
+        value = Decimal(cleaned)
+    except InvalidOperation:
+        return None
+    scale = el.get("scale")
+    if scale is not None:
+        try:
+            value = value.scaleb(int(scale))
+        except (ValueError, InvalidOperation):
+            return None
+    if el.get("sign") == "-":
+        value = -value
+    return value
+
+
+def truncates_nonzero_digits(value: Decimal, decimals: str) -> bool:
+    """Does this @decimals interpret a non-zero digit of `value` as zero?
+
+    EDGAR XBRL Guide section 9.5: "If the decimals attribute of a numeric fact
+    is not INF, then the value is interpreted as if certain digits were zero.
+    An instance must not contain usage that cause non-zero digits to be
+    interpreted as zero." Validation EFM 6.5.37.
+
+    `decimals="d"` zeroes every digit below the 10**-d place, so the rule holds
+    exactly when value * 10**d is an integer. The guide stresses that the test
+    is asymmetric: a decimals FINER than the value's own accuracy is fine --
+    1,000,000 may carry any decimals greater than -6 -- because zeroing digits
+    that are already zero loses nothing. Only coarsening is an error.
+
+    This is the decidable half of the decimals rules. Whether a filer SHOULD
+    have used INF (guide section 6.6.4: INF for an exactly reported amount)
+    depends on the accuracy of the underlying figure, which is not present in
+    the document, so it is deliberately not checked here.
+    """
+    if decimals == "INF":
+        return False  # infinite precision zeroes nothing
+    try:
+        shifted = value.scaleb(int(decimals))
+    except (ValueError, InvalidOperation):
         return False
-    digits = re.sub(r"[^0-9]", "", text.replace(",", ""))
-    if len(digits) < 4 or set(digits) == {"0"}:
-        return False
-    return digits.endswith("000")
+    return shifted != shifted.to_integral_value()
 
 
 def canonical_fact_text(value: str) -> str:
@@ -154,12 +192,15 @@ def check(path: Path) -> list[str]:
                 "ix:nonFraction has mutually exclusive attributes set "
                 f"(decimals, precision, xsi:nil) at line {el.sourceline}"
             )
-        if el.get("decimals") == "INF" and _looks_rounded(el.text):
-            issues.append(
-                f"ix:nonFraction declares decimals='INF' at line {el.sourceline} "
-                f"but the reported value {(el.text or '').strip()!r} appears "
-                "rounded — INF asserts the amount is exact"
-            )
+        decimals = el.get("decimals")
+        if decimals and not nil_present:
+            value = fact_value(el)
+            if value is not None and truncates_nonzero_digits(value, decimals):
+                issues.append(
+                    f"ix:nonFraction at line {el.sourceline} has decimals="
+                    f"'{decimals}', which interprets non-zero digits of "
+                    f"{value} as zero (EFM 6.5.37)"
+                )
 
     # --- ix:nonNumeric required attributes ---
     for el in nn_facts:

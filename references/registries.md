@@ -1,11 +1,11 @@
-# XBRL Registries — LRR, DTR, and URI Resolution
+# XBRL Registries: LRR, DTR, and URI Resolution
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
 
-XBRL 2.1 (2003) is deliberately minimal: seven label roles, a small set of item types, a linkbase mechanism. Real-world filings (ESEF, US-GAAP, IFRS, SBR) need more. XBRL International publishes those extensions through **registries** — versioned, community-maintained lists of URIs and types that act as de facto standards. This file covers the two most consequential — **Label Role Registry (LRR)** and **Data Types Registry (DTR)** — plus URI resolution (xsi, xml:base, XML Catalogs).
+XBRL 2.1 (2003) is deliberately minimal: seven label roles, a small set of item types, a linkbase mechanism. Real-world filings (ESEF, US-GAAP, IFRS, SBR) need more. XBRL International publishes those extensions through **registries**: versioned, community-maintained lists of URIs and types that act as de facto standards. This file covers the two most consequential, **Label Role Registry (LRR)** and **Data Types Registry (DTR)**, plus URI resolution (xsi, xml:base, XML Catalogs).
 
-XBRL International registries index: https://specifications.xbrl.org/spec-group-index-registries.html — lists LRR, DTR, Units Registry, Functions Registry, and the separately versioned Inline XBRL Transformation Registry.
+XBRL International registries index: https://specifications.xbrl.org/spec-group-index-registries.html. It lists LRR, DTR, Units Registry, Functions Registry, and the separately versioned Inline XBRL Transformation Registry.
 
 ## Label Role Registry (LRR)
 
@@ -22,8 +22,8 @@ index: https://specifications.xbrl.org/work-product-index-registries-lrr-2.0.htm
 
 The most operationally important roles in the LRR are the
 **negated-label** family. They tell a renderer to flip the displayed
-sign of a fact while leaving the underlying XBRL value untouched —
-essential because XBRL signs follow a concept's `xbrli:balance`,
+sign of a fact while leaving the underlying XBRL value untouched.
+This is essential because XBRL signs follow a concept's `xbrli:balance`,
 which often disagrees with how the figure is presented in a printed
 statement (e.g., expenses presented as positive deductions).
 
@@ -31,19 +31,19 @@ statement (e.g., expenses presented as positive deductions).
 
 All from base `http://www.xbrl.org/2009/role/`:
 
-- `negatedLabel` — `http://www.xbrl.org/2009/role/negatedLabel`
-- `negatedTerseLabel` — `http://www.xbrl.org/2009/role/negatedTerseLabel`
-- `negatedTotalLabel` — `http://www.xbrl.org/2009/role/negatedTotalLabel`
-- `negatedPeriodStartLabel` — `http://www.xbrl.org/2009/role/negatedPeriodStartLabel`
-- `negatedPeriodEndLabel` — `http://www.xbrl.org/2009/role/negatedPeriodEndLabel`
-- `negatedNetLabel` — `http://www.xbrl.org/2009/role/negatedNetLabel`
-- `netLabel` — `http://www.xbrl.org/2009/role/netLabel`
+- `negatedLabel`: `http://www.xbrl.org/2009/role/negatedLabel`
+- `negatedTerseLabel`: `http://www.xbrl.org/2009/role/negatedTerseLabel`
+- `negatedTotalLabel`: `http://www.xbrl.org/2009/role/negatedTotalLabel`
+- `negatedPeriodStartLabel`: `http://www.xbrl.org/2009/role/negatedPeriodStartLabel`
+- `negatedPeriodEndLabel`: `http://www.xbrl.org/2009/role/negatedPeriodEndLabel`
+- `negatedNetLabel`: `http://www.xbrl.org/2009/role/negatedNetLabel`
+- `netLabel`: `http://www.xbrl.org/2009/role/netLabel`
 
 > **Honest gap note:** A `negatedVerboseLabel` was not present in the
 > registry contents fetched. Treat its existence as unverified; the
 > verified negated set is the six above plus
 > `netLabel` / `negatedNetLabel`. The LRR also intentionally does not
-> register `*PeriodEndTotalLabel`-style negated variants — instead it
+> register `*PeriodEndTotalLabel`-style negated variants; instead it
 > offers `positivePeriodEndTotalLabel`,
 > `negativePeriodEndTotalLabel`, etc.
 
@@ -56,9 +56,9 @@ Sign-conditional balance labels (base `http://www.xbrl.org/2009/role/`):
 
 Lifecycle and reference roles:
 
-- `restatedLabel` — `http://www.xbrl.org/2006/role/restatedLabel` (note the 2006 base — older than the rest)
-- `deprecatedLabel`, `deprecatedDateLabel` — `http://www.xbrl.org/2009/role/...`
-- `commonPracticeRef`, `nonauthoritativeLiteratureRef`, `recognitionRef` — reference resource roles
+- `restatedLabel`: `http://www.xbrl.org/2006/role/restatedLabel` (note the 2006 base, older than the rest)
+- `deprecatedLabel`, `deprecatedDateLabel`: `http://www.xbrl.org/2009/role/...`
+- `commonPracticeRef`, `nonauthoritativeLiteratureRef`, `recognitionRef`: reference resource roles
 
 OIM-era property roles (base `https://www.xbrl.org/2022/role/`):
 
@@ -71,8 +71,8 @@ registered for backward compatibility.
 
 The LRR additionally registers **arc-roles**, including:
 
-- `parent-child` — `http://www.xbrl.org/2013/arcrole/parent-child`
-- ESMA's `wider-narrower` for ESEF anchoring — `http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower`
+- `parent-child`: `http://www.xbrl.org/2013/arcrole/parent-child`
+- ESMA's `wider-narrower` for ESEF anchoring: `http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower`
 - 2023 OIM arc-roles: `instant-inflow`, `instant-outflow`, `instant-contra`, `instant-accrual`, `trait-concept`, `class-subclass`, `trait-domain`.
 
 > **Honest gap note:** `commentaryGuidance` / `disclosureGuidance` /
@@ -110,13 +110,13 @@ separate namespaces in this revision.
 
 ### Types module (verified contents)
 
-- `textBlockItemType` — narrative HTML-fragment tagging (the most heavily used DTR type globally)
-- `escapedItemType` — escaped markup
-- `xmlItemType`, `xmlNodesItemType` — embedded XML
-- `domainItemType` — used as the type of dimension domain members
-- `noLangTokenItemType`, `noLangStringItemType` — language-neutral string/token
-- `gYearListItemType` — list of gregorian years
-- `dateTimeItemType` — DTR-flavoured datetime
+- `textBlockItemType`: narrative HTML-fragment tagging (the most heavily used DTR type globally)
+- `escapedItemType`: escaped markup
+- `xmlItemType`, `xmlNodesItemType`: embedded XML
+- `domainItemType`: used as the type of dimension domain members
+- `noLangTokenItemType`, `noLangStringItemType`: language-neutral string/token
+- `gYearListItemType`: list of gregorian years
+- `dateTimeItemType`: DTR-flavoured datetime
 
 ### Numeric module (verified contents)
 
@@ -154,7 +154,7 @@ report formats:
 - `guidanceItemType`
 
 An "SQName" is a string-form qualified name (`prefix:local`) that
-carries its own prefix-to-namespace bindings — designed so that fact
+carries its own prefix-to-namespace bindings, designed so that fact
 values which are themselves QNames can survive serialisation in
 non-XML formats. See `references/types.md` §SQName for the OIM
 mechanism in detail.
@@ -200,8 +200,8 @@ a `META-INF/catalog.xml` inside every package zip. That file is a
 **restricted subset of the OASIS XML Catalogs specification** and is
 limited to `<rewriteURI>` entries. Each entry has:
 
-- `uriStartString` — the public URL prefix to match
-- `rewritePrefix` — the replacement (typically a relative path like `../www.example.com/taxonomy/...`)
+- `uriStartString`: the public URL prefix to match
+- `rewritePrefix`: the replacement (typically a relative path like `../www.example.com/taxonomy/...`)
 
 Resolution uses the **longest matching prefix**. The result is that a
 processor opening the package can resolve a public URL such as
@@ -217,7 +217,7 @@ implementations.
 
 ### DNS-resolvable taxonomy URIs
 
-XBRL namespaces are URIs, not URLs — the standard does not require
+XBRL namespaces are URIs, not URLs; the standard does not require
 them to dereference. But ESEF treats issuer extension taxonomies as
 web resources: each filing's extension namespace and its entry-point
 URL ought to be resolvable so that downstream consumers (regulators,
@@ -228,7 +228,7 @@ Practical consequences for taxonomy authors:
 
 - The extension namespace authority (the host part of the namespace URI) should be a domain the issuer controls and that resolves in DNS.
 - If the namespace URI also serves as the schema's location hint, hosting the schema at that URL is good practice (and is assumed by some consumers).
-- In code paths that *generate* a filing, do not gate generation on live DNS resolution — transient failures break otherwise-valid output. DNS validation belongs at the user-input boundary (taxonomy registration), not in the iXBRL writer.
+- In code paths that *generate* a filing, do not gate generation on live DNS resolution; transient failures break otherwise-valid output. DNS validation belongs at the user-input boundary (taxonomy registration), not in the iXBRL writer.
 
 ## Sources
 

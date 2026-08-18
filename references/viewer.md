@@ -4,11 +4,11 @@
 
 
 Use the Arelle iXBRL Viewer as the **visual review workbench**, not as
-a replacement for validation. The viewer is the tool that makes
-content-level defects visible — sign conventions, scope mis-tagging,
-orphan presentation arcs, dimensional context drift — that no
-validator catches. Validate first (see SKILL.md "Standard validation
-pipeline"), then use the viewer for the content pass.
+a replacement for validation. The viewer is the tool that makes visible
+the content-level defects no validator catches: sign conventions, scope
+mis-tagging, orphan presentation arcs, dimensional context drift.
+Validate first (see SKILL.md "Standard validation pipeline"), then use
+the viewer for the content pass.
 
 The viewer is published as an Arelle plugin plus a JavaScript bundle:
 
@@ -31,7 +31,7 @@ python3 /path/to/Arelle/arelleCmdLine.py \
 
 For Inline XBRL document sets, also load `inlineXbrlDocumentSet`, pass
 the document-set JSON to `-f`, and write `--save-viewer` to an output
-directory. Document-set and stub viewers must be served over HTTP —
+directory. Document-set and stub viewers must be served over HTTP:
 browser security restrictions prevent loading them from `file:` URLs.
 
 Pin the viewer JavaScript to the same major version, and the same or
@@ -63,12 +63,12 @@ Walk these in order. Each step builds on the prior.
 - **Search and filter.** Find facts by taxonomy labels, references,
   concept type, hidden/visible status, period, namespace, unit, scale,
   dimensions, and calculation relationships. Useful filters for review:
-  - All facts where the concept is abstract (should be zero — abstracts
+  - All facts where the concept is abstract (should be zero: abstracts
     are never tagged on a fact).
-  - All facts with `decimals="INF"` (audit each one — see SKILL.md
+  - All facts with `decimals="INF"` (audit each one; see SKILL.md
     "First principles" §1).
   - All facts in `ix:hidden` (each must have a visible counterpart or
-    a defensible reason — see SKILL.md "First principles" §8).
+    a defensible reason; see SKILL.md "First principles" §8).
 - **Duplicate-fact cycle.** When the inspector reports more than one
   occurrence of a fact, cycle through them. Inconsistent duplicate
   values are a filing defect, not a display issue (`ESEF.2.2.4.*`,
