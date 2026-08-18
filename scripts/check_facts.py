@@ -64,6 +64,12 @@ XSI_NIL = f"{{{NS['xsi']}}}nil"
 
 ISO_4217 = re.compile(r"^[A-Z]{3}$")
 
+# A currency measure is identified by this namespace and its local part, not by
+# the prefix a document happens to bind to it. Matching the literal string
+# "iso4217:" skipped a measure under any other prefix, and accepted one whose
+# prefix was bound somewhere else entirely.
+ISO_4217_NS = "http://www.xbrl.org/2003/iso4217"
+
 
 # Transformations from the Inline XBRL Transformation Registry whose only
 # effect on a numeric fact is the separator convention. Everything else in the
@@ -95,7 +101,12 @@ ASCII_DIGITS = frozenset("0123456789")
 # resolution, because `:num-dot-decimal` has an empty prefix that a bare
 # rpartition reads as "no prefix", resolving it against the default namespace
 # as though it were well formed.
-_NCNAME = r"[A-Za-z_][\w.\-]*"
+#
+# NCNames are not ASCII. `xmlns:é` is a legal binding, so an ASCII-only start
+# character would decline a conformant document. `[^\W\d]` is the Unicode-aware
+# spelling of "a word character that is not a digit", which is letters and the
+# underscore; `\w` then admits digits and combining marks in later positions.
+_NCNAME = r"[^\W\d][\w.\-\u00b7]*"
 QNAME = re.compile(rf"(?:{_NCNAME}:)?{_NCNAME}")
 
 # Exactly the characters the input patterns of `num-dot-decimal-apos` and
@@ -126,6 +137,18 @@ SEPARATOR_FORMATS = {
 }
 
 
+def split_qname(el: etree._Element, value: str) -> tuple[str | None, str]:
+    """Resolve a QName-valued element body to (namespace, local part).
+
+    The namespace is what identifies the name; the prefix is only how this
+    document spells it. Reading the prefix instead means a measure written
+    `curr:USD` is missed and one written `iso4217:USD` under a prefix bound
+    elsewhere is mistaken for a currency.
+    """
+    prefix, _, local = value.rpartition(":")
+    return el.nsmap.get(prefix or None), local or value
+
+
 def resolve_transformation(
     el: etree._Element, raw_format: str
 ) -> tuple[str, str] | None:
@@ -146,40 +169,45 @@ def resolve_transformation(
     return SEPARATOR_FORMATS.get((namespace, local))
 
 
-def decode_separators(text: str, groups: str, decimal_mark: str) -> str | None:
-    """Strip the group separators, or None if the text does not fit the grammar.
+def collapse(text: str) -> str:
+    """Apply XML `whiteSpace="collapse"`, which the registry patterns assume.
 
-    Deliberately stricter than the registry's own input pattern, which permits
-    runs of separators. Being stricter can only decline a document the registry
-    would accept, and a decline is reported as a coverage gap, whereas being
-    laxer invents a value from malformed text.
+    Only the four XML whitespace characters take part. `str.strip()` also
+    removes Unicode spaces such as U+2009 THIN SPACE, which collapsing does
+    not, so a value surrounded by them would have been accepted as though the
+    surrounding characters were not there.
+    """
+    for character in "\t\n\r":
+        text = text.replace(character, " ")
+    return re.sub(r" +", " ", text).strip(" ")
+
+
+def decode_separators(text: str, groups: str, decimal_mark: str) -> str | None:
+    """Strip the group separators, or None if the text does not fit the pattern.
+
+    Follows the registry's own input pattern rather than a tidier one. The
+    integer part is any run of digits and group separators, in any arrangement,
+    and the fraction is digits and spaces after a single decimal mark. Runs of
+    separators and a leading or trailing one are all permitted, so `1,,234.56`
+    and `1. 5` are valid inputs and are decoded. An earlier version rejected
+    them as malformed, which turned conformant documents into coverage gaps.
 
     Digits are ASCII only. `str.isdigit()` is true of Arabic-Indic and
     fullwidth digits, which these patterns do not admit and which `Decimal`
-    would then happily parse into a number the document never stated. Group
-    width is not checked, because `numdotdecimalin` groups Indian-style.
+    would then parse into a number the document never stated.
     """
     if text.count(decimal_mark) > 1:
         return None
     whole, mark, fraction = text.partition(decimal_mark)
     if mark and not fraction:
-        return None  # a trailing decimal mark with no digits after it
+        return None  # a decimal mark with nothing after it
     separators = groups + SPACES
-    for part, allowed in ((whole, separators), (fraction, SPACES)):
-        if not part:
-            continue
-        if part[0] in allowed or part[-1] in allowed:
-            return None  # a leading or trailing separator is not a grouping
-        previous_was_separator = False
-        for char in part:
-            is_separator = char in allowed
-            if is_separator and previous_was_separator:
-                return None  # adjacent separators are not a grouping
-            if not is_separator and char not in ASCII_DIGITS:
-                return None
-            previous_was_separator = is_separator
-    whole = "".join(c for c in whole if c not in separators)
-    fraction = "".join(c for c in fraction if c not in SPACES)
+    if any(c not in separators and c not in ASCII_DIGITS for c in whole):
+        return None
+    if any(c not in SPACES and c not in ASCII_DIGITS for c in fraction):
+        return None
+    whole = "".join(c for c in whole if c in ASCII_DIGITS)
+    fraction = "".join(c for c in fraction if c in ASCII_DIGITS)
     if not whole and not fraction:
         return None
     return f"{whole or '0'}.{fraction}" if fraction else whole
@@ -200,7 +228,7 @@ def fact_value(el: etree._Element) -> Decimal | None:
         # which this function does not assemble. Reading `.text` alone would
         # silently judge a fragment of the value.
         return None
-    text = (el.text or "").strip()
+    text = collapse(el.text or "")
     if not text:
         return None
 
@@ -411,12 +439,11 @@ def check(path: Path) -> list[str]:
     for u in root.findall(".//xbrli:unit", NS):
         for measure in u.findall(".//xbrli:measure", NS):
             txt = (measure.text or "").strip()
-            if txt.startswith("iso4217:"):
-                code = txt.split(":", 1)[1]
-                if not ISO_4217.match(code):
-                    issues.append(
-                        f"unit @id='{u.get('id')}' has non-ISO-4217 measure '{txt}'"
-                    )
+            namespace, code = split_qname(measure, txt)
+            if namespace == ISO_4217_NS and not ISO_4217.match(code):
+                issues.append(
+                    f"unit @id='{u.get('id')}' has non-ISO-4217 measure '{txt}'"
+                )
 
     # --- Continuation chains ---
     # Built with an explicit loop rather than a comprehension so the keys narrow

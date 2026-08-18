@@ -34,6 +34,7 @@ from check_facts import truncates_nonzero_digits
 # the resolved path.
 IXT_NS = "http://www.xbrl.org/inlineXBRL/transformation/2022-02-16"
 ENTITY_NS = "http://example.com/entity"
+ISO_NS = "http://www.xbrl.org/2003/iso4217"
 NS_DECL = (
     'xmlns="http://www.w3.org/1999/xhtml" '
     'xmlns:ix="http://www.xbrl.org/2013/inlineXBRL" '
@@ -43,7 +44,8 @@ NS_DECL = (
     'xmlns:ixt3="http://www.xbrl.org/inlineXBRL/transformation/2015-02-26" '
     f'xmlns:e="{ENTITY_NS}" '
     f'xmlns:f="{ENTITY_NS}" '
-    'xmlns:fake="http://example.com/not-the-registry"'
+    'xmlns:fake="http://example.com/not-the-registry" '
+    f'xmlns:iso4217="{ISO_NS}"'
 )
 
 
@@ -243,6 +245,58 @@ class CheckFactsTestCase(unittest.TestCase):
         self.assertFalse(
             any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
             f"got {issues}",
+        )
+
+    def test_registry_permits_irregular_separator_runs(self):
+        """The integer part is digits and separators in any arrangement.
+
+        An earlier grammar here rejected runs of separators and leading or
+        trailing ones as malformed. The registry permits them, so conformant
+        documents were being turned into coverage gaps.
+        """
+        for text in ("1,,234.56", ",1234.56", "1234,.56", "1 234.56"):
+            with self.subTest(text=text):
+                issues = self.run_on(
+                    self._fact(text, "-2", ' format="ixt:num-dot-decimal"')
+                )
+                self.assertTrue(
+                    any("1234.56" in i for i in issues), f"{text}: {issues}"
+                )
+
+    def test_space_after_the_decimal_mark_is_permitted(self):
+        """`1. 5` is a valid input; the fraction admits spaces."""
+        issues = self.run_on(self._fact("1. 5", "0", ' format="ixt:num-dot-decimal"'))
+        self.assertTrue(any("1.5" in i for i in issues), f"got {issues}")
+
+    def test_unicode_prefixes_resolve(self):
+        """NCNames are not ASCII, so `xmlns:é` is a legal binding."""
+        body = (
+            CONTEXT_AND_UNIT + '<ix:nonFraction xmlns:\u00e9="' + IXT_NS + '"'
+            ' name="e:A" contextRef="c1" unitRef="u1" decimals="-2"'
+            ' format="\u00e9:num-dot-decimal">1,234.56</ix:nonFraction>'
+        )
+        issues = self.run_on(doc(body))
+        self.assertTrue(any("1234.56" in i for i in issues), f"got {issues}")
+
+    def test_currency_measures_are_matched_by_namespace(self):
+        """A measure is its namespace and local part, not its prefix spelling."""
+        under_alias = (
+            '<xbrli:context id="c1"/><xbrli:unit id="u1">'
+            '<xbrli:measure xmlns:curr="' + ISO_NS + '">curr:USDX</xbrli:measure>'
+            "</xbrli:unit>"
+        )
+        self.assertTrue(
+            any("non-ISO-4217" in i for i in self.run_on(doc(under_alias))),
+            "a currency under a different prefix was skipped",
+        )
+        unrelated = (
+            '<xbrli:context id="c1"/><xbrli:unit id="u1">'
+            '<xbrli:measure xmlns:iso4217="http://example.com/other">'
+            "iso4217:USDX</xbrli:measure></xbrli:unit>"
+        )
+        self.assertFalse(
+            any("non-ISO-4217" in i for i in self.run_on(doc(unrelated))),
+            "a non-currency namespace was treated as ISO 4217",
         )
 
     def test_dot_decimal_transformation_is_read(self):
@@ -562,10 +616,12 @@ class CheckFactsTestCase(unittest.TestCase):
     def test_malformed_transformation_input_is_declined(self):
         """Text that does not fit the grammar yields no value at all.
 
-        Runs of separators, or one in a leading or trailing position, are not
-        a grouping. Stripping them anyway would invent a number.
+        The registry's integer part admits digits and separators in any
+        arrangement, so runs of separators and leading or trailing ones are
+        VALID and are covered by the decoding test. What is malformed is a
+        second decimal mark or a character that is neither.
         """
-        for text in ("1,,234.56", ",234", "1,234,", "1.2.3", "12a4"):
+        for text in ("1.2.3", "12a4", "1..5", "-5"):
             with self.subTest(text=text):
                 issues = self.run_on(
                     self._fact(text, "0", ' format="ixt:num-dot-decimal"')
