@@ -18,7 +18,7 @@ import io
 import sys
 import tempfile
 import unittest
-from decimal import Decimal
+from decimal import Decimal, localcontext
 from fractions import Fraction
 from pathlib import Path
 
@@ -524,6 +524,33 @@ class CheckFactsTestCase(unittest.TestCase):
             self._fact("1\u02bc234.56", "2", ' format="ixt:num-dot-decimal-apos"')
         )
         self.assertTrue(any(i.startswith("NOTE") for i in issues), f"got {issues}")
+
+    def test_no_operation_consults_the_decimal_context(self):
+        """Guard against the whole class of bug, not one more instance of it.
+
+        Three separate rounding defects were fixed here in sequence: scaleb()
+        in the predicate, scaleb() again in the parser, then unary minus and
+        normalize(). Each was the same mistake in a new place. Running the
+        decode-and-judge path under a deliberately tiny precision makes any
+        context-sensitive operation change the answer, so a fourth instance
+        fails here rather than reaching a filing.
+        """
+        long_value = "10000000000000000000000000000.1"
+        for extra in ("", ' sign="-"', ' scale="0"', ' sign="-" scale="-3"'):
+            with self.subTest(extra=extra):
+                with localcontext() as ctx:
+                    ctx.prec = 5
+                    issues = self.run_on(self._fact(long_value, "0", extra))
+                self.assertTrue(
+                    any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+                    f"{extra} lost precision to the context: {issues}",
+                )
+        with localcontext() as ctx:
+            ctx.prec = 5
+            self.assertNotEqual(
+                check_facts.canonical_fact_text("10000000000000000000000000000.1"),
+                check_facts.canonical_fact_text("10000000000000000000000000000.2"),
+            )
 
     def test_unresolved_context_is_flagged(self):
         body = (
