@@ -323,7 +323,7 @@ version.
 
 | Basis | Taxonomy | Governance / supported versions |
 |---|---|---|
-| Finnish FAS | **National SBR taxonomy** (module **OYTP** for LLC/co-op; also STK/STP/VYTP/LSTP) | PRH maintains company modules, State Treasury (Valtiokonttori) the municipal/wellbeing modules; on `avoindata.fi`; annual cadence; **SBR-DPM-2025-12-31** (from periods starting 1.1.2026) + legacy `kpl-2016-12/*` |
+| Finnish FAS | **National SBR taxonomy** (module **OYTP** for LLC/co-op; also STK/STP/VYTP/LSTP) | PRH maintains company modules, State Treasury (Valtiokonttori) the municipal/wellbeing modules; on `avoindata.fi`; annual cadence; **SBR-DPM-2025-12-31_fix_2026-02-19** (from periods starting 1.1.2026) + legacy `kpl-2016-12/*` |
 | IFRS | **IFRS Accounting Taxonomy** (IFRS Foundation) | version approved for the period; PRH intake supports **2025, 2024** |
 | Listed (consolidated) | **ESEF taxonomy** (ESMA) | ESEF ZIP re-used; also to Trade Register from FY starting 2024; PRH intake supports **ESEF 2024, 2022** |
 

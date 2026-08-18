@@ -19,7 +19,7 @@ XBRL** (iXBRL).
 The architecture of the RTS distinguishes two tagging regimes:
 
 - **Detailed (numeric) tagging** of the primary financial statements (Annex II Table 1), applicable from financial years beginning on or after 1 January 2020.
-- **Block (narrative) tagging** of the notes (Annex II Table 2), applicable from financial years beginning on or after **1 January 2022**. Article 6 of the Regulation imposes the Table 2 obligation: issuers must mark up all disclosures made in the IFRS consolidated financial statements (or made by cross-reference therein to other parts of the AFR) that correspond to the elements listed in Table 2.
+- **Block (narrative) tagging** of the notes (Annex II Table 2), applicable from financial years beginning on or after **1 January 2022**. Article 4(2) imposes the Table 2 obligation by requiring issuers to mark up, as a minimum, the disclosures specified in Annex II. Annex II point 3 sets the scope: issuers must mark up all disclosures made in the IFRS consolidated financial statements, or made by cross-reference therein to other parts of the AFR, that correspond to the elements listed in Table 2. Article 6 governs how those markups are embedded, requiring Inline XBRL under Annex III and compliance with the marking up and filing rules in Annex IV.
 
 The Regulation has been amended several times to track updates to the
 IFRS Taxonomy. The currently published consolidated versions on
@@ -168,7 +168,7 @@ any preparation tool that purports to be ESEF-conformant.
 
 ## Sources
 
-- Commission Delegated Regulation (EU) 2019/815 of 17 December 2018 (RTS on ESEF), Article 6 and Annex II Table 2. Consolidated versions: `02019R0815-20210101`, `02019R0815-20230119`, `02019R0815-20250101`. https://eur-lex.europa.eu/eli/reg_del/2019/815/oj/eng and https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02019R0815-20250101
+- Commission Delegated Regulation (EU) 2019/815 of 17 December 2018 (RTS on ESEF), Article 4(2) and Annex II Table 2. Consolidated versions: `02019R0815-20210101`, `02019R0815-20230119`, `02019R0815-20250101`. https://eur-lex.europa.eu/eli/reg_del/2019/815/oj/eng and https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02019R0815-20250101
 - ESMA, *ESEF Reporting Manual: Preparation of Annual Financial Reports in ESEF format (Update October 2025)*, document reference **ESMA32-60-254 Rev**, dated 14 October 2025. Sections verified literally: Glossary (block tag definition, p. 10), §1.9.1 Marking up notes and accounting policies (p. 23), §1.9.2 Granularity of block tagging (p. 24), §1.9.3 Other considerations (p. 25–26), §2.2.4 Facts duplication (p. 30). https://www.esma.europa.eu/sites/default/files/library/esma32-60-254_esef_reporting_manual.pdf
 - Directive 2004/109/EC (Transparency Directive), Article 4 and Article 20, as amended by Directive 2013/50/EU.
 - XBRL International / XBRL.org, *Guidance on Block Tagging and Other ESEF Reporting Manual Updates from ESMA*. https://www.xbrl.org/guidance-on-block-tagging-and-other-esef-reporting-manual-updates-from-esma/

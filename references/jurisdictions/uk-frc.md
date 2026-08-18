@@ -65,9 +65,13 @@ four things:
    Charities SORP. Selects the FRC accounts entry point and the mandatory
    items (see *Filer classification*).
 4. **The document class**: accounts vs computation. HMRC returns carry
-   *both*; the CT computational and DPL taxonomies are separate from the
-   FRC accounts taxonomies and owned by HMRC, not the FRC. ["Taxonomies
-   accepted by HMRC", GOV.UK]
+   *both*. The CT computational taxonomy is separate from the FRC
+   accounts taxonomies and owned by HMRC, not the FRC. The DPL is an
+   HMRC extension, but from the **FRC 2022 suite** it ships inside the
+   FRC package under an FRC namespace, as a section of each accounts
+   entry point rather than an entry point of its own (see *Detailed
+   Profit & Loss (DPL)*). ["Taxonomies accepted by HMRC", GOV.UK; "2022
+   FRC Taxonomy Suite" release notes, FRC §4]
 
 ### Taxonomy ownership split
 
@@ -75,7 +79,7 @@ four things:
 |---|---|---|
 | FRS 101 / 102 (incl. 105) / UK IFRS / UKSEF / Charities / Irish Revenue Extension accounts taxonomies | **FRC** | Statutory-accounts markup for CH, HMRC accounts, FCA/UKSEF, ROS |
 | CT Computational taxonomy (2021 / 2023 / 2024 / 2025 current) | **HMRC** | The tax computation attached to a CT600 |
-| Detailed Profit & Loss (DPL) taxonomy | **HMRC** | The detailed P&L, tagged in the accounts **or** the computation, not both (see the *HMRC CT600* profile) |
+| Detailed Profit & Loss (DPL) | **HMRC** extension, published inside the FRC suite (namespace `http://xbrl.frc.org.uk/dpl/…`; standalone through FRC 2021 DPL, a section of each accounts entry point from FRC 2022) | The detailed P&L, tagged in the accounts **or** the computation, not both (see the *HMRC CT600* profile) |
 
 ### Bi-temporal cheatsheet: which rule applied when
 
@@ -227,9 +231,14 @@ The DPL user guide is explicit on both scope and completeness. **Scope**
 data in Detailed P&L statements. They should not be used for tagging data in ordinary
 statutory accounts or in computations"; "tags applied to statutory
 accounts must be sourced from the accounts taxonomies, while tags applied
-to Detailed P&L data must be sourced from the DPL taxonomies". **Sole
-source** (User Guide §2.2): the DPL taxonomies "are intended as the sole
-source of tags for Detailed P&L accounts", and Detailed P&L data "must not be tagged
+to Detailed P&L data must be sourced from the DPL taxonomies". That
+prohibition governs which *data* a DPL tag may carry, not which document
+it sits in: ordinary statutory-accounts facts take accounts-taxonomy
+tags and ordinary computation facts take CT computational-taxonomy tags,
+while a Detailed P&L attached to the computation still takes DPL tags.
+["CT Online XBRL Technical Pack v2.0" §3.3.3] **Sole source** (User
+Guide §2.2): the DPL taxonomies "are intended as the sole source of
+tags for Detailed P&L accounts", and Detailed P&L data "must not be tagged
 using tags in the statutory accounts taxonomies if these tags are not also
 available in the DPL taxonomy presentation views"; the "Detailed Profit
 and Loss" section in the UK GAAP statutory-accounts taxonomy "must not be
@@ -865,7 +874,7 @@ the statutory-accounts and CT-accounts gates. Who does what:
 | Institution | Role | Detail |
 |---|---|---|
 | **Companies House** (business register / publication organ) | Maintains the statutory register; receives and publishes company accounts | *Start here: choose a filing profile*; the *Companies House* profile; *Companies House: the public XBRL Company Accounts Validator* |
-| **HM Revenue & Customs** (tax authority) | Structured-filing regime: CT600 iXBRL accounts + computations; **owns** the CT computational and DPL taxonomies | *Start here: choose a filing profile*; the *HMRC CT600* profile |
+| **HM Revenue & Customs** (tax authority) | Structured-filing regime: CT600 iXBRL accounts + computations; **owns** the CT computational taxonomy and the DPL extension, the latter published inside the FRC suite from FRC 2022 | *Start here: choose a filing profile*; the *HMRC CT600* profile |
 | **Financial Reporting Council (FRC)** (standards setter + taxonomy author/governance) | Sets UK GAAP (FRS 100–105); authors and governs the **annual** FRC taxonomy suite (latest + penultimate in use at once), published at `frc.org.uk` | *Start here: choose a filing profile*; *FRC XBRL Tagging Guide 2026 (v13.0)* |
 | **UK Endorsement Board (UKEB)** (IFRS adoption) | Established **26 Mar 2021**; delegated statutory IFRS-adoption functions from **21 May 2021** (SI 2021/609); endorses and adopts IFRS "for use in the UK": the standards the UK-IFRS taxonomy tags | [SI 2021/609; UKEB] |
 | **Financial Conduct Authority (FCA)** (securities regulator / NCA) | DTR + National Storage Mechanism for listed-issuer AFRs; UKSEF | the *FCA / UKSEF / NSM* profile |

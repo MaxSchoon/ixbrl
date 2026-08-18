@@ -15,17 +15,27 @@ has been amended several times; the consolidated version applicable
 from 1 January 2025 incorporates **Commission Delegated Regulation (EU)
 2025/19** of 26 September 2024 (the 2024 taxonomy update).
 
-**Scope.** Issuers whose securities are admitted to trading on an EU
-regulated market and that are subject to the Transparency Directive's
-annual financial report obligation: in practice EU listed-issuer
-parent entities preparing IFRS consolidated annual financial reports.
+**Scope.** Article 3 binds every issuer whose securities are admitted to
+trading on an EU regulated market and that is subject to the Transparency
+Directive's annual financial report obligation, whether incorporated in a
+Member State or in a third country: the entire report goes to XHTML
+regardless of the accounting framework. The marking-up obligation is
+separate and narrower. Article 4(1) is triggered only where the annual
+financial report includes IFRS consolidated financial statements, which
+Article 2(3) defines as consolidated statements under IFRS adopted
+pursuant to Regulation (EC) No 1606/2002 or under IFRS carrying the
+unreserved IAS 1 compliance statement referred to in point (a) of the
+first subparagraph of Article 1 of Decision 2008/961/EC. An issuer whose
+report contains no such statements files XHTML with no mandatory markup,
+and an issuer incorporated in a third country marks up nothing beyond
+those statements (Art. 5(2)).
 
 **Article-level requirements:**
 
 - **Article 3.** Issuers must prepare the **entire annual financial report in XHTML format** (single human-readable rendering).
 - **Article 4.** Where the AFR contains **IFRS consolidated financial statements**, issuers must **mark up those statements** (Art. 4(1)), covering at a minimum the disclosures specified in **Annex II** (Art. 4(2)). The Annex II Table 2 block-tagging obligation applies from financial years beginning on or after 1 January 2022. Markup uses the **XBRL markup language** and a taxonomy whose elements are those of the **core taxonomy** (Annex VI plus the presentation, calculation, label and definition linkbases, per Art. 2(1)); where it is not appropriate to use a core element under Annex IV point 4, the issuer must create **extension taxonomy elements** in accordance with Annex IV (Art. 4(4)). Article 4 does not itself impose Inline XBRL; that requirement sits in Article 6.
 - **Article 6.** Common rules on markups: markups made under Articles 4 and 5 must be **embedded in the XHTML annual financial report using the Inline XBRL specifications set out in Annex III** (Art. 6(a)), and must respect the **marking up and filing rules set out in Annex IV** (Art. 6(b)).
-- **Article 8.** Effective dates: detailed primary-statement tagging from financial years beginning on or after 1 January 2020; block tagging of notes from financial years beginning on or after 1 January 2022. (Some Member States including the Netherlands took a one-year deferral, so first NL filings landed in 2022.)
+- **Article 8.** Application: the Regulation applies to annual financial reports containing financial statements for financial years beginning on or after 1 January 2020. Article 8 states that one date and nothing else; it sets no separate date for the notes. The staged tagging dates sit in the Article 4(2) obligation as qualified by Annex II: point 1 (all numbers in a declared currency in the four primary statements) carries no date of its own and runs from the Article 8 date, point 2 requires the Table 1 elements for financial years beginning on or after 1 January 2020, and point 3 requires the Table 2 elements, the block tagging of the notes, for financial years beginning on or after 1 January 2022. Regulation (EU) 2021/337 amended Article 4(7) of Directive 2004/109/EC so that a Member State could allow issuers to start from financial years beginning on or after 1 January 2021; the Netherlands used that option, so the first Dutch ESEF filings landed in 2022.
 
 **Annex II** lists IFRS disclosures subject to mandatory tagging: Table
 1 (detailed tagging from 2020) and Table 2 (block tagging from 2022).
@@ -129,7 +139,7 @@ ESEF imposes **two complementary regimes** on issuers preparing IFRS
 consolidated AFRs:
 
 - **Detailed tagging** (Article 4 + Annex II Table 1; mandatory from FY2020). Each numeric line item in the four primary statements (Statement of Financial Position, Statement of P&L / OCI, Statement of Changes in Equity, Statement of Cash Flows) is tagged with an `ix:nonFraction` pointing to the matching IFRS or extension concept. Contexts, units (`iso4217:EUR`), decimals, signs all required. Calculation linkbase relationships must reconcile (subject to rounding).
-- **Block tagging** (Article 6 + Annex II Table 2; mandatory from FY2022). Entire note disclosures are wrapped in `ix:nonNumeric` text-block elements with `escape="true"`. The aim is structured retrieval of narrative; auditors should expect explicit tags like `ifrs-full:DisclosureOfBasisOfPreparationOfFinancialStatementsExplanatory` plus *escaped* HTML preserving tables, lists, and headings inside the block.
+- **Block tagging** (Article 4(2) + Annex II Table 2; mandatory from FY2022). Entire note disclosures are wrapped in `ix:nonNumeric` text-block elements with `escape="true"`. The aim is structured retrieval of narrative; auditors should expect explicit tags like `ifrs-full:DisclosureOfBasisOfPreparationOfFinancialStatementsExplanatory` plus *escaped* HTML preserving tables, lists, and headings inside the block.
 
 A typical narrative block tag:
 
@@ -152,9 +162,10 @@ extraction) and 2.2.7 (proper application of the escape attribute).
 Anchoring links **extension concepts** (entity-specific concepts) back
 to the standard taxonomy. Implemented as an **XBRL definition-linkbase
 relationship** using the dedicated arcrole
-**`http://www.xbrl.org/2018/arcrole/wider-narrower`** (the
-`esef:wider-narrower` arc), the only XBRL relationship developed
-specifically for ESEF.
+**`http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower`**,
+registered in the XBRL Link Role Registry on 2018-11-21 and declared in
+`http://www.xbrl.org/lrr/arcrole/esma-arcrole-2018-11-21.xsd`, the only
+XBRL relationship developed specifically for ESEF.
 
 **Rules:**
 

@@ -167,7 +167,7 @@ today's date.
 |---|---|---|
 | Digital (XHTML) filing **mandatory** for sustainability-reporting companies | FY **2025** onward | Can no longer file FS via tax return; file directly to Trade Register [S1][S3]. |
 | Structured **taxonomy markup** (PRH identifiers) mandatory | periods starting **on/after 1 Jan 2026** | FY2025 permitted XHTML **without** PRH identifiers [S1][S4]. |
-| **SBR-DPM-2025-12-31** is the SBR version to mark up FAS statements against | periods starting **1 Jan 2026** at latest | PRH confirms the company-reporting SBR parts each year-end; the confirmed spec applies to periods starting the following year [S2][S4]. |
+| **SBR-DPM-2025-12-31_fix_2026-02-19** is the SBR version to mark up FAS statements against | periods starting **1 Jan 2026** at latest | PRH/1088/01/2026 s. 1 names this package by name; the unsuffixed `SBR-DPM-2025-12-31` is withdrawn on avoindata.fi as *"VANHA VERSIO, ÄLÄ KÄYTÄ"* [S2][S9]. |
 | ESEF ZIP **also** filed to the Trade Register (not only to the OAM) | financial year starting **2024** onward | Listed issuers re-use their ESEF artifact [S2][S3]. |
 | **Law 555/2026** narrows CSRD scope (turnover >€450M **and** >1,000 employees on average, **in both the last completed and the immediately preceding financial year**) | periods starting **on/after 1 Jul 2026** (opt-in from 1 Jan 2026) | In force 30 Jun 2026; PRH repealed & replaced both decisions [S7] (see *The 2026 scope change: law 555/2026*). |
 | FY2026 **entry-trigger**: a company that *becomes* sustainability-reporting-obligated on/after 1 Jul 2026 | its FS for periods starting **on/after 1 Jul 2026** | The decision applies from that entry point [S10]. |
@@ -234,11 +234,13 @@ Distribution and cadence:
   periods starting 1.1.2026) [S2][S4]. A company must always use the
   **latest** spec approved for the period (it may re-use the prior year's
   template while preparing) [S2].
-- **Currently supported SBR versions:** **SBR-DPM-2025-12-31** (apply at
-  latest from periods starting 1.1.2026; this is the version the
-  PRH-identifiers decision directs sustainability reporters to), plus
-  legacy `kpl-2016-12/2022-09-30`, `kpl-2016-12/2019-11-06`,
-  `kpl-2016-12/2019-03-28` [S2][S4].
+- **Currently supported SBR versions:** **SBR-DPM-2025-12-31_fix_2026-02-19**
+  (apply at latest from periods starting 1.1.2026; PRH/1088/01/2026 s. 1
+  names this package by name), plus legacy `kpl-2016-12/2022-09-30`,
+  `kpl-2016-12/2019-11-06`, `kpl-2016-12/2019-03-28` [S2][S4][S9]. The
+  package published 31.12.2025 as `SBR-DPM-2025-12-31` is still on
+  avoindata.fi, labelled *"VANHA VERSIO, ÄLÄ KÄYTÄ"*. Selecting it by
+  that shorter name picks the withdrawn package [S2].
 
 <a id="profile-ifrs-esef"></a>
 
@@ -395,14 +397,24 @@ taxonomy family by accounting framework*).
 **All financial-statement documents must be filed in machine-readable web
 format (XHTML). PDF is not accepted** (Word/PDF may be converted to XHTML
 with free online tools) [S1][S8]. The notification maximum size is **200
-MB**, and the statements must be filed **as a ZIP package** [S1][S10].
+MB** [S1][S6][S10]. On artifact shape the binding rule is
+PRH/1087/01/2026 s. 2: *"Tämän määräyksen mukaan ilmoitettavat asiakirjat
+on ilmoitettava XHTML-muodossa tai zip-pakettina"*, so **XHTML alone or a
+ZIP package**, and that sentence follows the channel list in s. 2 rather
+than attaching to one channel [S6]. PRH's web guidance states the
+narrower "*tilinpäätös täytyy ilmoittaa XHTML-muodossa ZIP-pakettina*"
+[S1][S10]; the ZIP is what PRH's pages expect and what a multi-document
+notification needs in practice, but a single XHTML file is what the
+closed interface and ytj.fi actually accept (see *Filing channels,
+signatures, deadline, tax forwarding, language*) and is **not** a defect.
 
 > **Divergence from the Dutch `.xbri` model (reviewer-critical).** "At the
 > moment, the PRH cannot receive material filed as an XBRI package"
 > (*PRH ei voi toistaiseksi vastaanottaa XBRI-pakettina ilmoitettuja
 > aineistoja*) [S1][S10]. Finland wants a **plain ZIP of XHTML**. **Any
-> converter output profile for Finland must emit XHTML-in-ZIP and must NOT
-> emit a `.xbri`.** Whether/when PRH will accept `.xbri` is **unknown**:
+> converter output profile for Finland must emit XHTML, in a plain ZIP
+> where the notification carries more than one document, and must NOT emit
+> a `.xbri`.** Whether/when PRH will accept `.xbri` is **unknown**:
 > no roadmap was found.
 
 **Closed-interface format rule: what may stay plain XHTML.** Under PRH's
@@ -631,8 +643,9 @@ order; each step depends on the prior being clean.
    iXBRL 1.1 + SBR taxonomy-package resolution only**; **no** PRH Arelle
    disclosure system, so do not report an "FI profile" verdict; see *No
    Arelle FI/PRH plugin exists (honest gap) + what PRH's interface checks*.
-4. **Check the package shape.** **XHTML-in-ZIP**, ≤ **200 MB**, **not** a
-   `.xbri` [S1][S10]. ESEF re-use path: adoption-date + profit-decision
+4. **Check the package shape.** **XHTML, alone or in a plain ZIP**
+   (PRH/1087 s. 2 permits either), ≤ **200 MB**, **not** a `.xbri`
+   [S1][S6][S10]. ESEF re-use path: adoption-date + profit-decision
    XHTML (and audit report) in the **main folder**, the single top-level
    report-package directory, not the ZIP root and not `reports/`; no PDF
    if it will go via ytj.fi; no `å`, `ä` or `ö` anywhere in the filenames;
@@ -741,8 +754,8 @@ given in [S6] and [S9].
   <https://www.prh.fi/fi/yrityksetjayhteisot/tilinpaatokset/digitaalinen-tilinpaatosraportointi/taksonomiat.html>.
   SBR governance (PRH company modules; Valtiokonttori municipal/wellbeing);
   modules STK/STP/VYTP/LSTP/**OYTP**; avoindata.fi; annual cadence;
-  **SBR-DPM-2025-12-31** + legacy `kpl-2016-12/*`; IFRS 2025/2024; ESEF
-  2024/2022; IFRS-vs-FAS mixed-consolidation rule.
+  **SBR-DPM-2025-12-31_fix_2026-02-19** + legacy `kpl-2016-12/*`; IFRS
+  2025/2024; ESEF 2024/2022; IFRS-vs-FAS mixed-consolidation rule.
 - **[S3]** PRH news 21.5.2025, ytj.fi renewed (FI):
   <https://www.prh.fi/fi/tietoa_prhsta/uutislistaus/tiedotteet/2025/ytj-palvelu-tilinpaatos_21.5.2025.html>.
   Digitilinpäätös option launched 21 May 2025; digital filing mandatory
@@ -752,9 +765,9 @@ given in [S6] and [S9].
 - **[S4]** PRH, *PRH's decision on digital financial statements* (EN):
   <https://www.prh.fi/en/companiesandorganisations/financial_statements/limited_liability_companies_co-operatives_and_other_companies/digital/sustainability-reporting/prh-decision.html>.
   PRH-identifiers markup mandatory for periods starting on/after
-  1 Jan 2026; SBR-DPM-2025-12-31; FY2025 permitted without PRH identifiers;
-  IFRS/ESEF carve-outs; annual taxonomy-approval decision; legal basis
-  **Accounting Act ch. 7 s. 23**.
+  1 Jan 2026; SBR-DPM-2025-12-31_fix_2026-02-19; FY2025 permitted without
+  PRH identifiers; IFRS/ESEF carve-outs; annual taxonomy-approval decision;
+  legal basis **Accounting Act ch. 7 s. 23**.
 - **[S5]** PRH, *Interface for software companies* (iXBRL REST API) (EN):
   <https://www.prh.fi/en/companiesandorganisations/financial_statements/developing-digital-financial-reporting/interface.html>.
   REST iXBRL interface: free; LLC iXBRL FS + foundation iXBRL reports;
@@ -803,7 +816,9 @@ given in [S6] and [S9].
   **S. 1 paras 2–3** are quoted in this file: IFRS preparers mark up with
   the IFRS Accounting Taxonomy confirmed by the IFRS Foundation for each
   reporting period, and the markup rules "*ei koske ESEF-vaatimusten mukaan
-  raportoitavia tietoja*". Other sections not read; corroborated by [S4][S7].
+  raportoitavia tietoja*". **S. 1 para 1** names the package
+  `SBR-DPM-2025-12-31_fix_2026-02-19` on avoindata.fi for FAS preparers.
+  Other sections not read; corroborated by [S4][S7].
 - **[S10]** PRH, *Osakeyhtiön digitaalinen tilinpäätös* (FI):
   <https://prh.fi/fi/yrityksetjayhteisot/tilinpaatokset/osakeyhtio_ja_osuuskunta_tilinpaatos_kaupparekisteriin/osakeyhtion_sahkoinen_tilinpaatos.html>.
   FY2026 **entry-trigger** rule; 200 MB XHTML ZIP; **PRH cannot receive
