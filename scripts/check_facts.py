@@ -159,6 +159,8 @@ def resolve_transformation(
     local part would decode `fake:num-dot-decimal` from an unrelated namespace
     as though it were the registry transformation of that name.
     """
+    # xs:QName collapses whitespace, so a padded name is still that name.
+    raw_format = collapse(raw_format)
     if not QNAME.fullmatch(raw_format):
         return None  # not a QName at all, so it names no transformation
     prefix, _, local = raw_format.rpartition(":")
@@ -258,7 +260,7 @@ def fact_value(el: etree._Element) -> Decimal | None:
     scale = el.get("scale")
     if scale is not None:
         try:
-            places = int(scale)
+            places = int(collapse(scale))
         except ValueError:
             return None
         # Shift the exponent rather than calling scaleb(), which rounds to the
@@ -274,11 +276,17 @@ def fact_value(el: etree._Element) -> Decimal | None:
             # not fit. That is a malformed document, but this checker's job is
             # to report rather than to crash on one.
             return None
-    if el.get("sign") == "-":
+    sign = collapse(el.get("sign") or "")
+    if sign == "-":
         # copy_negate() flips the sign without consulting the decimal context.
         # Unary minus rounds to 28 significant digits, which silently dropped
         # the low-order digit of a long value before it could be tested.
         value = value.copy_negate()
+    elif sign:
+        # @sign is an enumeration whose only member is "-". Anything else is
+        # not a value this script understands, and reading it as "not negative"
+        # would report the wrong number with total confidence.
+        return None
     return value
 
 
@@ -438,7 +446,7 @@ def check(path: Path) -> list[str]:
     # --- Currency unit sanity ---
     for u in root.findall(".//xbrli:unit", NS):
         for measure in u.findall(".//xbrli:measure", NS):
-            txt = (measure.text or "").strip()
+            txt = collapse(measure.text or "")
             namespace, code = split_qname(measure, txt)
             if namespace == ISO_4217_NS and not ISO_4217.match(code):
                 issues.append(

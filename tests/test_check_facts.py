@@ -756,6 +756,36 @@ class CheckFactsTestCase(unittest.TestCase):
         issues = self.run_on(doc(body))
         self.assertTrue(any("1234.56" in i for i in issues), f"not decoded: {issues}")
 
+    def test_attribute_whitespace_is_collapsed(self):
+        """Attributes are collapsed before they are read.
+
+        A padded @sign was the dangerous one: comparing it exactly meant " - "
+        read as "not negative", reporting the wrong number with confidence.
+        """
+        issues = self.run_on(self._fact("2345.67", "0", ' sign=" - "'))
+        self.assertTrue(
+            any("-2345.67" in i for i in issues), f"sign not applied: {issues}"
+        )
+        self.assertEqual(
+            self.defects(self._fact("45", "-3", ' scale=" 3 "')),
+            [],
+            "padded @scale was not read",
+        )
+        padded_format = self._fact("1,234.56", "-2", ' format=" ixt:num-dot-decimal "')
+        self.assertTrue(
+            any("1234.56" in i for i in self.run_on(padded_format)),
+            "padded @format was not resolved",
+        )
+
+    def test_unknown_sign_value_is_declined(self):
+        """@sign's only member is "-", so anything else is not understood."""
+        issues = self.run_on(self._fact("2345.67", "0", ' sign="+"'))
+        self.assertFalse(
+            any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+            f"got {issues}",
+        )
+        self.assertTrue(any(i.startswith("NOTE") for i in issues), f"got {issues}")
+
     def test_unresolved_context_is_flagged(self):
         body = (
             CONTEXT_AND_UNIT
