@@ -40,7 +40,7 @@ Inline XBRL embeds XBRL facts inside an XHTML host document: one file serves bot
 
 `decimals` counts digits relative to the decimal point (negative for rounding to thousands/millions); `precision` counts significant digits regardless of magnitude. XBRL 2.1 §4.6.3–4.6.4 makes them mutually exclusive on a single fact.
 
-**Exactly one of `decimals` or `precision` is required on every non-nil numeric fact.** Nil-valued facts (`xsi:nil="true"`) must omit both. SEC EDGAR and Dutch SBR require `decimals`, forbid `precision`, and forbid `decimals="INF"`.
+**Exactly one of `decimals` or `precision` is required on every non-nil numeric fact.** Nil-valued facts (`xsi:nil="true"`) must omit both. SEC EDGAR and Dutch SBR require `decimals` and forbid `precision`. `INF` is **not** forbidden: the EDGAR XBRL Guide section 6.6.4 prescribes it for an exactly reported amount. What is forbidden is a `decimals` that misstates the value's accuracy, which `EFM.6.05.37` catches in the direction that is decidable from the document.
 
 ## Transformation Registry (TRR 4)
 

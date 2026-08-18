@@ -294,7 +294,7 @@ python scripts/check_facts.py path/to/document.xhtml
 # 4. (If applicable) cryptographic seal/sign of the validated package
 ```
 
-Step 1 first because a base XBRL error makes step 2 noisy. Step 3 catches issues validators don't always surface clearly: dangling continuation chains, undefined contexts/units, inconsistent duplicate facts, `decimals="INF"` abuse, non-ISO currency unit measures.
+Step 1 first because a base XBRL error makes step 2 noisy. Step 3 catches issues validators don't always surface clearly: dangling continuation chains, undefined contexts/units, a finite `decimals` that zeroes non-zero digits of the reported value (`EFM.6.05.37`), and non-ISO-4217 currency unit measures. It does **not** judge whether duplicate facts agree; that needs a model of the report and is Arelle's job.
 
 ## Common-error decision tree
 
@@ -388,7 +388,7 @@ then say so and point to the primary source on the regulator's website. Do not i
 ## Bundled scripts
 
 - **`scripts/validate_with_arelle.sh <file> [profile]`**. Wraps `arelleCmdLine` with the right plugins per profile (`esef`, `efm`, `ukfrc`, `hmrc`, `dk`, `core`). Auto-detects single file, iXBRL document set, or `.zip` / `.xbri` report package.
-- **`scripts/check_facts.py <ixbrl.xhtml>`**. Pure-Python pre-flight check: required attributes, unresolved context/unit references, non-ISO-4217 currency measures, `decimals="INF"`, broken continuation chains, inconsistent duplicates. Run before Arelle to surface cheap errors fast.
+- **`scripts/check_facts.py <ixbrl.xhtml>`**. Pure-Python pre-flight check: required attributes, unresolved context/unit references, non-ISO-4217 currency measures, a finite `decimals` that zeroes non-zero digits of the value, and broken continuation chains. Duplicate-fact consistency is deferred to Arelle, and any value the script cannot decode is reported as a coverage note rather than judged. Run before Arelle to surface cheap errors fast.
 
 Both are dependency-light (`arelle-release`, `lxml`).
 `check_facts.py` is hermetic: local parsing with `no_network=True` and

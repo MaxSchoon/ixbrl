@@ -708,7 +708,7 @@ quoting any normative clause this file does not already quote verbatim
 (only PRH/1087 ss. 3 and 5 and PRH/1088 s. 1 have been read); the
 **PRH digital-FS pages** [S1][S2][S4][S5][S8][S10] for
 operative filing/taxonomy/interface/packaging guidance; the **Accounting
-Act (Kirjanpitolaki 1336/1997)** ch. 3 s. 5 (language) and ch. 7 ss. 22–25
+Act (Kirjanpitolaki 1336/1997)** ch. 3 s. 5 (language) and ch. 7 ss. 22–24 and 24a
 (format + markup power) and **law 555/2026** [S7] at `finlex.fi`; and
 **avoindata.fi** / **Valtiokonttori** for the SBR packages [S2][S5]
 (IFRS/ESEF → `references/esef.md`).
