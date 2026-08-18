@@ -776,7 +776,7 @@ number at the gateway"):
 > from the **Arelle plugin**, which advertises **JFCVC v4.0 (2020-06-09)**
 > and Style Guide v2.2. The current instrument is **JFCVC v4.4a** (ODT on
 > the GOV.UK CT technical-specifications page; change history "V4.3a to
-> V4.4a — FRS 2026 / 2026 FRS Charities taxonomies added"), and it has now
+> V4.4a: FRS 2026 / 2026 FRS Charities taxonomies added"), and it has now
 > been read for the 3312 mandatory-item tables, the conditional
 > identifier-scheme check and 3316 (see *Filer classification*). What
 > remains unverified is whether every code the plugin emits is the exact

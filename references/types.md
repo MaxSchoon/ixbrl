@@ -9,7 +9,7 @@ Every claim below is tied to a specification fetched live; URLs listed under **S
 
 An **NCName** ("non-colonized name") is the lexical building block for every namespace prefix and every local part in XML. W3C *Namespaces in XML 1.0* defines it as XML production [4]:
 
-> `NCName ::= Name - (Char* ':' Char*)` — "An XML Name, minus the ':'"
+> `NCName ::= Name - (Char* ':' Char*)`, that is "An XML Name, minus the ':'"
 
 Operationally:
 

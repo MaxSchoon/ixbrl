@@ -15,11 +15,11 @@ profiles:
     section: profile-csrd-esrs
 ---
 
-# France — ESEF via the AMF, and the honest map of what is *not* iXBRL
+# France: ESEF via the AMF, and the honest map of what is *not* iXBRL
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
-## Start here — choose a filing profile
+## Start here: choose a filing profile
 
 Load this when the jurisdiction is **France**: a listed-issuer annual
 financial report filed with the **AMF** (Autorité des marchés
@@ -38,10 +38,10 @@ prudential regulator. Statutory accounts and tax are not XBRL at all.
 
 | Situation | Profile | Section |
 |---|---|---|
-| A listed issuer's *rapport financier annuel* or *document d'enregistrement universel valant RFA* goes to the AMF | AMF ESEF | [Profile: Listed issuers — ESEF filed via the AMF](#profile-amf-esef) |
-| The statutory annual accounts must be deposited (*dépôt des comptes annuels*) | INPI statutory deposit: PDF, no XBRL | [Profile: Statutory annual accounts — PDF via INPI](#profile-inpi-comptes-annuels) |
-| The corporate tax return and accounting schedules (*liasse fiscale*) must be transmitted | DGFiP EDI-TDFC: EDIFACT, no XBRL | [Profile: Tax — the *liasse fiscale* via EDI-TDFC](#profile-dgfip-edi-tdfc) |
-| A bank or an insurer files prudential/supervisory reporting | ACPR DPM via OneGate: plain xBRL, not inline | [Profile: Banking / insurance — ACPR DPM/xBRL via OneGate](#profile-acpr-dpm) |
+| A listed issuer's *rapport financier annuel* or *document d'enregistrement universel valant RFA* goes to the AMF | AMF ESEF | [Profile: Listed issuers: ESEF filed via the AMF](#profile-amf-esef) |
+| The statutory annual accounts must be deposited (*dépôt des comptes annuels*) | INPI statutory deposit: PDF, no XBRL | [Profile: Statutory annual accounts: PDF via INPI](#profile-inpi-comptes-annuels) |
+| The corporate tax return and accounting schedules (*liasse fiscale*) must be transmitted | DGFiP EDI-TDFC: EDIFACT, no XBRL | [Profile: Tax: the *liasse fiscale* via EDI-TDFC](#profile-dgfip-edi-tdfc) |
+| A bank or an insurer files prudential/supervisory reporting | ACPR DPM via OneGate: plain xBRL, not inline | [Profile: Banking and insurance: ACPR DPM/xBRL via OneGate](#profile-acpr-dpm) |
 | The sustainability statement (CSRD / ESRS) is to be digitally tagged | CSRD / ESRS tagging: prepare-ahead, not in force | [Profile: CSRD / ESRS digital tagging](#profile-csrd-esrs) |
 
 ### Regime map
@@ -50,9 +50,9 @@ prudential regulator. Statutory accounts and tax are not XBRL at all.
 |---|---|---|---|
 | Listed-issuer RFA / DEU-valant-RFA with **IFRS consolidated** accounts | AMF via **ONDE**, archived on **info-financiere.fr** | XHTML **+ Inline XBRL** (ESEF) | **Yes: the core French iXBRL market** |
 | Listed-issuer RFA **not** IFRS-consolidated | AMF via ONDE | Plain **XHTML, no XBRL** | No: XHTML formatting, not tagging |
-| Statutory annual accounts (*dépôt des comptes annuels*) | **INPI Guichet unique** | **PDF** (or paper deposit) | **No mandate** (honest negative; see the *Statutory annual accounts — PDF via INPI* profile) |
-| Corporate tax + accounting schedules (*liasse fiscale*) | **DGFiP** via **EDI-TDFC** | **UN/EDIFACT** (INFENT) | **No: EDIFACT, not XBRL** (see the *Tax — the liasse fiscale via EDI-TDFC* profile) |
-| Banking / insurance supervisory reporting | **ACPR** via **OneGate** | plain **xBRL** on EBA/EIOPA **DPM** | Not *inline* → `references/dpm.md` (see the *Banking / insurance — ACPR DPM/xBRL via OneGate* profile) |
+| Statutory annual accounts (*dépôt des comptes annuels*) | **INPI Guichet unique** | **PDF** (or paper deposit) | **No mandate** (honest negative; see the *Statutory annual accounts: PDF via INPI* profile) |
+| Corporate tax + accounting schedules (*liasse fiscale*) | **DGFiP** via **EDI-TDFC** | **UN/EDIFACT** (INFENT) | **No: EDIFACT, not XBRL** (see the *Tax: the liasse fiscale via EDI-TDFC* profile) |
+| Banking / insurance supervisory reporting | **ACPR** via **OneGate** | plain **xBRL** on EBA/EIOPA **DPM** | Not *inline* → `references/dpm.md` (see the *Banking and insurance: ACPR DPM/xBRL via OneGate* profile) |
 | Sustainability statement (CSRD / ESRS) tagging | AMF (future, *rapport de gestion*) | XHTML + iXBRL, **not yet mandatory** | Prepare-ahead only (see the *CSRD / ESRS digital tagging* profile) |
 
 If the task is a row that is not an iXBRL job, say so and route to the
@@ -87,7 +87,7 @@ flagging or excusing a generation gap.
 
 <a id="profile-amf-esef"></a>
 
-## Profile: Listed issuers — ESEF filed via the AMF
+## Profile: Listed issuers: ESEF filed via the AMF
 
 The AMF is France's NCA for the Transparency Directive (2004/109/CE as
 revised by 2013/50/UE), so ESEF Reg. **(UE) 2019/815** applies to every
@@ -211,7 +211,7 @@ it as an acceptance condition.
 
 <a id="profile-inpi-comptes-annuels"></a>
 
-## Profile: Statutory annual accounts — PDF via INPI, no XBRL (honest negative)
+## Profile: Statutory annual accounts: PDF via INPI, no XBRL (honest negative)
 
 A **verified negative**, checked against actual filing instructions:
 French statutory annual-accounts filing has **no XBRL/iXBRL mandate for
@@ -250,7 +250,7 @@ INPI", the correct answer is that INPI accepts a PDF, not iXBRL.
 
 <a id="profile-dgfip-edi-tdfc"></a>
 
-## Profile: Tax — the *liasse fiscale* is EDIFACT via EDI-TDFC, not XBRL
+## Profile: Tax: the *liasse fiscale* is EDIFACT via EDI-TDFC, not XBRL
 
 The tax return plus accounting schedules go to the **DGFiP** under
 **EDI-TDFC** (*Transfert des Données Fiscales et Comptables*), whose
@@ -276,7 +276,7 @@ does not address the *liasse fiscale*.
 
 <a id="profile-acpr-dpm"></a>
 
-## Profile: Banking / insurance — ACPR DPM/xBRL via OneGate (not inline)
+## Profile: Banking and insurance: ACPR DPM/xBRL via OneGate (not inline)
 
 French prudential reporting is XBRL, but **plain xBRL on the EBA/EIOPA
 DPM, not Inline XBRL**. DPM mechanics (Table Linkbase, filing
@@ -328,7 +328,7 @@ iXBRL**, a distinct DPM pipeline. See `references/dpm.md`.
 
 <a id="profile-csrd-esrs"></a>
 
-## Profile: CSRD / ESRS digital tagging — taxonomy exists, mandate not in force
+## Profile: CSRD / ESRS digital tagging: taxonomy exists, mandate not in force
 
 Careful, primary-source: digital tagging of the sustainability statement
 is **not yet mandatory** for French issuers.
@@ -395,16 +395,16 @@ France is an EU Member State; the France layer sits on the EU rails in
 - **ESEF / Transparency-Directive transposition.** ESEF applies through
   the AMF as NCA under the TD (2004/109/CE, rev. 2013/50/UE), with
   info-financiere.fr as France's TD storage mechanism (see the *Listed
-  issuers — ESEF filed via the AMF* profile). No national
+  issuers: ESEF filed via the AMF* profile). No national
   *inline* format competes with ESEF; unlike the Dutch SBR/KvK route,
   France adds only document-typology and deposit mechanics on top of the
-  common ESEF rules (see the *Listed issuers — ESEF filed via the AMF*
+  common ESEF rules (see the *Listed issuers: ESEF filed via the AMF*
   profile, `references/esef.md`).
 - **Coexistence with national structured regimes.** The non-ESEF French
-  structured filings (EDI-TDFC tax, see the *Tax — the liasse fiscale via
-  EDI-TDFC* profile; ACPR DPM, see the *Banking / insurance — ACPR
+  structured filings (EDI-TDFC tax, see the *Tax: the liasse fiscale via
+  EDI-TDFC* profile; ACPR DPM, see the *Banking and insurance: ACPR
   DPM/xBRL via OneGate* profile; INPI PDF, see the *Statutory annual
-  accounts — PDF via INPI* profile) are **not** iXBRL and do not
+  accounts: PDF via INPI* profile) are **not** iXBRL and do not
   overlap ESEF; they coexist on separate rails (see *Regime map* and
   *Stakeholders and governance*).
 - **CSRD / ESRS trajectory: now expressly suspended.** **Directive (EU)
@@ -455,7 +455,7 @@ they interlock. Detail lives in the sections cited; this is only the map.
 - **Business register & publication organ: INPI + BODACC.** The **INPI**
   runs the *Registre national des entreprises* and the Guichet unique
   that receives the *dépôt des comptes annuels* and keys structured data
-  out of the deposited PDFs (see the *Statutory annual accounts — PDF via
+  out of the deposited PDFs (see the *Statutory annual accounts: PDF via
   INPI* profile). Official publicity of acts registered
   in the RNE, including account deposits, is given by the **BODACC**
   (*Bulletin officiel des annonces civiles et commerciales*, bodacc.fr)
@@ -464,8 +464,8 @@ they interlock. Detail lives in the sections cited; this is only the map.
   France has **no** single national SBR programme on one taxonomy; the
   nearest actor is **XBRL France** (loi-1901 jurisdiction body, see
   *France-specific XBRL history*), and structured filing is split by
-  domain across the DGFiP (see the *Tax — the liasse fiscale via
-  EDI-TDFC* profile) and ACPR (see the *Banking / insurance — ACPR
+  domain across the DGFiP (see the *Tax: the liasse fiscale via
+  EDI-TDFC* profile) and ACPR (see the *Banking and insurance: ACPR
   DPM/xBRL via OneGate* profile). State this gap rather than imply an SBR
   equivalent [S19].
 - **Accounting standards setter: ANC.** The *Autorité des normes
@@ -474,20 +474,20 @@ they interlock. Detail lives in the sections cited; this is only the map.
 - **Taxonomy author / governance.** For the only inline mandate, **ESMA**
   authors the ESEF RTS taxonomy the Commission adopts into Reg. 2019/815,
   on an **annual IFRS-taxonomy cadence**, published in the EU Official
-  Journal / ESMA's ESEF pages (see the *Listed issuers — ESEF filed via
+  Journal / ESMA's ESEF pages (see the *Listed issuers: ESEF filed via
   the AMF* profile and *Arelle / validation notes*). The legacy French
   **TCA** (XBRL France) is **no longer maintained** (see
   *France-specific XBRL history*) [S20].
 - **Tax authority (structured filing): DGFiP.** Runs the *liasse
   fiscale* via EDI-TDFC in UN/EDIFACT, structured but not XBRL (see the
-  *Tax — the liasse fiscale via EDI-TDFC* profile).
+  *Tax: the liasse fiscale via EDI-TDFC* profile).
 - **Securities regulator (NCA): AMF.** France's Transparency-Directive
   NCA; receives ESEF filings on ONDE and archives them on
-  info-financiere.fr (see the *Listed issuers — ESEF filed via the AMF*
+  info-financiere.fr (see the *Listed issuers: ESEF filed via the AMF*
   profile).
 - **Financial-sector overlay: ACPR (Banque de France).** Collects
   banking/insurance prudential reporting as plain xBRL on the EBA/EIOPA
-  DPM via OneGate (see the *Banking / insurance — ACPR DPM/xBRL via
+  DPM via OneGate (see the *Banking and insurance: ACPR DPM/xBRL via
   OneGate* profile).
 
 They interlock only loosely: AMF/ESEF, DGFiP/EDI-TDFC, ACPR/DPM and
@@ -510,7 +510,7 @@ obligation to its own channel (see *Regime map*).
   dematerialised XBRL deposit of *comptes sociaux*. France once had a
   live statutory-accounts XBRL channel, now **superseded** since
   Infogreffe stopped processing formalities and INPI accepts PDF (see
-  the *Statutory annual accounts — PDF via INPI* profile) [S20][S10].
+  the *Statutory annual accounts: PDF via INPI* profile) [S20][S10].
 - Framework context: the PCG is **Règlement ANC n° 2014-03**; the
   standard-setter lineage is CNC (1957) + CRC (1998) → **ANC**
   (ordonnance du 22 janvier 2009) [S21][S22]. **No current mandatory
@@ -549,7 +549,7 @@ obligation to its own channel (see *Regime map*).
   set language mechanics: the `_lab-{lang}` filename keyed to the report
   language, the unresolved « 2 fichiers : un {fr} et un {en} »
   parenthetical, and the French-or-English deposit language of
-  DOC-2007-03 Annexes 1 and 2 [S2] (see the *Listed issuers — ESEF filed
+  DOC-2007-03 Annexes 1 and 2 [S2] (see the *Listed issuers: ESEF filed
   via the AMF* profile).
 - **INPI XBRL roadmap.** INPI keys structured data out of PDFs [S11];
   no announced plan to move filers to structured/XBRL submission was
@@ -568,38 +568,38 @@ obligation to its own channel (see *Regime map*).
 
 Verify the operative version of every cited rule at filing date.
 
-- **[S1]** AMF — *Formats et modalités de dépôt des RFA et DEU valant RFA à compter du 1er janvier 2022* — <https://www.amf-france.org/fr/actualites-publications/actualites/formats-et-modalites-de-depot-des-rapports-financiers-annuels-et-des-documents-denregistrement>
-- **[S2]** Instruction **AMF DOC-2007-03** (v. 02/2025) — modalités de dépôt de l'information réglementée — <https://www.amf-france.org/sites/institutionnel/files/private/2025-02/instruction-amf-doc-2007-03-bon-pour-publication-v2bis.pdf>
-- **[S4]** AMF — *Je dépose de l'information en dehors d'une opération financière* — <https://www.amf-france.org/fr/espace-professionnels/societes-cotees-et-emetteurs/mes-relations-avec-lamf/deposer-de-linformation-financiere-et-extra-financiere/en-dehors-dune-operation>
-- **[S5]** AMF — *ESEF : vos questions fréquentes* — <https://www.amf-france.org/fr/actualites-publications/dossiers-thematiques/esef/esef-vos-questions-frequentes>
-- **[S6]** AMF — *ESEF : les émetteurs au rendez-vous dès la première année* — <https://www.amf-france.org/fr/actualites-publications/actualites/esef-les-emetteurs-au-rendez-vous-des-la-premiere-annee>
-- **[S7]** AMF — Position-recommandation **DOC-2016-05**, *Guide de l'information périodique des sociétés cotées*, version en vigueur du **28 juillet 2023** (PDF republished Dec 2024 carrying the AMF banner « Cette position-recommandation n'est pas à jour des impacts de la transposition de la Directive (UE) 2022/2464 du Parlement européen et du Conseil du 14 décembre 2022 (“Directive CSRD”) ») — <https://www.amf-france.org/sites/institutionnel/files/private/2024-12/2016-05-decembre-2024.pdf>
-- **[S8]** INPI — *Dépôt des comptes annuels* — <https://www.inpi.fr/realiser-demarches/formalites-dentreprises/depot-comptes-annuels>
-- **[S9]** Service-Public Entreprendre — *Dépôt des comptes annuels d'une société* (F31214) — <https://entreprendre.service-public.gouv.fr/vosdroits/F31214>
-- **[S10]** INPI — *Textes réglementaires du Guichet unique* (Arrêté du 7 mai 2021) — <https://www.inpi.fr/ressources/formalites-dentreprises/textes-reglementaires-du-guichet-unique>
-- **[S11]** INPI — *Documentation technique API comptes annuels* (V4/V5) — <https://www.inpi.fr/sites/default/files/2025-06/documentation%20technique%20API_comptes_annuels%20v5.pdf>
-- **[S12]** DGFiP — *Cahier des charges EDI-TDFC Volume II (2025)* — <https://www.impots.gouv.fr/sites/default/files/media/1_metier/3_partenaire/edi/cdc_edi_tdfc/2025/volume_ii_tdfc_2025.pdf>
-- **[S13]** DGFiP — *Cahier des charges EDI-TDFC Volume IV (2026)* — <https://www.impots.gouv.fr/sites/default/files/media/1_metier/3_partenaire/edi/cdc_edi_tdfc/2026/volume_iv_tdfc_2026.pdf>
-- **[S14]** DGFiP — *Obligations de téléprocédures* — <https://www.impots.gouv.fr/professionnel/obligations-de-teleprocedures-0>
-- **[S15]** ACPR — *Guide formalités, reportings et notifications (organismes d'assurance)* — <https://acpr.banque-france.fr/fr/professionnels/lacpr-vous-accompagne/parcours-fintech/contenus-pedagogiques/formalites-reportings-et-notifications/guide-formalites-reportings-et-notifications-pour-les-organismes-dassurance>
-- **[S16]** eSurfi Banque — *Format de remise Banque* — <https://esurfi.banque-france.fr/fr/esurfi-banque/informations-techniques/documentation-technique/format-de-remise-banque>
-- **[S17]** ACPR — *Pilier 3 : le format de communication Solvabilité II* — <https://acpr.banque-france.fr/fr/reglementation/focus-sur-la-reglementation/assurance/solvabilite-ii/pilier-3-le-format-de-communication-des-informations-solvabilite-ii>
-- **[S18]** ACPR — *Pilier 3 : les exigences nationales complémentaires (ENS)* — <https://acpr.banque-france.fr/fr/reglementation/focus-sur-la-reglementation/assurance/solvabilite-ii/pilier-3-les-exigences-nationales-complementaires>
-- **[S19]** XBRL France — *À propos* — <https://www.xbrlfrance.org/?page_id=15>
-- **[S20]** XBRL France — *Taxonomie Comptes Annuels (TCA)* — <https://www.xbrlfrance.org/?page_id=124>
-- **[S21]** ANC — *Recueils des normes comptables / Plan Comptable Général* — <https://www.anc.gouv.fr/normes-comptables-francaises/recueils-des-normes-comptables>
-- **[S22]** Revue Française de Comptabilité — *Un référentiel comptable qui fait autorité* — <https://revuefrancaisedecomptabilite.fr/un-referentiel-comptable-qui-fait-autorite/>
-- **[S23]** EFRAG — *EFRAG publishes the ESRS Set 1 XBRL Taxonomy* (30 Aug 2024) — <https://www.efrag.org/sites/default/files/sites/webpublishing/SiteAssets/2024-08-30%20EFRAG%20publishes%20the%20ESRS%20Set%201%20XBRL%20Taxonomy%20.pdf>
-- **[S24]** EFRAG — *ESRS XBRL Taxonomy* (concluded project) — <https://www.efrag.org/en/projects/esrs-xbrl-taxonomy/concluded>
-- **[S25]** ESMA — *CP: ESEF RTS marking-up rules for sustainability reports & financial notes* (Dec 2024) — <https://www.esma.europa.eu/sites/default/files/2024-12/ESMA32-2009130576-3024_CP_ESEF_RTS_-_marking_up_rules_for_sustainability_reports_and_financial_notes_and_EEAP_RTS_-_amendments.pdf>
-- **[S26]** XBRL France GT ESG — *Points d'attention pour la digitalisation des rapports de durabilité* (14/01/2026) — <https://www.xbrlfrance.org/wp-content/uploads/2026/02/Taxonomie-ESG-Points-dattention-et-recommandations-XBRL-France_v1def.pdf>
-- **[S27]** Commission Delegated Regulation (EU) 2026/283 of 12 Dec 2025 (adopted as C(2025) 8507; OJ 18 Mar 2026) — 2025 ESEF taxonomy update; Calc 1.1; IFRS 18/19 — <https://eur-lex.europa.eu/eli/reg_del/2026/283/oj>
-- **[S33]** ESMA — *ESMA support ESEF implementation with updated taxonomy* (21 Apr 2026; states no ESEF RTS/taxonomy amendment planned in 2026) — <https://www.esma.europa.eu/press-news/esma-news/esma-support-esef-implementation-updated-taxonomy>
-- **[S28]** Réglementation Environnement (blog, **Tier 3 — overstated**) — *CSRD juin 2026 : deuxième rapport, contrôle AMF* — <https://www.reglementation-environnement.com/csrd-premiers-rapports-large-companies-juin-2026-amf-sanctions/>
-- **[S29]** AMF — *Bilan 2024 du reporting de durabilité des sociétés cotées* — <https://www.amf-france.org/sites/institutionnel/files/private/2024-12/rapport-amf-2024-bilan-reporting-durabilite-des-societes-cotees_fr.pdf>
-- **[S30]** Directive **(EU) 2026/470** (Omnibus I), 24 Feb 2026, OJ L 26 Feb 2026 — amends CSRD Art. 29d (recital 24: mark-up suspended until Reg. 2019/815 updated; recital 25: Member-State board-responsibility limit) — <https://eur-lex.europa.eu/eli/dir/2026/470/oj/eng>
-- **[S31]** EFRAG — *EFRAG provides its technical advice on draft simplified (Amended) ESRS to the European Commission* (EFRAG SRB approval 28 Nov 2025; delivered 3 Dec 2025) — <https://www.efrag.org/en/news-and-calendar/news/efrag-provides-its-technical-advice-on-draft-simplified-esrs-to-the-european-commission>
-- **[S32]** BODACC — *Bulletin officiel des annonces civiles et commerciales* (publicité des actes enregistrés au RNE) — <https://www.bodacc.fr/>
+- **[S1]** AMF, *Formats et modalités de dépôt des RFA et DEU valant RFA à compter du 1er janvier 2022*: <https://www.amf-france.org/fr/actualites-publications/actualites/formats-et-modalites-de-depot-des-rapports-financiers-annuels-et-des-documents-denregistrement>
+- **[S2]** Instruction **AMF DOC-2007-03** (v. 02/2025), modalités de dépôt de l'information réglementée: <https://www.amf-france.org/sites/institutionnel/files/private/2025-02/instruction-amf-doc-2007-03-bon-pour-publication-v2bis.pdf>
+- **[S4]** AMF, *Je dépose de l'information en dehors d'une opération financière*: <https://www.amf-france.org/fr/espace-professionnels/societes-cotees-et-emetteurs/mes-relations-avec-lamf/deposer-de-linformation-financiere-et-extra-financiere/en-dehors-dune-operation>
+- **[S5]** AMF, *ESEF : vos questions fréquentes*: <https://www.amf-france.org/fr/actualites-publications/dossiers-thematiques/esef/esef-vos-questions-frequentes>
+- **[S6]** AMF, *ESEF : les émetteurs au rendez-vous dès la première année*: <https://www.amf-france.org/fr/actualites-publications/actualites/esef-les-emetteurs-au-rendez-vous-des-la-premiere-annee>
+- **[S7]** AMF, Position-recommandation **DOC-2016-05**, *Guide de l'information périodique des sociétés cotées*, version en vigueur du **28 juillet 2023** (PDF republished Dec 2024 carrying the AMF banner « Cette position-recommandation n'est pas à jour des impacts de la transposition de la Directive (UE) 2022/2464 du Parlement européen et du Conseil du 14 décembre 2022 (“Directive CSRD”) »): <https://www.amf-france.org/sites/institutionnel/files/private/2024-12/2016-05-decembre-2024.pdf>
+- **[S8]** INPI, *Dépôt des comptes annuels*: <https://www.inpi.fr/realiser-demarches/formalites-dentreprises/depot-comptes-annuels>
+- **[S9]** Service-Public Entreprendre, *Dépôt des comptes annuels d'une société* (F31214): <https://entreprendre.service-public.gouv.fr/vosdroits/F31214>
+- **[S10]** INPI, *Textes réglementaires du Guichet unique* (Arrêté du 7 mai 2021): <https://www.inpi.fr/ressources/formalites-dentreprises/textes-reglementaires-du-guichet-unique>
+- **[S11]** INPI, *Documentation technique API comptes annuels* (V4/V5): <https://www.inpi.fr/sites/default/files/2025-06/documentation%20technique%20API_comptes_annuels%20v5.pdf>
+- **[S12]** DGFiP, *Cahier des charges EDI-TDFC Volume II (2025)*: <https://www.impots.gouv.fr/sites/default/files/media/1_metier/3_partenaire/edi/cdc_edi_tdfc/2025/volume_ii_tdfc_2025.pdf>
+- **[S13]** DGFiP, *Cahier des charges EDI-TDFC Volume IV (2026)*: <https://www.impots.gouv.fr/sites/default/files/media/1_metier/3_partenaire/edi/cdc_edi_tdfc/2026/volume_iv_tdfc_2026.pdf>
+- **[S14]** DGFiP, *Obligations de téléprocédures*: <https://www.impots.gouv.fr/professionnel/obligations-de-teleprocedures-0>
+- **[S15]** ACPR, *Guide formalités, reportings et notifications (organismes d'assurance)*: <https://acpr.banque-france.fr/fr/professionnels/lacpr-vous-accompagne/parcours-fintech/contenus-pedagogiques/formalites-reportings-et-notifications/guide-formalites-reportings-et-notifications-pour-les-organismes-dassurance>
+- **[S16]** eSurfi Banque, *Format de remise Banque*: <https://esurfi.banque-france.fr/fr/esurfi-banque/informations-techniques/documentation-technique/format-de-remise-banque>
+- **[S17]** ACPR, *Pilier 3 : le format de communication Solvabilité II*: <https://acpr.banque-france.fr/fr/reglementation/focus-sur-la-reglementation/assurance/solvabilite-ii/pilier-3-le-format-de-communication-des-informations-solvabilite-ii>
+- **[S18]** ACPR, *Pilier 3 : les exigences nationales complémentaires (ENS)*: <https://acpr.banque-france.fr/fr/reglementation/focus-sur-la-reglementation/assurance/solvabilite-ii/pilier-3-les-exigences-nationales-complementaires>
+- **[S19]** XBRL France, *À propos*: <https://www.xbrlfrance.org/?page_id=15>
+- **[S20]** XBRL France, *Taxonomie Comptes Annuels (TCA)*: <https://www.xbrlfrance.org/?page_id=124>
+- **[S21]** ANC, *Recueils des normes comptables / Plan Comptable Général*: <https://www.anc.gouv.fr/normes-comptables-francaises/recueils-des-normes-comptables>
+- **[S22]** Revue Française de Comptabilité, *Un référentiel comptable qui fait autorité*: <https://revuefrancaisedecomptabilite.fr/un-referentiel-comptable-qui-fait-autorite/>
+- **[S23]** EFRAG, *EFRAG publishes the ESRS Set 1 XBRL Taxonomy* (30 Aug 2024): <https://www.efrag.org/sites/default/files/sites/webpublishing/SiteAssets/2024-08-30%20EFRAG%20publishes%20the%20ESRS%20Set%201%20XBRL%20Taxonomy%20.pdf>
+- **[S24]** EFRAG, *ESRS XBRL Taxonomy* (concluded project): <https://www.efrag.org/en/projects/esrs-xbrl-taxonomy/concluded>
+- **[S25]** ESMA, *CP: ESEF RTS marking-up rules for sustainability reports & financial notes* (Dec 2024): <https://www.esma.europa.eu/sites/default/files/2024-12/ESMA32-2009130576-3024_CP_ESEF_RTS_-_marking_up_rules_for_sustainability_reports_and_financial_notes_and_EEAP_RTS_-_amendments.pdf>
+- **[S26]** XBRL France GT ESG, *Points d'attention pour la digitalisation des rapports de durabilité* (14/01/2026): <https://www.xbrlfrance.org/wp-content/uploads/2026/02/Taxonomie-ESG-Points-dattention-et-recommandations-XBRL-France_v1def.pdf>
+- **[S27]** Commission Delegated Regulation (EU) 2026/283 of 12 Dec 2025 (adopted as C(2025) 8507; OJ 18 Mar 2026), 2025 ESEF taxonomy update; Calc 1.1; IFRS 18/19: <https://eur-lex.europa.eu/eli/reg_del/2026/283/oj>
+- **[S33]** ESMA, *ESMA support ESEF implementation with updated taxonomy* (21 Apr 2026; states no ESEF RTS/taxonomy amendment planned in 2026): <https://www.esma.europa.eu/press-news/esma-news/esma-support-esef-implementation-updated-taxonomy>
+- **[S28]** Réglementation Environnement (blog, **Tier 3, overstated**), *CSRD juin 2026 : deuxième rapport, contrôle AMF*: <https://www.reglementation-environnement.com/csrd-premiers-rapports-large-companies-juin-2026-amf-sanctions/>
+- **[S29]** AMF, *Bilan 2024 du reporting de durabilité des sociétés cotées*: <https://www.amf-france.org/sites/institutionnel/files/private/2024-12/rapport-amf-2024-bilan-reporting-durabilite-des-societes-cotees_fr.pdf>
+- **[S30]** Directive **(EU) 2026/470** (Omnibus I), 24 Feb 2026, OJ L 26 Feb 2026, amends CSRD Art. 29d (recital 24: mark-up suspended until Reg. 2019/815 updated; recital 25: Member-State board-responsibility limit): <https://eur-lex.europa.eu/eli/dir/2026/470/oj/eng>
+- **[S31]** EFRAG, *EFRAG provides its technical advice on draft simplified (Amended) ESRS to the European Commission* (EFRAG SRB approval 28 Nov 2025; delivered 3 Dec 2025): <https://www.efrag.org/en/news-and-calendar/news/efrag-provides-its-technical-advice-on-draft-simplified-esrs-to-the-european-commission>
+- **[S32]** BODACC, *Bulletin officiel des annonces civiles et commerciales* (publicité des actes enregistrés au RNE): <https://www.bodacc.fr/>
 
 For anything ESEF-general, return to `references/esef.md`. When a question concerns
 a rule version newer than this file cites, or a French mechanism not

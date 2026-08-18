@@ -1,4 +1,4 @@
-# European Single Electronic Format (ESEF) — Reference
+# European Single Electronic Format (ESEF): Reference
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 

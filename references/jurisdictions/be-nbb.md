@@ -491,19 +491,19 @@ Per regime:
 Practical harness shape:
 
 ```bash
-# NBB CBSO annual-accounts instance (classic XBRL 2.1 — NOT iXBRL)
+# NBB CBSO annual-accounts instance (classic XBRL 2.1, NOT iXBRL)
 arelleCmdLine \
   --packages nbb-cbso-26.0.15.zip \
   -f annual-accounts.xbrl --validate
 
-# Biztax return (classic XBRL 2.1 + Dimensions + Formula — NOT iXBRL).
+# Biztax return (classic XBRL 2.1 + Dimensions + Formula, NOT iXBRL).
 # Validate the instance, not the envelope: unpack the .biztax file first and
 # run each contained .xbrl instance through Arelle before bundling.
 arelleCmdLine \
   --packages be-tax-2026-04-30.zip \
   -f return.xbrl --validate
 
-# FSMA ESEF AFR (Inline XBRL) — the ONLY Belgian iXBRL path
+# FSMA ESEF AFR (Inline XBRL): the ONLY Belgian iXBRL path
 arelleCmdLine \
   --plugins 'inlineXbrlDocumentSet|validate/ESEF' \
   -f afr-report-package.xbri --validate

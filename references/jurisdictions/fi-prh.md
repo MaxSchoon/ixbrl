@@ -11,11 +11,11 @@ profiles:
     section: profile-sustainability-report
 ---
 
-# Finland — PRH digital financial statements (digitilinpäätös)
+# Finland: PRH digital financial statements (digitilinpäätös)
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
-## Start here — choose a filing profile
+## Start here: choose a filing profile
 
 Load this when the regulator is **PRH** (Patentti- ja rekisterihallitus /
 Finnish Patent and Registration Office) and the filing is a **digital
@@ -36,19 +36,19 @@ For the IFRS/ESEF path, most of the work is ESEF work. Use
 system**. See *No Arelle FI/PRH plugin exists (honest gap) + what PRH's
 interface checks* before promising a validator can gate it. This file is a
 working reference, not the legal source; the operative instruments are
-named in *The legal instruments — Accounting Act + two named PRH
-decisions* and listed with URLs in *Primary sources — what each
+named in *The legal instruments: Accounting Act plus two named PRH
+decisions* and listed with URLs in *Primary sources: what each
 establishes*.
 
 | Situation | Profile | Section |
 |---|---|---|
-| A Finnish `osakeyhtiö` / `osuuskunta` (or foundation) filing statutory Finnish FAS statements to the Trade Register in digital form | Trade Register digital financial statement — Finnish FAS, national SBR taxonomy | [Profile: Trade Register digital financial statement — Finnish FAS (national SBR taxonomy)](#profile-fas-sbr) |
+| A Finnish `osakeyhtiö` / `osuuskunta` (or foundation) filing statutory Finnish FAS statements to the Trade Register in digital form | Trade Register digital financial statement: Finnish FAS, national SBR taxonomy | [Profile: Trade Register digital financial statement: Finnish FAS (national SBR taxonomy)](#profile-fas-sbr) |
 | An IFRS preparer, or a listed issuer re-filing its ESEF ZIP to the Trade Register alongside the Nasdaq Helsinki OAM | IFRS statements and listed-issuer ESEF re-use | [Profile: IFRS statements and listed-issuer ESEF re-use](#profile-ifrs-esef) |
-| A company inside the CSRD/ESRS sustainability-reporting population (the trigger for mandatory digital filing, and a report that is **not** XBRL-tagged) | CSRD sustainability report | [Profile: CSRD sustainability report — assured, filed with the digital statements, not XBRL-tagged](#profile-sustainability-report) |
+| A company inside the CSRD/ESRS sustainability-reporting population (the trigger for mandatory digital filing, and a report that is **not** XBRL-tagged) | CSRD sustainability report | [Profile: CSRD sustainability report: assured, filed with the digital statements, not XBRL-tagged](#profile-sustainability-report) |
 
 ## Vintage and applicability
 
-### The legal instruments — Accounting Act + two named PRH decisions
+### The legal instruments: Accounting Act plus two named PRH decisions
 
 The operative technical requirements live in two PRH decisions, both
 issued and **entering into force 24 June 2026**, published in Finlex under
@@ -89,10 +89,10 @@ applied to financial periods starting in 2024) [S6][S7].
 > and **PRH/1088 s. 1**) were extracted from those PDFs and are quoted
 > verbatim here [S6][S9]. The **remaining sections of both decisions have
 > not been read**. **For any clause not quoted here, pull the downloadable
-> PDFs from the Finlex pages in *Primary sources — what each establishes*
+> PDFs from the Finlex pages in *Primary sources: what each establishes*
 > below**. Do not paraphrase a clause you have not read.
 
-### The two-stage mandate — keep these distinct
+### The two-stage mandate: keep these distinct
 
 The single most important distinction in this regime, and the one most
 easily conflated:
@@ -156,7 +156,7 @@ bill is **pending in Parliament as of 2026-08-18**, referred to the
 Commerce Committee (talousvaliokunta) 27 May 2026 with no committee report
 yet, so filing stays voluntary until enacted [S18].
 
-### Bi-temporal cheatsheet — which vintage applies to which period
+### Bi-temporal cheatsheet: which vintage applies to which period
 
 As with every iXBRL regime, ask for each rule: *was this in force when
 this report was prepared?* Read the period from `<xbrli:period>`, not
@@ -168,7 +168,7 @@ today's date.
 | Structured **taxonomy markup** (PRH identifiers) mandatory | periods starting **on/after 1 Jan 2026** | FY2025 permitted XHTML **without** PRH identifiers [S1][S4]. |
 | **SBR-DPM-2025-12-31** is the SBR version to mark up FAS statements against | periods starting **1 Jan 2026** at latest | PRH confirms the company-reporting SBR parts each year-end; the confirmed spec applies to periods starting the following year [S2][S4]. |
 | ESEF ZIP **also** filed to the Trade Register (not only to the OAM) | financial year starting **2024** onward | Listed issuers re-use their ESEF artifact [S2][S3]. |
-| **Law 555/2026** narrows CSRD scope (turnover >€450M **and** >1,000 employees on average, **in both the last completed and the immediately preceding financial year**) | periods starting **on/after 1 Jul 2026** (opt-in from 1 Jan 2026) | In force 30 Jun 2026; PRH repealed & replaced both decisions [S7] (see *The 2026 scope change — law 555/2026*). |
+| **Law 555/2026** narrows CSRD scope (turnover >€450M **and** >1,000 employees on average, **in both the last completed and the immediately preceding financial year**) | periods starting **on/after 1 Jul 2026** (opt-in from 1 Jan 2026) | In force 30 Jun 2026; PRH repealed & replaced both decisions [S7] (see *The 2026 scope change: law 555/2026*). |
 | FY2026 **entry-trigger**: a company that *becomes* sustainability-reporting-obligated on/after 1 Jul 2026 | its FS for periods starting **on/after 1 Jul 2026** | The decision applies from that entry point [S10]. |
 
 When uncertain, **state the vintage you are applying** before declaring a
@@ -178,7 +178,7 @@ untagged, therefore wrong" is not. For FY2025 it is permitted.
 
 <a id="profile-fas-sbr"></a>
 
-## Profile: Trade Register digital financial statement — Finnish FAS (national SBR taxonomy)
+## Profile: Trade Register digital financial statement: Finnish FAS (national SBR taxonomy)
 
 ### Who files, to whom, under what law
 
@@ -202,9 +202,9 @@ genuinely structured against a taxonomy [S1].
   23 for the markup decision, and ch. 7 ss. 22–24 (and 24a) for the
   technical format of documents entered in the Trade Register [S4][S8]. The
   operative technical requirements are set in two **PRH decisions**
-  (see *The legal instruments — Accounting Act + two named PRH decisions*).
+  (see *The legal instruments: Accounting Act plus two named PRH decisions*).
 
-### The national SBR taxonomy — modules, distribution, cadence
+### The national SBR taxonomy: modules, distribution, cadence
 
 **(A) National SBR taxonomy, for Finnish FAS statements.** "SBR" =
 Standard Business Reporting; expressed in XBRL as XML schema files plus
@@ -255,7 +255,7 @@ Governed by the EU ESEF RTS (see `references/esef.md`); ESEF statements go to th
 **Nasdaq Helsinki OAM** and, from the financial year starting 2024, **also
 to the Trade Register**; supported at PRH intake: **ESEF 2024 and 2022** [S2].
 
-### Packaging — the ESEF ZIP re-used for the Trade Register
+### Packaging: the ESEF ZIP re-used for the Trade Register
 
 **ESEF listed companies re-use their ESEF artifact**: they file the
 digitilinpäätös to the Trade Register **as an ESEF package in ZIP form**
@@ -299,24 +299,24 @@ Packaging rules from the PRH example [S8]:
   report language (`fi` or `sv`)**; both the main folder and the
   `reports/` folder/report must be named this way [S8].
 
-### Relation to EU reporting — ESEF coexistence and the CSRD/ESRS trajectory
+### Relation to EU reporting: ESEF coexistence and the CSRD/ESRS trajectory
 
 Delta-only; ESEF mechanics live in `references/esef.md`, *Which taxonomy applies*
-and *Packaging — the ESEF ZIP re-used for the Trade Register*.
+and *Packaging: the ESEF ZIP re-used for the Trade Register*.
 
 - **ESEF / Transparency-Directive transposition.** The ESEF RTS (**Reg (EU)
   2019/815**) is directly applicable; the Transparency Directive is transposed
   in the **Securities Markets Act**, with **FIN-FSA** as NCA and **Nasdaq
-  Helsinki** as OAM (see *Stakeholders — the institutional map*) [S14].
+  Helsinki** as OAM (see *Stakeholders: the institutional map*) [S14].
   **Coexistence:** listed issuers file the ESEF
   ZIP to the Nasdaq OAM and re-file it to the Trade Register (from FY2024).
   The national FAS regime does **not** re-tag the ESEF markup; it re-receives
   the tagged report unchanged but the Trade-Register ZIP additionally carries
   the required free-form XHTML attachments (adoption date, profit/surplus-use
-  decision, audit report; see *Packaging — the ESEF ZIP re-used for the
+  decision, audit report; see *Packaging: the ESEF ZIP re-used for the
   Trade Register*) [S2][S3].
 - **CSRD / ESRS trajectory.** Finland transposed the CSRD; scope was
-  **narrowed by law 555/2026** (see *The 2026 scope change — law
+  **narrowed by law 555/2026** (see *The 2026 scope change: law
   555/2026*). ESRS sustainability **mark-up is not yet required**: no ESRS
   XBRL taxonomy has been adopted (see *Filing channels, signatures,
   deadline, tax forwarding, language*) [S8].
@@ -336,9 +336,9 @@ and *Packaging — the ESEF ZIP re-used for the Trade Register*.
 
 <a id="profile-sustainability-report"></a>
 
-## Profile: CSRD sustainability report — assured, filed with the digital statements, not XBRL-tagged
+## Profile: CSRD sustainability report: assured, filed with the digital statements, not XBRL-tagged
 
-### The 2026 scope change — law 555/2026 (supersedes older ≥500-employee framing)
+### The 2026 scope change: law 555/2026 (supersedes older ≥500-employee framing)
 
 Any description of Finnish CSRD scope as "large listed non-financial
 companies; PIEs with ≥500 average employees; parents of such PIE groups"
@@ -370,7 +370,7 @@ transposition of the EU CSRD "Omnibus" simplification [S7].
 
 As a consequence PRH **repealed** the two earlier digital-FS decisions and
 **replaced** them with PRH/1087/01/2026 and PRH/1088/01/2026 (see *The legal
-instruments — Accounting Act + two named PRH decisions*). Under
+instruments: Accounting Act plus two named PRH decisions*). Under
 the new decisions the digital-markup requirement applies to: (a) companies
 already sustainability-reporting-obligated before the change and still
 obligated; and (b) companies that become obligated from 1 July 2026. It
@@ -389,7 +389,7 @@ taxonomy family by accounting framework*).
 
 ## Jurisdiction-specific invariants
 
-### Packaging and artifact shape — XHTML-in-ZIP, NOT `.xbri`
+### Packaging and artifact shape: XHTML-in-ZIP, NOT `.xbri`
 
 **All financial-statement documents must be filed in machine-readable web
 format (XHTML). PDF is not accepted** (Word/PDF may be converted to XHTML
@@ -518,7 +518,7 @@ applicable PRH identifiers for those sections [S6]. Because item 2 of s. 1
 of that decision places the **kestävyysraportti inside the
 toimintakertomus**, it is the national PRH-identifier condition that
 actually governs its markup at the Trade Register (see *Packaging and
-artifact shape — XHTML-in-ZIP, NOT `.xbri`*).
+artifact shape: XHTML-in-ZIP, NOT `.xbri`*).
 
 **Corrections are whole-package resubmissions.** Under PRH/1087/01/2026
 s. 5, if a filer reports corrections to the registrable data, **all
@@ -583,7 +583,7 @@ arelleCmdLine --plugins inlineXbrlDocumentSet \
               --packages <SBR-taxonomy-package>.zip \
               -f statements.xhtml --validate
 #   (SBR taxonomy published on avoindata.fi; also hosted by Valtiokonttori — see
-#    "The national SBR taxonomy — modules, distribution, cadence")
+#    "The national SBR taxonomy: modules, distribution, cadence")
 
 # IFRS / ESEF re-use path — the deposited artifact IS the ESEF ZIP.
 scripts/validate_with_arelle.sh <LEI>.zip esef
@@ -609,14 +609,14 @@ description of the error reason**; the interface is generally open 24/7
 
 ## Review workflow
 
-### A pragmatic PRH review pass — in order
+### A pragmatic PRH review pass, in order
 
 When asked to review a Finnish digital financial statement, walk this in
 order; each step depends on the prior being clean.
 
 1. **Pin basis + vintage.** FAS/SBR vs IFRS vs ESEF (see *Choosing the
    taxonomy family by accounting framework*), and the period start date
-   (see *Bi-temporal cheatsheet — which vintage applies to which period*).
+   (see *Bi-temporal cheatsheet: which vintage applies to which period*).
    FY2025 permits **untagged** XHTML for
    sustainability reporters; the markup obligation is FY2026+ [S1][S4].
 2. **Pin the filing obligation.** Sustainability-reporting company under
@@ -650,11 +650,11 @@ order; each step depends on the prior being clean.
 
 ## Authorities and governance
 
-### Stakeholders — the institutional map
+### Stakeholders: the institutional map
 
 Who runs electronic business reporting in Finland, each named once; taxonomy
 and ESEF detail stays in *Choosing the taxonomy family by accounting
-framework* / *Relation to EU reporting — ESEF coexistence and the CSRD/ESRS
+framework* / *Relation to EU reporting: ESEF coexistence and the CSRD/ESRS
 trajectory* (delta-only).
 
 - **Business register / publication organ:** the **Finnish Trade Register
@@ -675,7 +675,7 @@ trajectory* (delta-only).
   not a private standard-setter.
 - **Taxonomy author / cadence:** PRH (company modules) + State Treasury (public
   sector); annual, on **avoindata.fi**; detail in
-  *The national SBR taxonomy — modules, distribution, cadence* [S2].
+  *The national SBR taxonomy: modules, distribution, cadence* [S2].
 - **Tax authority (structured-filing regime):** the **Finnish Tax
   Administration (Verohallinto)**, which **receives FS data automatically
   forwarded by PRH** when filed by the tax-return deadline; sustainability
@@ -685,7 +685,7 @@ trajectory* (delta-only).
   Transparency-Directive competent authority (Securities Markets Act) and
   ESEF supervisor; **Nasdaq Helsinki** is the regulated-market operator
   whose storage is the
-  **OAM** [S14] (see *Relation to EU reporting — ESEF coexistence and the
+  **OAM** [S14] (see *Relation to EU reporting: ESEF coexistence and the
   CSRD/ESRS trajectory*). FIN-FSA also runs the **EBA/EIOPA** prudential regimes
   (COREP/FINREP, Solvency II) as separate DPM filings, **not** part of the
   digital-FS regime [S16].
@@ -693,7 +693,7 @@ trajectory* (delta-only).
 **How they interlock.** PRH owns the register *and* the FAS digital-FS pipeline;
 the State Treasury supplies the code-list backbone; KILA/TEM set the accounting
 *content*; FIN-FSA + Nasdaq own the listed-issuer **ESEF** path PRH merely
-**re-receives** (see *Which taxonomy applies* and *Packaging — the ESEF ZIP
+**re-receives** (see *Which taxonomy applies* and *Packaging: the ESEF ZIP
 re-used for the Trade Register*); Verohallinto is downstream via PRH
 forwarding.
 
@@ -722,7 +722,7 @@ a wrong citation on a regulated filing is high.
 
 ## Sources
 
-### Primary sources — what each establishes
+### Primary sources: what each establishes
 
 All fetched live this session. For any clause of the two PRH decisions not
 quoted verbatim in this file, pull the PDFs from the Finlex media endpoints

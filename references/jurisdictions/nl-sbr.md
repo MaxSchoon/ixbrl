@@ -841,7 +841,7 @@ or pick up the wrong NT generation. For deposit-quality validation:
    local files only:
 
 ```bash
-# FY2025 KvK iXBRL RTS pass — Calc 1.1 (see "Calculation linkbase scope-bleed")
+# FY2025 KvK iXBRL RTS pass: Calc 1.1 (see "Calculation linkbase scope-bleed")
 arelleCmdLine \
   --plugins 'inlineXbrlDocumentSet|validate/NL' \
   --disclosureSystem NL-INLINE-2025 \

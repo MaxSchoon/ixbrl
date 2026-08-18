@@ -229,7 +229,7 @@ Dutch listed issuers.
 deposit-quality validation, download the operative NT packages and
 pass them to Arelle via `--packages` so the DTS resolves offline.
 Remote fetches against `nltaxonomie.nl` are a recurring source of
-flaky validation. See `references/jurisdictions/nl-sbr.md` *Validation — offline DTS resolution*.
+flaky validation. See `references/jurisdictions/nl-sbr.md` *Validation: offline DTS resolution*.
 
 **Validator / review:** Use `--plugins validate/NL` with the
 disclosure system matching the NT generation in the report. For SBR
