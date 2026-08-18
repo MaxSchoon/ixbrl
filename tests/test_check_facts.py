@@ -40,7 +40,7 @@ NS_DECL = (
     'xmlns:xbrli="http://www.xbrl.org/2003/instance" '
     'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
     f'xmlns:ixt="{IXT_NS}" '
-    'xmlns:ixt1="http://www.xbrl.org/inlineXBRL/transformation/2010-04-20" '
+    'xmlns:ixt3="http://www.xbrl.org/inlineXBRL/transformation/2015-02-26" '
     f'xmlns:e="{ENTITY_NS}" '
     f'xmlns:f="{ENTITY_NS}" '
     'xmlns:fake="http://example.com/not-the-registry"'
@@ -648,11 +648,12 @@ class CheckFactsTestCase(unittest.TestCase):
     def test_transformation_pairing_must_be_published(self):
         """A name is the namespace and the local part together.
 
-        `num-dot-decimal-apos` exists only in Registry 5, so pairing it with an
-        earlier registry's namespace names nothing and must be declined.
+        `num-dot-decimal-apos` exists only in Registry 5, so pairing it with
+        Registry 3's namespace names nothing and must be declined. Each pairing
+        in the table was confirmed against that registry's own specification.
         """
         issues = self.run_on(
-            self._fact("1'234.56", "0", ' format="ixt1:num-dot-decimal-apos"')
+            self._fact("1'234.56", "0", ' format="ixt3:num-dot-decimal-apos"')
         )
         self.assertTrue(any(i.startswith("NOTE") for i in issues), f"got {issues}")
 

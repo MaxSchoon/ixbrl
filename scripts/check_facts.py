@@ -79,7 +79,9 @@ MAX_CANONICAL_EXPONENT = 1000
 # local part identify it together. Validating them separately would accept a
 # pairing that no registry publishes, such as an early namespace combined with
 # a name introduced years later.
-TR1 = "http://www.xbrl.org/inlineXBRL/transformation/2010-04-20"
+# TR1 (2010-04-20) is absent: its specification could not be retrieved to
+# confirm which names it publishes, and a pairing that cannot be verified is
+# declined rather than assumed. A decline costs a reported coverage gap.
 TR2 = "http://www.xbrl.org/inlineXBRL/transformation/2011-07-31"
 TR3 = "http://www.xbrl.org/inlineXBRL/transformation/2015-02-26"
 TR4 = "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12"
@@ -106,10 +108,12 @@ _DOT = (",", ".")
 _COMMA = (".", ",")
 _DOT_APOS = ("," + APOSTROPHES, ".")
 _COMMA_APOS = ("." + APOSTROPHES, ",")
+# Each pairing below was confirmed against that registry's own specification.
+# `numdotdecimalin` first appears in TR3, not TR2.
 SEPARATOR_FORMATS = {
-    **{(ns, "numdotdecimal"): _DOT for ns in (TR1, TR2, TR3)},
-    **{(ns, "numcommadecimal"): _COMMA for ns in (TR1, TR2, TR3)},
-    **{(ns, "numdotdecimalin"): _DOT for ns in (TR2, TR3)},
+    **{(ns, "numdotdecimal"): _DOT for ns in (TR2, TR3)},
+    **{(ns, "numcommadecimal"): _COMMA for ns in (TR2, TR3)},
+    (TR3, "numdotdecimalin"): _DOT,
     **{(ns, "num-dot-decimal"): _DOT for ns in (TR4, TR5)},
     **{(ns, "num-comma-decimal"): _COMMA for ns in (TR4, TR5)},
     (TR5, "num-dot-decimal-apos"): _DOT_APOS,
