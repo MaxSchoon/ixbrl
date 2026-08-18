@@ -426,7 +426,7 @@ France is an EU Member State; the France layer sits on the EU rails in
   taxonomy = ESEF/IFRS (Reg. 2019/815 as amended by 2025/19 and, for
   the 2025 taxonomy, **Reg. (EU) 2026/283**, applying for FYs from
   1 Jan 2026 with early FY2025 option and requiring the instance +
-  extension to be valid under **Calculations 1.1**) [S5][S27]. The AMF
+  extension to be valid under **Calculations 1.1**, per Annex III point 5 as added by Reg. (EU) 2026/283 art. 1(3)) [S27]. The AMF's own FAQ only encourages Calc 1.1, citing Reporting Manual 3.4.1; the obligation reaches French issuers because 2019/815 is directly applicable [S5]. The AMF
   accepts the package as `.zip` **or** `.xbri` (inlineXbrlDocumentSet),
   layout per DOC-2007-03 Annexe 1 [S2]. Use the same package harness /
   Calc 1.1 mode as other ESEF NCAs.

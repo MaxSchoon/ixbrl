@@ -11,9 +11,14 @@ The ESEF mandate is established by **Commission Delegated Regulation
 (EU) 2019/815 of 17 December 2018**, supplementing **Directive
 2004/109/EC** (Transparency Directive) with regulatory technical
 standards (RTS) on a single electronic reporting format. The Regulation
-has been amended several times; the consolidated version applicable
-from 1 January 2025 incorporates **Commission Delegated Regulation (EU)
-2025/19** of 26 September 2024 (the 2024 taxonomy update).
+has been amended several times. The version applicable to financial years
+beginning on or after 1 January 2025 incorporates **Commission Delegated
+Regulation (EU) 2025/19** of 26 September 2024, the 2024 taxonomy update.
+The version of 7 April 2026, enacted by **Commission Delegated Regulation
+(EU) 2026/283** of 12 December 2025, applies to financial years beginning
+on or after 1 January 2026 and may be applied early to earlier years. Read
+every statement below against the year being filed: this Regulation is
+amended on a yearly cadence and its annexes are replaced wholesale.
 
 **Scope.** Article 3 binds every issuer whose securities are admitted to
 trading on an EU regulated market and that is subject to the Transparency
@@ -33,21 +38,22 @@ those statements (Art. 5(2)).
 **Article-level requirements:**
 
 - **Article 3.** Issuers must prepare the **entire annual financial report in XHTML format** (single human-readable rendering).
-- **Article 4.** Where the AFR contains **IFRS consolidated financial statements**, issuers must **mark up those statements** (Art. 4(1)), covering at a minimum the disclosures specified in **Annex II** (Art. 4(2)). The Annex II point 2 obligation, which covers the text-block elements alongside the text and numeric elements of the Annex's Table, applies for financial years beginning on or after 1 January 2025 in the currently applicable version. Markup uses the **XBRL markup language** and a taxonomy whose elements are those of the **core taxonomy** (Annex VI plus the presentation, calculation, label and definition linkbases, per Art. 2(1)); where it is not appropriate to use a core element under Annex IV point 4, the issuer must create **extension taxonomy elements** in accordance with Annex IV (Art. 4(4)). Article 4 does not itself impose Inline XBRL; that requirement sits in Article 6.
+- **Article 4.** Where the AFR contains **IFRS consolidated financial statements**, issuers must **mark up those statements** (Art. 4(1)), covering at a minimum the disclosures specified in **Annex II** (Art. 4(2)). The Annex II obligation, which covers the text-block elements alongside the text and numeric elements of the Annex's Table, applies for financial years beginning on or after 1 January 2026 in the currently applicable version, under point 2 for IAS 1 filers and point 3 for IFRS 18 filers. Markup uses the **XBRL markup language** and a taxonomy whose elements are those of the **core taxonomy** (Annex VI plus the presentation, calculation, label and definition linkbases, per Art. 2(1)); where it is not appropriate to use a core element under Annex IV point 4, the issuer must create **extension taxonomy elements** in accordance with Annex IV (Art. 4(4)). Article 4 does not itself impose Inline XBRL; that requirement sits in Article 6.
 - **Article 6.** Common rules on markups: markups made under Articles 4 and 5 must be **embedded in the XHTML annual financial report using the Inline XBRL specifications set out in Annex III** (Art. 6(a)), and must respect the **marking up and filing rules set out in Annex IV** (Art. 6(b)).
-- **Article 8.** Application: the Regulation applies to annual financial reports containing financial statements for financial years beginning on or after 1 January 2020. Article 8 states that one date and nothing else; it sets no separate date for the notes. The staged tagging dates sit in the Article 4(2) obligation as qualified by Annex II, and Annex II has been replaced with each taxonomy update. In the original 2019 text, point 1 (all numbers in a declared currency in the four primary statements) carried no date of its own and ran from the Article 8 date, point 2 required the Table 1 elements, ten entity-identification text elements rather than the primary statements, for financial years beginning on or after 1 January 2020, and point 3 required the Table 2 elements, the block tagging of the notes, for financial years beginning on or after 1 January 2022. Delegated Regulation (EU) 2022/2553 removed that division, merging the two tables into one dated 1 January 2023, and Delegated Regulation (EU) 2025/19 replaced Annex II again with a single Table dated 1 January 2025. Only the two-point, one-Table structure is in force; the Table 1 and Table 2 labels reach only filings for financial years 2020 through 2022. Regulation (EU) 2021/337 amended Article 4(7) of Directive 2004/109/EC so that a Member State could allow issuers to start from financial years beginning on or after 1 January 2021; the Netherlands used that option, so the first Dutch ESEF filings landed in 2022.
+- **Article 8.** Application: the Regulation applies to annual financial reports containing financial statements for financial years beginning on or after 1 January 2020. Article 8 states that one date and nothing else; it sets no separate date for the notes. The staged tagging dates sit in the Article 4(2) obligation as qualified by Annex II, and Annex II has been replaced with each taxonomy update. In the original 2019 text, point 1 (all numbers in a declared currency in the four primary statements) carried no date of its own and ran from the Article 8 date, point 2 required the Table 1 elements, ten entity-identification text elements rather than the primary statements, for financial years beginning on or after 1 January 2020, and point 3 required the Table 2 elements, the block tagging of the notes, for financial years beginning on or after 1 January 2022. Delegated Regulation (EU) 2022/2553 removed that division, merging the two tables into one dated 1 January 2023, and Delegated Regulation (EU) 2025/19 replaced Annex II again with a single Table dated 1 January 2025. Delegated Regulation (EU) 2026/283 then replaced it once more, and this version has three points and two tables again for financial years beginning on or after 1 January 2026: point 2 with Table 1 for issuers on IAS 1, and point 3 with Table 2 for issuers applying IFRS 18. The labels therefore mean something different in each era. Table 1 and Table 2 in 2020 through 2022 divided entity identification from note block tagging; in 2026 they divide IAS 1 filers from IFRS 18 filers. Never carry a Table number across years without checking which Annex II is being cited. Regulation (EU) 2021/337 amended Article 4(7) of Directive 2004/109/EC so that a Member State could allow issuers to start from financial years beginning on or after 1 January 2021; the Netherlands used that option, so the first Dutch ESEF filings landed in 2022.
 
-**Annex II** (Mandatory markups) is a single undivided list in every
-version applicable to a current filing. Point 1 requires markup of all
-numbers in a declared currency in the four primary statements and
-carries no date of its own. Point 2 requires markup of all disclosures
-in the IFRS consolidated financial statements, or made by
-cross-reference therein to other parts of the annual financial report,
-that correspond to the elements in the Table of the Annex, for financial
-years beginning on or after 1 January 2025. Detailed and block tagging
-are distinguished only by the Table's `Type` column, which marks each
-element as `text block`, `text`, `X`, `X.XX` or `shares`, and not by any
-division of the Annex.
+**Annex II** (Mandatory markups) is replaced wholesale by each taxonomy
+update, so its structure depends on the year filed. Point 1 is stable
+across versions: markup of all numbers in a declared currency in the four
+primary statements, with no date of its own. In the version applicable to
+financial years beginning on or after 1 January 2026, point 2 requires
+markup of the disclosures corresponding to the elements of **Table 1**,
+for issuers on IAS 1, and point 3 requires the same for **Table 2**, for
+issuers applying IFRS 18. In the versions for 2023 through 2025 there was
+one undivided Table and no point 3. Detailed and block tagging are never
+divided by the Annex's structure: they are told apart by the Table's
+`Type` column, which marks each element as `text block`, `text`,
+`monetary`, `decimal`, `X`, `X.XX` or `shares`.
 **Annex III** sets the applicable specifications: the Inline XBRL
 instance document must be valid against **Inline XBRL 1.1** and conform
 to the **XBRL Units Registry** (point 1); extension taxonomy files must
@@ -55,9 +61,15 @@ be valid against **XBRL 2.1** and **XBRL Dimensions 1.0** (point 2); the
 report is submitted as a single reporting package conforming to **Report
 Packages 1.0** (point 3, as replaced by Delegated Regulation (EU)
 2025/19 Article 1(3); the earlier text required packaging according to the
-Taxonomy Packages specification). Annex III has four points. There is no
-Annex III requirement to validate against **Calculations 1.1**: that support
-comes from the ESMA taxonomy and the Reporting Manual, not from the RTS. **Annex IV** (Marking up and filing rules) contains the
+Taxonomy Packages specification). Annex III has four points in the version
+applicable to financial years beginning before 1 January 2026. Delegated
+Regulation (EU) 2026/283 Article 1(3) adds a fifth: issuers shall ensure that
+both the Inline XBRL instance document and the issuer's extension taxonomy are
+valid with respect to the **Calculations 1.1** specification. Its Article 1(4)
+adds Calculations 1.1 to the Annex V point (f) validity list. That version
+applies to financial years beginning on or after 1 January 2026, and may be
+applied early to earlier years. Before it, Calculations 1.1 rests on the ESMA
+taxonomy and the Reporting Manual rather than on the RTS. **Annex IV** (Marking up and filing rules) contains the
 technical mark-up specification: §9(b) is the wider-narrower anchoring
 obligation for extension elements. **Annex VI** lists the core ESEF
 taxonomy concepts.
@@ -149,7 +161,7 @@ ESEF imposes **two complementary regimes** on issuers preparing IFRS
 consolidated AFRs:
 
 - **Detailed tagging** (Article 4(1) and Annex II point 1; mandatory from FY2020 under Article 8). Each numeric line item in the four primary statements (Statement of Financial Position, Statement of P&L / OCI, Statement of Changes in Equity, Statement of Cash Flows) is tagged with an `ix:nonFraction` pointing to the matching IFRS or extension concept. Contexts, units (`iso4217:EUR`), decimals, signs all required. Calculation linkbase relationships must reconcile (subject to rounding).
-- **Block tagging** (Article 4(2) and Annex II point 2, the `text block` elements of the Annex II Table; mandatory from FY2022, and governed by the Table dated 1 January 2025 in the currently applicable version). A note disclosure that corresponds to a text-block element of the Annex II Table is wrapped in its entirety in an `ix:nonNumeric` element with `escape="true"`. The obligation reaches those disclosures, not every note in the report. The aim is structured retrieval of narrative; auditors should expect explicit tags like `ifrs-full:DisclosureOfBasisOfPreparationOfFinancialStatementsExplanatory` plus *escaped* HTML preserving tables, lists, and headings inside the block.
+- **Block tagging** (Article 4(2) and the Annex II point that applies to the issuer's standard, taking the `text block` elements of the relevant Annex II Table; mandatory from FY2022, and governed for financial years from 2026 by Table 1 for IAS 1 filers or Table 2 for IFRS 18 filers). A note disclosure that corresponds to a text-block element of the Annex II Table is wrapped in its entirety in an `ix:nonNumeric` element with `escape="true"`. The obligation reaches those disclosures, not every note in the report. The aim is structured retrieval of narrative; auditors should expect explicit tags like `ifrs-full:DisclosureOfBasisOfPreparationOfFinancialStatementsExplanatory` plus *escaped* HTML preserving tables, lists, and headings inside the block.
 
 A typical narrative block tag:
 
@@ -225,7 +237,7 @@ expose IAS 1 and IFRS 18 flavours of the filer entry point, but both
 resolve to `esef_cor.xsd`, so the element definitions an extension builds on
 are the same under either standard. What differs between the two flavours is
 the accompanying linkbase content, labels among it. The 2025 package is aimed at 2026 IFRS consolidated
-financial statements; the RTS in force for FY2025 reports remains
+financial statements; the RTS applying by default to FY2025 reports is
 2019/815 as amended by Delegated Regulation (EU) 2025/19, so entry-point
 matching still keys on the financial year. IFRS 18 is effective for
 financial years beginning on or after 1 January 2027 with early

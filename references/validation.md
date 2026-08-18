@@ -112,12 +112,19 @@ Practical implications:
 
 - Reporting in OIM-semantic terms means duplicate facts (which iXBRL produces routinely when the same concept is tagged in multiple places) no longer trip false calc errors when their values agree within their declared precision.
 - Rounding tolerance is computed from the strictest declared `decimals` across the operands.
-- Calc 1.1 is opt-in: the taxonomy must declare a `calculation-1.1` arcrole.
+- Calc 1.1 is opt-in at the specification level: its relationships use the arcrole `https://www.xbrl.org/2023/arcrole/summation-item`, an independent network from the XBRL 2.1 arcrole `http://www.xbrl.org/2003/arcrole/summation-item`, and each validation applies only to its own network.
 
-**Adoption status (2026):** ESEF accepts both; SEC EFM is still
-primarily on calc 1.0 with rounding consistency rules layered on top
-via EFM checks; the IFRS Taxonomy began publishing 1.1 calc
-relationships from the 2024 release.
+**Adoption status (2026):** ESEF **requires** Calc 1.1. Delegated Regulation
+(EU) 2026/283 added Annex III point 5, obliging issuers to ensure that both
+the instance document and the extension taxonomy are valid with respect to
+Calculations 1.1, for financial years beginning on or after 1 January 2026,
+with early application permitted. ESEF Reporting Manual guidance 3.4.1, as
+updated in October 2025, states that issuers shall use Calculations 1.1
+relationships in the extension taxonomy's calculation linkbase. The ESMA core
+taxonomy has carried only Calc 1.1 arcroles since the 2024 generation. SEC EFM
+is still primarily on calc 1.0 with rounding consistency rules layered on top
+via EFM checks; the IFRS Taxonomy began publishing 1.1 calc relationships from
+the 2024 release.
 
 **Dual statement sets: the cross-scope binding rule.** A
 calculation network lives in an extended-link role, but the link role

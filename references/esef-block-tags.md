@@ -21,14 +21,18 @@ The architecture of the RTS distinguishes two tagging regimes:
 - **Detailed (numeric) tagging** of the primary financial statements (Annex II point 1), applicable from financial years beginning on or after 1 January 2020 under Article 8.
 - **Block (narrative) tagging** of the notes (Annex II point 2, the elements typed `text block` in the Annex II Table), applicable from financial years beginning on or after **1 January 2022**. Article 4(2) imposes the obligation by requiring issuers to mark up, as a minimum, the disclosures specified in Annex II. Annex II point 2 sets the scope: issuers must mark up all disclosures made in the IFRS consolidated financial statements, or made by cross-reference therein to other parts of the AFR, that correspond to the elements in the Annex II Table. Article 6 governs how those markups are embedded, requiring Inline XBRL under Annex III and compliance with the marking up and filing rules in Annex IV.
 
-> **The Table 1 and Table 2 labels are historic.** Annex II carried that
-> division only in the versions applicable to financial years 2020 through
-> 2022. Delegated Regulation (EU) 2022/2553 merged the two into a single
-> Table for financial years beginning on or after 1 January 2023, and
-> Delegated Regulation (EU) 2025/19 replaced that Table again for financial
-> years beginning on or after 1 January 2025. Where an older source or filing
-> rule says "Table 2", read it as the `text block` elements of the single
-> Annex II Table.
+> **A Table number means nothing without its year.** Annex II is replaced
+> wholesale by each taxonomy update, and the labels have been reused for a
+> different division. For financial years 2020 through 2022, Table 1 held ten
+> entity-identification elements and Table 2 held the note block tags.
+> Delegated Regulation (EU) 2022/2553 merged them into a single Table for
+> financial years beginning on or after 1 January 2023, and Delegated
+> Regulation (EU) 2025/19 replaced that Table for 2025. Delegated Regulation
+> (EU) 2026/283 then reintroduced two tables for financial years beginning on
+> or after 1 January 2026, this time splitting by standard: Table 1 for
+> issuers on IAS 1 under point 2, Table 2 for issuers applying IFRS 18 under
+> point 3. Check which Annex II a source is citing before carrying a Table
+> number across years.
 
 The Regulation has been amended several times to track updates to the
 IFRS Taxonomy. The currently published consolidated versions on
