@@ -26,6 +26,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import check_facts
 from check_facts import truncates_nonzero_digits
+from lxml import etree
 
 # `ixt` and the concept prefixes must be DECLARED, not merely written. A
 # transformation name and a concept name are both QNames, and the checker
@@ -708,6 +709,65 @@ class CheckFactsTestCase(unittest.TestCase):
                 self.assertFalse(
                     any("inconsistent" in i for i in issues), f"got {issues}"
                 )
+
+    def test_interval_membership_matches_round_ties_to_even(self):
+        """Differential test against IEEE roundTiesToEven, per XBRL 2.1 4.6.7.2.
+
+        A value belongs to a fact's interval exactly when it rounds to that
+        fact's reported value. The oracle rounds with ROUND_HALF_EVEN, which
+        reproduces the spec's own worked example (123450 to -2 places is
+        123400, not 123500). Probing the endpoints specifically is the point:
+        an off-by-one on inclusivity shows up nowhere else, and a half-up
+        model passes every interior probe.
+        """
+        for places in (-3, -2, -1, 0, 1, 2):
+            unit = Fraction(10) ** -places
+            for step in range(-25, 26):
+                reported = Fraction(step) * unit
+                interval = check_facts.reported_interval(
+                    self._element(reported, places)
+                )
+                self.assertIsNotNone(interval)
+                for probe in (
+                    interval.lower,
+                    interval.upper,
+                    (interval.lower + interval.upper) / 2,
+                ):
+                    with self.subTest(places=places, reported=reported, probe=probe):
+                        inside = (
+                            interval.lower < probe < interval.upper
+                            or (probe == interval.lower and interval.lower_closed)
+                            or (probe == interval.upper and interval.upper_closed)
+                        )
+                        self.assertEqual(
+                            inside, self._rounds_to(probe, places, reported)
+                        )
+
+    @staticmethod
+    def _element(value, places):
+        text = (
+            str(value.numerator)
+            if value.denominator == 1
+            else format(Decimal(value.numerator) / Decimal(value.denominator), "f")
+        )
+        return etree.fromstring(
+            '<ix:nonFraction xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"'
+            f' decimals="{places}">{text}</ix:nonFraction>'
+        )
+
+    @staticmethod
+    def _rounds_to(probe, places, expected):
+        unit = Fraction(10) ** -places
+        quotient = probe / unit
+        floor = quotient.numerator // quotient.denominator
+        remainder = quotient - floor
+        if remainder > Fraction(1, 2):
+            nearest = floor + 1
+        elif remainder < Fraction(1, 2):
+            nearest = floor
+        else:  # a tie goes to the even neighbour
+            nearest = floor if floor % 2 == 0 else floor + 1
+        return nearest * unit == expected
 
     def test_touching_intervals_are_not_consistent(self):
         """5 and 6 at decimals=0 describe [4.5, 5.5) and [5.5, 6.5).

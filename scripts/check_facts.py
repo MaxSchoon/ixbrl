@@ -39,6 +39,7 @@ from collections import defaultdict
 from decimal import Decimal, InvalidOperation
 from fractions import Fraction
 from pathlib import Path
+from typing import NamedTuple
 
 try:
     from lxml import etree
@@ -292,6 +293,30 @@ def canonical_fact_text(value: str) -> str:
     return text if key is None else key
 
 
+class Interval(NamedTuple):
+    """A range of values, with each endpoint either included or excluded."""
+
+    lower: Fraction
+    upper: Fraction
+    lower_closed: bool
+    upper_closed: bool
+
+
+def intervals_share_a_value(intervals: list[Interval]) -> bool:
+    """Is there a single value satisfying every one of these ranges?"""
+    lower = max(i.lower for i in intervals)
+    upper = min(i.upper for i in intervals)
+    if lower < upper:
+        return True
+    if lower > upper:
+        return False
+    # The ranges meet at exactly one point, which counts only if every range
+    # that reaches it includes it.
+    return all(i.lower_closed for i in intervals if i.lower == lower) and all(
+        i.upper_closed for i in intervals if i.upper == upper
+    )
+
+
 def expand_qname(el: etree._Element, name: str | None) -> str | None:
     """Expand a QName attribute to `{namespace}local`, or None if unresolvable.
 
@@ -308,27 +333,27 @@ def expand_qname(el: etree._Element, name: str | None) -> str | None:
     return f"{{{namespace}}}{local}" if namespace else None
 
 
-def reported_interval(
-    el: etree._Element,
-) -> tuple[Fraction, Fraction, bool] | None:
-    """Values this fact is consistent with, as (lower, upper, upper_closed).
+def reported_interval(el: etree._Element) -> Interval | None:
+    """Values this fact is consistent with, as a possibly half-open range.
 
     A numeric fact does not assert a point. `decimals` states the place to
     which the value is accurate, so a fact reported as 45,000 with
     `decimals="-3"` asserts only that the true amount lies within half a
     thousand of it. `INF` is the degenerate case that does assert a point.
 
-    The upper bound is EXCLUSIVE for a finite `decimals` and inclusive for
-    `INF`. Rounding sends the half-way point up to the next representable
-    value, so 5 and 6 at `decimals="0"` describe [4.5, 5.5) and [5.5, 6.5):
-    they touch but share no value, and treating both bounds as closed would
-    call that pair consistent.
+    Whether the endpoints belong to the range depends on parity, because
+    XBRL 2.1 section 4.6.7.2 defines "correct to n decimal places" by IEEE 754
+    **roundTiesToEven**, not by rounding halves up. A tie goes to whichever
+    neighbour is even, so the half-way points bound an ODD reported value from
+    outside and an EVEN one from inside:
 
-    Two facts for one concept, context and unit are inconsistent only when no
-    value satisfies all of them. Comparing for exact equality instead reported
-    disagreement between facts that agree to the accuracy each one claims,
-    which is the ordinary case when an amount is tagged twice at different
-    roundings.
+        5 at decimals="0"  ->  (4.5, 5.5)   4.5 ties down to 4, 5.5 up to 6
+        6 at decimals="0"  ->  [5.5, 6.5]   both ties land on 6
+
+    The two therefore share no value and are correctly reported as
+    inconsistent, while two facts that agree to the accuracy each one claims
+    overlap and are not. The spec's own worked example is 123450 correct to
+    -2 decimal places, which is 123400 rather than 123500.
     """
     value = fact_value(el)
     if value is None:
@@ -338,16 +363,24 @@ def reported_interval(
         return None  # @precision or a missing attribute: already reported above
     exact = Fraction(value)
     if decimals == "INF":
-        return (exact, exact, True)
+        return Interval(exact, exact, True, True)
     try:
         places = int(decimals)
     except ValueError:
         return None
     try:
-        half = Fraction(5) * Fraction(10) ** (-places - 1)
+        unit = Fraction(10) ** -places
     except (OverflowError, ValueError, ZeroDivisionError):
         return None
-    return (exact - half, exact + half, False)
+    half = unit / 2
+    # A reported value whose last retained digit is even keeps both ties, so
+    # its endpoints are included. An odd one loses both, so they are not. A
+    # value that is not a whole multiple of its own unit is already reported
+    # as an EFM 6.5.37 truncation, and is treated inclusively here so that
+    # this check does not pile a second, derived complaint on top of it.
+    multiple = exact / unit
+    closed = multiple.denominator != 1 or multiple.numerator % 2 == 0
+    return Interval(exact - half, exact + half, closed, closed)
 
 
 def describe_reported(el: etree._Element) -> str:
@@ -602,12 +635,7 @@ def check(path: Path) -> list[str]:
             undecidable_groups += 1
             continue
         bounded = [i for i in intervals if i is not None]
-        lower = max(i[0] for i in bounded)
-        upper = min(i[1] for i in bounded)
-        # The shared upper bound is attainable only if every interval that
-        # reaches it includes it.
-        upper_attainable = all(closed for _, hi, closed in bounded if hi == upper)
-        if lower > upper or (lower == upper and not upper_attainable):
+        if not intervals_share_a_value(bounded):
             lines = ", ".join(str(e.sourceline) for e in els)
             shown = sorted({describe_reported(e) for e in els})
             concept = group_key[0].rpartition("}")[2] or group_key[0]
