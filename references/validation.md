@@ -112,7 +112,7 @@ Practical implications:
 
 - Reporting in OIM-semantic terms means duplicate facts (which iXBRL produces routinely when the same concept is tagged in multiple places) no longer trip false calc errors when their values agree within their declared precision.
 - Rounding tolerance is computed from the strictest declared `decimals` across the operands.
-- Calc 1.1 is opt-in at the specification level: its relationships use the arcrole `https://www.xbrl.org/2023/arcrole/summation-item`, an independent network from the XBRL 2.1 arcrole `http://www.xbrl.org/2003/arcrole/summation-item`, and each validation applies only to its own network.
+- Calc 1.1 is opt-in at the specification level: its relationships use the arcrole `https://xbrl.org/2023/arcrole/summation-item`, with no `www`, forming a network independent of the XBRL 2.1 arcrole `http://www.xbrl.org/2003/arcrole/summation-item`. A processor may optionally apply Calc 1.1 semantics to the legacy relationships as well, but the two networks stay distinct. Verified against the ESMA ESEF 2025 taxonomy, whose calculation linkbases carry 2652 arcs and only the 2023 arcrole.
 
 **Adoption status (2026):** ESEF **requires** Calc 1.1. Delegated Regulation
 (EU) 2026/283 added Annex III point 5, obliging issuers to ensure that both
