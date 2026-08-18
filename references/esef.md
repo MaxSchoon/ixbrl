@@ -33,21 +33,31 @@ those statements (Art. 5(2)).
 **Article-level requirements:**
 
 - **Article 3.** Issuers must prepare the **entire annual financial report in XHTML format** (single human-readable rendering).
-- **Article 4.** Where the AFR contains **IFRS consolidated financial statements**, issuers must **mark up those statements** (Art. 4(1)), covering at a minimum the disclosures specified in **Annex II** (Art. 4(2)). The Annex II Table 2 block-tagging obligation applies from financial years beginning on or after 1 January 2022. Markup uses the **XBRL markup language** and a taxonomy whose elements are those of the **core taxonomy** (Annex VI plus the presentation, calculation, label and definition linkbases, per Art. 2(1)); where it is not appropriate to use a core element under Annex IV point 4, the issuer must create **extension taxonomy elements** in accordance with Annex IV (Art. 4(4)). Article 4 does not itself impose Inline XBRL; that requirement sits in Article 6.
+- **Article 4.** Where the AFR contains **IFRS consolidated financial statements**, issuers must **mark up those statements** (Art. 4(1)), covering at a minimum the disclosures specified in **Annex II** (Art. 4(2)). The Annex II point 2 obligation, which covers the text-block elements alongside the text and numeric elements of the Annex's Table, applies for financial years beginning on or after 1 January 2025 in the currently applicable version. Markup uses the **XBRL markup language** and a taxonomy whose elements are those of the **core taxonomy** (Annex VI plus the presentation, calculation, label and definition linkbases, per Art. 2(1)); where it is not appropriate to use a core element under Annex IV point 4, the issuer must create **extension taxonomy elements** in accordance with Annex IV (Art. 4(4)). Article 4 does not itself impose Inline XBRL; that requirement sits in Article 6.
 - **Article 6.** Common rules on markups: markups made under Articles 4 and 5 must be **embedded in the XHTML annual financial report using the Inline XBRL specifications set out in Annex III** (Art. 6(a)), and must respect the **marking up and filing rules set out in Annex IV** (Art. 6(b)).
-- **Article 8.** Application: the Regulation applies to annual financial reports containing financial statements for financial years beginning on or after 1 January 2020. Article 8 states that one date and nothing else; it sets no separate date for the notes. The staged tagging dates sit in the Article 4(2) obligation as qualified by Annex II: point 1 (all numbers in a declared currency in the four primary statements) carries no date of its own and runs from the Article 8 date, point 2 requires the Table 1 elements for financial years beginning on or after 1 January 2020, and point 3 requires the Table 2 elements, the block tagging of the notes, for financial years beginning on or after 1 January 2022. Regulation (EU) 2021/337 amended Article 4(7) of Directive 2004/109/EC so that a Member State could allow issuers to start from financial years beginning on or after 1 January 2021; the Netherlands used that option, so the first Dutch ESEF filings landed in 2022.
+- **Article 8.** Application: the Regulation applies to annual financial reports containing financial statements for financial years beginning on or after 1 January 2020. Article 8 states that one date and nothing else; it sets no separate date for the notes. The staged tagging dates sit in the Article 4(2) obligation as qualified by Annex II, and Annex II has been replaced with each taxonomy update. In the original 2019 text, point 1 (all numbers in a declared currency in the four primary statements) carried no date of its own and ran from the Article 8 date, point 2 required the Table 1 elements, ten entity-identification text elements rather than the primary statements, for financial years beginning on or after 1 January 2020, and point 3 required the Table 2 elements, the block tagging of the notes, for financial years beginning on or after 1 January 2022. Delegated Regulation (EU) 2022/2553 removed that division, merging the two tables into one dated 1 January 2023, and Delegated Regulation (EU) 2025/19 replaced Annex II again with a single Table dated 1 January 2025. Only the two-point, one-Table structure is in force; the Table 1 and Table 2 labels reach only filings for financial years 2020 through 2022. Regulation (EU) 2021/337 amended Article 4(7) of Directive 2004/109/EC so that a Member State could allow issuers to start from financial years beginning on or after 1 January 2021; the Netherlands used that option, so the first Dutch ESEF filings landed in 2022.
 
-**Annex II** lists IFRS disclosures subject to mandatory tagging: Table
-1 (detailed tagging from 2020) and Table 2 (block tagging from 2022).
+**Annex II** (Mandatory markups) is a single undivided list in every
+version applicable to a current filing. Point 1 requires markup of all
+numbers in a declared currency in the four primary statements and
+carries no date of its own. Point 2 requires markup of all disclosures
+in the IFRS consolidated financial statements, or made by
+cross-reference therein to other parts of the annual financial report,
+that correspond to the elements in the Table of the Annex, for financial
+years beginning on or after 1 January 2025. Detailed and block tagging
+are distinguished only by the Table's `Type` column, which marks each
+element as `text block`, `text`, `X`, `X.XX` or `shares`, and not by any
+division of the Annex.
 **Annex III** sets the applicable specifications: the Inline XBRL
 instance document must be valid against **Inline XBRL 1.1** and conform
 to the **XBRL Units Registry** (point 1); extension taxonomy files must
 be valid against **XBRL 2.1** and **XBRL Dimensions 1.0** (point 2); the
 report is submitted as a single reporting package conforming to **Report
-Packages 1.0** (point 3, as amended by Delegated Regulation (EU)
-2023/2686); and, as added by Delegated Regulation (EU) 2025/19, the
-instance must be valid against the **Calculations 1.1** specification
-(point 5). **Annex IV** (Marking up and filing rules) contains the
+Packages 1.0** (point 3, as replaced by Delegated Regulation (EU)
+2025/19 Article 1(3); the earlier text required packaging according to the
+Taxonomy Packages specification). Annex III has four points. There is no
+Annex III requirement to validate against **Calculations 1.1**: that support
+comes from the ESMA taxonomy and the Reporting Manual, not from the RTS. **Annex IV** (Marking up and filing rules) contains the
 technical mark-up specification: §9(b) is the wider-narrower anchoring
 obligation for extension elements. **Annex VI** lists the core ESEF
 taxonomy concepts.
@@ -138,8 +148,8 @@ do not displace the EU-level XHTML / iXBRL obligations.
 ESEF imposes **two complementary regimes** on issuers preparing IFRS
 consolidated AFRs:
 
-- **Detailed tagging** (Article 4 + Annex II Table 1; mandatory from FY2020). Each numeric line item in the four primary statements (Statement of Financial Position, Statement of P&L / OCI, Statement of Changes in Equity, Statement of Cash Flows) is tagged with an `ix:nonFraction` pointing to the matching IFRS or extension concept. Contexts, units (`iso4217:EUR`), decimals, signs all required. Calculation linkbase relationships must reconcile (subject to rounding).
-- **Block tagging** (Article 4(2) + Annex II Table 2; mandatory from FY2022). Entire note disclosures are wrapped in `ix:nonNumeric` text-block elements with `escape="true"`. The aim is structured retrieval of narrative; auditors should expect explicit tags like `ifrs-full:DisclosureOfBasisOfPreparationOfFinancialStatementsExplanatory` plus *escaped* HTML preserving tables, lists, and headings inside the block.
+- **Detailed tagging** (Article 4(1) and Annex II point 1; mandatory from FY2020 under Article 8). Each numeric line item in the four primary statements (Statement of Financial Position, Statement of P&L / OCI, Statement of Changes in Equity, Statement of Cash Flows) is tagged with an `ix:nonFraction` pointing to the matching IFRS or extension concept. Contexts, units (`iso4217:EUR`), decimals, signs all required. Calculation linkbase relationships must reconcile (subject to rounding).
+- **Block tagging** (Article 4(2) and Annex II point 2, the `text block` elements of the Annex II Table; mandatory from FY2022, and governed by the Table dated 1 January 2025 in the currently applicable version). Entire note disclosures are wrapped in `ix:nonNumeric` text-block elements with `escape="true"`. The aim is structured retrieval of narrative; auditors should expect explicit tags like `ifrs-full:DisclosureOfBasisOfPreparationOfFinancialStatementsExplanatory` plus *escaped* HTML preserving tables, lists, and headings inside the block.
 
 A typical narrative block tag:
 

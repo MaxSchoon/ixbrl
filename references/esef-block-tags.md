@@ -1,4 +1,4 @@
-# ESEF Mandatory Block-Tag List (RTS Annex II Table 2)
+# ESEF Mandatory Block-Tag List (RTS Annex II, text block elements)
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
@@ -18,8 +18,17 @@ XBRL** (iXBRL).
 
 The architecture of the RTS distinguishes two tagging regimes:
 
-- **Detailed (numeric) tagging** of the primary financial statements (Annex II Table 1), applicable from financial years beginning on or after 1 January 2020.
-- **Block (narrative) tagging** of the notes (Annex II Table 2), applicable from financial years beginning on or after **1 January 2022**. Article 4(2) imposes the Table 2 obligation by requiring issuers to mark up, as a minimum, the disclosures specified in Annex II. Annex II point 3 sets the scope: issuers must mark up all disclosures made in the IFRS consolidated financial statements, or made by cross-reference therein to other parts of the AFR, that correspond to the elements listed in Table 2. Article 6 governs how those markups are embedded, requiring Inline XBRL under Annex III and compliance with the marking up and filing rules in Annex IV.
+- **Detailed (numeric) tagging** of the primary financial statements (Annex II point 1), applicable from financial years beginning on or after 1 January 2020 under Article 8.
+- **Block (narrative) tagging** of the notes (Annex II point 2, the elements typed `text block` in the Annex II Table), applicable from financial years beginning on or after **1 January 2022**. Article 4(2) imposes the obligation by requiring issuers to mark up, as a minimum, the disclosures specified in Annex II. Annex II point 2 sets the scope: issuers must mark up all disclosures made in the IFRS consolidated financial statements, or made by cross-reference therein to other parts of the AFR, that correspond to the elements in the Annex II Table. Article 6 governs how those markups are embedded, requiring Inline XBRL under Annex III and compliance with the marking up and filing rules in Annex IV.
+
+> **The Table 1 and Table 2 labels are historic.** Annex II carried that
+> division only in the versions applicable to financial years 2020 through
+> 2022. Delegated Regulation (EU) 2022/2553 merged the two into a single
+> Table for financial years beginning on or after 1 January 2023, and
+> Delegated Regulation (EU) 2025/19 replaced that Table again for financial
+> years beginning on or after 1 January 2025. Where an older source or filing
+> rule says "Table 2", read it as the `text block` elements of the single
+> Annex II Table.
 
 The Regulation has been amended several times to track updates to the
 IFRS Taxonomy. The currently published consolidated versions on
@@ -28,15 +37,15 @@ EUR-Lex include `02019R0815-20210101`, `02019R0815-20230119`, and
 ESEF taxonomy update incorporates the 2024 IFRS Taxonomy update and
 that two separate entry points are being introduced ahead of the
 mandatory IFRS 18 / IFRS 19 implementation effective 1 January 2027
-(manual paragraphs 7–8). Mandatory Table 2 obligations are therefore
+(manual paragraphs 7–8). Mandatory block-tagging obligations are therefore
 stable for FY 2022–FY 2026 reporting cycles, with prospective IFRS 18
 changes ahead.
 
 > **Honest gap note on the catalog.** When this reference was prepared,
 > the consolidated EUR-Lex text of Regulation 2019/815 returned an
 > asynchronous (HTTP 202) response that did not yield extractable
-> Table 2 contents within the time budget, and the FCA Handbook mirror
-> of Annex II Table 2 returned no extractable content via the
+> the text-block contents within the time budget, and the FCA Handbook mirror
+> of the Annex II text-block list returned no extractable content via the
 > available fetch tool. Accordingly, no QNames have been invented. The
 > catalog section below lists only QNames literally verified in the
 > fetched ESMA Reporting Manual figures plus the small additional set
@@ -83,7 +92,7 @@ figures (Manual §1.9, Figures 2–5) and the XBRL.org guidance article.
 Each is documented in the IFRS Foundation taxonomy at
 `http://xbrl.ifrs.org/taxonomy/.../ifrs-full` with type
 `dtr-types:textBlockItemType`. **This is a partial list.** The
-complete Annex II Table 2 catalog contains roughly 250 IFRS-full
+complete Annex II text-block catalog contains roughly 250 IFRS-full
 text-block elements covering every major IFRS standard (IAS 1, IAS 7,
 IAS 12, IAS 16, IAS 19, IAS 24, IAS 36, IAS 38, IFRS 2, IFRS 3, IFRS
 7, IFRS 8, IFRS 9, IFRS 13, IFRS 15, IFRS 16, IFRS 17, etc.). For the
@@ -109,7 +118,7 @@ Regulation 2019/815 directly from EUR-Lex or load the ESMA-published
 
 - `ifrs-full:DisclosureOfIncomeTaxExplanatory`: covers IAS 12 disclosures including current/deferred tax reconciliation and tax receivables/payables tables.
 
-### Other topical groups in Annex II Table 2: coverage NOT verified literally in this run
+### Other topical groups in the Annex II text-block set: coverage NOT verified literally in this run
 
 The following topical groupings are documented as part of the
 mandatory list in the secondary literature (XBRL.org guidance, ESMA
@@ -151,16 +160,16 @@ all typed as `dtr-types:textBlockItemType`.
 8. **Failing to concatenate split disclosures with `ix:continuation`.** Where the same logical disclosure is physically split across notes, two separate facts will produce inconsistent duplicates (Guidance 2.2.4) and must instead be assembled into one fact (Figure 5, Guidance 2.5.5).
 9. **Inconsistent block tagging across periods.** §1.9.3 requires consistency *"across reporting periods to the maximum possible extent"* when including additional voluntary tags.
 
-## Recommended workflow for enumerating the full Table 2 list
+## Recommended workflow for enumerating the full text-block list
 
 When preparers need the definitive ~250-element catalog, the
 authoritative path is:
 
-1. Fetch the latest consolidated text of Regulation 2019/815 from EUR-Lex (e.g., `02019R0815-20250101`) and extract the Annex II Table 2 element list.
+1. Fetch the latest consolidated text of Regulation 2019/815 from EUR-Lex (e.g., `02019R0815-20250101`) and extract the Annex II Table element list.
 2. Alternatively, load the ESMA-published `esef_taxonomy.zip` and enumerate elements satisfying:
    - `xbrli:item` substitution group,
    - `dtr-types:textBlockItemType` (or `dtr:textBlockItemType`) type,
-   - Member of the ESEF Annex II Table 2 entry-point.
+   - Member of the ESEF Annex II mandatory-element set.
 3. Cross-check against the IFRS Taxonomy Illustrated package from the IFRS Foundation for the human-readable concept labels.
 
 Both paths yield the same canonical list; both are mandatory inputs to
@@ -168,14 +177,14 @@ any preparation tool that purports to be ESEF-conformant.
 
 ## Sources
 
-- Commission Delegated Regulation (EU) 2019/815 of 17 December 2018 (RTS on ESEF), Article 4(2) and Annex II Table 2. Consolidated versions: `02019R0815-20210101`, `02019R0815-20230119`, `02019R0815-20250101`. https://eur-lex.europa.eu/eli/reg_del/2019/815/oj/eng and https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02019R0815-20250101
+- Commission Delegated Regulation (EU) 2019/815 of 17 December 2018 (RTS on ESEF), Article 4(2) and Annex II point 2. Consolidated versions: `02019R0815-20210101`, `02019R0815-20230119`, `02019R0815-20250101`. https://eur-lex.europa.eu/eli/reg_del/2019/815/oj/eng and https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02019R0815-20250101
 - ESMA, *ESEF Reporting Manual: Preparation of Annual Financial Reports in ESEF format (Update October 2025)*, document reference **ESMA32-60-254 Rev**, dated 14 October 2025. Sections verified literally: Glossary (block tag definition, p. 10), §1.9.1 Marking up notes and accounting policies (p. 23), §1.9.2 Granularity of block tagging (p. 24), §1.9.3 Other considerations (p. 25–26), §2.2.4 Facts duplication (p. 30). https://www.esma.europa.eu/sites/default/files/library/esma32-60-254_esef_reporting_manual.pdf
 - Directive 2004/109/EC (Transparency Directive), Article 4 and Article 20, as amended by Directive 2013/50/EU.
 - XBRL International / XBRL.org, *Guidance on Block Tagging and Other ESEF Reporting Manual Updates from ESMA*. https://www.xbrl.org/guidance-on-block-tagging-and-other-esef-reporting-manual-updates-from-esma/
 - IFRS Foundation, IFRS Taxonomy (namespace `http://xbrl.ifrs.org/taxonomy/.../ifrs-full`). https://www.ifrs.org/issued-standards/ifrs-taxonomy/
 
 > **Verification gap acknowledged:** The full ~250-element list of
-> Annex II Table 2 QNames was not literally extracted within the time
+> the Annex II text-block QNames were not literally extracted within the time
 > budget when this reference was prepared (EUR-Lex consolidated text
 > returned an asynchronous response; the FCA Handbook mirror returned
 > no extractable text via the fetch tool; the XBRL France mapping PDF
