@@ -14,14 +14,18 @@ Run: python3 -m unittest discover -s tests -p 'test_*.py'
 
 from __future__ import annotations
 
+import io
 import sys
 import tempfile
 import unittest
+from decimal import Decimal
+from fractions import Fraction
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import check_facts
+from check_facts import truncates_nonzero_digits
 
 NS_DECL = (
     'xmlns="http://www.w3.org/1999/xhtml" '
@@ -256,6 +260,22 @@ class CheckFactsTestCase(unittest.TestCase):
             [],
         )
 
+    def test_apostrophe_separator_variants(self):
+        """Registry 5 -apos forms use the apostrophe as the thousands mark."""
+        self.assertEqual(
+            self.defects(
+                self._fact("1'234.56", "2", ' format="ixt:num-dot-decimal-apos"')
+            ),
+            [],
+        )
+        issues = self.run_on(
+            self._fact("1'234,56", "0", ' format="ixt:num-comma-decimal-apos"')
+        )
+        self.assertTrue(
+            any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+            f"got {issues}",
+        )
+
     def test_unknown_transformation_is_declined(self):
         """A transformation this script does not decode yields no verdict."""
         issues = self.run_on(
@@ -313,6 +333,104 @@ class CheckFactsTestCase(unittest.TestCase):
                     should_flag,
                     f"got {issues}",
                 )
+
+    def test_truncation_matches_exact_rational_arithmetic(self):
+        """Differential test against an independent oracle.
+
+        The rule is that value * 10**decimals must be an integer. Fraction
+        computes that exactly and by a completely different route than the
+        coefficient/exponent arithmetic under test, so the two agreeing across
+        this grid is real evidence rather than a restatement of the
+        implementation. The grid deliberately includes values longer than the
+        default 28-digit decimal context, which is what the earlier scaleb()
+        version got wrong.
+        """
+        values = [
+            "-2345.67",
+            "2345.67",
+            "1000000",
+            "1E+30",
+            "1.000",
+            "0",
+            "0.0",
+            "-0.5",
+            "10000000000000000000000000000.1",
+            "123456789012345678901234567890.5",
+            "1.5",
+            "0.0001",
+            "-1234500",
+            "9.99E-5",
+            "1E-30",
+        ]
+        places = ["-9", "-7", "-6", "-3", "-2", "0", "2", "5", "9"]
+        for literal in values:
+            value = Decimal(literal)
+            for decimals in places:
+                with self.subTest(value=literal, decimals=decimals):
+                    expected = (
+                        Fraction(value) * Fraction(10) ** int(decimals)
+                    ).denominator != 1
+                    self.assertEqual(
+                        truncates_nonzero_digits(value, decimals), expected
+                    )
+            with self.subTest(value=literal, decimals="INF"):
+                self.assertFalse(truncates_nonzero_digits(value, "INF"))
+
+    def test_scale_on_a_value_longer_than_the_decimal_context(self):
+        """@scale must not round the value it is applied to.
+
+        The exponent shift is exact; scaleb() would round to 28 significant
+        digits and drop the trailing digit before it could be tested. Both a
+        zero and a negative scale exercise the same path.
+        """
+        long_value = "10000000000000000000000000000.1"
+        for scale in ("0", "-3"):
+            with self.subTest(scale=scale):
+                issues = self.run_on(self._fact(long_value, "0", f' scale="{scale}"'))
+                self.assertTrue(
+                    any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+                    f"scale={scale} got {issues}",
+                )
+
+    def test_note_names_the_uncovered_facts(self):
+        """The coverage note must state the count and not fail the run."""
+        body = (
+            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1"'
+            ' unitRef="u1" decimals="0" format="ixt:num-unit-decimal">12 34'
+            "</ix:nonFraction>"
+        )
+        issues = self.run_on(doc(body))
+        notes = [i for i in issues if i.startswith("NOTE")]
+        self.assertEqual(len(notes), 1, f"got {issues}")
+        self.assertIn("1 numeric fact", notes[0])
+        self.assertEqual([i for i in issues if not i.startswith("NOTE")], [])
+
+    def test_main_exit_code_ignores_notes(self):
+        """A document whose only finding is a coverage note exits 0."""
+        body = (
+            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1"'
+            ' unitRef="u1" decimals="0" format="ixt:num-unit-decimal">12 34'
+            "</ix:nonFraction>"
+        )
+        with tempfile.NamedTemporaryFile(
+            "w", suffix=".xhtml", delete=False, encoding="utf-8"
+        ) as handle:
+            handle.write(doc(body))
+            temp = handle.name
+        try:
+            argv, stdout = sys.argv, sys.stdout
+            sys.argv = ["check_facts.py", temp]
+            sys.stdout = io.StringIO()
+            try:
+                code = check_facts.main()
+                printed = sys.stdout.getvalue()
+            finally:
+                sys.argv, sys.stdout = argv, stdout
+        finally:
+            Path(temp).unlink()
+        self.assertEqual(code, 0, printed)
+        self.assertIn("NOTE", printed)
+        self.assertIn("passes pre-flight checks", printed)
 
     def test_unresolved_context_is_flagged(self):
         body = (

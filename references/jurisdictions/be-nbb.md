@@ -350,7 +350,7 @@ FY2025 to FY2027** and **wave 3 from FY2026 to FY2028**. The **Omnibus I
 provides that **until the sustainability-reporting mark-up rules are adopted**
 in Delegated Regulation (EU) 2019/815 (the ESEF RTS), undertakings are **not**
 required to mark up sustainability reporting. That is the operative provision;
-recital 24 explains it but does not enact it. the ESRS digital-tagging
+recital 24 explains it but does not enact it. The ESRS digital-tagging
 delegated act is expected only in H2 2026, with revised (simplified) ESRS around
 September 2026. **Net: ESRS mark-up in ESEF is effectively suspended pending the
 updated ESEF RTS.** Belgian listed issuers still file the ESEF

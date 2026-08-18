@@ -60,10 +60,20 @@ ISO_4217 = re.compile(r"^[A-Z]{3}$")
 # Transformations from the Inline XBRL Transformation Registry whose only
 # effect on a numeric fact is the separator convention. Everything else in the
 # registry is declined by fact_value() rather than guessed at.
-DOT_DECIMAL_FORMATS = frozenset(
-    {"numdotdecimal", "num-dot-decimal", "numdotdecimalin", "num-dot-decimal-in"}
-)
+# Names are matched on the local part, so both the hyphenated spellings of
+# Transformation Registry 4/5 and the camelCase of the earlier registries hit.
+# `num-unit-decimal` is deliberately absent: its final group is the fraction,
+# not a thousands group, so it is a transformation rather than a separator
+# convention and is declined like any other.
+# Registry 5 gives the apostrophe grouping its own transformations rather than
+# folding it into the base ones, and accepts several apostrophe-like
+# characters. Keeping the four sets separate means a base transformation does
+# not silently accept a separator it does not permit.
+APOSTROPHES = "'\u2019\u00b4\u02bc\u2032`"
+DOT_DECIMAL_FORMATS = frozenset({"numdotdecimal", "num-dot-decimal", "numdotdecimalin"})
+DOT_DECIMAL_APOS_FORMATS = frozenset({"num-dot-decimal-apos"})
 COMMA_DECIMAL_FORMATS = frozenset({"numcommadecimal", "num-comma-decimal"})
+COMMA_DECIMAL_APOS_FORMATS = frozenset({"num-comma-decimal-apos"})
 
 
 def fact_value(el: etree._Element) -> Decimal | None:
@@ -94,9 +104,14 @@ def fact_value(el: etree._Element) -> Decimal | None:
     if not fmt:
         cleaned = text  # no transformation: the text is already an XBRL numeric
     elif fmt in DOT_DECIMAL_FORMATS:
-        cleaned = re.sub(r"[\s\u00a0,']", "", text)
+        cleaned = re.sub(r"[\s\u00a0,]", "", text)
+    elif fmt in DOT_DECIMAL_APOS_FORMATS:
+        cleaned = re.sub(rf"[\s\u00a0{re.escape(APOSTROPHES)}]", "", text)
     elif fmt in COMMA_DECIMAL_FORMATS:
-        cleaned = re.sub(r"[\s\u00a0.']", "", text).replace(",", ".")
+        cleaned = re.sub(r"[\s\u00a0.]", "", text).replace(",", ".")
+    elif fmt in COMMA_DECIMAL_APOS_FORMATS:
+        cleaned = re.sub(rf"[\s\u00a0{re.escape(APOSTROPHES)}]", "", text)
+        cleaned = cleaned.replace(",", ".")
     else:
         return None
     try:
@@ -106,9 +121,16 @@ def fact_value(el: etree._Element) -> Decimal | None:
     scale = el.get("scale")
     if scale is not None:
         try:
-            value = value.scaleb(int(scale))
-        except (ValueError, InvalidOperation):
+            places = int(scale)
+        except ValueError:
             return None
+        # Shift the exponent rather than calling scaleb(), which rounds to the
+        # active decimal context and would drop a digit from a value longer
+        # than 28 significant figures before it could ever be tested.
+        sign, digits, exponent = value.as_tuple()
+        if not isinstance(exponent, int):
+            return None
+        value = Decimal((sign, digits, exponent + places))
     if el.get("sign") == "-":
         value = -value
     return value
@@ -211,7 +233,8 @@ def check(path: Path) -> list[str]:
 
     nf_facts, nn_facts, continuations = find_facts(root)
     # Facts whose reported value this script could not decode, and which the
-    # decimals check therefore did not evaluate. Counted rather than dropped: a
+    # decimals check therefore did not evaluate, for any reason. Counted
+    # rather than dropped: a
     # check that quietly covers less than it appears to is worse than one that
     # says so, and "no issues found" would otherwise overstate the coverage.
     undecodable = 0
@@ -368,9 +391,11 @@ def check(path: Path) -> list[str]:
 
     if undecodable:
         issues.append(
-            f"NOTE: {undecodable} numeric fact(s) carry a @format this script "
-            "does not decode, so EFM 6.5.37 was not evaluated for them. "
-            "Arelle checks these; this is a coverage gap, not a defect."
+            f"NOTE: {undecodable} numeric fact(s) had a reported value this "
+            "script could not decode (an unsupported @format, a nested or "
+            "continued fact, or text that is not a number), so EFM 6.5.37 was "
+            "not evaluated for them. Arelle checks these; this is a coverage "
+            "gap, not a defect."
         )
 
     return issues
