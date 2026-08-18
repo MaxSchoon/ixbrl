@@ -269,7 +269,11 @@ class CheckFactsTestCase(unittest.TestCase):
         self.assertTrue(any("1.5" in i for i in issues), f"got {issues}")
 
     def test_unicode_prefixes_resolve(self):
-        """NCNames are not ASCII, so `xmlns:é` is a legal binding."""
+        """NCNames follow XML's Name productions, which are not ASCII.
+
+        `xmlns:é` is a legal binding, and so is a prefix carrying a combining
+        mark, which Python's `\\w` shorthand excludes.
+        """
         body = (
             CONTEXT_AND_UNIT + '<ix:nonFraction xmlns:\u00e9="' + IXT_NS + '"'
             ' name="e:A" contextRef="c1" unitRef="u1" decimals="-2"'
@@ -759,12 +763,21 @@ class CheckFactsTestCase(unittest.TestCase):
     def test_attribute_whitespace_is_collapsed(self):
         """Attributes are collapsed before they are read.
 
-        A padded @sign was the dangerous one: comparing it exactly meant " - "
-        read as "not negative", reporting the wrong number with confidence.
+        @sign is excluded: it is not a whitespace-collapsing type, so a padded
+        value is not "-" and is declined rather than read as positive, which
+        would report the opposite number with confidence.
         """
         issues = self.run_on(self._fact("2345.67", "0", ' sign=" - "'))
+        self.assertFalse(
+            any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+            f"a padded @sign was read anyway: {issues}",
+        )
+        self.assertTrue(any(i.startswith("NOTE") for i in issues), f"got {issues}")
         self.assertTrue(
-            any("-2345.67" in i for i in issues), f"sign not applied: {issues}"
+            any(
+                "-2345.67" in i
+                for i in self.run_on(self._fact("2345.67", "0", ' sign="-"'))
+            )
         )
         self.assertEqual(
             self.defects(self._fact("45", "-3", ' scale=" 3 "')),

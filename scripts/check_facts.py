@@ -102,11 +102,18 @@ ASCII_DIGITS = frozenset("0123456789")
 # rpartition reads as "no prefix", resolving it against the default namespace
 # as though it were well formed.
 #
-# NCNames are not ASCII. `xmlns:é` is a legal binding, so an ASCII-only start
-# character would decline a conformant document. `[^\W\d]` is the Unicode-aware
-# spelling of "a word character that is not a digit", which is letters and the
-# underscore; `\w` then admits digits and combining marks in later positions.
-_NCNAME = r"[^\W\d][\w.\-\u00b7]*"
+# Transcribed from the XML 1.0 NameStartChar and NameChar productions, minus
+# the colon, which is what separates an NCName from a Name. Python's `\w` is
+# not a substitute: it excludes the combining marks of #x300-#x36F, so a
+# perfectly legal prefix such as "a" followed by U+0301 would be declined.
+_NAME_START = (
+    "A-Za-z_"
+    "\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u02ff\u0370-\u037d\u037f-\u1fff"
+    "\u200c-\u200d\u2070-\u218f\u2c00-\u2fef\u3001-\ud7ff"
+    "\uf900-\ufdcf\ufdf0-\ufffd\U00010000-\U000effff"
+)
+_NAME_CHAR = _NAME_START + r"0-9\-." + "\u00b7\u0300-\u036f\u203f-\u2040"
+_NCNAME = rf"[{_NAME_START}][{_NAME_CHAR}]*"
 QNAME = re.compile(rf"(?:{_NCNAME}:)?{_NCNAME}")
 
 # Exactly the characters the input patterns of `num-dot-decimal-apos` and
@@ -276,7 +283,10 @@ def fact_value(el: etree._Element) -> Decimal | None:
             # not fit. That is a malformed document, but this checker's job is
             # to report rather than to crash on one.
             return None
-    sign = collapse(el.get("sign") or "")
+    # @sign is not a whitespace-collapsing type, so its value is read as
+    # written. Exactly "-" means negative; anything else, padding included, is
+    # not a value this attribute may take.
+    sign = el.get("sign") or ""
     if sign == "-":
         # copy_negate() flips the sign without consulting the decimal context.
         # Unary minus rounds to 28 significant digits, which silently dropped
