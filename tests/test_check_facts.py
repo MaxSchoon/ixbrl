@@ -870,6 +870,29 @@ class CheckFactsTestCase(unittest.TestCase):
             f"TRUE was accepted as a boolean: {issues}",
         )
 
+    def test_no_format_text_must_be_an_xs_decimal(self):
+        """Decimal() is looser than the type the document may use.
+
+        It accepts digit-group underscores and exponent notation, neither of
+        which is in the xs:decimal lexical space, so "1_000" parsed as one
+        thousand and "1E5" as a hundred thousand. The checker then pronounced
+        on a value the document never stated.
+        """
+        for text in ("1_000", "1E5", "1e5", "0x10", "1,000"):
+            with self.subTest(text=text):
+                issues = self.run_on(self._fact(text, "-3"))
+                self.assertFalse(
+                    any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+                    f"{text!r} was decoded: {issues}",
+                )
+                self.assertTrue(
+                    any(i.startswith("NOTE") for i in issues), f"{text!r}: {issues}"
+                )
+        # The forms xs:decimal does permit still decode.
+        for text in ("+5", "-2345.67", ".56", "1.", "0012.5"):
+            with self.subTest(text=text):
+                self.assertEqual(self.defects(self._fact(text, "INF")), [])
+
     def test_unresolved_context_is_flagged(self):
         body = (
             CONTEXT_AND_UNIT

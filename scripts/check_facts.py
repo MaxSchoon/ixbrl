@@ -128,6 +128,12 @@ _NAME_CHAR = _NAME_START + r"0-9\-." + "\u00b7\u0300-\u036f\u203f-\u2040"
 _NCNAME = rf"[{_NAME_START}][{_NAME_CHAR}]*"
 QNAME = re.compile(rf"(?:{_NCNAME}:)?{_NCNAME}")
 
+# The xs:decimal lexical space. Decimal() is far more permissive: it accepts
+# digit-group underscores and exponent notation, so "1_000" and "1E5" would
+# parse into numbers no conformant document can express, and the decimals check
+# would then pronounce on a value the document never stated.
+XS_DECIMAL = re.compile(r"[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)")
+
 # Exactly the characters the input patterns of `num-dot-decimal-apos` and
 # `num-comma-decimal-apos` accept as the group separator. U+FF07 FULLWIDTH
 # APOSTROPHE belongs only to `num-unit-decimal-apos`, which this module
@@ -258,7 +264,11 @@ def fact_value(el: etree._Element) -> Decimal | None:
     # half. Stripping commas unconditionally turns that into fifteen.
     raw_format = el.get("format")
     if raw_format is None:
-        cleaned = text  # no transformation: the text is already an XBRL numeric
+        # With no transformation the text must already be an XBRL numeric,
+        # which is xs:decimal and nothing looser.
+        if not XS_DECIMAL.fullmatch(text):
+            return None
+        cleaned = text
     else:
         convention = resolve_transformation(el, raw_format)
         if convention is None:
