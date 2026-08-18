@@ -19,7 +19,7 @@ XBRL** (iXBRL).
 The architecture of the RTS distinguishes two tagging regimes:
 
 - **Detailed (numeric) tagging** of the primary financial statements (Annex II point 1), applicable from financial years beginning on or after 1 January 2020 under Article 8.
-- **Block (narrative) tagging** of the notes, taking the elements typed `text block` in the applicable Annex II Table, applicable from financial years beginning on or after **1 January 2022**. Article 4(2) imposes the obligation by requiring issuers to mark up, as a minimum, the disclosures specified in Annex II. Which Annex II point carries the scope depends on the year and the standard: one undivided point 2 for financial years 2023 through 2025, and from 2026 point 2 with Table 1 for issuers on IAS 1 or point 3 with Table 2 for issuers applying IFRS 18. In each case the issuer marks up all disclosures made in the IFRS consolidated financial statements, or made by cross-reference therein to other parts of the AFR, that correspond to the elements in the relevant Table. Article 6 governs how those markups are embedded, requiring Inline XBRL under Annex III and compliance with the marking up and filing rules in Annex IV.
+- **Block (narrative) tagging** of the notes, taking the elements typed `text block` in the applicable Annex II Table, applicable from financial years beginning on or after **1 January 2022**. Article 4(2) imposes the obligation by requiring issuers to mark up, as a minimum, the disclosures specified in Annex II. Which Annex II point carries the scope depends on the year, and from 2026 on the standard: point 3 with Table 2 for financial year 2022, one undivided point 2 for 2023 through 2025, and from 2026 point 2 with Table 1 for issuers on IAS 1 or point 3 with Table 2 for issuers applying IFRS 18. In each case the issuer marks up all disclosures made in the IFRS consolidated financial statements, or made by cross-reference therein to other parts of the AFR, that correspond to the elements in the relevant Table. Article 6 governs how those markups are embedded, requiring Inline XBRL under Annex III and compliance with the marking up and filing rules in Annex IV.
 
 > **A Table number means nothing without its year.** Annex II is replaced
 > wholesale by each taxonomy update, and the labels have been reused for a
@@ -45,13 +45,14 @@ mandatory IFRS 18 / IFRS 19 implementation effective 1 January 2027
 stable in substance since FY2022, but its citation is not: Delegated
 Regulation (EU) 2026/283 split Annex II by standard for financial years from
 2026, so an IFRS 18 filer takes point 3 and Table 2 while an IAS 1 filer takes
-point 2 and Table 1. The element list below was compiled against the earlier
-undivided Table and has not been re-derived against either 2026 Table.
+point 2 and Table 1. The element list below reflects pre-2026 sources, described in the note
+under *Honest gap note on the catalog*, and has not been reconciled against
+either 2026 Table.
 
 > **Honest gap note on the catalog.** When this reference was prepared,
 > the consolidated EUR-Lex text of Regulation 2019/815 returned an
-> asynchronous (HTTP 202) response that did not yield extractable
-> the text-block contents within the time budget, and the FCA Handbook mirror
+> asynchronous (HTTP 202) response that did not yield the text-block
+> contents within the time budget, and the FCA Handbook mirror
 > of the Annex II text-block list returned no extractable content via the
 > available fetch tool. Accordingly, no QNames have been invented. The
 > catalog section below lists only QNames literally verified in the
