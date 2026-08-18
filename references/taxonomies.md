@@ -150,8 +150,12 @@ versions should be in active use simultaneously.
 - **UKSEF:** UK Single Electronic Format, the UK's post-Brexit successor
   extending ESEF for FCA listed-issuer filings.
 - **Charities Taxonomy:** for charities reporting under the Charities
-  FRS 102 SORP. Mandatory for large charities (income > £6.5m); refreshed
-  for SORP 2026 in the 2026 suite.
+  FRS 102 SORP. HMRC requires iXBRL accounts from a charitable company
+  whose income, combined with that of any wholly owned subsidiaries,
+  exceeds £6.5m for the accounting period; at or below that HMRC accepts
+  PDF accounts, and unincorporated charities may file PDF accounts at
+  any income. The computation is iXBRL either way. Refreshed for SORP
+  2026 in the 2026 suite.
 - **Irish Extension:** Irish Revenue iXBRL filing of Corporation Tax
   accounts.
 
@@ -159,7 +163,11 @@ versions should be in active use simultaneously.
 - Companies House statutory accounts (most UK companies, in iXBRL).
 - HMRC Corporation Tax computations and accounts attached to CT600
   (mandatory iXBRL).
-- Charity Commission / HMRC for charities meeting the threshold.
+- HMRC accounts of charitable companies above the £6.5m threshold, and
+  Companies House accounts of charitable companies at any size. The
+  Charity Commission is a stakeholder in the FRC programme, not an
+  iXBRL receiver: its annual return takes the trustees' report and
+  accounts as uploaded documents.
 - FCA for UKSEF AFR filings of premium- and standard-listed issuers.
 - **Companies House April 2028 (ECCTA):** software-only iXBRL accounts
   mandate confirmed 9 June 2026 (moved from the paused April-2027 date).

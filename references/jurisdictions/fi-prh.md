@@ -27,8 +27,9 @@ company) or `osuuskunta` (co-operative), the words *digitilinpäätös* /
 PRH iXBRL REST interface, or an ESEF ZIP being re-filed to the Trade
 Register.
 
-Finland is **not** a report-package (`.xbri`) regime: a deposit is a plain
-**ZIP of XHTML**, and for a listed issuer it is the **ESEF ZIP** re-used.
+Finland is **not** a report-package (`.xbri`) regime: a deposit is **XHTML
+alone or a plain ZIP of XHTML** (PRH/1087 s. 2 permits either), and for a
+listed issuer it is the **ESEF ZIP** re-used.
 For the IFRS/ESEF path, most of the work is ESEF work. Use
 `references/esef.md` and return here only for the Trade-Register overlays
 (channel, metadata attachments, packaging, deadlines). For the national-GAAP
@@ -411,10 +412,11 @@ signatures, deadline, tax forwarding, language*) and is **not** a defect.
 > **Divergence from the Dutch `.xbri` model (reviewer-critical).** "At the
 > moment, the PRH cannot receive material filed as an XBRI package"
 > (*PRH ei voi toistaiseksi vastaanottaa XBRI-pakettina ilmoitettuja
-> aineistoja*) [S1][S10]. Finland wants a **plain ZIP of XHTML**. **Any
-> converter output profile for Finland must emit XHTML, in a plain ZIP
-> where the notification carries more than one document, and must NOT emit
-> a `.xbri`.** Whether/when PRH will accept `.xbri` is **unknown**:
+> aineistoja*) [S1][S10]. Finland wants **XHTML, in a plain ZIP where the
+> notification carries more than one document**. **Any converter output
+> profile for Finland must emit XHTML, in a plain ZIP where the
+> notification carries more than one document, and must NOT emit a
+> `.xbri`.** Whether/when PRH will accept `.xbri` is **unknown**:
 > no roadmap was found.
 
 **Closed-interface format rule: what may stay plain XHTML.** Under PRH's

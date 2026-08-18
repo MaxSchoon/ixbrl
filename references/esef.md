@@ -99,7 +99,7 @@ operationally, so non-conformance materially raises filing risk.
 3. **Guidance 1.9: Block tagging.** Issuers shall, as a minimum, mark up the information in the IFRS consolidated financial statements (headers and titles included) with the Annex II `textBlockItemType` elements (1.9.1). Where one disclosure corresponds to more than one Annex II element of different granularity, preparers should apply each of them and multi-tag the information to the extent that matches its accounting meaning, rather than choosing between the wider and the narrower element (1.9.1). ESMA recommends that the lowest level of block-tagging granularity be the individual table within a note: the tag goes on the whole table, not on selected rows or columns (1.9.2). A disclosure with no corresponding Annex II element need not be block tagged, and no extension element need be created for it (1.9.3). Mandatory Annex II elements take precedence over the optional Annex VI elements even where an Annex VI element has a closer accounting meaning (footnote 21).
 4. **Guidance 2.2.5: Tagging of dashes and empty fields.** Dashes representing zero use a transformation (`ixt:fixed-zero`); truly empty cells are tagged with `xsi:nil="true"`.
 5. **Guidance 2.2.6: Readability after extraction.** Word and number ordering, spacing, and tabular structure of block-tagged content must be machine-readable in a way that is faithful to the visual report.
-6. **Guidance 2.6.1: Report Package conformance.** The submitted ZIP must conform to the XBRL Taxonomy/Report Package Specification.
+6. **Guidance 2.6.1: Report Package conformance.** The submitted package (`.xbri` or `.zip`) must conform to the XBRL Taxonomy/Report Package Specification.
 7. **RTS Annex IV §9(b): Narrower anchoring.** Where an extension concept combines two or more core taxonomy concepts, it must be anchored to **each** narrower base concept in addition to its wider anchor.
 8. **Section 3.4 series: Labels.** Each extension carries a standard label in the entity's reporting language; preferred-label roles supplied where presentation arcs require them.
 9. **Guidance 3.1.2: Correct ESEF taxonomy entry point.** The DTS must import the ESEF entry point matching the financial year.
@@ -258,18 +258,20 @@ ESMA-mandated submissions are XBRL **Report Packages** built on the
 **Taxonomy Packages 1.0 Recommendation** (REC-2016-04-19) extended by
 the **Report Packages 1.0** specification.
 
-**ZIP structure (taxonomy-package half):**
+**Archive structure (taxonomy-package half):**
 
-- A single top-level directory inside the ZIP (no `__MACOSX`, no `.DS_Store`, no PDFs at root).
+- A single top-level directory inside the archive (no `__MACOSX`, no `.DS_Store`, no PDFs at root).
 - A mandatory `META-INF/` directory containing:
   - `taxonomyPackage.xml`: the manifest, with at minimum a `<tp:identifier>` URI; in practice also name, version, publisher, publisherCountry (ISO 3166-1 alpha-2, e.g., `NL`, not `Netherlands`), and `<tp:entryPoint>` elements pointing at the issuer's extension entry-point schema.
   - `catalog.xml`: optional but standard; remaps public taxonomy URIs to local files inside the package.
+  - `reportPackage.json`: mandatory when the package carries the `.xbri` extension, optional but recommended for `.zip`. It holds one property, `/documentInfo/documentType`, whose value for an Inline XBRL report package is `https://xbrl.org/report-package/2023/xbri`. It is a distinct file from `taxonomyPackage.xml`, governed by Report Packages 1.0 rather than Taxonomy Packages 1.0, and an ESEF submission needs both.
 
 **Report-package half (Report Packages 1.0):**
 
 - A `reports/` directory at the top level.
 - **Single-file iXBRL:** one `.xhtml` (or `.html`/`.htm`) directly in `reports/`.
 - **Multi-file iXBRL document set:** multiple `.xhtml` files inside a single subfolder of `reports/`; the subfolder signals that the files form one logical report.
+- **File extension:** `.xbri` for a package holding a single Inline XBRL document set, `.zip` (or `.ZIP`) for the unconstrained form. Reporting Manual guidance 2.6.3 (October 2025) recommends `{base}-{date}-{version}-{lang}.xbri`; footnote 37 keeps `.zip` permitted. Arelle accepts `.xbri` from disclosure system 2024 onward and raises `ESEF.2.6.3.disallowedReportPackageFileExtension` for anything else. An `.xbri` package with no `META-INF/reportPackage.json` raises `rpe:documentTypeFileExtensionMismatch`.
 
 Arelle's ESEF plugin enforces report-package layout via codes such as
 `ESEF.2.6.1.reportIncorrectlyPlacedInPackage`,

@@ -307,7 +307,7 @@ tooling).
 
 ## 7. Conformance suites and test material
 
-- **ESEF Conformance Suite (latest)**: https://www.esma.europa.eu/document/esef-conformance-suite-2024
+- **ESEF Conformance Suite (latest)**: https://www.esma.europa.eu/document/esef-conformance-suite-2025
 - **ESEF Reporting Manual**: https://www.esma.europa.eu/document/esef-reporting-manual
 - **Inline XBRL 1.1 conformance suite**: https://www.xbrl.org/2020/inlineXBRL-1.1-conformanceSuite-2020-04-08.zip
 - **XBRL 2.1 base conformance suite**: https://specifications.xbrl.org/work-product-index-group-base-spec-base-spec.html
@@ -340,7 +340,7 @@ order. Skipping a step is how filings reach the regulator broken.
 - https://specifications.xbrl.org/spec-group-index-formula.html
 - https://specifications.xbrl.org/work-product-index-inline-xbrl-inline-xbrl-1.1.html
 - https://specifications.xbrl.org/work-product-index-group-base-spec-base-spec.html
-- https://www.esma.europa.eu/document/esef-conformance-suite-2024
+- https://www.esma.europa.eu/document/esef-conformance-suite-2025
 - https://www.esma.europa.eu/document/esef-reporting-manual
 - https://www.sec.gov/files/edgar/filer-information/specifications/xbrl-guide.pdf
 - https://www.sbr-nl.nl/

@@ -43,7 +43,22 @@ only.
 
 ## "Axis" naming convention
 
-**Axis**, **Domain**, **Member** are **not** XDT spec vocabulary; XDT uses "dimensions", "domains", "members". "Axis" is a naming convention adopted by the major standard taxonomies. SEC *EDGAR XBRL Filing Guide* (Sept 2024, §3.5): *"in this document as in all SEC standard taxonomies a taxonomy-defined dimension is called an Axis"*. The IFRS Taxonomy follows the same convention: every explicit dimension declaration in `full_ifrs-cor_2024-03-27.xsd` ends in `Axis` (e.g. `ifrs-full:ConsolidatedAndSeparateFinancialStatementsAxis`, `ifrs-full:RetrospectiveApplicationAndRetrospectiveRestatementAxis`). Treat "Axis" as a label suffix synonymous with "explicit dimension"; it never appears in the XDT spec or in instance documents.
+**Axis** is not XDT spec vocabulary; the spec calls these elements
+dimensions. **Domain** and **Member** are spec vocabulary: XDT defines
+a domain member declaration and a dimension domain, and two of the six
+arcroles are `dimension-domain` and `domain-member`. What the standard
+taxonomies add is the convention of ending element names in `Axis`,
+`Domain`, and `Member`. SEC *EDGAR XBRL Filing Guide* (Sept 2024,
+§3.5): *"in this document as in all SEC standard taxonomies a
+taxonomy-defined dimension is called an Axis"*. The IFRS Taxonomy
+follows the same convention: every explicit dimension declaration in
+`full_ifrs-cor_2024-03-27.xsd` ends in `Axis` (e.g.
+`ifrs-full:ConsolidatedAndSeparateFinancialStatementsAxis`,
+`ifrs-full:RetrospectiveApplicationAndRetrospectiveRestatementAxis`).
+Treat `Axis` as a name suffix synonymous with "explicit dimension".
+The word never appears in the XDT spec; in an instance an
+Axis-suffixed QName appears as the value of
+`xbrldi:explicitMember/@dimension`, as in the example below.
 
 ## Explicit vs typed dimensions
 
@@ -126,8 +141,19 @@ In ESEF, `xbrli:scenario` may contain only `xbrldi:explicitMember` and
 `@xbrldt:closed` is declared on has-hypercube arcs as `xs:boolean`
 with **default `false`** (XDT §2.3.3). Semantics:
 
-- `closed="false"` (open, the default): additional dimensions in the indicated container are tolerated; the hypercube's enumerated dimensions must still validate, but the context may contain dimensions outside the set.
-- `closed="true"` (closed): the indicated container (`segment` or `scenario` per `@xbrldt:contextElement`) must contain *only* dimensions from this hypercube and *exactly* the declared dimensions; any unexpected dimension value invalidates the hypercube.
+- `closed="false"` (open, the default): the context may carry
+  dimension values outside this hypercube's set. Each dimension of the
+  hypercube must still resolve, either from a dimension value in the
+  container named by `@xbrldt:contextElement` or from that dimension's
+  default member (XDT [Def, 20]).
+- `closed="true"` (closed): neither the `segment` nor the `scenario`
+  container of the context may carry a dimension value whose dimension
+  is not a dimension of this hypercube (XDT [Def, 21]); the restriction
+  covers both containers, not only the one named by
+  `@xbrldt:contextElement`. A declared dimension may still be absent
+  from the context when it has a default member, which supplies the
+  value implicitly. Emitting that default explicitly fires
+  `xbrldie:DefaultValueUsedInInstanceError`.
 
 Closed hypercubes are how regulators express "this primary item may
 only be reported with these dimensions and no others."

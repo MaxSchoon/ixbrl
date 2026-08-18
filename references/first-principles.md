@@ -66,7 +66,7 @@ When in doubt, anchor wider.
 
 ## 7. Block tagging is structured narrative, not a screenshot
 
-Where note-block tagging is required (ESEF Article 6, mandatory from FY2022; analogous regimes elsewhere), an `ix:nonNumeric escape="true"` element wraps the entire note's XHTML. The escaped XHTML *is* the fact value. Preserve tables, lists, headings, and ensure machine-readability after extraction (Reporting Manual 2.2.6). Empty or whitespace-only block tags are valid syntactically but useless and often trip downstream formula assertions.
+Where note-block tagging is required (ESEF Article 4(2) with Annex II, mandatory from FY2022; analogous regimes elsewhere), an `ix:nonNumeric escape="true"` element wraps the entire note's XHTML. The escaped XHTML *is* the fact value. Preserve tables, lists, headings, and ensure machine-readability after extraction (Reporting Manual 2.2.6). Empty or whitespace-only block tags are valid syntactically but useless and often trip downstream formula assertions.
 
 ## 8. The hidden section is for facts that exist, not for facts you're embarrassed by
 

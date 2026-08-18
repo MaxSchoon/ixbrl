@@ -31,7 +31,7 @@ Inline XBRL embeds XBRL facts inside an XHTML host document: one file serves bot
 - `precision`: Significant digits. Mutually exclusive with `decimals` on the same fact.
 - `scale`: Inline-only multiplier as a power of 10 applied to the rendered text before producing the canonical XBRL value. E.g., `scale="3"` on rendered "1,234" yields fact `1234000`.
 - `sign`: `-` to negate the parsed value (Inline-only; pairs with parentheses formatting in HTML).
-- `format`: QName of a TRR transform (e.g., `ixt:numdotdecimal`) that converts rendered text to canonical XBRL lexical form.
+- `format`: QName of a TRR transform (e.g., `ixt:num-dot-decimal`) that converts rendered text to canonical XBRL lexical form.
 - `escape`: on `ix:nonNumeric`, `true` keeps inner XHTML markup as part of the fact value; `false` (default) takes text content only.
 - `continuedAt`: IDREF chain pointer to the next `ix:continuation` (or `ix:footnote`) segment.
 - `target`: Names an output document target so a single Inline document can produce multiple XBRL reports.
@@ -42,23 +42,23 @@ Inline XBRL embeds XBRL facts inside an XHTML host document: one file serves bot
 
 **Exactly one of `decimals` or `precision` is required on every non-nil numeric fact.** Nil-valued facts (`xsi:nil="true"`) must omit both. SEC EDGAR and Dutch SBR require `decimals` and forbid `precision`. `INF` is **not** forbidden: the EDGAR XBRL Guide section 6.6.4 prescribes it for an exactly reported amount. What is forbidden is a `decimals` that misstates the value's accuracy, which `EFM.6.05.37` catches in the direction that is decidable from the document.
 
-## Transformation Registry (TRR 4)
+## Transformation Registry (TRR 5)
 
 The Transformation Registry defines named transformations (QNames in the `ixt` namespace) that Inline XBRL processors apply to rendered text to derive canonical XBRL lexical values: handling locale formatting, date orderings, sign conventions, boolean text.
 
-**TRR 4** is the current registered version (Recommendation, namespace `http://www.xbrl.org/inlineXBRL/transformation/2022-02-16`).
+**TRR 5** is the current registered version (Recommendation of 16 February 2022, namespace `http://www.xbrl.org/inlineXBRL/transformation/2022-02-16`). TRR 4 is the previous Recommendation, namespace `http://www.xbrl.org/inlineXBRL/transformation/2020-02-12`. TRR 6 is a Public Working Draft. The `ixt` prefix must be bound to the namespace of the registry whose names the document actually uses; the hyphen-less spellings of TRR 3 and earlier do not resolve in TRR 4 or TRR 5.
 
 Categories and representative names:
 
-- **Numbers**: `ixt:numdotdecimal`, `ixt:numcommadecimal`, `ixt:num-dot-decimal-apos`, `ixt:numdotdecimalin`, `ixt:numunitdecimal`, `ixt:zerodash`, `ixt:nocontent`, `ixt:fixed-zero`, `ixt:fixed-empty`.
-- **Dates**: `ixt:datedaymonthyear`, `ixt:datemonthdayyear`, `ixt:dateyearmonthday`, `ixt:datedaymonthyearen`, `ixt:datemonthyear`, `ixt:dateyearmonth`, `ixt:dateerayearmonthdayjp`.
-- **Booleans**: `ixt:booleanfalse`, `ixt:booleantrue`.
+- **Numbers**: `ixt:num-dot-decimal`, `ixt:num-comma-decimal`, `ixt:num-dot-decimal-apos`, `ixt:num-comma-decimal-apos`, `ixt:num-unit-decimal`, `ixt:num-unit-decimal-apos`.
+- **Fixed values**: `ixt:fixed-zero` (dashes standing for zero), `ixt:fixed-empty`, `ixt:fixed-true`, `ixt:fixed-false`.
+- **Dates**: `ixt:date-day-month-year`, `ixt:date-month-day-year`, `ixt:date-year-month-day`, `ixt:date-day-monthname-year-en`, `ixt:date-month-year`, `ixt:date-year-month`, `ixt:date-jpn-era-year-month-day`.
 
 Example:
 
 ```xml
 <ix:nonFraction name="us-gaap:Revenues" contextRef="c1" unitRef="usd"
-                decimals="-3" format="ixt:numdotdecimal" scale="3">1,234</ix:nonFraction>
+                decimals="-3" format="ixt:num-dot-decimal" scale="3">1,234</ix:nonFraction>
 ```
 
 Produces canonical fact value `1234000`.
@@ -118,6 +118,6 @@ A processor reports a **calculation inconsistency** (not an error) when the pare
 ## Sources
 
 - https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18/inlineXBRL-part1-REC-2013-11-18.html
-- https://specifications.xbrl.org/work-product-index-inline-xbrl-transformation-registry-4.html
+- https://specifications.xbrl.org/work-product-index-inline-xbrl-transformation-registry-5.html
 - https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html
 - https://www.xbrl.org/Specification/XDT/REC-2006-09-18/XDT-REC-2006-09-18.html
