@@ -63,7 +63,8 @@ issued and **entering into force 24 June 2026**, published in Finlex under
 Finlex metadata for **PRH/1087/01/2026**: Antopäivä (issued) 24.6.2026;
 Voimaantulo (in force) 24.6.2026; Säädösperusta (legal basis) =
 *Kirjanpitolaki (1336/1993) 7 luku 23, 24 ja 25 §* + *Laki
-kaupparekisterilaki (564/2023) 1 § 3 momentti*; the operative text is a
+kaupparekisterilaki (564/2023) 1 § 3 momentti* (reproduced as Finlex renders
+it; the Act's own number is **1336/1997**, see below); the operative text is a
 downloadable PDF available in **Finnish and Swedish** [S6]. The Finlex detail
 page is a **JavaScript shell** for plain fetchers, so these fields (including
 the Säädösperusta legal-basis chain) were captured via a **JS-rendering
@@ -198,7 +199,7 @@ genuinely structured against a taxonomy [S1].
   (kaupparekisteri), operated by PRH. Once registered, the data become
   public in PRH's **Virre** information service [S1].
 - **Statutory basis:** PRH's power to require the digital format and the
-  markup is in the **Accounting Act (Kirjanpitolaki 1336/1993)**: ch. 7 s.
+  markup is in the **Accounting Act (Kirjanpitolaki 1336/1997)**: ch. 7 s.
   23 for the markup decision, and ch. 7 ss. 22–24 (and 24a) for the
   technical format of documents entered in the Trade Register [S4][S8]. The
   operative technical requirements are set in two **PRH decisions**
@@ -707,7 +708,7 @@ quoting any normative clause this file does not already quote verbatim
 (only PRH/1087 ss. 3 and 5 and PRH/1088 s. 1 have been read); the
 **PRH digital-FS pages** [S1][S2][S4][S5][S8][S10] for
 operative filing/taxonomy/interface/packaging guidance; the **Accounting
-Act (Kirjanpitolaki 1336/1993)** ch. 3 s. 5 (language) and ch. 7 ss. 22–25
+Act (Kirjanpitolaki 1336/1997)** ch. 3 s. 5 (language) and ch. 7 ss. 22–25
 (format + markup power) and **law 555/2026** [S7] at `finlex.fi`; and
 **avoindata.fi** / **Valtiokonttori** for the SBR packages [S2][S5]
 (IFRS/ESEF → `references/esef.md`).
