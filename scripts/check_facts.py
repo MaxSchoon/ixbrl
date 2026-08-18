@@ -16,9 +16,12 @@ Checks performed:
   - All contextRef values resolve to a defined xbrli:context.
   - All unitRef values resolve to a defined xbrli:unit.
   - Currency unit measures match ISO 4217 alpha-3 patterns.
-  - Duplicate facts (same expanded concept name + contextRef + unitRef) report
-    values whose decimals intervals overlap, so a figure tagged twice at
-    different roundings is not reported as a disagreement.
+
+NOT checked here, on purpose: whether duplicate facts report consistent
+values. Deciding that needs the semantics of contexts, units, targets, nil and
+the normative duplicate-consistency rule, which is a model of the report
+rather than a reading of the document. Arelle already has that model; a
+cheaper imitation of it was wrong in both directions. Run Arelle for it.
 
 Usage:
   python check_facts.py <ixbrl.xhtml>
@@ -37,9 +40,7 @@ import re
 import sys
 from collections import defaultdict
 from decimal import Decimal, InvalidOperation
-from fractions import Fraction
 from pathlib import Path
-from typing import NamedTuple
 
 try:
     from lxml import etree
@@ -74,19 +75,17 @@ MAX_CANONICAL_EXPONENT = 1000
 # convention and is declined like any other.
 # Registry 5 gives the apostrophe grouping its own transformations rather than
 # folding it into the base ones, and accepts several apostrophe-like
-# Every published namespace of the Inline XBRL Transformation Registry. A
-# transformation name is a QName, so the local part alone does not identify it:
-# `fake:num-dot-decimal` in an unrelated namespace is a different name and must
-# not be decoded as though it were the registry's.
-TRANSFORM_NAMESPACES = frozenset(
-    {
-        "http://www.xbrl.org/inlineXBRL/transformation/2010-04-20",
-        "http://www.xbrl.org/inlineXBRL/transformation/2011-07-31",
-        "http://www.xbrl.org/inlineXBRL/transformation/2015-02-26",
-        "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
-        "http://www.xbrl.org/inlineXBRL/transformation/2022-02-16",
-    }
-)
+# A transformation is named by an EXPANDED QName, so the namespace and the
+# local part identify it together. Validating them separately would accept a
+# pairing that no registry publishes, such as an early namespace combined with
+# a name introduced years later.
+TR1 = "http://www.xbrl.org/inlineXBRL/transformation/2010-04-20"
+TR2 = "http://www.xbrl.org/inlineXBRL/transformation/2011-07-31"
+TR3 = "http://www.xbrl.org/inlineXBRL/transformation/2015-02-26"
+TR4 = "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12"
+TR5 = "http://www.xbrl.org/inlineXBRL/transformation/2022-02-16"
+
+ASCII_DIGITS = frozenset("0123456789")
 
 # Exactly the characters the input patterns of `num-dot-decimal-apos` and
 # `num-comma-decimal-apos` accept as the group separator. U+FF07 FULLWIDTH
@@ -95,19 +94,26 @@ TRANSFORM_NAMESPACES = frozenset(
 APOSTROPHES = "'\u0060\u00b4\u2019\u2032"
 SPACES = " \u00a0"
 
-# Local name -> (group separators, decimal mark). Only transformations whose
-# sole effect is the separator convention appear here. `num-unit-decimal` and
-# its apos variant are absent on purpose: their trailing group is the fraction
-# rather than a thousands group, so reading one means implementing the
-# transformation, not reading a separator.
+# (namespace, local name) -> (group separators, decimal mark). Only
+# transformations whose sole effect is the separator convention appear here.
+# `num-unit-decimal` and its apos variant are absent on purpose: their trailing
+# group is the fraction rather than a thousands group, so reading one means
+# implementing the transformation, not reading a separator.
+#
+# The apostrophe variants ADD the apostrophes to the base separator; they do
+# not replace it, so `1,234.56` is valid under `num-dot-decimal-apos`.
+_DOT = (",", ".")
+_COMMA = (".", ",")
+_DOT_APOS = ("," + APOSTROPHES, ".")
+_COMMA_APOS = ("." + APOSTROPHES, ",")
 SEPARATOR_FORMATS = {
-    "numdotdecimal": (",", "."),
-    "num-dot-decimal": (",", "."),
-    "numdotdecimalin": (",", "."),
-    "num-dot-decimal-apos": (APOSTROPHES, "."),
-    "numcommadecimal": (".", ","),
-    "num-comma-decimal": (".", ","),
-    "num-comma-decimal-apos": (APOSTROPHES, ","),
+    **{(ns, "numdotdecimal"): _DOT for ns in (TR1, TR2, TR3)},
+    **{(ns, "numcommadecimal"): _COMMA for ns in (TR1, TR2, TR3)},
+    **{(ns, "numdotdecimalin"): _DOT for ns in (TR2, TR3)},
+    **{(ns, "num-dot-decimal"): _DOT for ns in (TR4, TR5)},
+    **{(ns, "num-comma-decimal"): _COMMA for ns in (TR4, TR5)},
+    (TR5, "num-dot-decimal-apos"): _DOT_APOS,
+    (TR5, "num-comma-decimal-apos"): _COMMA_APOS,
 }
 
 
@@ -122,11 +128,11 @@ def resolve_transformation(
     as though it were the registry transformation of that name.
     """
     prefix, _, local = raw_format.rpartition(":")
-    if not prefix:
-        return None  # an unprefixed name is in no namespace, so in no registry
-    if el.nsmap.get(prefix) not in TRANSFORM_NAMESPACES:
+    # An unprefixed name still resolves, through the default namespace.
+    namespace = el.nsmap.get(prefix or None)
+    if namespace is None:
         return None
-    return SEPARATOR_FORMATS.get(local)
+    return SEPARATOR_FORMATS.get((namespace, local))
 
 
 def decode_separators(text: str, groups: str, decimal_mark: str) -> str | None:
@@ -134,14 +140,19 @@ def decode_separators(text: str, groups: str, decimal_mark: str) -> str | None:
 
     Deliberately stricter than the registry's own input pattern, which permits
     runs of separators. Being stricter can only decline a document the registry
-    would accept, and a decline is reported as a coverage gap; being laxer
-    would silently invent a value from malformed text. Group width is not
-    checked, because `numdotdecimalin` groups Indian-style rather than in
-    threes.
+    would accept, and a decline is reported as a coverage gap, whereas being
+    laxer invents a value from malformed text.
+
+    Digits are ASCII only. `str.isdigit()` is true of Arabic-Indic and
+    fullwidth digits, which these patterns do not admit and which `Decimal`
+    would then happily parse into a number the document never stated. Group
+    width is not checked, because `numdotdecimalin` groups Indian-style.
     """
     if text.count(decimal_mark) > 1:
         return None
-    whole, _, fraction = text.partition(decimal_mark)
+    whole, mark, fraction = text.partition(decimal_mark)
+    if mark and not fraction:
+        return None  # a trailing decimal mark with no digits after it
     separators = groups + SPACES
     for part, allowed in ((whole, separators), (fraction, SPACES)):
         if not part:
@@ -153,7 +164,7 @@ def decode_separators(text: str, groups: str, decimal_mark: str) -> str | None:
             is_separator = char in allowed
             if is_separator and previous_was_separator:
                 return None  # adjacent separators are not a grouping
-            if not is_separator and not char.isdigit():
+            if not is_separator and char not in ASCII_DIGITS:
                 return None
             previous_was_separator = is_separator
     whole = "".join(c for c in whole if c not in separators)
@@ -270,158 +281,6 @@ def truncates_nonzero_digits(value: Decimal, decimals: str) -> bool:
     return any(dropped)
 
 
-def canonical_fact_text(value: str) -> str:
-    """Return a stable comparison key for simple numeric duplicate checks.
-
-    Trailing zeros are stripped so that "1.50" and "1.5" compare equal, but the
-    stripping is done on the coefficient rather than through normalize().
-    normalize() rounds to the active decimal context, so two values differing
-    only beyond the 28th significant digit collapsed to one key and their
-    inconsistency went unreported. Non-finite input is returned as written:
-    it is not a number, and signalling NaN raises inside normalize().
-    """
-    text = value.strip()
-    if not text:
-        return text
-    try:
-        parsed = Decimal(text)
-    except InvalidOperation:
-        return text
-    if not parsed.is_finite():
-        return text
-    key = canonical_decimal(parsed)
-    return text if key is None else key
-
-
-class Interval(NamedTuple):
-    """A range of values, with each endpoint either included or excluded."""
-
-    lower: Fraction
-    upper: Fraction
-    lower_closed: bool
-    upper_closed: bool
-
-
-def intervals_share_a_value(intervals: list[Interval]) -> bool:
-    """Is there a single value satisfying every one of these ranges?"""
-    lower = max(i.lower for i in intervals)
-    upper = min(i.upper for i in intervals)
-    if lower < upper:
-        return True
-    if lower > upper:
-        return False
-    # The ranges meet at exactly one point, which counts only if every range
-    # that reaches it includes it.
-    return all(i.lower_closed for i in intervals if i.lower == lower) and all(
-        i.upper_closed for i in intervals if i.upper == upper
-    )
-
-
-def expand_qname(el: etree._Element, name: str | None) -> str | None:
-    """Expand a QName attribute to `{namespace}local`, or None if unresolvable.
-
-    Concept identity in XBRL is the expanded name. Two prefixes bound to one
-    namespace name the same concept, and the same prefix in different scopes
-    can name different concepts, so the lexical string is not an identity.
-    """
-    if not name:
-        return None
-    prefix, _, local = name.rpartition(":")
-    if not local:
-        return None
-    namespace = el.nsmap.get(prefix or None)
-    return f"{{{namespace}}}{local}" if namespace else None
-
-
-def reported_interval(el: etree._Element) -> Interval | None:
-    """Values this fact is consistent with, as a possibly half-open range.
-
-    A numeric fact does not assert a point. `decimals` states the place to
-    which the value is accurate, so a fact reported as 45,000 with
-    `decimals="-3"` asserts only that the true amount lies within half a
-    thousand of it. `INF` is the degenerate case that does assert a point.
-
-    Whether the endpoints belong to the range depends on parity, because
-    XBRL 2.1 section 4.6.7.2 defines "correct to n decimal places" by IEEE 754
-    **roundTiesToEven**, not by rounding halves up. A tie goes to whichever
-    neighbour is even, so the half-way points bound an ODD reported value from
-    outside and an EVEN one from inside:
-
-        5 at decimals="0"  ->  (4.5, 5.5)   4.5 ties down to 4, 5.5 up to 6
-        6 at decimals="0"  ->  [5.5, 6.5]   both ties land on 6
-
-    The two therefore share no value and are correctly reported as
-    inconsistent, while two facts that agree to the accuracy each one claims
-    overlap and are not. The spec's own worked example is 123450 correct to
-    -2 decimal places, which is 123400 rather than 123500.
-    """
-    value = fact_value(el)
-    if value is None:
-        return None
-    decimals = el.get("decimals")
-    if decimals is None:
-        return None  # @precision or a missing attribute: already reported above
-    exact = Fraction(value)
-    if decimals == "INF":
-        return Interval(exact, exact, True, True)
-    try:
-        places = int(decimals)
-    except ValueError:
-        return None
-    try:
-        unit = Fraction(10) ** -places
-    except (OverflowError, ValueError, ZeroDivisionError):
-        return None
-    half = unit / 2
-    # A reported value whose last retained digit is even keeps both ties, so
-    # its endpoints are included. An odd one loses both, so they are not. A
-    # value that is not a whole multiple of its own unit is already reported
-    # as an EFM 6.5.37 truncation, and is treated inclusively here so that
-    # this check does not pile a second, derived complaint on top of it.
-    multiple = exact / unit
-    closed = multiple.denominator != 1 or multiple.numerator % 2 == 0
-    return Interval(exact - half, exact + half, closed, closed)
-
-
-def describe_reported(el: etree._Element) -> str:
-    """How to name this fact's value in a finding, for a human reading it."""
-    value = fact_value(el)
-    if value is None:
-        return (el.text or "").strip()
-    canonical = canonical_decimal(value)
-    return canonical if canonical is not None else str(value)
-
-
-def canonical_decimal(parsed: Decimal) -> str | None:
-    """Canonical string for a decoded value, or None if it has no exact form.
-
-    Both duplicate-comparison paths go through here so that a decoded value and
-    a raw text value are canonicalised the same way. They were not, and "5"
-    against "5.0" was briefly reported as an inconsistency.
-    """
-    sign, digits, exponent = parsed.as_tuple()
-    if not isinstance(exponent, int):
-        return None
-    if abs(exponent) > MAX_CANONICAL_EXPONENT:
-        # format(..., "f") writes the value out in full, so an exponent like
-        # 1E+100000 would build a hundred-thousand-character key. No real
-        # reported amount needs one, and a crafted document should not be able
-        # to spend memory here.
-        return None
-    digits = list(digits)
-    while exponent < 0 and digits and digits[-1] == 0:
-        digits.pop()
-        exponent += 1
-    if not digits:
-        digits, exponent = [0], 0
-    if not any(digits):
-        # Negative zero is the same reported amount as zero. Keeping the sign
-        # would make a fact pair of "0" and "-0" compare unequal and be
-        # reported as an inconsistency that is not one.
-        sign = 0
-    return format(Decimal((sign, tuple(digits), exponent)), "f")
-
-
 def find_facts(
     root: etree._Element,
 ) -> tuple[list[etree._Element], list[etree._Element], list[etree._Element]]:
@@ -474,9 +333,6 @@ def check(path: Path) -> list[str]:
     # check that quietly covers less than it appears to is worse than one that
     # says so, and "no issues found" would otherwise overstate the coverage.
     undecodable = 0
-    # Duplicate-fact groups in which at least one member could not be decoded,
-    # so the group's consistency is unknown rather than confirmed.
-    undecidable_groups = 0
 
     # --- ix:nonFraction required attributes ---
     for el in nf_facts:
@@ -610,46 +466,6 @@ def check(path: Path) -> list[str]:
 
     for cid in cont_by_id:
         walk_chain(cid)
-
-    # --- Duplicate facts: same concept+context+unit, inconsistent values ---
-    # The concept is identified by its EXPANDED name. @name is a QName, so two
-    # prefixes bound to the same namespace name the same concept, and comparing
-    # the lexical strings would treat `e:Assets` and `f:Assets` as unrelated.
-    grouped: dict[tuple[str, str, str], list[etree._Element]] = defaultdict(list)
-    for el in nf_facts:
-        expanded = expand_qname(el, el.get("name"))
-        context = el.get("contextRef")
-        unit = el.get("unitRef")
-        if expanded and context and unit:
-            grouped[(expanded, context, unit)] = grouped[(expanded, context, unit)]
-            grouped[(expanded, context, unit)].append(el)
-    for group_key, els in grouped.items():
-        if len(els) < 2:
-            continue
-        intervals = [reported_interval(e) for e in els]
-        if any(interval is None for interval in intervals):
-            # One member could not be decoded, so nothing can be concluded
-            # about the group. Reporting an inconsistency here would compare a
-            # decoded value against raw text, and staying silent would imply
-            # the group was checked and agreed.
-            undecidable_groups += 1
-            continue
-        bounded = [i for i in intervals if i is not None]
-        if not intervals_share_a_value(bounded):
-            lines = ", ".join(str(e.sourceline) for e in els)
-            shown = sorted({describe_reported(e) for e in els})
-            concept = group_key[0].rpartition("}")[2] or group_key[0]
-            issues.append(
-                f"Duplicate fact {concept} in context {group_key[1]} reports "
-                f"inconsistent values {shown} (lines {lines})"
-            )
-
-    if undecidable_groups:
-        issues.append(
-            f"NOTE: {undecidable_groups} duplicate-fact group(s) contained a "
-            "value this script could not decode, so their consistency was not "
-            "determined either way."
-        )
 
     if undecodable:
         issues.append(

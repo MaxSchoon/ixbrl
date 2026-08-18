@@ -26,7 +26,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import check_facts
 from check_facts import truncates_nonzero_digits
-from lxml import etree
 
 # `ixt` and the concept prefixes must be DECLARED, not merely written. A
 # transformation name and a concept name are both QNames, and the checker
@@ -41,6 +40,7 @@ NS_DECL = (
     'xmlns:xbrli="http://www.xbrl.org/2003/instance" '
     'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
     f'xmlns:ixt="{IXT_NS}" '
+    'xmlns:ixt1="http://www.xbrl.org/inlineXBRL/transformation/2010-04-20" '
     f'xmlns:e="{ENTITY_NS}" '
     f'xmlns:f="{ENTITY_NS}" '
     'xmlns:fake="http://example.com/not-the-registry"'
@@ -490,81 +490,6 @@ class CheckFactsTestCase(unittest.TestCase):
                     f"{extra} got {issues}",
                 )
 
-    def test_duplicate_facts_differing_beyond_the_decimal_context(self):
-        """normalize() rounded two distinct values into one comparison key.
-
-        The duplicate check then saw a single value and reported nothing, so an
-        inconsistency between two facts went silently unflagged.
-        """
-        body = CONTEXT_AND_UNIT + "".join(
-            '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
-            f' decimals="INF">1000000000000000000000000000{tail}</ix:nonFraction>'
-            for tail in ("0.1", "0.2")
-        )
-        issues = self.run_on(doc(body))
-        self.assertTrue(any("Duplicate fact" in i for i in issues), f"got {issues}")
-
-    def test_canonical_key_still_ignores_trailing_zeros(self):
-        """The exact key must not lose the equality it exists to provide."""
-        self.assertEqual(
-            check_facts.canonical_fact_text("1.50"),
-            check_facts.canonical_fact_text("1.5"),
-        )
-        self.assertEqual(check_facts.canonical_fact_text("0.00"), "0")
-        # Negative zero is the same amount as zero; splitting them would
-        # report a duplicate-fact inconsistency that does not exist.
-        for zero in ("0", "-0", "0.0", "-0.00", "0E+5"):
-            with self.subTest(zero=zero):
-                self.assertEqual(check_facts.canonical_fact_text(zero), "0")
-
-    def test_duplicates_compare_reported_values_not_rendered_text(self):
-        """@scale and @sign change the amount a fact reports.
-
-        Comparing `.text` alone was wrong in both directions: it missed a real
-        inconsistency between two facts whose scales differ, and invented one
-        between two facts that report the same amount differently.
-        """
-
-        # Same text, different scale: different amounts, so inconsistent.
-        conflicting = doc(
-            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
-            ' decimals="INF" scale="0">1</ix:nonFraction>'
-            '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
-            ' decimals="INF" scale="3">1</ix:nonFraction>'
-        )
-        self.assertTrue(
-            any("Duplicate fact" in i for i in self.run_on(conflicting)),
-            f"got {self.run_on(conflicting)}",
-        )
-
-        # Different text, same amount: consistent, so no finding.
-        agreeing = doc(
-            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
-            ' decimals="INF" scale="3">1</ix:nonFraction>'
-            '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
-            ' decimals="INF">1000</ix:nonFraction>'
-        )
-        self.assertFalse(
-            any("Duplicate fact" in i for i in self.run_on(agreeing)),
-            f"got {self.run_on(agreeing)}",
-        )
-
-        # @sign likewise.
-        signed = doc(
-            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
-            ' decimals="INF" sign="-">5</ix:nonFraction>'
-            '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
-            ' decimals="INF">5</ix:nonFraction>'
-        )
-        self.assertTrue(
-            any("Duplicate fact" in i for i in self.run_on(signed)),
-            f"got {self.run_on(signed)}",
-        )
-
-    def test_canonical_key_survives_signalling_nan(self):
-        """sNaN raised inside normalize(); it must be returned as written."""
-        self.assertEqual(check_facts.canonical_fact_text("sNaN"), "sNaN")
-
     def test_apostrophe_set_matches_the_registry(self):
         """Only the separators the registry lists are decoded.
 
@@ -618,12 +543,6 @@ class CheckFactsTestCase(unittest.TestCase):
                     any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
                     f"{extra} lost precision to the context: {issues}",
                 )
-        with localcontext() as ctx:
-            ctx.prec = 5
-            self.assertNotEqual(
-                check_facts.canonical_fact_text("10000000000000000000000000000.1"),
-                check_facts.canonical_fact_text("10000000000000000000000000000.2"),
-            )
 
     def _dup(self, *facts):
         return doc(CONTEXT_AND_UNIT + "".join(facts))
@@ -664,34 +583,6 @@ class CheckFactsTestCase(unittest.TestCase):
                     any(i.startswith("NOTE") for i in issues), f"{text}: {issues}"
                 )
 
-    def test_concept_identity_is_the_expanded_name(self):
-        """Two prefixes bound to one namespace name the same concept.
-
-        Comparing the lexical QName treated e:A and f:A as unrelated, so an
-        inconsistency between them went unreported.
-        """
-        issues = self.run_on(
-            self._dup(self._nf("e:A", "0", "5"), self._nf("f:A", "0", "6"))
-        )
-        self.assertTrue(any("inconsistent" in i for i in issues), f"got {issues}")
-
-    def test_duplicate_group_with_an_undecodable_member_is_declined(self):
-        """Consistency is unknown, so it must be neither asserted nor denied.
-
-        Reporting an inconsistency would compare a decoded value against raw
-        text; staying silent would imply the group was checked and agreed.
-        """
-        issues = self.run_on(
-            self._dup(
-                self._nf("e:A", "0", "5"),
-                self._nf("e:A", "0", "12 34", ' format="ixt:num-unit-decimal"'),
-            )
-        )
-        self.assertFalse(any("inconsistent" in i for i in issues), f"got {issues}")
-        self.assertTrue(
-            any("duplicate-fact group" in i for i in issues), f"got {issues}"
-        )
-
     def test_duplicate_consistency_is_modulo_decimals(self):
         """The same amount tagged at different roundings is not a disagreement.
 
@@ -710,76 +601,6 @@ class CheckFactsTestCase(unittest.TestCase):
                     any("inconsistent" in i for i in issues), f"got {issues}"
                 )
 
-    def test_interval_membership_matches_round_ties_to_even(self):
-        """Differential test against IEEE roundTiesToEven, per XBRL 2.1 4.6.7.2.
-
-        A value belongs to a fact's interval exactly when it rounds to that
-        fact's reported value. The oracle rounds with ROUND_HALF_EVEN, which
-        reproduces the spec's own worked example (123450 to -2 places is
-        123400, not 123500). Probing the endpoints specifically is the point:
-        an off-by-one on inclusivity shows up nowhere else, and a half-up
-        model passes every interior probe.
-        """
-        for places in (-3, -2, -1, 0, 1, 2):
-            unit = Fraction(10) ** -places
-            for step in range(-25, 26):
-                reported = Fraction(step) * unit
-                interval = check_facts.reported_interval(
-                    self._element(reported, places)
-                )
-                self.assertIsNotNone(interval)
-                for probe in (
-                    interval.lower,
-                    interval.upper,
-                    (interval.lower + interval.upper) / 2,
-                ):
-                    with self.subTest(places=places, reported=reported, probe=probe):
-                        inside = (
-                            interval.lower < probe < interval.upper
-                            or (probe == interval.lower and interval.lower_closed)
-                            or (probe == interval.upper and interval.upper_closed)
-                        )
-                        self.assertEqual(
-                            inside, self._rounds_to(probe, places, reported)
-                        )
-
-    @staticmethod
-    def _element(value, places):
-        text = (
-            str(value.numerator)
-            if value.denominator == 1
-            else format(Decimal(value.numerator) / Decimal(value.denominator), "f")
-        )
-        return etree.fromstring(
-            '<ix:nonFraction xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"'
-            f' decimals="{places}">{text}</ix:nonFraction>'
-        )
-
-    @staticmethod
-    def _rounds_to(probe, places, expected):
-        unit = Fraction(10) ** -places
-        quotient = probe / unit
-        floor = quotient.numerator // quotient.denominator
-        remainder = quotient - floor
-        if remainder > Fraction(1, 2):
-            nearest = floor + 1
-        elif remainder < Fraction(1, 2):
-            nearest = floor
-        else:  # a tie goes to the even neighbour
-            nearest = floor if floor % 2 == 0 else floor + 1
-        return nearest * unit == expected
-
-    def test_touching_intervals_are_not_consistent(self):
-        """5 and 6 at decimals=0 describe [4.5, 5.5) and [5.5, 6.5).
-
-        They touch but share no value. Treating both bounds as closed would
-        call adjacent whole numbers consistent.
-        """
-        issues = self.run_on(
-            self._dup(self._nf("e:A", "0", "5"), self._nf("e:A", "0", "6"))
-        )
-        self.assertTrue(any("inconsistent" in i for i in issues), f"got {issues}")
-
     def test_directory_argument_is_a_usage_error(self):
         """exists() is true for a directory, which then raised in the parser."""
         argv, stderr = sys.argv, sys.stderr
@@ -790,6 +611,79 @@ class CheckFactsTestCase(unittest.TestCase):
         finally:
             sys.argv, sys.stderr = argv, stderr
         self.assertEqual(code, 2)
+
+    def test_duplicate_consistency_is_deferred_to_arelle(self):
+        """This checker must not judge whether duplicate facts agree.
+
+        Deciding that needs semantic context and unit identity, target
+        documents, nil handling and the normative duplicate-consistency rule.
+        Four successive attempts at a cheaper version were wrong in one
+        direction or the other, so the rule is Arelle's. Two facts that plainly
+        disagree must therefore produce no finding here, and this test exists
+        to stop the rule creeping back in.
+        """
+        body = CONTEXT_AND_UNIT + "".join(
+            '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
+            f' decimals="INF">{value}</ix:nonFraction>'
+            for value in ("5", "6")
+        )
+        issues = self.run_on(doc(body))
+        self.assertFalse(
+            any("uplicate" in i or "inconsistent" in i for i in issues),
+            f"the duplicate rule is back: {issues}",
+        )
+
+    def test_apostrophe_formats_also_accept_the_base_separator(self):
+        """The apos transformations ADD apostrophes; they do not replace.
+
+        Registry 5's input pattern for `num-dot-decimal-apos` admits the comma
+        as well, so a conventionally grouped number is valid under it and must
+        be decoded, not declined.
+        """
+        issues = self.run_on(
+            self._fact("1,234.56", "-2", ' format="ixt:num-dot-decimal-apos"')
+        )
+        self.assertTrue(any("1234.56" in i for i in issues), f"not decoded: {issues}")
+
+    def test_transformation_pairing_must_be_published(self):
+        """A name is the namespace and the local part together.
+
+        `num-dot-decimal-apos` exists only in Registry 5, so pairing it with an
+        earlier registry's namespace names nothing and must be declined.
+        """
+        issues = self.run_on(
+            self._fact("1'234.56", "0", ' format="ixt1:num-dot-decimal-apos"')
+        )
+        self.assertTrue(any(i.startswith("NOTE") for i in issues), f"got {issues}")
+
+    def test_non_ascii_digits_are_declined(self):
+        """str.isdigit() is true of digits these patterns do not admit."""
+        arabic_indic = "\u0661\u0662\u0663\u0664"
+        fullwidth = "\uff11\uff12\uff13\uff14"
+        for text in (arabic_indic, fullwidth):
+            with self.subTest(text=text):
+                issues = self.run_on(
+                    self._fact(text, "0", ' format="ixt:num-dot-decimal"')
+                )
+                self.assertTrue(
+                    any(i.startswith("NOTE") for i in issues), f"{text}: {issues}"
+                )
+
+    def test_trailing_decimal_mark_is_declined(self):
+        """ "5." has no digits after the mark, which the grammar requires."""
+        issues = self.run_on(self._fact("5.", "0", ' format="ixt:num-dot-decimal"'))
+        self.assertTrue(any(i.startswith("NOTE") for i in issues), f"got {issues}")
+
+    def test_default_namespace_resolves_a_transformation(self):
+        """An unprefixed @format still resolves, through the default namespace."""
+        body = (
+            CONTEXT_AND_UNIT
+            + '<ix:nonFraction xmlns="http://www.xbrl.org/inlineXBRL/transformation'
+            '/2022-02-16" name="e:A" contextRef="c1" unitRef="u1" decimals="-2"'
+            ' format="num-dot-decimal">1,234.56</ix:nonFraction>'
+        )
+        issues = self.run_on(doc(body))
+        self.assertTrue(any("1234.56" in i for i in issues), f"not decoded: {issues}")
 
     def test_unresolved_context_is_flagged(self):
         body = (
@@ -808,26 +702,6 @@ class CheckFactsTestCase(unittest.TestCase):
         )
         issues = self.run_on(doc(body))
         self.assertTrue(any("non-ISO-4217" in i for i in issues))
-
-    def test_inconsistent_duplicate_facts_are_flagged(self):
-        body = (
-            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
-            ' decimals="0">5</ix:nonFraction>'
-            + '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
-            ' decimals="0">6</ix:nonFraction>'
-        )
-        issues = self.run_on(doc(body))
-        self.assertTrue(any("inconsistent" in i for i in issues))
-
-    def test_consistent_duplicate_facts_are_not_flagged(self):
-        """iXBRL routinely tags the same number twice; that is not an error."""
-        body = (
-            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
-            ' decimals="0">5.0</ix:nonFraction>'
-            + '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
-            ' decimals="0">5</ix:nonFraction>'
-        )
-        self.assertEqual(self.run_on(doc(body)), [])
 
 
 if __name__ == "__main__":
