@@ -324,7 +324,7 @@ tooling).
 A defensible validation pipeline always runs the same steps in the same
 order. Skipping a step is how filings reach the regulator broken.
 
-1. **Validate against the base XBRL spec.** Run Arelle with no jurisdiction plugin, just `--validate`. Catches XBRL 2.1 schema, linkbase, dimension and units violations (`xbrl.*`, `xbrldie:*`).
+1. **Validate against the base XBRL spec.** Run Arelle with no jurisdiction plugin. For an iXBRL document set that still means `--plugins inlineXbrlDocumentSet --validate`: without that plugin Arelle does not assemble the document set, so the facts are never seen. Catches XBRL 2.1 schema, linkbase, dimension and units violations (`xbrl.*`, `xbrldie:*`).
 2. **Validate against the jurisdiction's filer-manual rules.** Add `--plugins validate/ESEF` (with `--disclosureSystem esef-2024`), `validate/EFM`, `validate/UK`, `validate/EBA`, `validate/NL` as appropriate. This is where `ESEF.*`, `EFM.*`, `UKFRC.*` codes appear.
 3. **Run formula assertions.** Many regulators ship Formula 1.0 linkbases. Verify with `--formulaAsserResultCounts` that the count of unsatisfied assertions is zero.
 4. **Verify report-package structure.** Confirm the `reports/` directory under the single top-level directory, `META-INF/reportPackage.json` where the extension is `.xbr` or `.xbri`, `META-INF/taxonomyPackage.xml` where the package ships a taxonomy or a catalog remapping, correct file extensions (`.xhtml`, not `.html`), and correct naming.
