@@ -69,7 +69,10 @@ ISO_4217 = re.compile(r"^[A-Z]{3}$")
 # folding it into the base ones, and accepts several apostrophe-like
 # characters. Keeping the four sets separate means a base transformation does
 # not silently accept a separator it does not permit.
-APOSTROPHES = "'\u2019\u00b4\u02bc\u2032`"
+# Exactly the characters the registry's input patterns accept for the
+# apostrophe group separator. U+02BC is not among them, and including it would
+# decode a document the registry does not.
+APOSTROPHES = "'\u0060\u00b4\u2019\u2032\uff07"
 DOT_DECIMAL_FORMATS = frozenset({"numdotdecimal", "num-dot-decimal", "numdotdecimalin"})
 DOT_DECIMAL_APOS_FORMATS = frozenset({"num-dot-decimal-apos"})
 COMMA_DECIMAL_FORMATS = frozenset({"numcommadecimal", "num-comma-decimal"})
@@ -118,6 +121,11 @@ def fact_value(el: etree._Element) -> Decimal | None:
         value = Decimal(cleaned)
     except InvalidOperation:
         return None
+    if not value.is_finite():
+        # "NaN" and "Infinity" are legal Decimal literals but not legal XBRL
+        # numeric values. Accepting them would put a nonsense figure into a
+        # finding message and hand a non-finite value to the arithmetic below.
+        return None
     scale = el.get("scale")
     if scale is not None:
         try:
@@ -130,9 +138,18 @@ def fact_value(el: etree._Element) -> Decimal | None:
         sign, digits, exponent = value.as_tuple()
         if not isinstance(exponent, int):
             return None
-        value = Decimal((sign, digits, exponent + places))
+        try:
+            value = Decimal((sign, digits, exponent + places))
+        except (OverflowError, ValueError, InvalidOperation):
+            # A @scale far outside any real reporting range: the exponent will
+            # not fit. That is a malformed document, but this checker's job is
+            # to report rather than to crash on one.
+            return None
     if el.get("sign") == "-":
-        value = -value
+        # copy_negate() flips the sign without consulting the decimal context.
+        # Unary minus rounds to 28 significant digits, which silently dropped
+        # the low-order digit of a long value before it could be tested.
+        value = value.copy_negate()
     return value
 
 
@@ -175,7 +192,15 @@ def truncates_nonzero_digits(value: Decimal, decimals: str) -> bool:
 
 
 def canonical_fact_text(value: str) -> str:
-    """Return a stable comparison key for simple numeric duplicate checks."""
+    """Return a stable comparison key for simple numeric duplicate checks.
+
+    Trailing zeros are stripped so that "1.50" and "1.5" compare equal, but the
+    stripping is done on the coefficient rather than through normalize().
+    normalize() rounds to the active decimal context, so two values differing
+    only beyond the 28th significant digit collapsed to one key and their
+    inconsistency went unreported. Non-finite input is returned as written:
+    it is not a number, and signalling NaN raises inside normalize().
+    """
     text = value.strip()
     if not text:
         return text
@@ -183,7 +208,18 @@ def canonical_fact_text(value: str) -> str:
         parsed = Decimal(text)
     except InvalidOperation:
         return text
-    return format(parsed.normalize(), "f")
+    if not parsed.is_finite():
+        return text
+    sign, digits, exponent = parsed.as_tuple()
+    if not isinstance(exponent, int):
+        return text
+    digits = list(digits)
+    while exponent < 0 and digits and digits[-1] == 0:
+        digits.pop()
+        exponent += 1
+    if not digits:
+        digits, exponent = [0], 0
+    return format(Decimal((sign, tuple(digits), exponent)), "f")
 
 
 def find_facts(

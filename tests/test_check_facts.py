@@ -432,6 +432,99 @@ class CheckFactsTestCase(unittest.TestCase):
         self.assertIn("NOTE", printed)
         self.assertIn("passes pre-flight checks", printed)
 
+    def test_degenerate_values_are_declined_not_crashed(self):
+        """Malformed input is a finding to report, never a traceback.
+
+        "NaN" and "Infinity" parse as Decimal but are not legal XBRL numeric
+        values, and an absurd @scale overflowed the exponent and raised.
+        """
+        cases = [
+            ("NaN", ""),
+            ("Infinity", ""),
+            ("-Infinity", ""),
+            ("45", ' scale="99999999999999999999"'),
+            ("45", ' scale="-99999999999999999999"'),
+            ("abc", ""),
+            ("1.2.3", ""),
+        ]
+        for value, extra in cases:
+            with self.subTest(value=value, extra=extra):
+                issues = self.run_on(self._fact(value, "0", extra))
+                self.assertFalse(
+                    any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+                    f"got {issues}",
+                )
+                # Asserting only the absence of a verdict would also pass if
+                # the fact were dropped entirely. The note is the evidence it
+                # was seen and consciously declined.
+                self.assertTrue(
+                    any(i.startswith("NOTE") for i in issues),
+                    f"declined without a coverage note: {issues}",
+                )
+
+    def test_sign_on_a_value_longer_than_the_decimal_context(self):
+        """@sign must not round the value it negates.
+
+        Unary minus consults the decimal context; copy_negate() does not. This
+        combines @sign with @scale because that is the path that reintroduced
+        the rounding after the parser itself had been fixed.
+        """
+        long_value = "10000000000000000000000000000.1"
+        for extra in (' sign="-"', ' sign="-" scale="0"', ' sign="-" scale="-3"'):
+            with self.subTest(extra=extra):
+                issues = self.run_on(self._fact(long_value, "0", extra))
+                self.assertTrue(
+                    any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+                    f"{extra} got {issues}",
+                )
+
+    def test_duplicate_facts_differing_beyond_the_decimal_context(self):
+        """normalize() rounded two distinct values into one comparison key.
+
+        The duplicate check then saw a single value and reported nothing, so an
+        inconsistency between two facts went silently unflagged.
+        """
+        body = CONTEXT_AND_UNIT + "".join(
+            '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
+            f' decimals="INF">1000000000000000000000000000{tail}</ix:nonFraction>'
+            for tail in ("0.1", "0.2")
+        )
+        issues = self.run_on(doc(body))
+        self.assertTrue(any("Duplicate fact" in i for i in issues), f"got {issues}")
+
+    def test_canonical_key_still_ignores_trailing_zeros(self):
+        """The exact key must not lose the equality it exists to provide."""
+        self.assertEqual(
+            check_facts.canonical_fact_text("1.50"),
+            check_facts.canonical_fact_text("1.5"),
+        )
+        self.assertEqual(check_facts.canonical_fact_text("0.00"), "0")
+
+    def test_canonical_key_survives_signalling_nan(self):
+        """sNaN raised inside normalize(); it must be returned as written."""
+        self.assertEqual(check_facts.canonical_fact_text("sNaN"), "sNaN")
+
+    def test_apostrophe_set_matches_the_registry(self):
+        """Only the separators the registry lists are decoded.
+
+        U+02BC MODIFIER LETTER APOSTROPHE is not one of them, so a document
+        using it is declined rather than silently reinterpreted.
+        """
+        for ch in "'\u0060\u00b4\u2019\u2032\uff07":
+            with self.subTest(char=hex(ord(ch))):
+                self.assertEqual(
+                    self.defects(
+                        self._fact(
+                            f"1{ch}234.56", "2", ' format="ixt:num-dot-decimal-apos"'
+                        )
+                    ),
+                    [],
+                )
+        issues = self.run_on(
+            self._fact("1\u02bc234.56", "2", ' format="ixt:num-dot-decimal-apos"')
+        )
+        self.assertTrue(any(i.startswith("NOTE") for i in issues), f"got {issues}")
+
     def test_unresolved_context_is_flagged(self):
         body = (
             CONTEXT_AND_UNIT
