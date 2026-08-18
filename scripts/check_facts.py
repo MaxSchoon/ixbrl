@@ -62,6 +62,18 @@ NS = {
 # access, so derive the one from the other rather than repeating the URI.
 XSI_NIL = f"{{{NS['xsi']}}}nil"
 
+
+def ncname(el: etree._Element, attribute: str) -> str:
+    """An NCName-typed attribute, whitespace-collapsed as its type requires.
+
+    `contextRef`, `unitRef`, `continuedAt` and `id` are NCNames, which collapse
+    whitespace, so `contextRef=" c1 "` names the same context as `contextRef=
+    "c1"`. Comparing the raw strings reported a conformant document's contexts
+    and units as unresolved, and could invent a dangling continuation.
+    """
+    return collapse(el.get(attribute) or "")
+
+
 ISO_4217 = re.compile(r"^[A-Z]{3}$")
 
 # A currency measure is identified by this namespace and its local part, not by
@@ -232,7 +244,7 @@ def fact_value(el: etree._Element) -> Decimal | None:
     not implement, and guessing at one would produce confident nonsense. A
     check that cannot see the value must decline to judge it.
     """
-    if len(el) or el.get("continuedAt"):
+    if len(el) or ncname(el, "continuedAt"):
         # A nested or continued fact takes its value from descendant content,
         # which this function does not assemble. Reading `.text` alone would
         # silently judge a fragment of the value.
@@ -394,12 +406,13 @@ def check(path: Path) -> list[str]:
     # --- ix:nonFraction required attributes ---
     for el in nf_facts:
         for attr in ("contextRef", "unitRef"):
-            if not el.get(attr):
+            if not ncname(el, attr):
                 issues.append(f"ix:nonFraction missing @{attr} at line {el.sourceline}")
         decimals_present = bool(el.get("decimals"))
         precision_present = bool(el.get("precision"))
-        nil_value = (el.get(XSI_NIL) or "").lower()
-        nil_present = nil_value in {"true", "1"}
+        # xsi:nil is xs:boolean: whitespace-collapsing, and case-sensitive.
+        # Lower-casing accepted "TRUE", which is not a boolean literal.
+        nil_present = collapse(el.get(XSI_NIL) or "") in {"true", "1"}
         present_count = sum((decimals_present, precision_present, nil_present))
         if present_count == 0:
             issues.append(
@@ -425,7 +438,7 @@ def check(path: Path) -> list[str]:
 
     # --- ix:nonNumeric required attributes ---
     for el in nn_facts:
-        if not el.get("contextRef"):
+        if not ncname(el, "contextRef"):
             issues.append(f"ix:nonNumeric missing @contextRef at line {el.sourceline}")
         # @escape is xs:boolean, so "1" is as true as "true".
         if (el.get("escape") or "").strip() in {"true", "1"}:
@@ -439,17 +452,17 @@ def check(path: Path) -> list[str]:
 
     # --- Context resolution ---
     defined_contexts = {
-        c.get("id") for c in root.findall(".//xbrli:context", NS) if c.get("id")
+        ncname(c, "id") for c in root.findall(".//xbrli:context", NS) if c.get("id")
     }
     defined_units = {
-        u.get("id") for u in root.findall(".//xbrli:unit", NS) if u.get("id")
+        ncname(u, "id") for u in root.findall(".//xbrli:unit", NS) if u.get("id")
     }
     for el in nf_facts + nn_facts:
-        cref = el.get("contextRef")
+        cref = ncname(el, "contextRef")
         if cref and cref not in defined_contexts:
             issues.append(f"contextRef='{cref}' not defined (line {el.sourceline})")
     for el in nf_facts:
-        uref = el.get("unitRef")
+        uref = ncname(el, "unitRef")
         if uref and uref not in defined_units:
             issues.append(f"unitRef='{uref}' not defined (line {el.sourceline})")
 
@@ -469,13 +482,13 @@ def check(path: Path) -> list[str]:
     # comprehension does not narrow the key type for a checker.
     cont_by_id: dict[str, etree._Element] = {}
     for continuation in continuations:
-        continuation_id = continuation.get("id")
+        continuation_id = ncname(continuation, "id")
         if continuation_id:
             cont_by_id[continuation_id] = continuation
     starters = nf_facts + nn_facts + list(continuations)
     targets = defaultdict(int)
     for el in starters:
-        ref = el.get("continuedAt")
+        ref = ncname(el, "continuedAt")
         if ref:
             targets[ref] += 1
             if ref not in cont_by_id:
@@ -490,7 +503,7 @@ def check(path: Path) -> list[str]:
                 f"attributes (must be unique)"
             )
 
-    next_ref = {cid: c.get("continuedAt") for cid, c in cont_by_id.items()}
+    next_ref = {cid: ncname(c, "continuedAt") or None for cid, c in cont_by_id.items()}
 
     # Walk iteratively, not recursively. @continuedAt is single-valued, so a
     # continuation chain is a linked list rather than a branching tree — the

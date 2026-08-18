@@ -799,6 +799,49 @@ class CheckFactsTestCase(unittest.TestCase):
         )
         self.assertTrue(any(i.startswith("NOTE") for i in issues), f"got {issues}")
 
+    def test_padding_a_reference_does_not_change_the_verdict(self):
+        """NCName-typed references collapse whitespace, so padding is not part
+        of the name.
+
+        Comparing raw strings reported a conformant document's contexts and
+        units as unresolved, which is a false positive on a filing that is
+        actually fine. The property is the point: the same document with and
+        without padding must produce the same findings.
+        """
+        padded = doc(
+            CONTEXT_AND_UNIT
+            + '<ix:nonFraction name="e:A" contextRef=" c1 " unitRef=" u1 "'
+            ' decimals="0">5</ix:nonFraction>'
+            '<ix:nonFraction name="e:B" contextRef="c1" unitRef="u1"'
+            ' xsi:nil=" true ">0</ix:nonFraction>'
+            '<ix:nonNumeric name="e:C" contextRef="c1" continuedAt=" k1 "/>'
+            '<ix:continuation id="k1">rest</ix:continuation>'
+        )
+        plain = (
+            padded.replace(" c1 ", "c1")
+            .replace(" u1 ", "u1")
+            .replace(" true ", "true")
+            .replace(" k1 ", "k1")
+        )
+        self.assertEqual(self.run_on(padded), self.run_on(plain))
+        self.assertEqual(self.run_on(padded), [])
+
+    def test_xsi_nil_is_case_sensitive(self):
+        """Boolean literals are lower case; "TRUE" is not one of them.
+
+        Lower-casing the attribute accepted it, which would treat a fact as
+        nil on the strength of a value the type does not permit.
+        """
+        body = (
+            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1"'
+            ' unitRef="u1" xsi:nil="TRUE">0</ix:nonFraction>'
+        )
+        issues = self.run_on(doc(body))
+        self.assertTrue(
+            any("missing @decimals" in i for i in issues),
+            f"TRUE was accepted as a boolean: {issues}",
+        )
+
     def test_unresolved_context_is_flagged(self):
         body = (
             CONTEXT_AND_UNIT
