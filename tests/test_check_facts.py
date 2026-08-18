@@ -544,15 +544,6 @@ class CheckFactsTestCase(unittest.TestCase):
                     f"{extra} lost precision to the context: {issues}",
                 )
 
-    def _dup(self, *facts):
-        return doc(CONTEXT_AND_UNIT + "".join(facts))
-
-    def _nf(self, name, decimals, value, extra=""):
-        return (
-            f'<ix:nonFraction name="{name}" contextRef="c1" unitRef="u1"'
-            f' decimals="{decimals}"{extra}>{value}</ix:nonFraction>'
-        )
-
     def test_transformation_namespace_must_be_the_registry(self):
         """@format is a QName; the local part alone does not identify it.
 
@@ -583,24 +574,6 @@ class CheckFactsTestCase(unittest.TestCase):
                     any(i.startswith("NOTE") for i in issues), f"{text}: {issues}"
                 )
 
-    def test_duplicate_consistency_is_modulo_decimals(self):
-        """The same amount tagged at different roundings is not a disagreement.
-
-        This is the behaviour the module docstring claims, and the exact-value
-        comparison it replaced did not provide it.
-        """
-        agreeing = [
-            (self._nf("e:A", "0", "5"), self._nf("e:A", "2", "5.00")),
-            (self._nf("e:A", "-3", "45000"), self._nf("e:A", "INF", "45000")),
-            (self._nf("e:A", "-3", "45000"), self._nf("e:A", "0", "45200")),
-        ]
-        for facts in agreeing:
-            with self.subTest(facts=facts):
-                issues = self.run_on(self._dup(*facts))
-                self.assertFalse(
-                    any("inconsistent" in i for i in issues), f"got {issues}"
-                )
-
     def test_directory_argument_is_a_usage_error(self):
         """exists() is true for a directory, which then raised in the parser."""
         argv, stderr = sys.argv, sys.stderr
@@ -617,7 +590,7 @@ class CheckFactsTestCase(unittest.TestCase):
 
         Deciding that needs semantic context and unit identity, target
         documents, nil handling and the normative duplicate-consistency rule.
-        Four successive attempts at a cheaper version were wrong in one
+        Four successive attempts at a cheaper version were each wrong in one
         direction or the other, so the rule is Arelle's. Two facts that plainly
         disagree must therefore produce no finding here, and this test exists
         to stop the rule creeping back in.
@@ -632,6 +605,47 @@ class CheckFactsTestCase(unittest.TestCase):
             any("uplicate" in i or "inconsistent" in i for i in issues),
             f"the duplicate rule is back: {issues}",
         )
+
+    def test_legacy_transformation_registries_are_declined(self):
+        """TR1 to TR3 state different input grammars for the same conventions.
+
+        One shared decoder cannot honour all of them, and the one that is right
+        for TR4 is too permissive for TR3, which would put a confident EFM
+        verdict on a value the registry never described that way.
+        """
+        issues = self.run_on(
+            self._fact("1,234.56", "-2", ' format="ixt3:numdotdecimal"')
+        )
+        self.assertTrue(any(i.startswith("NOTE") for i in issues), f"got {issues}")
+
+    def test_malformed_format_qnames_are_declined(self):
+        """A name that is not a QName names no transformation.
+
+        `:num-dot-decimal` has an empty prefix that a bare rpartition reads as
+        "no prefix", which would resolve it against the default namespace as
+        though it were well formed. An empty @format is present and invalid,
+        not absent.
+        """
+        for bad in (":num-dot-decimal", "", "ixt:", "1bad:num-dot-decimal", "a:b:c"):
+            with self.subTest(fmt=bad):
+                issues = self.run_on(self._fact("1,234.56", "-2", f' format="{bad}"'))
+                self.assertFalse(
+                    any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+                    f"{bad!r} was decoded: {issues}",
+                )
+
+    def test_escape_accepts_either_boolean_spelling(self):
+        """@escape is xs:boolean, so "1" is as true as "true"."""
+        for spelling in ("true", "1"):
+            with self.subTest(escape=spelling):
+                body = (
+                    CONTEXT_AND_UNIT + '<ix:nonNumeric name="e:N" contextRef="c1"'
+                    f' escape="{spelling}"><p>unclosed</ix:nonNumeric>'
+                )
+                issues = self.run_on(doc(body))
+                self.assertTrue(
+                    any("not well-formed" in i for i in issues), f"got {issues}"
+                )
 
     def test_apostrophe_formats_also_accept_the_base_separator(self):
         """The apos transformations ADD apostrophes; they do not replace.

@@ -61,9 +61,6 @@ XSI_NIL = f"{{{NS['xsi']}}}nil"
 
 ISO_4217 = re.compile(r"^[A-Z]{3}$")
 
-# Beyond this the fixed-point spelling of a value stops being a comparison key
-# and starts being a memory cost. Reported amounts do not approach it.
-MAX_CANONICAL_EXPONENT = 1000
 
 # Transformations from the Inline XBRL Transformation Registry whose only
 # effect on a numeric fact is the separator convention. Everything else in the
@@ -79,15 +76,24 @@ MAX_CANONICAL_EXPONENT = 1000
 # local part identify it together. Validating them separately would accept a
 # pairing that no registry publishes, such as an early namespace combined with
 # a name introduced years later.
-# TR1 (2010-04-20) is absent: its specification could not be retrieved to
-# confirm which names it publishes, and a pairing that cannot be verified is
-# declined rather than assumed. A decline costs a reported coverage gap.
-TR2 = "http://www.xbrl.org/inlineXBRL/transformation/2011-07-31"
-TR3 = "http://www.xbrl.org/inlineXBRL/transformation/2015-02-26"
+# Only the two modern registries are decoded. TR1 to TR3 state materially
+# different input grammars for the same conventions, including three-digit
+# grouping and a different treatment of spaces around the decimal mark, so one
+# shared decoder cannot honour all of them: the grammar that is right for TR4
+# is too permissive for TR3. A legacy transformation is therefore declined and
+# reported as a coverage gap, rather than decoded by a grammar that is not its
+# own and given a confident EFM verdict it has not earned.
 TR4 = "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12"
 TR5 = "http://www.xbrl.org/inlineXBRL/transformation/2022-02-16"
 
 ASCII_DIGITS = frozenset("0123456789")
+
+# An NCName, optionally prefixed by one. @format is checked against this before
+# resolution, because `:num-dot-decimal` has an empty prefix that a bare
+# rpartition reads as "no prefix", resolving it against the default namespace
+# as though it were well formed.
+_NCNAME = r"[A-Za-z_][\w.\-]*"
+QNAME = re.compile(rf"(?:{_NCNAME}:)?{_NCNAME}")
 
 # Exactly the characters the input patterns of `num-dot-decimal-apos` and
 # `num-comma-decimal-apos` accept as the group separator. U+FF07 FULLWIDTH
@@ -109,11 +115,7 @@ _COMMA = (".", ",")
 _DOT_APOS = ("," + APOSTROPHES, ".")
 _COMMA_APOS = ("." + APOSTROPHES, ",")
 # Each pairing below was confirmed against that registry's own specification.
-# `numdotdecimalin` first appears in TR3, not TR2.
 SEPARATOR_FORMATS = {
-    **{(ns, "numdotdecimal"): _DOT for ns in (TR2, TR3)},
-    **{(ns, "numcommadecimal"): _COMMA for ns in (TR2, TR3)},
-    (TR3, "numdotdecimalin"): _DOT,
     **{(ns, "num-dot-decimal"): _DOT for ns in (TR4, TR5)},
     **{(ns, "num-comma-decimal"): _COMMA for ns in (TR4, TR5)},
     (TR5, "num-dot-decimal-apos"): _DOT_APOS,
@@ -131,6 +133,8 @@ def resolve_transformation(
     local part would decode `fake:num-dot-decimal` from an unrelated namespace
     as though it were the registry transformation of that name.
     """
+    if not QNAME.fullmatch(raw_format):
+        return None  # not a QName at all, so it names no transformation
     prefix, _, local = raw_format.rpartition(":")
     # An unprefixed name still resolves, through the default namespace.
     namespace = el.nsmap.get(prefix or None)
@@ -201,7 +205,7 @@ def fact_value(el: etree._Element) -> Decimal | None:
     # convention is part of it: under `num-comma-decimal`, "1,5" is one and a
     # half. Stripping commas unconditionally turns that into fifteen.
     raw_format = el.get("format")
-    if not raw_format:
+    if raw_format is None:
         cleaned = text  # no transformation: the text is already an XBRL numeric
     else:
         convention = resolve_transformation(el, raw_format)
@@ -374,7 +378,8 @@ def check(path: Path) -> list[str]:
     for el in nn_facts:
         if not el.get("contextRef"):
             issues.append(f"ix:nonNumeric missing @contextRef at line {el.sourceline}")
-        if el.get("escape") == "true":
+        # @escape is xs:boolean, so "1" is as true as "true".
+        if (el.get("escape") or "").strip() in {"true", "1"}:
             try:
                 etree.fromstring(f"<wrap>{el.text or ''}</wrap>", parser)
             except etree.XMLSyntaxError as exc:
