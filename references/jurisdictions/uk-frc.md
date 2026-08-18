@@ -547,7 +547,10 @@ Audited accounts require `DateAuditorsReport` plus
 `OpinionAuditorsOnEntity` plus (`NameIndividualAuditor` **OR**
 `NameSeniorStatutoryAuditor` + `NameEntityAuditors`); the disjunction is
 what makes the 2026-suite change (see *The 2026 suite changed the audit-report
-tag set*) validator-safe. Charity audits
+tag set*) validator-safe. The disjunction is the validator's, not a choice
+offered to the preparer: `NameIndividualAuditor` is absent from the 2026
+taxonomies, so a 2026 filing has only the pair, and passing this rule with the
+removed concept means the filing is on an earlier suite. Charity audits
 additionally key off the
 `CharityAuditCarriedOutInAccordanceWithCharitiesAct2011Truefalse`
 Boolean. [Arelle `validate/UK`]
