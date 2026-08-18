@@ -11,7 +11,8 @@ Checks performed:
     treated as XHTML; flag if it does not parse.
   - Continuation chains (continuedAt → ix:continuation@id) form a tree
     with no cycles, no dangling references, and a single root per chain.
-  - decimals="INF" not used (rejected by SEC EFM and discouraged in ESEF).
+  - decimals="INF" only where the reported value is exact. SEC prescribes INF
+    for exact amounts; the defect is INF on a value that has been rounded.
   - All contextRef values resolve to a defined xbrli:context.
   - All unitRef values resolve to a defined xbrli:unit.
   - Currency unit measures match ISO 4217 alpha-3 patterns.
@@ -51,6 +52,27 @@ NS = {
 XSI_NIL = f"{{{NS['xsi']}}}nil"
 
 ISO_4217 = re.compile(r"^[A-Z]{3}$")
+
+
+def _looks_rounded(text: str | None) -> bool:
+    """Does this rendered value look like it was rounded rather than exact?
+
+    `decimals="INF"` is not forbidden -- the EDGAR XBRL Guide section 6.6.4
+    prescribes it for exact monetary, percentage and basis-point amounts. The
+    real defect, which EFM 6.05.48 names, is INF on a value that was rounded:
+    the filer asserts exactness the figure does not have.
+
+    Distinguishing the two from the rendered text alone is not decidable in
+    general, so this errs towards silence: it flags only trailing-zero
+    magnitudes, where rounding is the overwhelmingly likely explanation. A
+    value with any significant low-order digit is treated as exact and passes.
+    """
+    if not text:
+        return False
+    digits = re.sub(r"[^0-9]", "", text.replace(",", ""))
+    if len(digits) < 4 or set(digits) == {"0"}:
+        return False
+    return digits.endswith("000")
 
 
 def canonical_fact_text(value: str) -> str:
@@ -132,10 +154,11 @@ def check(path: Path) -> list[str]:
                 "ix:nonFraction has mutually exclusive attributes set "
                 f"(decimals, precision, xsi:nil) at line {el.sourceline}"
             )
-        if el.get("decimals") == "INF":
+        if el.get("decimals") == "INF" and _looks_rounded(el.text):
             issues.append(
-                f"ix:nonFraction uses decimals='INF' at line {el.sourceline} "
-                f"(rejected by SEC EFM; discouraged elsewhere)"
+                f"ix:nonFraction declares decimals='INF' at line {el.sourceline} "
+                f"but the reported value {(el.text or '').strip()!r} appears "
+                "rounded — INF asserts the amount is exact"
             )
 
     # --- ix:nonNumeric required attributes ---

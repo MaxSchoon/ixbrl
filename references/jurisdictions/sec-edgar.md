@@ -148,7 +148,12 @@ have at least one occurrence outside `ix:hidden`.
 EFM 6.5.16 and the EDGAR XBRL Guide:
 
 - Every numeric `ix:nonFraction` carries a `decimals` attribute. `precision` is not allowed.
-- The literal `INF` is **forbidden** for `decimals`. Use a finite integer (e.g., `-3` thousands, `-6` millions, `0` whole units, `2` pennies).
+- The literal `INF` is permitted for `decimals`, but **only where the reported
+  amount is exact**. The EDGAR XBRL Guide gives `INF` as the correct value for
+  an exactly stated monetary amount, percentage or basis-point figure. Anything
+  the filer rounded takes a finite integer instead (`-3` thousands, `-6`
+  millions, `0` whole units, `2` pennies). `INF` on a rounded value asserts a
+  precision the figure does not have and trips `EFM.6.05.48`.
 - Monetary values use ISO 4217 currency codes as the unit (`iso4217:USD`).
 - Per-share values use a divide unit such as `iso4217:USD / xbrli:shares`.
 - A calculation linkbase is required for facts that roll up arithmetically. Calculation inconsistencies are reported as warnings.
@@ -173,7 +178,8 @@ Codes verbatim, with the EFM section that drives them:
 | EFM.6.05.01 | CIK / identifier convention violation | 6.5.1 |
 | EFM.6.05.11 | Duplicate or equivalent units must be deduplicated | 6.5.11 |
 | EFM.6.05.14 | Hidden cover-page fact not referenced via `-sec-ix-hidden` | 6.5.14 |
-| EFM.6.05.16 | `decimals` requirement; `INF` not permitted | 6.5.16 |
+| EFM.6.05.16 | `decimals` required on numeric facts; `precision` not permitted | 6.5.16 |
+| EFM.6.05.48 | `decimals="INF"` on a value whose rendered text is rounded | 6.5.48 |
 | EFM.6.05.20 | Required DEI element missing (e.g., `dei:AmendmentFlag`) | 6.5.20 |
 | EFM.6.05.21 | Required DEI per document type (e.g., `EntityRegistrantName`) | 6.5.21 |
 | EFM.6.05.34 | Inline XBRL submission / well-formedness violation | 6.5.34 |
@@ -239,7 +245,10 @@ Most-cited iXBRL rules:
 - **EFM 6.4** — Submission of Interactive Data (which forms, attachment names, EX-101 vs. embedded iXBRL).
 - **EFM 6.5** — *Syntax of Instances*. Master section for Inline XBRL syntax checks.
 - **EFM 6.5.14** — Cover-page facts in `ix:hidden` must be referenced elsewhere via `-sec-ix-hidden` style.
-- **EFM 6.5.16** — Numeric facts must carry `decimals` (not `precision`); `INF` is forbidden.
+- **EFM 6.5.16** — Numeric facts must carry `decimals`, not `precision`.
+- **EFM 6.5.48** — `decimals="INF"` must not be paired with a rendered value
+  that has been rounded. `INF` itself is allowed, and is the prescribed value
+  for an exact amount.
 - **EFM 6.5.20 / 6.5.21** — Required DEI facts present for the document type.
 - **EFM 6.5.34** — Inline XBRL submission-level validation (well-formedness of inline document and XHTML host).
 - **EFM 6.5.40** — DEI completeness for the relevant taxonomy version (`EntitySmallBusiness`, `EntityEmergingGrowthCompany`, etc.).

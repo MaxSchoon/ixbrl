@@ -16,7 +16,7 @@ parses), and **declared accuracy** (`decimals`).
 
 - `format` (an `ixt:*` transformation, see `references/spec.md` §TRR) converts rendered text to a canonical numeric value.
 - `scale` multiplies the parsed text by 10^scale. `scale="3"` on rendered "1,234" yields canonical 1,234,000.
-- `decimals` declares accuracy. `decimals="-3"` ≡ "rounded to thousands"; `decimals="0"` ≡ "whole units". **Never use `decimals="INF"` for a rounded value** — SEC EFM 6.05.16 rejects it; ESEF discourages it; both reject when rendered text is shorter than INF claims.
+- `decimals` declares accuracy. `decimals="-3"` ≡ "rounded to thousands"; `decimals="0"` ≡ "whole units". **Never use `decimals="INF"` for a rounded value** — it asserts the amount is exact. `INF` is legitimate, and is what the SEC prescribes for an exactly stated figure; the violation is the mismatch, caught by `EFM.6.05.48` and the equivalent ESEF inconsistency check.
 - `precision` is mutually exclusive with `decimals` on the same fact. **SEC and SBR forbid `precision`** — use `decimals` only.
 
 Audit rule: canonical value = `transform(rendered_text) × 10^scale × (sign == "-" ? -1 : 1)`. If that doesn't match the natural-language number the reader sees, it's a tagging defect.

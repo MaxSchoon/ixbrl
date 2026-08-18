@@ -129,7 +129,7 @@ defect.
 | KvK Middelgroot must deposit digitally | FY2017 onward | Stable for years. |
 | KvK Klein / Microbedrijf must deposit digitally | FY2016 / FY2017 | Stable for years. |
 | Notes / management report / other-information block-tagging for KvK iXBRL | Not yet fixed — **not sooner than two years** after ESMA's definitive block-tagging requirements take effect | RTS 2026 Annex II point 2 still writes the date as `1 januari 20XX`, and *widened* the lag: RTS 2025 said one year after ESMA's amended approach, RTS 2026 says "niet eerder voorzien dan twee jaar na invoering van de definitieve ESMA-vereisten", adding XBRL International best-practice work as a second dependency. Voluntary block-tagging before that date remains **not permitted**. Check the current RTS / FAQ before requiring it. |
-| ESEF report deposited **directly** at the Handelsregister | FY2026 | RTS 2026 art. 4(5): an in-scope issuer "kan hun ESEF-rapportage rechtstreeks deponeren bij het handelsregister". Two review-visible consequences: the entity identifier becomes the **LEI** with scheme `http://standards.iso.org/iso/17442` instead of the KvK number with `http://www.kvk.nl/kvk-id` (Annex IV pt 2), and `esef_cor:NotesAccountingPoliciesAndMandatoryTags` joins the start points (Annex IV Table 7). Filing with the AFM still discharges the KvK obligation (art. 2:394 lid 8 BW). |
+| ESEF report deposited **directly** at the Handelsregister | Not a FY2026 change — the route already stood under RTS 2025 | Article 4 is textually identical in RTS 2025 and RTS 2026, so art. 4(5) — an in-scope issuer "kan hun ESEF-rapportage rechtstreeks deponeren bij het handelsregister" — is a standing rule, not a new one. Do not tell a filer this route opens with FY2026. Two review-visible consequences: the entity identifier becomes the **LEI** with scheme `http://standards.iso.org/iso/17442` instead of the KvK number with `http://www.kvk.nl/kvk-id` (Annex IV pt 2), and `esef_cor:NotesAccountingPoliciesAndMandatoryTags` joins the start points (Annex IV Table 7). Filing with the AFM still discharges the KvK obligation (art. 2:394 lid 8 BW). |
 | art. 2:403 BW foreign-group-head report in iXBRL | FY2025 | Operative. Untagged group report + separate filing-data iXBRL document in one Report Package (see the *art. 2:403 foreign group head report in iXBRL* profile). |
 | art. 2:408 BW foreign-group-head report in iXBRL | **Not before FY2028** | FAQ 2.2.4 (10 July 2026): for financial years beginning **before 2028-01-01** the 2:408 group report is deposited **by PDF e-mail**; the iXBRL obligation is only *expected* from FY2028. An FY2026 PDF-by-email 2:408 deposit is correct — do not flag it (see the *art. 2:408 foreign group head report by PDF e-mail (before FY2028)* profile). |
 | ESEF block-tagging for AFM (listed) IFRS notes | FY2022 | Distinct from KvK above. AFM-listed AFRs follow ESMA Annex II Table 2, not KvK. |
@@ -155,9 +155,11 @@ October 2025 for financial years beginning on or after 1 January 2025.
 The **2026 RTS** was finalised on **10 July 2026** for financial years
 beginning on or after 1 January 2026, and may be applied to earlier
 years. Article numbering and the Annex I–VI layout are unchanged
-between them; the substantive deltas are the ESEF-direct route (art.
-4(5)), the LEI identifier and the `esef_cor` notes start point for
-ESEF reports (Annex IV pt 2 and Table 7), the widened block-tagging
+between them. **Article 4 itself did not change** — its text is
+identical in both RTS, so the ESEF-direct deposit route of art. 4(5) is
+a standing rule rather than an FY2026 delta. The substantive deltas sit
+in the Annexes: the LEI identifier and the `esef_cor` notes start point
+for ESEF reports (Annex IV pt 2 and Table 7), the widened block-tagging
 lag (Annex II pt 2), and the rolled base-taxonomy set (Annex VI).
 
 The RTS is not the same thing as the Reporting Manual (RM):

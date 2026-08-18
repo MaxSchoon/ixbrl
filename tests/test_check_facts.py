@@ -141,13 +141,27 @@ class CheckFactsTestCase(unittest.TestCase):
         issues = self.run_on(doc(body))
         self.assertTrue(any("missing @decimals" in i for i in issues))
 
-    def test_decimals_inf_is_flagged(self):
+    def test_decimals_inf_on_an_exact_value_is_allowed(self):
+        """SEC prescribes INF for exact amounts, so this must NOT be flagged.
+
+        EDGAR XBRL Guide section 6.6.4 gives INF as the correct decimals value
+        for an exact monetary, percentage or basis-point amount. Flagging every
+        INF reported a defect against conformant filings.
+        """
         body = (
             CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
-            ' decimals="INF">5</ix:nonFraction>'
+            ' decimals="INF">1234.56</ix:nonFraction>'
+        )
+        self.assertEqual(self.run_on(doc(body)), [])
+
+    def test_decimals_inf_on_a_rounded_value_is_flagged(self):
+        """The actual defect EFM 6.05.48 names: INF asserting a rounded figure."""
+        body = (
+            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
+            ' decimals="INF">45000</ix:nonFraction>'
         )
         issues = self.run_on(doc(body))
-        self.assertTrue(any("INF" in i for i in issues))
+        self.assertTrue(any("INF" in i for i in issues), f"got {issues}")
 
     def test_unresolved_context_is_flagged(self):
         body = (
