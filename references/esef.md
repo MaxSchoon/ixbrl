@@ -23,15 +23,24 @@ parent entities preparing IFRS consolidated annual financial reports.
 **Article-level requirements:**
 
 - **Article 3** — Issuers must prepare the **entire annual financial report in XHTML format** (single human-readable rendering).
-- **Article 4** — Where the AFR contains **IFRS consolidated financial statements**, those statements must be **marked up using Inline XBRL** referencing elements in the ESEF core taxonomy (Annex VI).
-- **Article 6** — Block tagging of notes: from financial years beginning on or after 1 January 2022, issuers must mark up disclosures in the IFRS consolidated financial statements that correspond to the elements in **Annex II Table 2**.
+- **Article 4** — Where the AFR contains **IFRS consolidated financial statements**, issuers must **mark up those statements** (Art. 4(1)), covering at a minimum the disclosures specified in **Annex II** (Art. 4(2)) — the Annex II Table 2 block-tagging obligation applying from financial years beginning on or after 1 January 2022. Markup uses the **XBRL markup language** and a taxonomy whose elements are those of the **core taxonomy** (Annex VI plus the presentation, calculation, label and definition linkbases, per Art. 2(1)); where it is not appropriate to use a core element under Annex IV point 4, the issuer must create **extension taxonomy elements** in accordance with Annex IV (Art. 4(4)). Article 4 does not itself impose Inline XBRL; that requirement sits in Article 6.
+- **Article 6** — Common rules on markups: markups made under Articles 4 and 5 must be **embedded in the XHTML annual financial report using the Inline XBRL specifications set out in Annex III** (Art. 6(a)), and must respect the **marking up and filing rules set out in Annex IV** (Art. 6(b)).
 - **Article 8** — Effective dates: detailed primary-statement tagging from financial years beginning on or after 1 January 2020; block tagging of notes from financial years beginning on or after 1 January 2022. (Some Member States including the Netherlands took a one-year deferral, so first NL filings landed in 2022.)
 
 **Annex II** lists IFRS disclosures subject to mandatory tagging — Table
 1 (detailed tagging from 2020) and Table 2 (block tagging from 2022).
-**Annex IV** (Markup rules) contains the technical mark-up
-specification: §9(b) is the wider-narrower anchoring obligation for
-extension elements. **Annex VI** lists the core ESEF taxonomy concepts.
+**Annex III** sets the applicable specifications: the Inline XBRL
+instance document must be valid against **Inline XBRL 1.1** and conform
+to the **XBRL Units Registry** (point 1); extension taxonomy files must
+be valid against **XBRL 2.1** and **XBRL Dimensions 1.0** (point 2); the
+report is submitted as a single reporting package conforming to **Report
+Packages 1.0** (point 3, as amended by Delegated Regulation (EU)
+2023/2686); and, as added by Delegated Regulation (EU) 2025/19, the
+instance must be valid against the **Calculations 1.1** specification
+(point 5). **Annex IV** (Marking up and filing rules) contains the
+technical mark-up specification: §9(b) is the wider-narrower anchoring
+obligation for extension elements. **Annex VI** lists the core ESEF
+taxonomy concepts.
 
 ## 2. The ESEF Reporting Manual
 
@@ -51,11 +60,11 @@ it operationally, so non-conformance materially raises filing risk.
 - **Section 3** — Extension taxonomy construction (DTS structure, labels, presentation, calculation, dimensional validity).
 - **Section 4** — Filings without IFRS consolidated statements (XHTML-only).
 
-**Ten consequential rules every preparer/auditor should know:**
+**Eleven consequential rules every preparer/auditor should know:**
 
 1. **Guidance 1.4.1 — Anchoring extension elements wider.** Each extension concept used in primary statements must be anchored to the closest **wider** ESEF/IFRS taxonomy concept. Anchoring is not required for extensions used only in notes/accounting policies.
-2. **Guidance 1.2.2 — Replicating IFRS concepts.** Extensions that replicate IFRS concepts are permitted when a current-year IFRS concept is not yet incorporated into the ESEF taxonomy.
-3. **Guidance 1.9 — Block tagging.** Defines text-block tag construction for notes; clarifies that an "umbrella" single block tag covering all notes is unnecessary; mandatory Annex II elements take precedence over optional Annex VI choices.
+2. **Guidance 1.2.2 — IFRS elements not yet in the ESEF taxonomy.** Where the IFRS Taxonomy contains an element corresponding to a disclosure but the ESEF taxonomy does not yet include it, the issuer *should* define an extension element whose name, label and XBRL characteristics correspond to those of the IFRS element (ESMA's worked example: `issuer_prefix:PropertyPlantAndEquipmentIncludingRightofuseAssets` mirroring `ifrs-full:PropertyPlantAndEquipmentIncludingRightofuseAssets`). Rollover: as soon as the element is included in the ESEF core taxonomy as published in the EU Official Journal, the issuer adopts the ESEF element — and uses it for the comparative figures in the current report too, since the RTS requires every number in a declared currency presented in the primary financial statements, comparatives included, to be marked up.
+3. **Guidance 1.9 — Block tagging.** Issuers shall, as a minimum, mark up the information in the IFRS consolidated financial statements — headers and titles included — with the Annex II `textBlockItemType` elements (1.9.1). Where one disclosure corresponds to more than one Annex II element of different granularity, preparers should apply each of them and multi-tag the information to the extent that matches its accounting meaning, rather than choosing between the wider and the narrower element (1.9.1). ESMA recommends that the lowest level of block-tagging granularity be the individual table within a note: the tag goes on the whole table, not on selected rows or columns (1.9.2). A disclosure with no corresponding Annex II element need not be block tagged, and no extension element need be created for it (1.9.3). Mandatory Annex II elements take precedence over the optional Annex VI elements even where an Annex VI element has a closer accounting meaning (footnote 21).
 4. **Guidance 2.2.5 — Tagging of dashes and empty fields.** Dashes representing zero use a transformation (`ixt:fixed-zero`); truly empty cells are tagged with `xsi:nil="true"`.
 5. **Guidance 2.2.6 — Readability after extraction.** Word and number ordering, spacing, and tabular structure of block-tagged content must be machine-readable in a way that is faithful to the visual report.
 6. **Guidance 2.6.1 — Report Package conformance.** The submitted ZIP must conform to the XBRL Taxonomy/Report Package Specification.
@@ -63,6 +72,7 @@ it operationally, so non-conformance materially raises filing risk.
 8. **Section 3.4 series — Labels.** Each extension carries a standard label in the entity's reporting language; preferred-label roles supplied where presentation arcs require them.
 9. **Guidance 3.1.2 — Correct ESEF taxonomy entry point.** The DTS must import the ESEF entry point matching the financial year.
 10. **Guidance 2.4 — Hidden facts.** Facts in `ix:hidden` must either be transformable element types or carry the specific `-esef-ix-hidden` style tying them to a visible value; hidden non-transformable facts must not duplicate visible content.
+11. **Guidance 1.2.1 — Non-endorsed IFRS elements are for third-country issuers only.** The ESEF taxonomy contains all elements of the IFRS Taxonomy regardless of their endorsement status in the EU, but the elements corresponding to IFRS not endorsed by the EU exist solely to let third-country issuers listed in the EU (equivalence under Commission Decision 2008/961/EC) comply. EU issuers should under no circumstances use those elements to tag their consolidated financial statements, because doing so would breach Regulation (EC) No 1606/2002 by cross-reference to Annex IV §3 of the RTS.
 
 ### 2.1 ESEF audit and assurance
 
@@ -173,10 +183,30 @@ for every extension. English labels widely recommended (and many NCAs
 prefer it). Missing labels raise
 `ESEF.3.4.5.missingLabelForRoleInReportLanguage`.
 
-**ESEF Conformance Suite** — published annually by ESMA. Targeted at
-software vendors but the de facto reference for what NCAs (and Arelle)
-actually check. Each rule has at least one valid and one invalid test
-sample. https://www.esma.europa.eu/document/esef-conformance-suite-2024
+**ESEF Conformance Suite** — maintained by ESMA and reissued most
+years. Targeted at software vendors but the de facto reference for what
+NCAs (and Arelle) actually check. Each rule has at least one valid and
+one invalid test sample. The current edition is the **ESEF Conformance
+Suite 2025**, published 21 April 2026, which ESMA describes as 215
+packages grouped into 68 tests:
+https://www.esma.europa.eu/document/esef-conformance-suite-2025
+
+**ESEF Taxonomy 2025** was published the same day
+(https://www.esma.europa.eu/document/esef-taxonomy-2025, package
+`esef_taxonomy-2025_12_31.zip`). Its entry points sit under
+https://www.esma.europa.eu/taxonomy/2025-03-27/ — a core entry point
+(`esef_cor.xsd`) plus two alternative entry points, `esef_ias_1.xsd`
+and `esef_ifrs_18.xsd`, allowing an issuer to report under either IAS 1
+or IFRS 18. The 2025 package is aimed at 2026 IFRS consolidated
+financial statements; the RTS in force for FY2025 reports remains
+2019/815 as amended by Delegated Regulation (EU) 2025/19, so entry-point
+matching still keys on the financial year. IFRS 18 is effective for
+financial years beginning on or after 1 January 2027 with early
+application permitted, the availability of the IFRS 18 entry point
+imposes no obligation to adopt it earlier, and IFRS 18 and IFRS 19
+elements may be used only once those standards are formally endorsed at
+EU level. ESMA has stated that it does not plan to amend the ESEF RTS or
+taxonomy in 2026, so do not assume a further annual release.
 
 **Common rejection grounds:** invalid LEI in the context entity scheme,
 mismatched ESEF entry point, untagged Annex II elements, anchoring
@@ -222,11 +252,14 @@ ESEF is harmonised but each Member State runs its own filing portal
 
 ## 8. Common ESEF validation errors
 
-Codes verbatim from Arelle `validate/ESEF/ESEF_Current/ValidateXbrlFinally.py`:
+Codes verbatim from the Arelle ESEF plugin
+(`arelle/plugin/validate/ESEF/`); all but
+`ESEF.2.6.3.disallowedReportPackageFileExtension`, which is raised from
+the plugin's `__init__.py`, sit in `ESEF_Current/ValidateXbrlFinally.py`:
 
 | Code | What it detects | Manual / RTS link |
 |---|---|---|
-| `ESEF.2.1.1.invalidIdentifier` / `nonLEIContextScheme` | Context entity identifier is not a valid LEI | RTS Annex IV §6 / Manual §2.1.1 |
+| `ESEF.2.1.1.nonLEIContextScheme` / `invalidIdentifierFormat` / `invalidIdentifier` | Context `xbrli:identifier/@scheme` is not `http://standards.iso.org/iso/17442` (warning), or the identifier is not a well-formed LEI / fails the ISO 17442 check-digit test (error) | RTS Annex IV §2 / Manual §2.1.1 |
 | `ESEF.2.1.3.scenarioContainsNonDimensionalContent` / `segmentUsed` | Use of `xbrli:segment` or non-dimensional `xbrli:scenario` content | Manual §2.1.3 |
 | `ESEF.2.2.1.precisionAttributeUsed` | `precision` attribute on numeric facts | Manual §2.2.1 |
 | `ESEF.2.2.3.incorrectTransformationRuleApplied` | Wrong ixt transformation or wrong namespace | Manual §2.2.3 |
@@ -240,6 +273,11 @@ Codes verbatim from Arelle `validate/ESEF/ESEF_Current/ValidateXbrlFinally.py`:
 | `ESEF.3.3.1.ExtensionConceptAnchoredToAbstractConcept` | Extension anchored to an abstract base concept | Manual §3.3.1 / Annex IV §9 |
 | `ESEF.3.4.5.missingLabelForRoleInReportLanguage` | Extension lacks a standard label in the report language | Manual §3.4.5 |
 | `ESEF.3.4.7.singleExtendedLinkRoleUsedForAllPFSs` | A single ELR used to organise all four primary statements | Manual §3.4.7 |
+
+Forward-looking: from the ESEF Taxonomy 2025 onward the DTS may import
+either the IAS 1 or the IFRS 18 entry point, so
+`requiredEntryPointNotImported` becomes a two-way check once issuers
+report under IFRS 18. That is not a current validation trigger.
 
 NCA post-filing review reports (notably AMF) consistently flag
 **incorrect signs**, **calculation inconsistencies**, and
@@ -255,9 +293,10 @@ errors.
 - https://finance.ec.europa.eu/document/download/ce847777-0caa-47e1-8a9a-fcac34943878_en?filename=211109-ceaob-esef-guidelines-auditors_en.pdf
 - https://www.esma.europa.eu/sites/default/files/library/esma32-60-254_esef_reporting_manual.pdf
 - https://www.esma.europa.eu/document/esef-reporting-manual
-- https://www.esma.europa.eu/document/esef-conformance-suite-2024
+- https://www.esma.europa.eu/document/esef-conformance-suite-2025
+- https://www.esma.europa.eu/document/esef-taxonomy-2025
 - https://www.esma.europa.eu/issuer-disclosure/electronic-reporting
-- https://github.com/Arelle/Arelle/blob/master/arelle/plugin/validate/ESEF/ESEF_Current/ValidateXbrlFinally.py
+- https://github.com/Arelle/Arelle/tree/master/arelle/plugin/validate/ESEF
 - https://www.xbrl.org/Specification/taxonomy-package/REC-2016-04-19/taxonomy-package-REC-2016-04-19.html
 - https://www.xbrl.org/guidance/esef-rules-anchoring-extensions/
 - https://www.xbrl.org/guidance/esef-rules-anchoring-extensions-examples/

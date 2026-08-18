@@ -82,14 +82,14 @@ applied to financial periods starting in 2024) [S6][S7].
 > Confirm against the superseded decision PDFs before relying on the exact
 > vintage identifiers.
 >
-> **Honest gap.** The full **operative paragraph text** of both decision
-> PDFs was **not extracted** this session — only the Finlex metadata /
-> legal basis for PRH/1087 and PRH's own summary pages were fetched. The
-> PRH/1088 Finlex page body rendered only its JavaScript shell; its
-> existence, title, and 24.6.2026 date are confirmed via [S7], but the
-> body was not read. **For verbatim normative wording, pull the
-> downloadable PDFs from the Finlex pages in *Primary sources — what each
-> establishes* below** — do not paraphrase a clause you have not read.
+> **Partial extraction.** The Finlex detail pages render only a JavaScript
+> shell, but the decision PDFs are downloadable from Finlex's media
+> endpoint, and the sections quoted in this file — **PRH/1087 ss. 3 and 5**
+> and **PRH/1088 s. 1** — were extracted from those PDFs and are quoted
+> verbatim here [S6][S9]. The **remaining sections of both decisions have
+> not been read**. **For any clause not quoted here, pull the downloadable
+> PDFs from the Finlex pages in *Primary sources — what each establishes*
+> below** — do not paraphrase a clause you have not read.
 
 ### The two-stage mandate — keep these distinct
 
@@ -123,12 +123,37 @@ formally in train: **government bill HE 96/2026 vp**
 21 May 2026; Finlex
 <https://www.finlex.fi/fi/hallituksen-esitykset/2026/96>; TEM project
 TEM027:00/2025) proposes amending the Accounting Act, Trade Register Act
-§ 11 and Auditing Act to make digital XHTML filing (with defined data
-XBRL-tagged) **mandatory for all limited companies** and for open/limited
-partnerships whose general partners are limited companies, phased from
-financial years starting **1 Jul 2027** (1 Jul 2028 for companies without
-an audit obligation). The bill is **pending in Parliament as of
-2026-07-07** — filing stays voluntary until enacted.
+§ 11 and Auditing Act to make digital preparation and registration of the
+financial statements and management report (XHTML, with the data PRH
+designates tagged in iXBRL) **mandatory for a "digitaalisesti raportoiva
+kirjanpitovelvollinen"** — proposed **KPL 3:8 § 2 mom**: an entity
+registered as an `osakeyhtiö`, and an `avoin yhtiö` / `kommandiittiyhtiö`
+whose partners (in a `kommandiittiyhtiö`, the general partners) are such
+companies, including nested chains of them [S18].
+
+Two carve-outs, and they are **not** the same kind:
+
+- **Hard exclusion.** Proposed **KPL 3:8 § 4 mom** disapplies the
+  digitally-reporting-entity provisions to **luottolaitokset** (credit
+  institutions), **vakuutusyhtiöt** (insurance companies),
+  **työeläkeyhtiöt** (employment-pension companies) **and their branches** —
+  even though those are `osakeyhtiö`-form entities. "All limited companies"
+  therefore overstates the bill [S18].
+- **Not mandatory, but permitted.** `osuuskunnat`, `asunto-osakeyhtiöt`,
+  `säätiöt`, `yhdistykset` and other private-law legal persons fall outside
+  the mandate (*"ei koskisi pakottavana"*), but proposed **KPL 3:9 § 6 mom**
+  lets them use the digital form for register filing once PRH issues a
+  decision governing the procedure for that legal form [S18].
+
+Sustainability-reporting companies stay governed exhaustively by Accounting
+Act ch. 7, not by these proposed provisions. The bill implements Directives
+(EU) 2017/1132, (EU) 2019/1151 and **(EU) 2025/25** (the second digital
+directive, amending 2009/102/EC and (EU) 2017/1132) [S18]. Phasing runs from
+financial years starting **1 Jul 2027** (**1 Jul 2028** for
+digitally-reporting entities with no obligation to appoint an auditor). The
+bill is **pending in Parliament as of 2026-08-18** — referred to the
+Commerce Committee (talousvaliokunta) 27 May 2026, no committee report yet —
+so filing stays voluntary until enacted [S18].
 
 ### Bi-temporal cheatsheet — which vintage applies to which period
 
@@ -142,7 +167,7 @@ today's date.
 | Structured **taxonomy markup** (PRH identifiers) mandatory | periods starting **on/after 1 Jan 2026** | FY2025 permitted XHTML **without** PRH identifiers [S1][S4]. |
 | **SBR-DPM-2025-12-31** is the SBR version to mark up FAS statements against | periods starting **1 Jan 2026** at latest | PRH confirms the company-reporting SBR parts each year-end; the confirmed spec applies to periods starting the following year [S2][S4]. |
 | ESEF ZIP **also** filed to the Trade Register (not only to the OAM) | financial year starting **2024** onward | Listed issuers re-use their ESEF artifact [S2][S3]. |
-| **Law 555/2026** narrows CSRD scope (turnover >€450M **and** >1,000 employees) | periods starting **on/after 1 Jul 2026** (opt-in from 1 Jan 2026) | In force 30 Jun 2026; PRH repealed & replaced both decisions [S7] (see *The 2026 scope change — law 555/2026*). |
+| **Law 555/2026** narrows CSRD scope (turnover >€450M **and** >1,000 employees on average, **in both the last completed and the immediately preceding financial year**) | periods starting **on/after 1 Jul 2026** (opt-in from 1 Jan 2026) | In force 30 Jun 2026; PRH repealed & replaced both decisions [S7] (see *The 2026 scope change — law 555/2026*). |
 | FY2026 **entry-trigger**: a company that *becomes* sustainability-reporting-obligated on/after 1 Jul 2026 | its FS for periods starting **on/after 1 Jul 2026** | The decision applies from that entry point [S10]. |
 
 When uncertain, **state the vintage you are applying** before declaring a
@@ -238,26 +263,36 @@ ESEF ZIP internal structure [S8]:
 
 ```text
 <LEI>.zip
-├── META-INF/
-│   ├── reportPackage.json
-│   ├── taxonomyPackage.xml
-│   └── catalog.xml
-├── <taxonomy folder>/
-│   ├── taxonomy.xsd
-│   └── taxonomy-linkbase.xml
-├── reports/
-│   └── report-1.html
-├── companyprofit.xhtml            # profit-use decision (free-form XHTML)
-├── generalmeetingdecision.xhtml   # adoption-date decision (free-form XHTML)
-└── <auditreport>.xhtml            # if applicable
+└── <report-package folder>/          # PRH example: acme-x42-submission-2022/
+    ├── META-INF/
+    │   ├── reportPackage.json
+    │   ├── taxonomyPackage.xml
+    │   └── catalog.xml
+    ├── <taxonomy folder>/            # PRH example: xbrl.example.com/v1/
+    │   ├── taxonomy.xsd
+    │   └── taxonomy-linkbase.xml
+    ├── reports/
+    │   └── report-1.html
+    ├── companyprofit.xhtml           # profit-use decision (free-form XHTML)
+    ├── generalmeetingdecision.xhtml  # adoption-date decision (free-form XHTML)
+    └── <auditreport>.xhtml           # if applicable; from PRH's prose, not
+                                      # part of its published example tree
 ```
+
+Note the level PRH's own example shows and that is easy to collapse: a
+**single top-level report-package directory** sits between the ZIP and
+`META-INF/`, and the free-form attachments sit **inside that directory**,
+not at the ZIP root. The XBRL Report Packages specification requires exactly
+one such top-level directory.
 
 Packaging rules from the PRH example [S8]:
 
 - The free-form adoption-date and profit-decision documents (and any audit
   report) are attached **in XHTML to the MAIN folder** of the ZIP —
-  **not** to the `reports/` folder.
+  **not** to the `reports/` folder. "MAIN folder" here means that single
+  top-level report-package directory, **not** the ZIP root.
 - **If you add PDF files to the ZIP you cannot file it via ytj.fi** [S8].
+- **Filenames must not contain `å`, `ä` or `ö`** [S8].
 - **File naming** follows ESMA's ESEF Reporting Manual: name = **LEI code
   (or name, max 20 chars) + financial-period end date `YYYY-MM-DD` +
   report language (`fi` or `sv`)**; both the main folder and the
@@ -312,8 +347,18 @@ population obliged to do sustainability reporting — Finland's transposition
 of the EU CSRD "Omnibus" simplification [S7].
 
 - **New threshold:** a sustainability report must be prepared and filed
-  only if the company or group has **turnover over €450 million AND more
-  than 1,000 employees** [S7].
+  only if, **in both the last completed and the immediately preceding
+  financial year** (*"viimeksi päättyneellä ja sitä edeltäneellä
+  tilikaudella"*), the company or group parent had **on average more than
+  1,000 employees AND turnover of more than €450 million** — Accounting Act
+  **ch. 7 s. 1(1)** as amended by law 555/2026 [S7][S19]. The two-year
+  condition governs **both** limbs: one qualifying year is not enough, and a
+  company that fell below either limit in the preceding year is out of scope.
+- **Group-level duty:** Accounting Act **ch. 7 s. 19(1)** applies the same
+  two-limb, two-year test at group level — where the group met both limits in
+  both years, the group management report must contain a **consolidated
+  sustainability report as a separate section**
+  (*konsernikestävyysraportti*) [S19].
 - **Voluntary commitment:** a company may voluntarily commit to preparing
   an **ESRS-compliant** sustainability report, in which case it must also
   comply with the digital-financial-statement requirements [S7].
@@ -357,6 +402,28 @@ MB**, and the statements must be filed **as a ZIP package** [S1][S10].
 > emit a `.xbri`.** Whether/when PRH will accept `.xbri` is **unknown** —
 > no roadmap was found.
 
+**Closed-interface format rule — what may stay plain XHTML.** Under PRH's
+**closed interface** (PRH/1087/01/2026 s. 2(a)), copies of the financial
+statements and of the documents registrable with them go in **iXBRL (Inline
+XBRL) in XHTML**. The **toimintakertomus** (management report), the
+**tilintarkastuskertomus** (audit report) and the **kestävyysraportin
+varmennuskertomus** (sustainability assurance report) may nonetheless be
+included in the notification as **plain XHTML** *for as long as PRH has not
+confirmed PRH identifiers (a taxonomy) applicable to those sections of the
+financial-statement notification* — s. 3 [S6]. Where a document is XHTML
+prepared in iXBRL, the data must be presented according to the applicable
+taxonomy PRH has prescribed [S6]. The carve-out list is **exactly those
+three documents**; it does **not** reach the auditor's statement under
+Securities Markets Act ch. 7 s. 8(4) (item 4 of s. 1 of the decision) [S6].
+
+> **Read the carve-out through the Swedish text.** The Finnish sentence
+> carries a drafting double negative — "*jollei PRH **ei** ole vahvistanut
+> näihin tilinpäätösilmoituksen osioihin soveltuvia PRH-tunnisteita
+> (taksonomiaa)*" — which, read literally, inverts the rule. The equally
+> authentic Swedish text resolves it: "*om PRS **inte har fastställt**
+> PRS-identifieringar (taxonomi) som lämpar sig för de här avsnitten i
+> bokslutsanmälan*" [S6].
+
 **Required attachments (free-form XHTML in the package).** The notification
 must also state the **date the statements were adopted** and the
 **decision on the use of the company's profits / co-operative surplus**;
@@ -373,9 +440,15 @@ Three taxonomy families, chosen by **accounting framework** [S2][S4]:
 
 **Mixed-basis rule.** If the **consolidated** statements are IFRS and the
 **parent's own** statements are FAS, tag the consolidated with the **IFRS**
-taxonomy and the parent with the **SBR** taxonomy [S2]. The PRH-identifiers
-markup obligation does **not** apply to the consolidated figures of ESEF
-reporters or to IFRS preparers — those follow ESEF/IFRS [S4].
+taxonomy and the parent with the **SBR** taxonomy [S2]. The decision's
+markup rules do **not** reach information that must be reported under
+**ESEF** requirements (PRH/1088/01/2026 s. 1 para 3: *"ei koske
+ESEF-vaatimusten mukaan raportoitavia tietoja"*) — in practice a listed
+issuer's consolidated figures, which are marked up with the ESEF taxonomy.
+**IFRS preparers remain in scope**: s. 1 para 2 requires them to mark up
+using the **IFRS Accounting Taxonomy confirmed by the IFRS Foundation for
+each reporting period**. The parent company's own figures must always be
+marked up with either the SBR (FAS) or the IFRS taxonomy [S4][S9].
 
 ### Filing channels, signatures, deadline, tax forwarding, language
 
@@ -431,13 +504,37 @@ Act **chapter 3, section 5** (and Finnish Accounting Board statement
 **`sv`** [S8]. The **sustainability report** must be drafted in FI/SV and
 **assured** (KRT / audit-firm assurance report attached) [S7][S8]. **XBRL
 markup is not yet required** in the sustainability report or its assurance
-report, because the Commission has not yet adopted the **ESRS XBRL
-taxonomy** (EFRAG work) [S8].
+report. Two independent grounds run in parallel and should not be collapsed
+into one: at **EU level**, the Commission has not adopted an **ESRS XBRL
+taxonomy** (EFRAG work), and Omnibus I recital 24 suspends the mark-up duty
+until marking-up rules are adopted via Reg (EU) 2019/815 [S8][S13];
+**nationally**, PRH/1087/01/2026 s. 3 lets the toimintakertomus and the
+assurance report stay plain XHTML for as long as PRH has confirmed no
+applicable PRH identifiers for those sections [S6]. Because item 2 of s. 1
+of that decision places the **kestävyysraportti inside the
+toimintakertomus**, it is the national PRH-identifier condition that
+actually governs its markup at the Trade Register (see *Packaging and
+artifact shape — XHTML-in-ZIP, NOT `.xbri`*).
 
-**Stale-document correction.** A company that mistakenly filed a **PDF**
-must **also** file the digital statement via ytj.fi or the interface; the
-digital one registers as the latest version, but the PDF is **not**
-de-registered and remains in Virre [S1].
+**Corrections are whole-package resubmissions.** If a filer reports
+corrections to the registrable data, **all documents must be delivered to
+PRH again as one whole** (*"kaikki asiakirjat on yhtenä kokonaisuutena
+toimitettava uudelleen"*), in the manner set out earlier in the decision —
+that is, through the same channels (the closed interface via software,
+ytj.fi, or the exception web form) and in the same format (iXBRL in XHTML,
+or a ZIP package, max 200 MB; ESEF consolidated statements per s. 4) —
+PRH/1087/01/2026 s. 5 [S6]. **There is no partial or delta correction.** The
+duty binds companies within Accounting Act ch. 7 s. 1 sustainability
+reporting and companies that have committed to sustainability reporting
+(s. 1), for documents filed for registration **on or after 1 Jan 2026**
+(s. 6); the decision replaces PRH/2287/01/2025 [S6].
+
+**Stale-document correction (PRH web-page guidance, subordinate to s. 5).**
+A company that mistakenly filed a **PDF** must **also** file the digital
+statement via ytj.fi or the interface; the digital one registers as the
+latest version, but the PDF is **not** de-registered and remains in Virre
+[S1][S10]. That describes what happens to a legacy PDF filing; it is not
+the correction rule itself, which is s. 5 above.
 
 ## Validation
 
@@ -519,8 +616,10 @@ order; each step depends on the prior being clean.
    sustainability reporters; the markup obligation is FY2026+ [S1][S4].
 2. **Pin the filing obligation.** Sustainability-reporting company under
    the **post-555/2026** threshold (turnover >€450M **and** >1,000
-   employees, or a voluntary ESRS committer)? For everyone else digital
-   filing is voluntary and its **absence is not a defect** [S1][S7].
+   employees on average, in **both** the last completed and the immediately
+   preceding financial year, or a voluntary ESRS committer)? For everyone
+   else digital filing is voluntary and its **absence is not a defect**
+   [S1][S7][S19].
 3. **Choose the validation profile — honestly.** IFRS/ESEF → validate as
    ESEF (`references/esef.md`, plugin present [S12]). FAS/SBR → **core XBRL 2.1 +
    iXBRL 1.1 + SBR taxonomy-package resolution only**; **no** PRH Arelle
@@ -528,12 +627,18 @@ order; each step depends on the prior being clean.
    Arelle FI/PRH plugin exists (honest gap) + what PRH's interface checks*.
 4. **Check the package shape.** **XHTML-in-ZIP**, ≤ **200 MB**, **not** a
    `.xbri` [S1][S10]. ESEF re-use path: adoption-date + profit-decision
-   XHTML (and audit report) in the **main folder**, not `reports/`; no PDF
-   if it will go via ytj.fi; ESMA naming `<LEI>-YYYY-MM-DD-fi|sv` [S8].
+   XHTML (and audit report) in the **main folder** — the single top-level
+   report-package directory, not the ZIP root and not `reports/`; no PDF
+   if it will go via ytj.fi; no `å`, `ä` or `ö` anywhere in the filenames;
+   ESMA naming `<LEI>-YYYY-MM-DD-fi|sv` [S8].
 5. **Check attachments + assurance.** Adoption date and profit-use /
    surplus decision present as free-form XHTML; minutes **not** required
    [S1][S8]. Sustainability reporters: report in FI/SV, KRT/audit-firm
    assurance report attached; **no** XBRL markup expected in it yet [S7][S8].
+   Check the **national** condition, not only the missing ESRS taxonomy: the
+   management report, audit report and assurance report may be plain XHTML
+   for as long as PRH has confirmed no PRH identifiers applicable to those
+   sections (PRH/1087/01/2026 s. 3) [S6].
 6. **Content-level review.** No validator confirms fidelity to the source
    statements — read the rendered report as a financial professional
    (`references/conversion.md` §10).
@@ -592,8 +697,9 @@ forwarding.
 
 This file is a reviewer's working reference, not the legal source. Defer
 to and cite: the **two PRH decision PDFs** at Finlex [S6][S9] before
-quoting any normative clause (this file cites only their metadata and PRH's
-summary pages); the **PRH digital-FS pages** [S1][S2][S4][S5][S8][S10] for
+quoting any normative clause this file does not already quote verbatim
+(only PRH/1087 ss. 3 and 5 and PRH/1088 s. 1 have been read); the
+**PRH digital-FS pages** [S1][S2][S4][S5][S8][S10] for
 operative filing/taxonomy/interface/packaging guidance; the **Accounting
 Act (Kirjanpitolaki 1336/1993)** ch. 3 s. 5 (language) and ch. 7 ss. 22–25
 (format + markup power) and **law 555/2026** [S7] at `finlex.fi`; and
@@ -612,8 +718,9 @@ a wrong citation on a regulated filing is high.
 
 ### Primary sources — what each establishes
 
-All fetched live this session. For verbatim normative wording of the two
-PRH decisions, pull the PDFs from the Finlex pages ([S6], [S9]).
+All fetched live this session. For any clause of the two PRH decisions not
+quoted verbatim in this file, pull the PDFs from the Finlex media endpoints
+given in [S6] and [S9].
 
 - **[S1]** PRH — *Digital financial statements of limited liability
   companies to the Finnish Trade Register* (EN):
@@ -650,15 +757,27 @@ PRH decisions, pull the PDFs from the Finlex pages ([S6], [S9]).
   filings are copies.
 - **[S6]** Finlex — technical-filing decision **PRH/1087/01/2026**:
   <https://www.finlex.fi/fi/viranomaiset/maarayskokoelmat/patentti-ja-rekisterihallitus/2026/2>
-  — type Määräys; issued & in force 24.6.2026; legal basis Kirjanpitolaki
-  1336/1993 ch. 7 §§ 23, 24, 25 + kaupparekisterilaki 564/2023 § 1(3);
-  downloadable PDF (FI/SV). Metadata captured; **PDF body not extracted**.
+  — type Määräys; issued & in force 24.6.2026; legal basis Accounting Act
+  ch. 7 §§ 23, 24, 25 + kaupparekisterilaki 564/2023 § 1(3) (the Finlex
+  metadata field renders the Act's number as *1336/1993*; the Act's own
+  number is **1336/1997** — see [S19]). The operative text **is**
+  extractable: FI PDF
+  <https://www.finlex.fi/api/media/authority-regulation/1072570/mainPdf/main.pdf>,
+  SV twin at `…/1072569/…`. **s. 3** (closed-interface format; the
+  plain-XHTML carve-out for the toimintakertomus, tilintarkastuskertomus and
+  kestävyysraportin varmennuskertomus, conditional on PRH having confirmed
+  no applicable PRH identifiers) and **s. 5** (corrections are whole-package
+  resubmissions) are quoted in this file; **s. 6** applies the decision to
+  documents filed for registration on/after 1 Jan 2026 and it replaces
+  PRH/2287/01/2025 (19.12.2025). Other sections not read.
 - **[S7]** PRH news 2026 — CSRD scope narrowed, law 555/2026 (FI):
   <https://www.prh.fi/fi/tietoa_prhsta/uutislistaus/tiedotteet/2026/kestavyysraportointi-laki-muuttuu.html>
   — Accounting Act amendment **555/2026** in force 30 Jun 2026 narrows
-  scope to **turnover >€450M AND >1,000 employees**; periods starting
-  on/after 1.7.2026 (opt-in from 1.1.2026); PRH repealed & replaced both
-  decisions (**PRH/1088** + **PRH/1087**); markup rules unchanged; voluntary
+  scope to **turnover >€450M AND >1,000 employees** (the statutory
+  two-year condition on both limbs is in the Act itself — see [S19]);
+  periods starting on/after 1.7.2026 (opt-in from 1.1.2026); PRH repealed &
+  replaced both decisions (**PRH/1088** + **PRH/1087**); markup rules
+  unchanged; voluntary
   ESRS commitment triggers digital-FS duties; report assured by KRT.
 - **[S8]** PRH — *How to file a sustainability report …* (EN):
   <https://www.prh.fi/en/companiesandorganisations/financial_statements/limited_liability_companies_co-operatives_and_other_companies/digital/sustainability-reporting/how-to-file.html>
@@ -670,9 +789,14 @@ PRH decisions, pull the PDFs from the Finlex pages ([S6], [S9]).
   taxonomy not yet adopted.
 - **[S9]** Finlex — PRH-identifiers decision **PRH/1088/01/2026**:
   <https://www.finlex.fi/fi/viranomaiset/maarayskokoelmat/patentti-ja-rekisterihallitus/2026/3>
-  — confirms title (*…teknisistä seikoista (PRH-tunnisteet)*) and date
-  (24.6.2026). **Page body not captured** (JS shell only); corroborated by
-  [S7].
+  — title (*…teknisistä seikoista (PRH-tunnisteet)*), issued 24.6.2026,
+  replaces PRH/2288/01/2025; legal basis Accounting Act ch. 7 §§ 23, 24, 25.
+  The Finlex page body is a JS shell, but the PDF is at
+  <https://www.finlex.fi/api/media/authority-regulation/1072572/mainPdf/main.pdf>
+  — **s. 1 paras 2–3** are quoted in this file: IFRS preparers mark up with
+  the IFRS Accounting Taxonomy confirmed by the IFRS Foundation for each
+  reporting period, and the markup rules "*ei koske ESEF-vaatimusten mukaan
+  raportoitavia tietoja*". Other sections not read; corroborated by [S4][S7].
 - **[S10]** PRH — *Osakeyhtiön digitaalinen tilinpäätös* (FI):
   <https://prh.fi/fi/yrityksetjayhteisot/tilinpaatokset/osakeyhtio_ja_osuuskunta_tilinpaatos_kaupparekisteriin/osakeyhtion_sahkoinen_tilinpaatos.html>
   — FY2026 **entry-trigger** rule; 200 MB XHTML ZIP; **PRH cannot receive
@@ -711,3 +835,37 @@ PRH decisions, pull the PDFs from the Finlex pages ([S6], [S9]).
   <https://www.prh.fi/en/companiesandorganisations/financial_statements/digital-financial-reporting.html>
   — PRH "is responsible for the development of digital financial statement
   reporting"; hosts the taxonomy **working group**.
+- **[S18]** Finlex — government bill **HE 96/2026 vp** (*Hallituksen esitys
+  eduskunnalle laeiksi kirjanpitolain, kaupparekisterilain 11 §:n ja
+  tilintarkastuslain muuttamisesta*), given to Parliament 21.5.2026:
+  <https://www.finlex.fi/fi/hallituksen-esitykset/2026/96>; FI PDF
+  <https://www.finlex.fi/api/media/government-proposal/1070036/mainPdf/main.pdf>
+  (SV twin RP 96/2026 rd at `…/1070037/…`)
+  — proposed **KPL 3:8 § 2 mom** defines the *digitaalisesti raportoiva
+  kirjanpitovelvollinen* (osakeyhtiö; avoin yhtiö / kommandiittiyhtiö whose
+  partners, or general partners, are such companies); **§ 4 mom** disapplies
+  the regime to credit institutions, insurance companies,
+  employment-pension companies **and their branches**; proposed **KPL 3:9
+  § 6 mom** permits other legal forms to file digitally once PRH issues a
+  decision for that form; the bill implements Dirs (EU) 2017/1132,
+  (EU) 2019/1151 and **(EU) 2025/25**; entry into force 1.7.2027, applied to
+  financial years starting on/after 1.7.2027 (1.7.2028 where no auditor must
+  be appointed). Status: referred to talousvaliokunta 27.5.2026, **no
+  committee report as of 2026-08-18** (eduskunta open data, VaskiData
+  record 341349).
+- **[S19]** Finlex — **Laki 555/2026** amending the Accounting Act
+  (published 23.6.2026, in force 30.6.2026):
+  <https://www.finlex.fi/fi/laki/alkup/2026/20260555>, and the consolidated
+  **Kirjanpitolaki 1336/1997** carrying the amendment:
+  <https://www.finlex.fi/fi/lainsaadanto/1997/1336>
+  — **ch. 7 s. 1(1)**: the chapter applies to an undertaking or group parent
+  that, "*viimeksi päättyneellä ja sitä edeltäneellä tilikaudella*" (in the
+  last completed **and** the immediately preceding financial year), had on
+  average more than 1 000 employees **and** turnover of more than €450
+  million; Swedish parallel text "*under den senast avslutade och den
+  föregående räkenskapsperioden*". **ch. 7 s. 19(1)** applies the same
+  two-limb, two-year test at group level and requires the
+  *konsernikestävyysraportti* as a separate section of the group management
+  report. Note the Act's number is **1336/1997**, which 555/2026 itself
+  cites, not the *1336/1993* reproduced elsewhere in this file from Finlex's
+  PRH-decision metadata field.

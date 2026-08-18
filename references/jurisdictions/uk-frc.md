@@ -90,14 +90,19 @@ filing.
 | CH: `AverageNumberEmployeesDuringPeriod` a compulsory validated field | **13 Oct 2020** | "Using software to file…", GOV.UK |
 | CH: **software/iXBRL filing voluntary** (alongside web + paper) until the 2028 mandate | Current regime | Same |
 | FCA: onshored TD **ESEF RTS revoked**; requirements relocated into **DTR 4.1.15R–4.1.23G** (unchanged from ESEF; supplemented by **TN/507.2**, July 2025) | **29 July 2023** | FCA page; TN/507.2 |
-| FCA/NSM: **ESEF-2024** (Reg (EU) 2025/19) is the generally-accepted taxonomy (ESEF-2022 before) | AFR deadlines **from 30 April 2026** (FY on/after 1 Jan 2025) | TN/507.2 |
+| FCA/NSM: **ESEF-2024** (Reg (EU) 2025/19) is the generally-accepted taxonomy (ESEF-2022 before) | AFR deadlines **from 30 April 2026** — the earliest deadline in the DTR 4.1.3R four-month range (FY on/after 1 Jan 2025) | TN/507.2 |
 | CH accepts **FRC suites 2026 / 2025 / 2024 / 2023 / 2022** (aligned with HMRC) | From **April 2026** | CH XML Gateway Forum, 22 Dec 2025 |
 | HMRC's free **CATO** filing service closes | **31 March 2026** | COM60040 |
 | CH: **software-only iXBRL accounts mandate** (ECCTA); web + paper accounts routes **close** (see the *Companies House* profile) | **April 2028** | GOV.UK news 9 June 2026; ICAEW |
 
 The FRC's own version policy: **only two suite versions should be in
 use at once — the latest and the penultimate** — to satisfy HMRC full
-tagging. ["2026 FRC Taxonomy Suite", FRC]
+tagging. The 2026 suite was released 18 November 2025 and the 2025 suite
+on 18 October 2024, and "all reporters may elect to use this 2026
+taxonomy suite". This is the FRC's *use* policy, which is a different
+question from what Companies House accepts (see the acceptance row
+above). ["XBRL Tagging Guide – FRC Taxonomies 2026" v13.0, §6.6
+"Taxonomy versioning"]
 
 ### The 2026 suite changed the audit-report tag set — a converter trap
 
@@ -216,12 +221,36 @@ computations or the accounts, not both**; double-tagging is accepted at
 the front end but invites compliance scrutiny. ["Guidance for the CT
 Online Service"]
 
-> **Honest gap.** The stronger DPL claims sometimes cited — "DPL is the
-> *sole* source for Detailed P&L tags"; "no minimum-tagging subset, the
-> whole DPL taxonomy is within the minimum requirement" — come from an
-> unfetched search highlight of the DPL user guide. Fetched HMRC docs
-> confirm only the DPL dates and the accounts-OR-computation rule. Fetch
-> the DPL user guide before asserting the stronger wording.
+The DPL user guide is explicit on both scope and completeness. **Scope**
+(User Guide §2.1): the DPL taxonomies "are only intended for tagging
+data in Detailed P&L statements. They should not be used for tagging data in ordinary
+statutory accounts or in computations" — "tags applied to statutory
+accounts must be sourced from the accounts taxonomies, while tags applied
+to Detailed P&L data must be sourced from the DPL taxonomies". **Sole
+source** (User Guide §2.2): the DPL taxonomies "are intended as the sole
+source of tags for Detailed P&L accounts", and Detailed P&L data "must not be tagged
+using tags in the statutory accounts taxonomies if these tags are not also
+available in the DPL taxonomy presentation views"; the "Detailed Profit
+and Loss" section in the UK GAAP statutory-accounts taxonomy "must not be
+used for tagging Detailed P&L statements". **No minimum-tagging subset**
+(User Guide §2.3): Detailed P&L information "must be tagged
+comprehensively using the available tags in the DPL taxonomies… There is
+no 'minimum tagging' subset of the DPL taxonomies: the whole of the taxonomies should be regarded as
+falling within the HMRC minimum tagging requirement." ["Detailed Profit
+and Loss XBRL Taxonomies – User Guide", HMRC]
+
+**Vintage caveat.** That guide is dated **18 May 2013** and is written for
+the two standalone taxonomies of that era (GAAP DPL and IFRS DPL).
+"Taxonomies accepted by HMRC" §1.3 lists standalone DPL section taxonomies
+only through **FRC 2021 DPL** (AP end 31 March 2024); from the **FRC 2022
+suite** the DPL "has been incorporated as a section within each of the
+current entry points, not separately as its own entry point". The guide
+itself remains operative — still published on GOV.UK's CT
+technical-specifications page (last updated 15 May 2026) and still called
+"essential reading for anyone tagging a DPL statement" by CT Online XBRL
+Technical Pack v2.0 §2.2. ["2022 FRC Taxonomy Suite" release notes,
+FRC §4; "Taxonomies accepted by HMRC"; "CT Online XBRL Technical Pack
+v2.0"]
 
 ### CT technical mechanics and taxonomy-version enforcement
 
@@ -264,6 +293,18 @@ format", FCA]
 - **Filing channel:** AFRs filed in the **National Storage Mechanism**
   (DTR 6.2.2R). A PDF alone does **not** satisfy DTR 4.1; the PIP route
   (DTR 6.2.3G) does **not** apply. [FCA page]
+- **Deadline — the rule behind the dates:** **DTR 4.1.3R** requires an
+  issuer to make its annual financial report public "at the latest four
+  months after the end of each financial year", with a copy filed in the
+  NSM (DTR 6.2.2R). TN/507.2 states the two together: the AFR is to be
+  "prepared and made public (with a copy filed in the NSM) within 4 months
+  of the financial year end (DTR 4.1.3R)". Its taxonomy table therefore
+  shows a **range of possible deadlines**, not a fixed cutover date: the
+  "from 30 April 2026" below is the *earliest* deadline in the range for
+  financial years starting on or after 1 January 2025, matching the common
+  1 January–31 December year; for a financial year starting after
+  1 January the deadline falls correspondingly later. [TN/507.2; FCA
+  Handbook DTR 4.1.3R]
 - **Exemptions:** public-sector issuers (DTR 4.4.1); debt ≥ **EUR
   100,000** denomination (DTR 4.4.2). **Notes block-tagging** since
   **FY2022** (PS20/14). [FCA page]
@@ -304,7 +345,7 @@ system whose names string is `ROS (Ireland)|ROS|ros`, validationType
 `ROS`, defaultLanguage English, with a `rules/ros.py` module and a
 `resources/config.xml`. [Arelle `validate/ROS`]
 
-The FRC 2026 suite ships a separate **"Irish Revenue Taxonomies 2026"**
+The FRC 2026 suite ships a separate **"Irish Revenue Taxonomy 2026"**
 zip (2.9 MB, 18 Nov 2025). The Irish Revenue Extension "enables electronic
 tagging of Irish accounts to support the Irish Revenue Commissioners'
 requirement for iXBRL financial statements as part of the Corporation Tax
@@ -313,11 +354,51 @@ the Republic of Ireland (FRS 101/102/105 and IFRS) in a dedicated Irish
 Taxonomy section (2.3). ["2026 FRC Taxonomy Suite"; XBRL Tagging Guide
 2026]
 
-> **Honest gap.** Irish Revenue's own iXBRL CT filing rules and phase-in
-> thresholds (Revenue eBrief / Tax and Duty Manual) were **not fetched**.
-> ROS coverage here rests on the FRC Irish Revenue Extension description,
-> the Tagging Guide's ROI scope, and the Arelle ROS plugin. Fetch
-> Revenue.ie's iXBRL guidance for the ROI mandate scope and thresholds.
+### The ROI mandate — phases, deferral thresholds, CT1 options, filing window
+
+**Statutory basis.** Section 884 TCA 1997 extends the definition of a
+Corporation Tax return to encompass the financial statements; combined
+with the existing e-filing legislation, that makes electronic financial
+statements part of the return. [Revenue TDM Part 41A-03-01 §1.1]
+
+**Mandate phase-in.** Each phase is gated on **both** a return-filing date
+and an accounting-period-end date — pin both before deciding whether a
+given filing was in scope. [Revenue TDM Part 41A-03-01 §2.1]
+
+| From | Phase | Who, and on what accounting periods |
+|---|---|---|
+| 23 Nov 2012 / 1 Jan 2013 | Voluntary | All CT payers (23 Nov 2012); all income-tax payers (1 Jan 2013) |
+| 1 Oct 2013 | **Phase I** | Customers of Large Corporates Division and High Wealth and Financial Services Division (formerly Large Cases Division), **excluding** Section 110 securitisation SPVs — CT returns filed on/after 1 Oct 2013 for APs ending on/after 31 Dec 2012 |
+| 1 May 2014 | — | The same LCD/HWFSD population's **Section 110 securitisation SPVs** — returns filed on/after 1 May 2014 for APs ending on/after 31 Jul 2013 |
+| 1 Oct 2014 | **Phase II** | All remaining Revenue customers **except** those meeting the deferral criteria — returns filed on/after 1 Oct 2014 for APs ending on/after 31 Dec 2013 |
+| "Later phases to be confirmed" | **Phase III** | All CT payers not covered by Phases I and II — **not implemented**; date and scope still undetermined |
+
+So there is **no universal ROI iXBRL mandate** today: Phase III remains
+unimplemented, and the manual only notes that the mandate may later extend
+to some income-tax filers.
+
+**Phase II deferral criteria — cumulative, not any-of.** A company is
+excluded only if it meets **all three**: balance-sheet total (the
+aggregate of assets *without* deduction of liabilities) not exceeding
+**€4.4m**; turnover not exceeding **€8.8m**; and an average number of
+persons employed, per s.317 Companies Act 2014, not exceeding **50**.
+These thresholds are **not pro-rated** for a long accounting period.
+[Revenue TDM Part 41A-03-01 §2.1]
+
+**CT1 self-classification.** The filer picks one of five options on the
+Form CT1: (1) not mandated but electing to file iXBRL; (2) mandated and
+not excluded by options 3–5; (3) claiming the three-criteria deferral
+exclusion; (4) inactive — no P&L income or expenses and balance-sheet
+movement under €500; (5) in liquidation (other than a voluntary
+liquidation with net assets). **Options 1 and 2 must file iXBRL**; the
+rest complete "Extracts from Accounts" on the CT1 in full. [Revenue TDM
+Part 41A-03-01 §3]
+
+**Filing window.** Revenue's current administrative practice permits the
+iXBRL financial statements to be filed before, at the same time as, or
+**within 3 months after** the CT1 due date. Outside that window the CT1 is
+**deemed incomplete**, which can block refunds and repayments and
+tax-clearance applications. [Revenue TDM Part 41A-03-01 §2.1.1]
 
 ## Jurisdiction-specific invariants
 
@@ -343,25 +424,83 @@ single**, **LLP vs company**, plus a separate **charity** path. [Arelle
 `validate/UK` — see *Validation*]
 
 
-Mandatory items (implementation evidence, Arelle `validate/UK`;
-authoritative source is the Joint Filing Common Validation Checks — see
-*Validation*):
+Mandatory items are **receiver-specific**, and the two published
+instruments do not carry the same list. Split them before declaring an
+absence a defect:
 
-- **Common (all frameworks):** `AverageNumberEmployeesDuringPeriod`,
-  `EntityCurrentLegalOrRegisteredName`,
-  `StartDateForPeriodCoveredByReport`,
-  `EndDateForPeriodCoveredByReport`, `BalanceSheetDate`.
-- **FRS adds:** `DateAuthorisationFinancialStatementsForIssue`,
+- **HMRC (Government Gateway boundary validation) — JFCVC v4.4a, error
+  3312**, tabulated per taxonomy vintage. For the FRS 2022 / 2023 / 2024 /
+  2025 / 2026 taxonomies: `EntityCurrentLegalOrRegisteredName`,
+  `StartDateForPeriodCoveredByReport`, `EndDateForPeriodCoveredByReport`,
+  `BalanceSheetDate`, `DateAuthorisationFinancialStatementsForIssue`,
   `DirectorSigningFinancialStatements`, `EntityDormantTruefalse`,
   `EntityTradingStatus`, `AccountingStandardsApplied`,
-  `AccountsStatusAuditedOrUnaudited`, `LegalFormEntity`,
-  `DescriptionPrincipalActivities`, plus `AccountsType` (FRS-2022) /
-  `AccountsTypeFullOrAbbreviated` (pre-2022).
-- **When the entity has a Companies House registration number** — which
-  includes LLPs, and normally includes charitable companies — the scheme
-  is `http://www.companieshouse.gov.uk/` and
-  `UKCompaniesHouseRegisteredNumber` becomes mandatory. That is the exact
-  value: lowercase `http`, `www.`, and the **trailing slash**. The slash
+  `AccountsStatusAuditedOrUnaudited`, `AccountsType`, `LegalFormEntity`,
+  `DescriptionPrincipalActivities`. The **2021** vintage is identical
+  except that the accounts-type concept is
+  `AccountsTypeFullOrAbbreviated` — so the `AccountsType` (2022+) /
+  `AccountsTypeFullOrAbbreviated` (pre-2022) split holds **for HMRC**. For
+  the +2018 … +2026 FRS **Charities** taxonomies the JFCVC marks legal
+  form of entity, accounts type and description of principal activities
+  "Not Applicable", and for a detected charity submission the rules look
+  **only** for the Trustee variants of the three director-related items.
+  [JFCVC v4.4a]
+- **Companies House (eFiling gateway) — TIS for accounts v5.9 (1 April
+  2026), "FRS – Mandatory elements":** `UKCompaniesHouseRegisteredNumber`
+  (unconditional here), `EntityCurrentLegalOrRegisteredName`,
+  `BalanceSheetDate`, `DateAuthorisationFinancialStatementsForIssue`,
+  `DirectorSigningFinancialStatements`, `EntityDormantTruefalse`,
+  `StartDateForPeriodCoveredByReport`, `EndDateForPeriodCoveredByReport`,
+  `EntityTradingStatus` (via `EntityTradingStatusDimension`),
+  `AccountsStatusAuditedOrUnaudited` (via `AccountsStatusDimension`),
+  `AccountsTypeFullOrAbbreviated` (via `AccountsTypeDimension`),
+  `AccountingStandardsApplied` (via `AccountingStandardsDimension`).
+  `LegalFormEntity` (via `LegalFormEntityDimension`) is **mandatory only
+  for LLP accounts** and must then carry the value
+  `LimitedLiabilityPartnershipLLP` — that qualifier attaches to
+  `LegalFormEntity` alone, not to `AccountsTypeFullOrAbbreviated`.
+  `DescriptionPrincipalActivities` is **not** a CH FRS mandatory element;
+  it is mandatory only in the **CIC34** component of a CIC package. TIS
+  v5.9 also warns that **dimension defaults must not be reported** — a
+  trading entity reports `EntityTradingStatus` *without* the
+  `EntityTradingStatusDimension`. [CH TIS for accounts v5.9]
+- **Charities at Companies House** — the "Charities – Mandatory elements"
+  table is the same core list minus accounts type, legal form and
+  principal activities, plus at least one of
+  `CharityRegistrationNumber{EnglandWales, Scotland, NorthernIreland}`;
+  `AccountsTypeFullOrAbbreviated` is **not** mandatory there, but if
+  present must equal `FullAccounts`. [CH TIS for accounts v5.9]
+- **Divergences to hold in mind**, since they are the reason the split
+  matters. `LegalFormEntity`: always mandatory at HMRC, LLP-only at CH.
+  `DescriptionPrincipalActivities`: always mandatory at HMRC, CIC34-only
+  at CH. Accounts type: CH TIS v5.9's 2026 table still names
+  `AccountsTypeFullOrAbbreviated` where JFCVC v4.4a's 2022–2026 table
+  names `AccountsType`. And `AverageNumberEmployeesDuringPeriod` appears
+  in **neither** instrument's mandatory-element tables — it is enforced by
+  the Arelle `validate/UK` plugin's `COMMON_MANDATORY_ITEMS`, so it fires
+  `JFCVC.3312` locally without a matching published gateway rule (GOV.UK's
+  "Using software to file…" separately describes it as a compulsory
+  validated field from 13 October 2020 — see *Vintage and applicability*).
+  Treat the plugin list as an implementation **superset**, not a receiver
+  requirement. [Arelle `validate/UK` — see *Validation*]
+- **The context entity identifier scheme is a conditional trigger, and the
+  direction matters.** If **at least one context entity uses the scheme**
+  `http://www.companieshouse.gov.uk/`, then
+  `UKCompaniesHouseRegisteredNumber` (Company Reference Number) is
+  mandatory. JFCVC v4.4a separates this from the rest of the 3312
+  mandatory items precisely because it is *conditional*, not universal
+  (§ "Validation on identifier scheme"), and its companion **3316** then
+  requires that **every** context entity carrying that scheme have an
+  identifier value equal to the `UKCompaniesHouseRegisteredNumber` fact.
+  The JFCVC does not oblige anyone to *use* the Companies House scheme; it
+  conditions on the scheme being used. In practice a company or LLP filing
+  to Companies House will use it (and an HMRC CT filing must carry a
+  matching CRN — gateway error 1606), so for those filers the fact is
+  effectively always required; but an entity that has a CRN yet identifies
+  its contexts under another scheme does not trip 3312. [JFCVC v4.4a]
+
+  `http://www.companieshouse.gov.uk/` is the exact value: lowercase
+  `http`, `www.`, and the **trailing slash**. The slash
   is part of the attribute value, so a bare domain is a *different
   identifier*, not a lenient spelling of the same one (HMRC, *XBRL
   tagging: context entity identifiers*). The same value serves Companies
@@ -376,9 +515,23 @@ authoritative source is the Joint Filing Common Validation Checks — see
   the UTR. A charitable *company* still normally uses its CRN as the
   context entity identifier — charity registration is tagged separately.
 
-  **Charities** need at
-  least one of
-  `CharityRegistrationNumber{EnglandWales, Scotland, NorthernIreland}`.
+**When the disclosure itself is absent.** A mandatory tag stays mandatory
+even where the underlying disclosure is not in the accounts: "In some
+circumstances a Directors' Report, for example, may not be included with
+the accounts but the mandatory XBRL tags relating to the Directors' Report
+must still be present. In most cases software will prompt this and attach
+the tag either against data elsewhere in the accounts, or within a
+'hidden' area within the iXBRL file." For
+`DescriptionPrincipalActivities` specifically, JFCVC v4.4a directs
+preparers to the hidden section and either a preparer-sourced description
+or the literal value **"No description of principal activity"** (singular
+"activity"); that note is attached to the 2022 / 2023 / 2024 / 2025 / 2026
+FRS mandatory-item tables, so scope it to those vintages. For a UK branch
+of a non-UK-incorporated company with no director, "in place of a director
+you should include the name of the person approving the balance sheet or
+the CT600". This is a preparation instruction, not a rule with its own
+error code — the failure mode is the ordinary 3312 rejection. ["XBRL guide
+for businesses" §4.6, HMRC; JFCVC v4.4a]
 
 Audited accounts require `DateAuditorsReport` plus
 `OpinionAuditorsOnEntity` plus (`NameIndividualAuditor` **OR**
@@ -413,7 +566,9 @@ the guide's contents):
 | **4.21.1 / 4.22.1 / 4.25.1** | **Compulsory tags**; unreported data; distinction of **company vs group** data |
 | **5.3.1–5.11.1** | Positive/negative values; accuracy; period context; entity context |
 
-Taxonomy **design** features (Section 3, for reading the DTS): 3.6.2
+Taxonomy **design** features (Section 3, for reading the DTS): 3.6.1
+dimensions — **general description** (not, despite Arelle's code label,
+the segment/scenario rule — see *Validation*); 3.6.2
 dimension **default** tags; 3.6.3 **generic** dimension tags (`Director1`,
 `Director2`…); 3.6.4 "non-standard"/"further item" tags; 3.6.5 **typed**
 dimensions; 3.7 groupings; 3.8 **analysis items** (repeatable line items
@@ -441,18 +596,39 @@ obligation** — almost nothing to anchor. [XBRL Tagging Guide 2026]
 A recurring UK-specific defect: a **generic dimension member** is used to
 enumerate an officer, subsidiary, segment, or share class, but the
 paired **name/description** fact is missing. `JFCVC.3315` flags it. The
-machine form of the rule (Arelle `GENERIC_DIMENSION_VALIDATIONS`):
+rule itself is HMRC's, not the plugin's: whenever a listed Generic Domain
+Member element name appears in an instance, the corresponding related
+name/description tag must also be present, on the same dimension. The
+member lists below are the **FRS 2022–2026 (+ FRS Charities)** tables of
+HMRC's *Generic dimension validations 4.91a* — those five vintages are
+substantively identical, differing only in the `{fr, cd, char}` namespace
+year. ["Generic dimension validations 4.91a", HMRC]
 
 | Generic member(s) | Requires |
 |---|---|
-| `Director1..40`, `CompanySecretary1..2`, `Trustee1..20`, `PartnerLLP1..20`, `Chairman`, `ChiefExecutive` | `NameEntityOfficer` |
+| `SpecificDiscontinuedOperation1..8`, `SpecificNon-currentAssetsDisposalGroupHeldForSale1..8` | `DescriptionDiscontinuedOperationOrNon-currentAssetsOrDisposalGroupHeldForSale` |
+| `Chairman`, `ChiefExecutive`, `ChairmanChiefExecutive`, `SeniorPartnerLimitedLiabilityPartnership`, `CompanySecretary1..2`, `CompanySecretaryDirector1..2`, `Director1..40`, `PartnerLLP1..20` (`EntityOfficersDimension`) | `NameEntityOfficer` |
+| `CorporateTrustee1..3`, `DirectorOfCorporateTrustee`, `CustodianTrustee`, `Trustee1..20` (`char` namespace, `EntityOfficersDimension`) | `NameEntityOfficer` |
+| `ReportableOperatingSegment1..20`, `ProductService1..12`, `MajorCustomer1..12` | `NameIndividualSegment` |
+| `OtherContractType1..2` | `DescriptionOtherContractType` |
+| `OtherDurationType1..2` | `DescriptionOtherContractDurationType` |
+| `OtherChannelType1..2` | `DescriptionOtherSalesChannelType` |
+| `SpecificBusinessCombination1..10` | `NameAcquiredEntity` |
+| `ConsumableBiologicalAssetClass1..5`, `BearerBiologicalAssetClass1..5` | `NameOrDescriptionBiologicalAssetClass` |
 | `Subsidiary1..200` | `NameSubsidiary` |
-| `Associate` / `JointVenture` | `NameAssociate` / `NameJointVenture` |
-| `ReportableOperatingSegment` / `ProductService` / `MajorCustomer` | `NameIndividualSegment` |
-| `OrdinaryShareClass` / `PreferenceShareClass` / `DeferredShareClass` / `OtherShareClass` | `DescriptionShareType` |
-| `PensionPlan` | `NameDefinedContributionPlan` \| `NameDefinedBenefitPlan` |
+| `Associate1..50` | `NameAssociate` |
+| `JointVenture1..50` | `NameJointVenture` |
+| `UnconsolidatedStructuredEntity1..5` | `NameUnconsolidatedStructuredEntity` |
+| `IntermediateParent1..5`, `EntityWithJointControlOrSignificantInfluence1..5`, `OtherGroupMember1..8`, `KeyManagementIndividualGroup1..5`, `CloseFamilyMember1..5`, `EntityControlledByKeyManagementPersonnel1..5`, `OtherRelatedPartyRelationshipType1..2`, `ComponentTotalRelatedParties` | `NameOrDescriptionRelatedPartyIfNotDefinedByAnotherTag` |
+| `OrdinaryShareClass1..5`, `PreferenceShareClass1..5`, `DeferredShareClass1..5`, `OtherShareClass1..4` (`EntityShareClassesDimension`) | `DescriptionShareType` |
+| `Share-basedArrangement1..8` | `NameShare-basedPaymentArrangement` |
+| `Grant1..10` | `NameOrDescriptionGrantUnderShare-basedPaymentArrangement` |
+| `PensionPlan1..6`, `Post-employmentMedicalPlan1..2`, `OtherPost-employmentBenefitPlan1..2` | `NameDefinedContributionPlan` \| `NameDefinedBenefitPlan` |
 
-[Arelle `validate/UK`]
+The machine form is Arelle's `GENERIC_DIMENSION_VALIDATIONS`, which agrees
+with the instrument bar one range: Arelle allows `OtherShareClass` to 5
+where *Generic dimension validations 4.91a* stops at 4. [Arelle
+`validate/UK`]
 
 **Welsh handling.** A bilingual text-validation table matches the required
 Companies-Act statements (s.477/s.480 exemptions, directors'/members'
@@ -487,13 +663,69 @@ excerpt. Public test endpoint
 The **Technical Interface Specification (TIS)** governs the software
 gateway: general TIS **v5.3**, **TIS for accounts v5.9** (1 April 2026).
 Developers "must read and understand the file structure and the validation
-rules", and complex (package) accounts must use the CH **zip**
-functionality. ["Technical interface specifications for Companies House
-software", GOV.UK]
+rules". v5.9 is the "2026 taxonomy implementation highlighting changes to
+Audit Report requirements and new Charity functionality"; FRS 105
+submissions use the **FRS 102 entry point**, and 2026-01-01 entry points
+exist for FRS 101, FRS 102, IFRS and Charities. ["Technical interface
+specifications for Companies House software", GOV.UK; CH TIS for accounts
+v5.9]
 
-> **Honest gap.** The CH TIS-for-accounts v5.9 rule content was **not
-> read** (the file is an ODT, not fetched); only its version/metadata was
-> verified. Download the ODT to enumerate the 2026 CH business rules.
+**Extensions are not merely discouraged at the CH gateway — they are
+unsupported.** TIS v5.9: "Extension taxonomies will only be supported for
+the filing of UKSEF accounts." For FRS 101/102/105, full IFRS and
+Charities filings to Companies House an extension taxonomy is not accepted
+at all, which is stronger than the Tagging Guide's RULE 3.16.1 posture
+(see *The structural inversion vs ESEF*). [CH TIS for accounts v5.9]
+
+**Package submissions.** On the XML gateway, for UKSEF and Welsh
+submissions the self-contained file (the "Blob") "is no longer a single
+iXBRL instance but must be a Base64-encoded zip package"; the file
+structures are in TIS Appendix A. The separate browser-route **ZIP Upload
+Service** (live January 2025 for UKSEF, April 2025 for the rest) is
+**optional** — "Until CH mandates digital filing, using this upload
+service is optional" — so package accounts are not obliged to travel that
+route. A **100 MB** limit applies on the initial service release. Nine
+package types are defined: [CH TIS for accounts v5.9]
+
+- **UKSEF**; **Welsh** (`reports/english/` + `reports/welsh/`).
+- **Limited Partnership (LP)** — `general-partner-accounts`,
+  `partnership-accounts`.
+- **Community Interest Company (CIC)** — `accounts`, `CIC34`.
+- **Audit Exempt Subsidiary** — `parent-accounts`, `subsidiary-accounts`,
+  `agreement`, `guarantee`.
+- **Filing Exempt Subsidiary** — `parent-accounts`, `agreement`,
+  `guarantee`.
+- **Group Package Accounts s400** (UK-consolidated) —
+  `consolidated-accounts`, `exempt-parent-accounts`.
+- **Group Package Accounts s401** (non-UK-consolidated) — the same two
+  directories; the consolidated side is checked only for valid iXBRL.
+- **Overseas Accounts** — `english-accounts`, optional
+  `untranslated-accounts`, optional OSAA01 PDF; not validated against UK
+  law.
+
+`parent-accounts` may itself be an FRC iXBRL file **or** a nested UKSEF
+zip package. Audit Exempt and Filing Exempt Subsidiary packages replace
+the s477 statement with **s479a**
+(`StatementThatCompanyEntitledToExemptionFromAuditUnderSection479aCompaniesAct2006RelatingToSmallCompanies`);
+AA06 in the taxonomy suite may be tailored for LLAA06. [CH TIS for
+accounts v5.9]
+
+**Welsh packages.** `META-INF` carries a `taxonomyPackage.xml` with
+minimal information — no entry-point descriptions, since there is no
+extension taxonomy to describe; `catalog.xml` may be omitted; there is no
+extension-taxonomy directory alongside `META-INF`; and `reports.json`
+declares `documentType`
+`http://xbrl.org/PWD/2020-12-09/report-package`. The two reports sit in
+`reports/english/` and `reports/welsh/` (identical filenames permitted).
+Each iXBRL document is validated **independently** under its
+language-specific statement rules and either failure rejects the whole
+package; if both pass they are cross-compared for the same entity, the
+same period, and matching numeric and date content, and a mismatch
+rejects the package. Welsh is signalled by `ReportPrincipalLanguage` on
+the **Welsh** member of the Languages dimension (typically in the hidden
+section); English by omission or by an undimensioned occurrence, English
+being the dimension default — which sources the Welsh-handling note under
+*Generic-dimension pairing*. [CH TIS for accounts v5.9]
 
 ### HMRC / Companies House — the Joint Filing Common Validation Checks (Arelle `validate/UK`)
 
@@ -536,17 +768,21 @@ number at the gateway":
 | `HMRC.SG.4.5` | Insignificant non-zero digits vs the declared `decimals` |
 | `HMRC.SG.3.3` | iXBRL root MUST be `{xhtml}html`; no `<script>` elements, no `javascript:` hrefs |
 | `HMRC.SG.3.8` | Images MUST be `data:` URIs — gif/jpeg/png only; no external image URLs in `<style>`/`style` |
-| `FRC.TG.3.6.1` | A context carries an `xbrli:scenario` element — disallowed; **segment** is the dimensional container. This is the **inverse of ESEF** (Reporting Manual section 2.1.3 forbids segment, requires scenario): do not carry an ESEF context shape into a UK FRC filing |
+| `FRC.TG.3.6.1` | A context carries an `xbrli:scenario` element. The rule text is in the **FRC Developer Guide 2026 §4.2.5** ("Primary items and hypercubes"), not the Tagging Guide: "By convention, the 'all' arc is defined using the 'segment' element of context. The scenario element of context is not used. This is purely a matter of technical convention and does not alter the functionality of dimensions." `FRC.TG.3.6.1` is **Arelle's own code label** and its number does not point at the text of the rule — Tagging Guide 2026 §3.6.1 exists but is headed "Dimensions – general description" and the word "scenario" appears nowhere in that guide. The consequence for a filer is concrete rather than declaratory: the FRC hypercubes bind through **segment**, so a scenario-shaped context yields dimensionally invalid facts. This is the **inverse of ESEF** (Reporting Manual section 2.1.3 forbids segment, requires scenario): do not carry an ESEF context shape into a UK FRC filing |
 
-> **Honest gap.** The JFCVC numbering here was read from the **Arelle
-> plugin**, not the primary JFCVC PDF (unfetched; the plugin advertises
-> **JFCVC v4.0, 2020-06-09** and Style Guide v2.2). The authoritative
-> gateway error numbers — **1606/1607/3312/3316/3317/3318/3320** — come
-> from the HMRC/CH sources in the *HMRC CT600* profile and
-> *Companies House — the public XBRL Company Accounts Validator*, not the
-> plugin. Obtain the
-> current JFCVC PDF and CH TIS v5.9 before treating any emitted code as
-> the exact code a live gateway returns.
+> **Honest gap, narrowed.** The code numbering in this table was read
+> from the **Arelle plugin**, which advertises **JFCVC v4.0 (2020-06-09)**
+> and Style Guide v2.2. The current instrument is **JFCVC v4.4a** (ODT on
+> the GOV.UK CT technical-specifications page; change history "V4.3a to
+> V4.4a — FRS 2026 / 2026 FRS Charities taxonomies added"), and it has now
+> been read for the 3312 mandatory-item tables, the conditional
+> identifier-scheme check and 3316 (see *Filer classification*). What
+> remains unverified is whether every code the plugin emits is the exact
+> number a live gateway returns: the authoritative gateway numbers —
+> **1606/1607/3312/3316/3317/3318/3320** — come from the HMRC/CH sources
+> in the *HMRC CT600* profile and *Companies House — the public XBRL
+> Company Accounts Validator*, not the plugin. The HMRC CT Inline XBRL
+> Style Guide is still unfetched.
 
 ## Review workflow
 
@@ -576,8 +812,9 @@ Each step depends on the prior being clean.
    `NameSeniorStatutoryAuditor`+`NameEntityAuditors`, not
    `NameIndividualAuditor`; audited charity ⇒ the Charities-Act Boolean.
 7. **Context-shape pass** (see *HMRC / Companies House — the Joint Filing
-   Common Validation Checks*): UK FRC uses `xbrli:segment`
-   (`FRC.TG.3.6.1` flags scenario) — opposite of ESEF; `precision`
+   Common Validation Checks*): UK FRC binds dimensions through
+   `xbrli:segment` (FRC Developer Guide 2026 §4.2.5; Arelle flags a
+   scenario context as `FRC.TG.3.6.1`) — opposite of ESEF; `precision`
    forbidden (`HMRC.5.4`).
 8. **Extension discipline** (see *The structural inversion vs ESEF*): could a
    generic dimension tag or analysis item carry it instead?
@@ -662,8 +899,8 @@ mechanics — this is the EU-relationship summary only.
   multi-target iXBRL file satisfies both the FCA (ESEF-style IFRS tagging) and
   Companies House (FRC UK tags). The UK still **tracks EU ESEF taxonomy
   versions** — **ESEF-2024** (Reg (EU) 2025/19) is the FCA "generally accepted
-  taxonomy" for AFR deadlines from 30 Apr 2026 (see the *FCA / UKSEF / NSM*
-  profile).
+  taxonomy" for AFR deadlines from 30 Apr 2026 — the earliest deadline in
+  the DTR 4.1.3R four-month range (see the *FCA / UKSEF / NSM* profile).
 - **CSRD / ESRS trajectory — divergent.** The UK is **outside CSRD**. Its own
   path is **UK SRS S1/S2**, issued **25 Feb 2026** by DBT (based on the ISSB's
   IFRS S1/S2) for **voluntary** use; the FCA consulted (Jan 2026) on mandating
@@ -683,11 +920,10 @@ mechanics — this is the EU-relationship summary only.
 ## Coverage and known limitations
 
 If the question concerns a receiver, rule version, or code not covered
-here — or the April 2028 tagging scope, DPL "sole source" wording, the
-JFCVC PDF numbering, UKSEF 2026 guidance, the CH TIS v5.9 rule content,
-or Irish Revenue's own thresholds (all flagged as honest gaps above) —
-say so and link the primary source. The cost of a wrong citation on a
-regulated filing is high.
+here — or the April 2028 tagging scope, the UKSEF 2026 guidance, or
+whether an Arelle-emitted code is the exact number a live gateway returns
+(the honest gaps that remain above) — say so and link the primary source.
+The cost of a wrong citation on a regulated filing is high.
 
 ## Sources
 
@@ -732,24 +968,69 @@ notes what the source establishes; section refs point to the detail.
   ESEF-2024; UKSEF; the *FCA / UKSEF / NSM* profile.
   <https://www.fca.org.uk/publication/primary-market/tn-507-2.pdf>
 - **XBRL Tagging Guide – FRC Taxonomies 2026 (v13.0, 18 Nov 2025)** —
-  RULE numbering; closed-taxonomy design; *FRC XBRL Tagging Guide 2026 (v13.0)*.
+  RULE numbering; closed-taxonomy design; the **version policy** at
+  Tagging Guide §6.6 "Taxonomy versioning"; *Vintage and applicability*;
+  *FRC XBRL Tagging Guide 2026 (v13.0)*.
   <https://media.frc.org.uk/documents/XBRL_Tagging_Guide_-_FRC_Taxonomies_2026.pdf>
-- **2026 FRC Taxonomy Suite — FRC** — suite contents; version policy;
-  Irish Revenue Extension; *Start here — choose a filing profile*;
-  *Vintage and applicability*; *FRC XBRL Tagging Guide 2026 (v13.0)*.
-  <https://www.frc.org.uk/library/standards-codes-policy/accounting-and-reporting/frc-taxonomies/current-frc-taxonomy-suites/2026-frc-taxonomy-suite/>
-- **FRC Taxonomies Documentation and Guidance — FRC** — 2026 doc set;
-  UKSEF Guide/Conformance Suite; *UKSEF — the optional multi-target
-  document*; *FRC XBRL Tagging Guide 2026 (v13.0)*.
-  <https://www.frc.org.uk/library/standards-codes-policy/accounting-and-reporting/frc-taxonomies/frc-taxonomies-documentation-and-guidance/>
+- **2026 UK and Irish digital reporting taxonomies — FRC** (the page
+  formerly titled "2026 FRC Taxonomy Suite"; the suite artefact is still
+  named "2026 FRC Taxonomy Suite v1.0.0" on its download table, and the
+  old URL 301-redirects) — suite contents; Irish Revenue Taxonomy 2026;
+  *Start here — choose a filing profile*; *Vintage and applicability*;
+  *FRC XBRL Tagging Guide 2026 (v13.0)*.
+  <https://www.frc.org.uk/library/standards-codes-policy/accounting-and-reporting/frc-taxonomies/current-uk-and-irish-digital-reporting-taxonomies/2026-uk-and-irish-digital-reporting-taxonomies/>
+- **UK and Irish digital reporting taxonomies Guide — FRC** (the page
+  formerly titled "FRC Taxonomies Documentation and Guidance"; the old URL
+  301-redirects) — 2026 doc set; UKSEF Guide/Conformance Suite;
+  *UKSEF — the optional multi-target document*;
+  *FRC XBRL Tagging Guide 2026 (v13.0)*.
+  <https://www.frc.org.uk/library/standards-codes-policy/accounting-and-reporting/frc-taxonomies/uk-and-irish-digital-reporting-taxonomies-guide/>
 - **Structured Digital Reporting: Insights 2025/26 — FRC (20 May 2026)** —
   nine SDR findings; UKSEF;
   *FRC "Structured Digital Reporting: Insights 2025/26"*.
   <https://www.frc.org.uk/library/digital-reporting/structured-digital-reporting-insights-202526/>
 - **Technical interface specifications for CH software — GOV.UK (1 Apr
-  2026)** — TIS accounts v5.9 / general v5.3;
-  *Companies House — the public XBRL Company Accounts Validator*.
+  2026)**, and the attached **TIS for accounts v5.9** ODT (issued
+  01/04/2026, status Final) — CH mandatory-element tables; UKSEF-only
+  extension support; the nine package types and Welsh `META-INF` rules;
+  *Filer classification*; *Companies House — the public XBRL Company
+  Accounts Validator*.
   <https://www.gov.uk/government/publications/technical-interface-specifications-for-companies-house-software>
+- **Joint Filing Common Validation Checks v4.4a — GOV.UK (ODT)** — the
+  3312 mandatory-item tables per taxonomy vintage; the conditional
+  identifier-scheme check and 3316; the hidden-section note for
+  `DescriptionPrincipalActivities`; *Filer classification*; *Validation*.
+  <https://assets.publishing.service.gov.uk/media/6a06d6545f39105e0848a2f6/Joint-Filing-Common-Validation-Checks-v4.4a.odt>
+- **Generic dimension validations 4.91a — HMRC (ODT)** — the regulator's
+  own generic-member / paired-tag tables per taxonomy vintage;
+  *Generic-dimension pairing*.
+  <https://assets.publishing.service.gov.uk/media/6a06d61ac0cc74b4523e4e71/Generic-Dimension-Validations-4.91a.odt>
+- **XBRL guide for businesses — HMRC / GOV.UK (updated 1 April 2026)** —
+  §4.6 on mandatory tags for boundary validation, the `ix:hidden` route
+  when the disclosure is absent, and the UK-branch no-director case;
+  *Filer classification*.
+  <https://www.gov.uk/government/publications/xbrl-guide-for-uk-businesses/xbrl-guide-for-uk-businesses>
+- **Detailed Profit and Loss XBRL Taxonomies – User Guide — HMRC (18 May
+  2013)** — DPL scope (Guide §2.1), sole source of tags (Guide §2.2), no
+  minimum-tagging subset (Guide §2.3); *Detailed Profit & Loss (DPL)*.
+  <https://assets.publishing.service.gov.uk/media/5a7f9dc6ed915d74e33f7845/dpl-guide.pdf>
+- **Developer Guide 2026 — FRC (v13.0, 18 Nov 2025)** — §4.2.5 "Primary
+  items and hypercubes": closed hypercubes, and the segment-not-scenario
+  convention that `FRC.TG.3.6.1` actually enforces; *Validation*.
+  <https://www.frc.org.uk/documents/8911/Developer_Guide_2026.pdf>
+- **2022 FRC Taxonomy Suite release notes §4 — FRC** — the DPL
+  "incorporated as a section within each of the current entry points, not
+  separately as its own entry point" from the 2022 suite;
+  *Detailed Profit & Loss (DPL)*.
+- **Tax and Duty Manual Part 41A-03-01, "Submission of iXBRL Financial
+  Statements as part of Corporation Tax Returns" — Irish Revenue (last
+  updated July 2026)** — s.884 TCA 1997 basis; the phase table; the three
+  cumulative deferral thresholds; CT1 Options 1–5; the 3-month filing
+  window; the *Irish Revenue (ROS)* profile.
+  <https://www.revenue.ie/en/tax-professionals/tdm/income-tax-capital-gains-tax-corporation-tax/part-41a/41a-03-01.pdf>
+- **FCA Handbook DTR 4.1 — FCA** — DTR 4.1.3R, the four-month AFR
+  deadline behind the TN/507.2 dates; the *FCA / UKSEF / NSM* profile.
+  <https://www.handbook.fca.org.uk/handbook/DTR/4/1.html>
 - **XBRL Validator Help — Companies House** — public validator; three-stage
   validation; *Companies House — the public XBRL Company Accounts
   Validator*.

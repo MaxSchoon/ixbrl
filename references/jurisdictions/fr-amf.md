@@ -72,6 +72,19 @@ plan to amend the ESEF RTS or taxonomy in 2026 [S33]. Pin the
 period from `<xbrli:period>` and confirm the ESEF generation before
 declaring a defect.
 
+**Which generation may be used.** The AMF's ESEF FAQ (« Quelle version
+de la taxonomie ESEF doit être utilisée ? », 19 Dec 2025) states that
+*de façon générale* issuers may use either the latest available ESEF
+taxonomy or the previous year's to tag their financial statements,
+comparatives included — a 31/12/N closer may tag FY N (N and N-1
+figures) with the taxonomy published in N or the one published in N+1
+[S5]. So a French filing tagged one generation behind the newest
+taxonomy is not by itself a defect. The binding limit is still the
+application clause of the relevant amending RTS — Reg. (EU) 2026/283
+applies at the latest for FYs beginning on/after 1 Jan 2026, with early
+application permitted for FY2025 [S27] — so check that clause before
+either flagging or excusing a generation gap.
+
 <a id="profile-amf-esef"></a>
 
 ## Profile: Listed issuers — ESEF filed via the AMF
@@ -122,9 +135,30 @@ French document names):
 **Document-typology quirk (a real rejection cause).** On ONDE the filer
 must pick the exact typology — *Rapport financier annuel*, or *Document
 d'enregistrement universel* with *Vaut RFA = OUI / NON*. A typology
-error means the document is **not considered officially filed** and is
-not published on the archive [S1][S6]. An otherwise-valid ESEF package
-filed under the wrong typology has, in the AMF's terms, not been filed.
+error means the document is **not considered officially filed**. For
+issuers whose securities are admitted on a regulated market, the AMF
+adds that it is then also not published on the archive [S1][S6]. An
+otherwise-valid ESEF package filed under the wrong typology has, in the
+AMF's terms, not been filed.
+
+The AMF's typology table has seven rows; the three it asterisks are the
+ones published on info-financiere.fr, the DILA site [S1]. Instruction
+DOC-2007-03 Annexe 2 corroborates that publication rule [S2].
+
+| Document to file | Typology to select on ONDE | Published on info-financiere.fr |
+|---|---|---|
+| RFA | *Rapport financier annuel* | Yes |
+| DEU valant RFA | *Document d'enregistrement universel*, « Vaut RFA = OUI » | Yes |
+| DEU déposé en contrôle a priori | DEU, « Vaut RFA = NON » — it becomes the RFA only in its final version, once approved by the AMF | No |
+| DEU déposé postérieurement à un RFA | DEU, « Vaut RFA = NON » | No |
+| Annual activity report of a bond-only issuer on a regulated market not required to produce an RFA | *Rapport annuel Emetteur obligataire non redevable d'un rapport financier annuel* | Yes |
+| Annual report of a Euronext Growth / Euronext Access company | *Rapport annuel Euronext Growth / Euronext Access* | No |
+| Annual report of an unlisted company | *Rapport annuel Emetteur non coté* | No |
+
+The last two rows sit outside ESEF because Euronext Growth and Euronext
+Access are MTFs, not regulated markets — that conclusion follows from
+Reg. (UE) 2019/815 read with the Transparency Directive, stated earlier
+in this profile, not from the AMF typology text itself.
 
 **First-year enforcement signal.** At 30 September 2022 (FY2021, first
 mandatory year) **98%** of obligated issuers filed successfully; **87%**
@@ -134,13 +168,39 @@ corrective); the AMF ran **300+** pre-filing tests and urges quality
 XHTML with proper heading / section tags for machine exploitation [S6].
 Use the `esefxbrl@` pre-filing test route before a first deposit.
 
-**French-label / language note.** Beyond the general ESMA Reporting
-Manual guidance in `references/esef.md` §5 (labels in the report language; English
-widely recommended), **no AMF-specific French-label rule was located in
-Tier-1 AMF sources**. Do not invent one. A French-language report
-satisfies `ESEF.3.4.5.missingLabelForRoleInReportLanguage` with French
-standard labels on every extension concept; an added English label is a
-common recommendation, not a confirmed AMF rule.
+**French-label / language note.** What a label must *say* is ESMA's
+rule, not the AMF's: DOC-2007-03 footnote 13 quotes ESMA Reporting
+Manual rec. 1.1.1 — labels « devraient être rédigés dans la langue dans
+laquelle le rapport financier annuel est établi », issuers being « pas
+tenus de fournir des libellés dans d'autres langues » — alongside RG AMF
+art. 221-2 and DOC-2016-05 [S2][S7]; the general guidance in
+`references/esef.md` §5 stands. **Do not invent an AMF rule about label
+content.** The AMF does, however, set three language mechanics of its
+own, in DOC-2007-03 Annexe 1 and Annexe 2 (v. 02/2025), restated in the
+AMF ESEF FAQ of 19/12/2025 [S2][S5]:
+
+- The extension-taxonomy sub-folder file list ends « (2 fichiers : un
+  {fr} et un {en}) » — an AMF-specific requirement for a French and an
+  English file among the extension linkbases. The parenthetical sits
+  grammatically on the *definitions* bullet, which is implausible for a
+  dimension-only linkbase; read it as most likely governing the label
+  linkbase, and flag the ambiguity rather than asserting a settled
+  reading.
+- The Annexe 1 naming table mandates a language-suffixed label linkbase,
+  `{base}-{date}_lab-{lang}.xml`, where `{lang}` is the ISO 639-1 code of
+  the report language — not literally `fr`. The `_pre`, `_def`, `_cal`
+  and `_ref` linkbases carry no `{lang}` component.
+- Annexe 2 fixes the official deposit language as **French or English**,
+  and the instruction body states that a single official version of the
+  RFA or RFS is filed with the AMF, in one language and one format.
+  Extra-language ESEF versions belong in a separate package per ESMA
+  rec. 1.1.2 and are not filed with the AMF.
+
+A French-language report satisfies
+`ESEF.3.4.5.missingLabelForRoleInReportLanguage` with French standard
+labels on every extension concept; the AMF's own Annexe 1 additionally
+calls for an `{en}` file, so an English file is not merely a common
+recommendation here.
 
 <a id="profile-inpi-comptes-annuels"></a>
 
@@ -164,6 +224,13 @@ the filer**; the accepted format is **PDF**.
   dropped [S8][S9].
 - Legal basis: **Arrêté du 7 mai 2021** (décret 2021-300) sets the
   formats / transmission norms of the guichet unique [S10].
+- **Deadline.** The *dépôt* is due within **one month** of approval of
+  the accounts by the *assemblée ordinaire* (or by the sole
+  shareholder), extended to **two months** where the deposit is made by
+  electronic means — that is, via the INPI Guichet unique; the paper /
+  in-person deposit at the greffe keeps the one-month limb. C. com. art.
+  **R.123-111** (délai as amended by décret 2014-1063) and art.
+  **L.232-23 I** [S8][S9].
 - **Structured data is downstream, not filer-facing.** INPI keys
   structured data (*bilans saisis*) **out of** the deposited PDFs and
   exposes them (and the PDFs) via API and Data INPI / the *Registre
@@ -221,14 +288,29 @@ French-authority pointer.
   **RAN** — a *taxonomy* name, **not** a state [S18]. Two ENS carry
   special applicability: **FR.29.01** (Solvency-II-data / internal-model
   state) and **FR.11.01** (*réserve de capitalisation*), both confirmed
-  on that page [S18]. Narrative reports (RSR, SFCR, ORSA) are office
-  formats (PDF/Excel/Word), **not** XBRL. Docs live on **e-SURFI
+  on that page [S18]. The ENS are remitted annually **within four months
+  of the annual close**, and bind **solo (individual) organismes only,
+  FR.29.01 excepted** [S18]. That four-month rule is ENS-specific: the
+  Solvency II QRT deadlines (14 weeks solo / 20 weeks group) and the
+  banking COREP/FINREP remittance dates are set elsewhere, by EU and EBA
+  ITS, and do not follow it. Narrative reports (RSR, SFCR, ORSA) are
+  office formats (PDF/Excel/Word), **not** XBRL. Docs live on **e-SURFI
   Assurance** [S15][S17][S18].
 - **Banking.** COREP/FINREP etc. are collected on the **EBA DPM**
-  taxonomies (Eurofiling), LEI-identified; EBA Filing Rules apply —
-  **v5.8 (25 Feb 2026) is current**; ACPR's Feb 2026 OneGate remittance
-  documentation cites v5.7. This artifact churns fast: verify the
-  operative version at filing date [S16].
+  taxonomies (Eurofiling), LEI-identified. EBA Filing Rules apply, but
+  the ACPR does not track the EBA's latest revision. eSurfi Banque's
+  *Format de remise Banque* (page updated 21 April 2026) still carries
+  one Filing-Rules item only — « Règles décimales - Filing Rules V5.5 »
+  (27/03/2025), applying the v5.5 accuracy table from 01/04/2025
+  (decimals ≥ -4, or ≥ -6 for FP, ESG, Pillar3 and
+  REM_Diversity_Benchmarking; -3 remains permitted) — and expressly keeps
+  **RUBA 1.2.0.1 on Filing Rules v5.0** (monetary precision ≥ -3) [S16];
+  ACPR's *Règles de remise XBRL* r1.0.9 (Dec 2024) is based on EBA Filing
+  Rules v5.0 / v5.1. On the EBA side, **v5.8** (EBA/XBRL/2026/02, 25 Feb
+  2026) is the version bound to the in-force framework 4.2, and **v5.9**
+  (EBA/XBRL/2026/06, 26 June 2026) is already published for framework 4.3
+  (expected Q4 2026). This artifact churns fast: verify both the EBA
+  version and what eSurfi has actually adopted at filing date [S16].
 - **Migration signal.** From the **03/2026** reference date, entry
   points previously in **xBRL-XML** must be submitted as **xBRL-CSV**
   (zip, base64 inside the OneGate XML envelope); non-conforming
@@ -452,9 +534,12 @@ obligation to its own channel (see *Regime map*).
 - **OJ date of the ESRS ESEF-RTS delegated act** (the mandatory-tagging
   trigger) is not fixed; ESMA said "not before 2026" with a
   30-June-keyed phase-in [S25].
-- **French-language ESEF labels.** No AMF-specific French-label rule was
-  located; `references/esef.md` §5 general guidance stands (see the
-  *Listed issuers — ESEF filed via the AMF* profile).
+- **French-language ESEF labels.** No AMF rule on label *content* was
+  located; `references/esef.md` §5 general guidance stands. The AMF does
+  set language mechanics — the `{fr}`/`{en}` extension-file pair, the
+  `_lab-{lang}` filename and the French-or-English deposit language of
+  DOC-2007-03 Annexes 1 and 2 [S2] (see the *Listed issuers — ESEF filed
+  via the AMF* profile).
 - **INPI XBRL roadmap.** INPI keys structured data out of PDFs [S11];
   no announced plan to move filers to structured/XBRL submission was
   found — treated as absent, not confirmed-absent-by-statement.
@@ -477,7 +562,7 @@ Verify the operative version of every cited rule at filing date.
 - **[S4]** AMF — *Je dépose de l'information en dehors d'une opération financière* — <https://www.amf-france.org/fr/espace-professionnels/societes-cotees-et-emetteurs/mes-relations-avec-lamf/deposer-de-linformation-financiere-et-extra-financiere/en-dehors-dune-operation>
 - **[S5]** AMF — *ESEF : vos questions fréquentes* — <https://www.amf-france.org/fr/actualites-publications/dossiers-thematiques/esef/esef-vos-questions-frequentes>
 - **[S6]** AMF — *ESEF : les émetteurs au rendez-vous dès la première année* — <https://www.amf-france.org/fr/actualites-publications/actualites/esef-les-emetteurs-au-rendez-vous-des-la-premiere-annee>
-- **[S7]** AMF — *Guide de l'information périodique des sociétés cotées* (déc. 2024) — <https://www.amf-france.org/sites/institutionnel/files/private/2024-12/2016-05-decembre-2024.pdf>
+- **[S7]** AMF — Position-recommandation **DOC-2016-05**, *Guide de l'information périodique des sociétés cotées*, version en vigueur du **28 juillet 2023** (PDF republished Dec 2024 carrying the AMF banner « Cette position-recommandation n'est pas à jour des impacts de la transposition de la Directive (UE) 2022/2464 du Parlement européen et du Conseil du 14 décembre 2022 (“Directive CSRD”) ») — <https://www.amf-france.org/sites/institutionnel/files/private/2024-12/2016-05-decembre-2024.pdf>
 - **[S8]** INPI — *Dépôt des comptes annuels* — <https://www.inpi.fr/realiser-demarches/formalites-dentreprises/depot-comptes-annuels>
 - **[S9]** Service-Public Entreprendre — *Dépôt des comptes annuels d'une société* (F31214) — <https://entreprendre.service-public.gouv.fr/vosdroits/F31214>
 - **[S10]** INPI — *Textes réglementaires du Guichet unique* (Arrêté du 7 mai 2021) — <https://www.inpi.fr/ressources/formalites-dentreprises/textes-reglementaires-du-guichet-unique>

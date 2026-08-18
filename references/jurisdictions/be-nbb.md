@@ -80,8 +80,9 @@ accounts** — not the upload date. Before you validate or review, pin:
   `nbb-cbso-26.0.15` is the current final version (in use since **2 January
   2026**); the prior framework is `25.0`, final `nbb-cbso-25.0.11` (6 January
   2025). Do not validate a FY2024-closing set against the 26.0 framework.
-- **The assessment year** for Biztax — `be-tax` is versioned `be-tax-YYYY-04-30`,
-  the return-form model fixed each year by Royal Decree.
+- **The assessment year** for Biztax — `be-tax` is versioned `be-tax-YYYY-04-30`
+  (`be-tax-2026-04-30` for AY2026), the return-form model fixed each year by Royal
+  Decree.
 - **The financial year for ESEF / ESRS** (see *CSRD / ESRS in Belgium and the
   Omnibus I effect on digital tagging*) — the CSRD phase-in moved twice
   (stop-the-clock, then Omnibus I); applying a later wave's obligation to an
@@ -179,7 +180,18 @@ a foreign company's. All other cases must be PDF.
 firms and UCI management companies; insurance companies; health-insurance funds
 and their national federations (Act of 6 August 1990); copyright collecting
 societies. Do not attempt a `be-gaap` XBRL instance for these. **Max file size
-(XBRL or PDF): 50 MB.**
+(XBRL or PDF): 50 MB** — for an XBRL filing that ceiling covers the instance (or
+the ZIP of instance plus software-vendor and contact files) *including* every PDF
+embedded in it.
+
+**Encapsulated PDFs.** Each PDF embedded in a CBSO instance must additionally be
+**≤ 10 MB** and meet the acceptance criteria of NBB Technical Guide 26.0.15 §5.1:
+DIN-A4 pages (21 x 29.7 cm) only, and no OCG/layers, no comments or tags, no
+attached files, no audio/video, no security or password protection, no JavaScript,
+and no "fake" PDFs (a non-PDF renamed to `.pdf`). Colours and both handwritten and
+electronic signatures are accepted in 26.0.15, having been refused in older
+guides. These criteria are not all machine-checkable: the CBSO may refuse a filing
+after manual visual inspection once it is uploaded.
 
 **Decimals.** Reporting/publication unit is the **euro without decimals** for
 full/abridged/micro. For XBRL a filer *may* optionally supply **two-decimal**
@@ -191,8 +203,11 @@ publication.
 applicable CBSO taxonomy, and satisfy the legal **arithmetic and logical
 controls** published in the Belgian Bulletin — shipped as **Formula linkbase
 assertions** (separate lists for companies vs associations/foundations) plus
-technical constraints. Those shipped Formula linkbases *are* the legal control
-set (see *Validation*).
+technical constraints. NBB Technical Guide 26.0.15 §4.3.3.2 divides those linkbases
+into `<model_id>-<model_part>-legal-formula` (the legal arithmetic and logic
+controls), `-nbb-formula` (complementary arithmetic and logic controls) and
+`-other-formula`, with the control list in its Appendix 2. Those shipped Formula
+linkbases *are* the legal control set (see *Validation*).
 
 **Language.** Filings are in **Dutch, French, or German** per the company's
 region; NBB forms and labels come in four languages (`en`/`fr`/`nl`/`de`).
@@ -214,9 +229,25 @@ to FPS Finance.
 
 ### Sustainability information in the CBSO filing
 
-On the NBB side, from **6 January 2025** the CBSO Filing application accepts the
-**full management report (incl. sustainability information) as a ZIP** — a
-container change, not a tagging obligation.
+Per the NBB Balanscentrale notice *Rapportering van duurzaamheidsinformatie*
+(22 October 2024), sustainability information is **not** a separate report: it is
+an integral part of the (consolidated) management report, and the NBB states the
+**full management report must be drawn up per the ESEF rules (iXBRL, XHTML), for
+listed and non-listed companies alike**. From **6 January 2025** the CBSO
+**Filing** application accepts that full management report, sustainability
+information included, as a **ZIP** holding an XHTML file plus the files carrying
+the XBRL/iXBRL taxonomy information; the NBB describes it as comparable to the
+ZIP filed with the FSMA via STORI. NBB Technical Guide 26.0.15 §6 sets the container
+mechanics for such encapsulated XHTML/iXBRL files: one XHTML document only, a
+`.html` or `.xhtml` extension, no executable code, and no HTML `<base>` element.
+
+**Caveat for current builds:** that notice predates the postponements. Under
+recital 24 of Directive (EU) 2026/470 the **mark-up** of the sustainability
+statement is not required until the mark-up rules are adopted in Delegated
+Regulation (EU) 2019/815 (see *CSRD / ESRS in Belgium and the Omnibus I effect on
+digital tagging*); the XHTML/ESEF format requirement is unaffected. So the ZIP
+channel carries an ESEF-format obligation rather than merely a new container, but
+do not implement ESRS tagging against it yet.
 
 <a id="profile-fsma-esef"></a>
 
@@ -300,15 +331,33 @@ authored by FPS Finance.
 
 - **Format:** classic **XBRL 2.1** (incl. errata) + **Dimensions 1.0** +
   **Formula 1.0**. **Not** Inline XBRL.
-- **Package:** returns from external software upload as a **`.biztax`** package of
-  one or more returns (**max 25** per upload). If any single return fails the
-  technical/content checks, **the whole package is rejected** — design around this
-  batch atomicity. On submission the return is stored as PDF; the XBRL file is
-  also retained and consultable.
-- **Cadence:** annual, tied to the **assessment year**. Architecture guides are
-  versioned `be-tax-YYYY-04-30`; the return-form model is fixed each year by
-  Royal Decree — e.g. the **RD of 13 April 2025** (AY2025), under **Income Tax
-  Code 1992 arts 307 §1 and 307bis** (mandatory electronic filing).
+- **Instance:** the validatable unit is the instance document carrying the
+  **`.xbrl`** extension. It must be **UTF-8**, must contain **exactly one return**,
+  and must not exceed **15 MB** including its embedded PDF attachments, each of
+  which may not exceed **5 MB**; attachments must be genuine PDFs, not files
+  renamed to `.pdf`. File names may use only unaccented alphabetic characters,
+  digits, spaces and the symbols `.`, `-` and `_`.
+- **Package:** the **`.biztax`** file is only the transport envelope
+  (*omslagbestand*) for online upload, holding **at most 25** such returns. The
+  manual states no size cap for the envelope itself, so do not assert one. Both
+  the instance and the `.biztax` file must be valid XML, and each return must
+  satisfy the `be-tax` taxonomy including the content and technical validations in
+  the Formula linkbases. On submission the return is stored as PDF; the XBRL file
+  is also retained and consultable.
+- **Two rejection gates, different scope.** **Technical failure is
+  package-atomic:** if any one return in the uploaded `.biztax` envelope fails the
+  technical checks (is the file technically correct, and may a return be filed for
+  each enterprise in it), the whole upload is invalidated and every return in it is
+  rejected. **Content failure is per-return:** a return with content
+  (*inhoudelijke*) errors is stored but not submitted, while the other returns in
+  the same package are automatically signed and filed; the failed ones are opened
+  via *My returns* → *List of errors* and corrected. Validate each instance before
+  bundling.
+- **Cadence:** annual, tied to the **assessment year**. Architecture guides and
+  user manuals are versioned `be-tax-YYYY-04-30` — **`be-tax-2026-04-30`** is live
+  for AY2026; the return-form model is fixed each year by Royal Decree — e.g. the
+  **RD of 13 April 2025** (AY2025), under **Income Tax Code 1992 arts 307 §1 and
+  307bis** (mandatory electronic filing).
 - **Entry points (three return types):** corporate income tax (`be-tax-inc-rcorp`;
   ISOC/VenB), non-resident (`be-tax-inc-nrcorp`; BNI/INR), legal-entities
   (`be-tax-inc-rle`; RPB/IPM). **Treat these identifiers as secondary** (gap
@@ -319,13 +368,14 @@ authored by FPS Finance.
 
 ### Honest gap
 
-**Honest gap.** The exact current `be-tax` version for AY2026 could not be
-confirmed from a live official page — the FPS Finance Biztax technical-docs index
-is behind an anti-bot CAPTCHA. The version/format facts rest on the fetchable
-`be-tax-2025-04-30` Architecture Guide, the *Characteristics* page, and the RD of
-13 April 2025. The entry-point identifiers come from a **republished FPS Finance
+**Honest gap.** The entry-point identifiers come from a **republished FPS Finance
 presentation, not the live schemas** — confirm against the official `be-tax`
-entry-point schemas before treating them as normative.
+entry-point schemas before treating them as normative. The version, format and
+size facts rest on the `be-tax-2026-04-30` Gebruikershandleiding and the
+`be-tax-2025-04-30` Architecture Guide, the *Characteristics* / *Functionaliteiten*
+page, and the RD of 13 April 2025; the FPS Finance Biztax technical-docs index has
+been observed behind an anti-bot CAPTCHA, but the `be-tax-2026-04-30` documents
+fetch directly from the FPS Finance downloads path.
 
 ## Jurisdiction-specific invariants
 
@@ -333,15 +383,16 @@ entry-point schemas before treating them as normative.
 
 This is the fact most likely to sink a Belgian conversion. **Only the FSMA/ESEF
 layer uses Inline XBRL** (iXBRL facts embedded in XHTML). The other two regimes
-use **classic XBRL 2.1 instance documents** — a separate `.xbrl` or `.biztax`
-file, *not* iXBRL, *not* XHTML:
+use **classic XBRL 2.1 instance documents** — a separate `.xbrl` file, *not*
+iXBRL, *not* XHTML:
 
 - The NBB taxonomy page states plainly: *"XBRL Specification use: XBRL 2.1
   Specification - version (2003-12-31)."* CBSO instances carry the `.xbrl`
   extension.
 - The `be-tax` architecture guide requires conformance to *"the XBRL 2.1
   specification, including errata, the Dimensions 1.0 and the Formula 1.0
-  specification."* Biztax returns upload as a `.biztax` package, not iXBRL.
+  specification."* Biztax returns are `.xbrl` instances uploaded inside a
+  `.biztax` envelope, not iXBRL.
 
 Consequence for a product whose default output is iXBRL/XHTML (built for ESEF or
 KvK): **iXBRL emitted for the NBB or Biztax will be rejected.** Those regimes want
@@ -353,7 +404,7 @@ route NBB and Biztax to a classic XBRL 2.1 instance writer.
 |---|---|---|---|---|
 | Annual accounts | NBB CBSO | `be-gaap` (`nbb-cbso`) | **XBRL 2.1** | `.xbrl` instance (optionally in a ZIP) |
 | Listed AFR | FSMA | ESEF core + issuer extension | **Inline XBRL 1.1** | `.xbri` report package (XHTML) |
-| Income-tax return | FPS Finance | `be-tax` | **XBRL 2.1** + Dimensions 1.0 + Formula 1.0 | `.biztax` package |
+| Income-tax return | FPS Finance | `be-tax` | **XBRL 2.1** + Dimensions 1.0 + Formula 1.0 | `.xbrl` instance, uploaded inside a `.biztax` envelope (max 25) |
 
 ### Relation to EU reporting
 
@@ -408,10 +459,12 @@ arelleCmdLine \
   --packages nbb-cbso-26.0.15.zip \
   -f annual-accounts.xbrl --validate
 
-# Biztax return (classic XBRL 2.1 + Dimensions + Formula — NOT iXBRL)
+# Biztax return (classic XBRL 2.1 + Dimensions + Formula — NOT iXBRL).
+# Validate the instance, not the envelope: unpack the .biztax file first and
+# run each contained .xbrl instance through Arelle before bundling.
 arelleCmdLine \
-  --packages be-tax-2025-04-30.zip \
-  -f return.biztax --validate
+  --packages be-tax-2026-04-30.zip \
+  -f return.xbrl --validate
 
 # FSMA ESEF AFR (Inline XBRL) — the ONLY Belgian iXBRL path
 arelleCmdLine \
@@ -432,8 +485,9 @@ Walk this in order; each step depends on the prior being clean.
    (see *Start here — choose a filing profile*). State it back before opening
    the file.
 2. **Confirm format matches regime** — iXBRL/XHTML → FSMA only; `.xbrl` XBRL 2.1 →
-   NBB; `.biztax` XBRL 2.1 → FPS Finance. An iXBRL file bound for the NBB or Biztax
-   is wrong on its face (see *The critical split: iXBRL vs classic XBRL 2.1*).
+   NBB; `.xbrl` XBRL 2.1 inside a `.biztax` envelope → FPS Finance. An iXBRL file
+   bound for the NBB or Biztax is wrong on its face (see *The critical split:
+   iXBRL vs classic XBRL 2.1*).
 3. **Pin the version to the reference date** — `nbb-cbso` framework by closing
    date; `be-tax-YYYY-04-30` by assessment year; ESEF/ESRS by financial year
    against the current phase-in (see *Vintage and applicability* and *CSRD /
@@ -441,7 +495,9 @@ Walk this in order; each step depends on the prior being clean.
 4. **NBB: format eligibility** — XBRL only if standard model + euro (or authorised
    foreign currency) + not a foreign company; specific-model entities (credit
    institutions, insurers, health funds, collecting societies) file **PDF**; 50 MB
-   cap (see *Accepted formats, controls, decimals, language, fees*).
+   cap on the instance or ZIP including embedded PDFs, and ≤ 10 MB per encapsulated
+   PDF, DIN-A4 and free of layers, comments, attachments, media, passwords and
+   JavaScript (see *Accepted formats, controls, decimals, language, fees*).
 5. **NBB: model / entry point** — with/without capital, size class, associations
    vs companies; `schemaRef` must point to the matching `m0x-f` entry point;
    respect micro-model date limits (see *The `be-gaap` taxonomy — versions,
@@ -452,9 +508,11 @@ Walk this in order; each step depends on the prior being clean.
 7. **Read Formula assertions as legal controls** — for NBB/Biztax the shipped
    Formula linkbase *is* the arithmetic/logical control set; a failed assertion is
    a legal control failure, not a style warning.
-8. **Biztax: batch atomicity** — a `.biztax` package (≤25 returns) is rejected
-   whole if any one return fails; validate each before bundling (see the
-   *Biztax* profile).
+8. **Biztax: two rejection gates** — a technical failure in any one return
+   invalidates the whole `.biztax` upload (≤25 returns) and rejects every return in
+   it, while a content failure is confined to that return, which is stored but not
+   filed; validate each `.xbrl` instance before bundling (see the *Biztax*
+   profile).
 9. **FSMA: apply the ESEF checklist** (`references/esef.md`), then the Belgian mechanics —
    `.xbri`, ESEF as main document, PDF only as attachment, one ZIP per language,
    deadline of the earlier of AGM − 30 days or year-end + 4 months (see the
@@ -499,12 +557,12 @@ The institutional map a Belgian filing product must hold in its head:
 
 **Honest gaps to carry:**
 
-- Whether **every** current 26.0 arithmetic/logical control ships as a Formula
-  1.0 assertion (vs partly enforced in Filing) is stated at framework level in
-  the CBSO technical guide but not verified line-by-line against the 26.0.15 guide.
-- The exact current `be-tax` version and `.biztax` schema for AY2026 were not
-  confirmed from the CAPTCHA-gated FPS Finance index; pull from the official page
-  when reachable.
+- The `be-tax` **entry-point identifiers** rest on a republished FPS Finance
+  presentation rather than the live schemas; confirm against the official `be-tax`
+  entry-point schemas before treating them as normative.
+- The `.biztax` envelope schema itself was not fetched; the envelope facts come
+  from the `be-tax-2026-04-30` Gebruikershandleiding and the FPS Finance
+  *Functionaliteiten* page.
 - Belgium-specific ESEF guidance beyond the FSMA FAQ was not separately fetched;
   defer generic ESEF/RTS mechanics to `references/esef.md`.
 
@@ -527,9 +585,15 @@ entry notes what it establishes.
 - Filing format (XBRL-vs-PDF eligibility, specific-model PDF rule, 50 MB, RD 29
   April 2019 + Dir 2013/34/EU, paper abolished 1 Jan 2020) —
   <https://www.nbb.be/en/central-balance-sheet-office/preparation-and-filing/when-and-how-file/filing-format>
-- CBSO technical guide (XBRL since 1 April 2007, `.xbrl` mechanics, controls as
-  Formula assertions, four-language labels, micro date limits) —
-  <https://www.nbb.be/doc/ba/xbrl/Taxo2022/Technische%20handleiding/taxonomy_technical_guide_22.9.1.pdf>
+- CBSO technical guide, Version 2026 - 3.0 (18/06/2026), taxonomy version 26.0.15
+  (XBRL since 1 April 2007, `.xbrl` mechanics, 50 MB instance/ZIP cap and the
+  encapsulated-PDF acceptance criteria, encapsulated XHTML/iXBRL rules, controls as
+  Formula linkbase assertions, four-language EN/FR/NL/DE labels, micro-model date
+  limits) —
+  <https://www.nbb.be/doc/ba/xbrl/taxo2026/Taxonomy_technical%20guide_26.0.15.pdf>
+  (the superseded 22.9.1 guide, historical reference for the 2022 framework only, is
+  still reachable at
+  <https://www.nbb.be/doc/ba/xbrl/Taxo2022/Technische%20handleiding/taxonomy_technical_guide_22.9.1.pdf>)
 - About the CBSO (mandate, ~500,000/year, free access, history) —
   <https://www.nbb.be/en/central-balance-sheet-office/about-central-balance-sheet-office>
 - New integrated Filing (2.0 live 4 April 2022; legacy Filing off 1 May 2022) —
@@ -561,9 +625,16 @@ entry notes what it establishes.
 
 **FPS Finance — Biztax (`be-tax`):**
 
-- Biztax Characteristics (`.biztax` package, max 25 returns, whole-package
-  rejection, PDF stored + XBRL retained) —
+- Biztax Characteristics / Functionaliteiten (`.biztax` envelope, max 25 returns,
+  technical failure invalidating the whole upload vs content failure confined to
+  one return, PDF stored + XBRL retained) —
   <https://finance.belgium.be/en/E-services/biztax/how-to-use-biztax/characteristics>
+  (NL: <https://financien.belgium.be/nl/E-services/biztax/hoe-biztax-gebruiken/functionaliteiten>)
+- `be-tax` 2026-04-30 Gebruikershandleiding XBRL Taxonomie, v1.0 of 2026-04-30
+  (`.xbrl` instance = exactly one return, UTF-8, ≤ 15 MB incl. embedded PDFs of
+  ≤ 5 MB each, file-name character set; `.biztax` *omslagbestand* of at most 25
+  returns) —
+  <https://financien.belgium.be/sites/default/files/downloads/be-tax-2026-04-30-Gebruikershandleiding.pdf>
 - `be-tax` 2025-04-30 Architecture Guide (XBRL 2.1 + Dimensions 1.0 + Formula
   1.0 — not iXBRL; annual `be-tax-YYYY-04-30`; fetched in-session, but the
   URL has since been observed CAPTCHA-gated — re-request via the Biztax
