@@ -69,10 +69,11 @@ ISO_4217 = re.compile(r"^[A-Z]{3}$")
 # folding it into the base ones, and accepts several apostrophe-like
 # characters. Keeping the four sets separate means a base transformation does
 # not silently accept a separator it does not permit.
-# Exactly the characters the registry's input patterns accept for the
-# apostrophe group separator. U+02BC is not among them, and including it would
-# decode a document the registry does not.
-APOSTROPHES = "'\u0060\u00b4\u2019\u2032\uff07"
+# Exactly the characters the input patterns of `num-dot-decimal-apos` and
+# `num-comma-decimal-apos` accept as the group separator. U+FF07 FULLWIDTH
+# APOSTROPHE belongs only to `num-unit-decimal-apos`, which this module
+# declines, so accepting it here would decode a document the registry does not.
+APOSTROPHES = "'\u0060\u00b4\u2019\u2032"
 DOT_DECIMAL_FORMATS = frozenset({"numdotdecimal", "num-dot-decimal", "numdotdecimalin"})
 DOT_DECIMAL_APOS_FORMATS = frozenset({"num-dot-decimal-apos"})
 COMMA_DECIMAL_FORMATS = frozenset({"numcommadecimal", "num-comma-decimal"})
@@ -210,15 +211,31 @@ def canonical_fact_text(value: str) -> str:
         return text
     if not parsed.is_finite():
         return text
+    key = canonical_decimal(parsed)
+    return text if key is None else key
+
+
+def canonical_decimal(parsed: Decimal) -> str | None:
+    """Canonical string for a decoded value, or None if it has no exact form.
+
+    Both duplicate-comparison paths go through here so that a decoded value and
+    a raw text value are canonicalised the same way. They were not, and "5"
+    against "5.0" was briefly reported as an inconsistency.
+    """
     sign, digits, exponent = parsed.as_tuple()
     if not isinstance(exponent, int):
-        return text
+        return None
     digits = list(digits)
     while exponent < 0 and digits and digits[-1] == 0:
         digits.pop()
         exponent += 1
     if not digits:
         digits, exponent = [0], 0
+    if not any(digits):
+        # Negative zero is the same reported amount as zero. Keeping the sign
+        # would make a fact pair of "0" and "-0" compare unequal and be
+        # reported as an inconsistency that is not one.
+        sign = 0
     return format(Decimal((sign, tuple(digits), exponent)), "f")
 
 
@@ -417,7 +434,21 @@ def check(path: Path) -> list[str]:
         if all(key):
             grouped[key].append(el)
     for key, els in grouped.items():
-        values = {canonical_fact_text(e.text or "") for e in els}
+        # Compare REPORTED values, not rendered text. Two facts reading "1"
+        # with @scale of 0 and 3 report different amounts, and a fact reading
+        # "1" with @scale="3" reports the same amount as one reading "1000".
+        # Comparing the text alone got both directions wrong. Where a value
+        # cannot be decoded, fall back to its text so the facts are still
+        # compared rather than silently dropped from the check.
+        values = set()
+        for e in els:
+            decoded = fact_value(e)
+            decoded_key = None if decoded is None else canonical_decimal(decoded)
+            values.add(
+                canonical_fact_text(e.text or "")
+                if decoded_key is None
+                else decoded_key
+            )
         if len(values) > 1:
             lines = ", ".join(str(e.sourceline) for e in els)
             issues.append(

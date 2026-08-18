@@ -499,6 +499,55 @@ class CheckFactsTestCase(unittest.TestCase):
             check_facts.canonical_fact_text("1.5"),
         )
         self.assertEqual(check_facts.canonical_fact_text("0.00"), "0")
+        # Negative zero is the same amount as zero; splitting them would
+        # report a duplicate-fact inconsistency that does not exist.
+        for zero in ("0", "-0", "0.0", "-0.00", "0E+5"):
+            with self.subTest(zero=zero):
+                self.assertEqual(check_facts.canonical_fact_text(zero), "0")
+
+    def test_duplicates_compare_reported_values_not_rendered_text(self):
+        """@scale and @sign change the amount a fact reports.
+
+        Comparing `.text` alone was wrong in both directions: it missed a real
+        inconsistency between two facts whose scales differ, and invented one
+        between two facts that report the same amount differently.
+        """
+
+        # Same text, different scale: different amounts, so inconsistent.
+        conflicting = doc(
+            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
+            ' decimals="INF" scale="0">1</ix:nonFraction>'
+            '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
+            ' decimals="INF" scale="3">1</ix:nonFraction>'
+        )
+        self.assertTrue(
+            any("Duplicate fact" in i for i in self.run_on(conflicting)),
+            f"got {self.run_on(conflicting)}",
+        )
+
+        # Different text, same amount: consistent, so no finding.
+        agreeing = doc(
+            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
+            ' decimals="INF" scale="3">1</ix:nonFraction>'
+            '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
+            ' decimals="INF">1000</ix:nonFraction>'
+        )
+        self.assertFalse(
+            any("Duplicate fact" in i for i in self.run_on(agreeing)),
+            f"got {self.run_on(agreeing)}",
+        )
+
+        # @sign likewise.
+        signed = doc(
+            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
+            ' decimals="INF" sign="-">5</ix:nonFraction>'
+            '<ix:nonFraction name="e:A" contextRef="c1" unitRef="u1"'
+            ' decimals="INF">5</ix:nonFraction>'
+        )
+        self.assertTrue(
+            any("Duplicate fact" in i for i in self.run_on(signed)),
+            f"got {self.run_on(signed)}",
+        )
 
     def test_canonical_key_survives_signalling_nan(self):
         """sNaN raised inside normalize(); it must be returned as written."""
@@ -507,10 +556,12 @@ class CheckFactsTestCase(unittest.TestCase):
     def test_apostrophe_set_matches_the_registry(self):
         """Only the separators the registry lists are decoded.
 
-        U+02BC MODIFIER LETTER APOSTROPHE is not one of them, so a document
-        using it is declined rather than silently reinterpreted.
+        The apos decimal transformations accept ASCII apostrophe, U+0060,
+        U+00B4, U+2019 and U+2032. U+02BC is in no pattern at all, and U+FF07
+        belongs only to num-unit-decimal-apos, which this module declines. A
+        document using either is declined rather than reinterpreted.
         """
-        for ch in "'\u0060\u00b4\u2019\u2032\uff07":
+        for ch in "'\u0060\u00b4\u2019\u2032":
             with self.subTest(char=hex(ord(ch))):
                 self.assertEqual(
                     self.defects(
@@ -520,10 +571,16 @@ class CheckFactsTestCase(unittest.TestCase):
                     ),
                     [],
                 )
-        issues = self.run_on(
-            self._fact("1\u02bc234.56", "2", ' format="ixt:num-dot-decimal-apos"')
-        )
-        self.assertTrue(any(i.startswith("NOTE") for i in issues), f"got {issues}")
+        for ch in "\u02bc\uff07":
+            with self.subTest(declined=hex(ord(ch))):
+                issues = self.run_on(
+                    self._fact(
+                        f"1{ch}234.56", "2", ' format="ixt:num-dot-decimal-apos"'
+                    )
+                )
+                self.assertTrue(
+                    any(i.startswith("NOTE") for i in issues), f"got {issues}"
+                )
 
     def test_no_operation_consults_the_decimal_context(self):
         """Guard against the whole class of bug, not one more instance of it.
