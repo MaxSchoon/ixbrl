@@ -345,10 +345,12 @@ FY2025 to FY2027** and **wave 3 from FY2026 to FY2028**. The **Omnibus I
 26 February 2026, in force 18 March 2026; CSRD-amending transposition deadline
 19 March 2027) further reshaped the ESRS.
 
-**Why this matters to a conversion product:** recital 24 of Directive (EU)
-2026/470 states that **until the sustainability-reporting mark-up rules are
-adopted** in Delegated Regulation (EU) 2019/815 (the ESEF RTS), undertakings are
-**not** required to mark up sustainability reporting; the ESRS digital-tagging
+**Why this matters to a conversion product:** art. 2(9) of Directive (EU)
+2026/470 replaces art. 29d of Directive 2013/34/EU, and the replacement text
+provides that **until the sustainability-reporting mark-up rules are adopted**
+in Delegated Regulation (EU) 2019/815 (the ESEF RTS), undertakings are **not**
+required to mark up sustainability reporting. That is the operative provision;
+recital 24 explains it but does not enact it. the ESRS digital-tagging
 delegated act is expected only in H2 2026, with revised (simplified) ESRS around
 September 2026. **Net: ESRS mark-up in ESEF is effectively suspended pending the
 updated ESEF RTS.** Belgian listed issuers still file the ESEF

@@ -201,8 +201,9 @@ is the entry point the preparer's extension schema imports.
 browsing the taxonomy content aligned with IAS 1 and with IFRS 18
 respectively (ESEF Taxonomy 2025 Documentation §3.4.7). The package does
 expose IAS 1 and IFRS 18 flavours of the filer entry point, but both
-resolve to `esef_cor.xsd` and differ only in which IFRS label linkbases
-they pull in, so the extension DTS is the same either way. The 2025 package is aimed at 2026 IFRS consolidated
+resolve to `esef_cor.xsd`, so the element definitions an extension builds on
+are the same under either standard. What differs between the two flavours is
+the accompanying linkbase content, labels among it. The 2025 package is aimed at 2026 IFRS consolidated
 financial statements; the RTS in force for FY2025 reports remains
 2019/815 as amended by Delegated Regulation (EU) 2025/19, so entry-point
 matching still keys on the financial year. IFRS 18 is effective for

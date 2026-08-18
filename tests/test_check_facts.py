@@ -141,6 +141,14 @@ class CheckFactsTestCase(unittest.TestCase):
         issues = self.run_on(doc(body))
         self.assertTrue(any("missing @decimals" in i for i in issues))
 
+    def defects(self, document):
+        """Findings only, with coverage notes filtered out.
+
+        A NOTE reports what the checker could not evaluate. It is not a defect
+        in the document, so a test for "clean" must not trip over one.
+        """
+        return [i for i in self.run_on(document) if not i.startswith("NOTE")]
+
     def _fact(self, value, decimals, extra=""):
         return doc(
             CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1"'
@@ -165,7 +173,9 @@ class CheckFactsTestCase(unittest.TestCase):
         for decimals, should_flag in cases:
             with self.subTest(decimals=decimals):
                 issues = self.run_on(self._fact("-2345.67", decimals))
-                flagged = any("6.5.37" in i for i in issues)
+                flagged = any(
+                    "6.5.37" in i and not i.startswith("NOTE") for i in issues
+                )
                 self.assertEqual(flagged, should_flag, f"got {issues}")
 
     def test_decimals_finer_than_the_value_is_allowed(self):
@@ -178,18 +188,21 @@ class CheckFactsTestCase(unittest.TestCase):
         """
         for decimals in ("INF", "0", "-3", "-5", "-6"):
             with self.subTest(decimals=decimals):
-                self.assertEqual(self.run_on(self._fact("1000000", decimals)), [])
+                self.assertEqual(self.defects(self._fact("1000000", decimals)), [])
 
     def test_decimals_coarser_than_the_value_is_flagged(self):
         """-7 would zero the leading 1 of 1,000,000."""
         issues = self.run_on(self._fact("1000000", "-7"))
-        self.assertTrue(any("6.5.37" in i for i in issues), f"got {issues}")
+        self.assertTrue(
+            any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+            f"got {issues}",
+        )
 
     def test_exact_value_with_inf_is_never_flagged(self):
         """INF is prescribed for an exact amount (guide section 6.6.4)."""
         for value in ("1234.56", "45000", "0.0325", "1000000"):
             with self.subTest(value=value):
-                self.assertEqual(self.run_on(self._fact(value, "INF")), [])
+                self.assertEqual(self.defects(self._fact(value, "INF")), [])
 
     def test_scale_is_applied_before_the_check(self):
         """@scale changes the reported value, so it changes the verdict.
@@ -197,9 +210,12 @@ class CheckFactsTestCase(unittest.TestCase):
         Text 45 with scale=3 reports 45000. decimals=-3 zeroes nothing there
         and must pass; decimals=-6 would zero the 45 and must fail.
         """
-        self.assertEqual(self.run_on(self._fact("45", "-3", ' scale="3"')), [])
+        self.assertEqual(self.defects(self._fact("45", "-3", ' scale="3"')), [])
         issues = self.run_on(self._fact("45", "-6", ' scale="3"'))
-        self.assertTrue(any("6.5.37" in i for i in issues), f"got {issues}")
+        self.assertTrue(
+            any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+            f"got {issues}",
+        )
 
     def test_unreadable_value_is_not_judged(self):
         """A value this script cannot parse must produce no truncation verdict.
@@ -208,11 +224,95 @@ class CheckFactsTestCase(unittest.TestCase):
         implemented here. Guessing would produce confident nonsense.
         """
         issues = self.run_on(self._fact("twelve thousand", "-3"))
-        self.assertFalse(any("6.5.37" in i for i in issues), f"got {issues}")
+        self.assertFalse(
+            any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+            f"got {issues}",
+        )
 
-    def test_thousands_separators_are_read(self):
+    def test_dot_decimal_transformation_is_read(self):
+        """Commas are separators only when @format says so."""
+        issues = self.run_on(
+            self._fact("1,234.56", "-2", ' format="ixt:num-dot-decimal"')
+        )
+        self.assertTrue(
+            any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+            f"got {issues}",
+        )
+
+    def test_comma_decimal_transformation_is_not_read_as_dot(self):
+        """Under num-comma-decimal, "1,5" is one and a half, not fifteen.
+
+        Stripping commas unconditionally read it as 15, which is exact at
+        decimals="0" and so passed. The real value 1.5 must be flagged.
+        """
+        issues = self.run_on(self._fact("1,5", "0", ' format="ixt:num-comma-decimal"'))
+        self.assertTrue(
+            any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+            f"got {issues}",
+        )
+        # And its thousands separator is the dot.
+        self.assertEqual(
+            self.run_on(self._fact("1.234,56", "2", ' format="ixt:num-comma-decimal"')),
+            [],
+        )
+
+    def test_unknown_transformation_is_declined(self):
+        """A transformation this script does not decode yields no verdict."""
+        issues = self.run_on(
+            self._fact("1,234.56", "-2", ' format="ixt:num-unit-decimal"')
+        )
+        self.assertFalse(
+            any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+            f"got {issues}",
+        )
+
+    def test_separators_without_a_format_are_not_assumed(self):
+        """No @format means the text is already an XBRL numeric value.
+
+        Commas are not valid there, so the value is undecodable rather than
+        silently reinterpreted.
+        """
         issues = self.run_on(self._fact("1,234.56", "-2"))
-        self.assertTrue(any("6.5.37" in i for i in issues), f"got {issues}")
+        self.assertFalse(
+            any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+            f"got {issues}",
+        )
+
+    def test_value_longer_than_the_decimal_context_is_exact(self):
+        """Regression: scaleb() rounded to 28 significant digits.
+
+        The trailing .1 was rounded away before the integer test, so a value
+        that plainly truncates at decimals="0" passed.
+        """
+        issues = self.run_on(self._fact("10000000000000000000000000000.1", "0"))
+        self.assertTrue(
+            any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+            f"got {issues}",
+        )
+
+    def test_nested_fact_is_declined(self):
+        """A fact whose value comes from child content is not judged on .text."""
+        body = (
+            CONTEXT_AND_UNIT + '<ix:nonFraction name="e:A" contextRef="c1"'
+            ' unitRef="u1" decimals="0"><span>2345.67</span></ix:nonFraction>'
+        )
+        issues = self.run_on(doc(body))
+        self.assertFalse(
+            any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+            f"got {issues}",
+        )
+
+    def test_sign_attribute_is_applied(self):
+        """Conformant iXBRL puts the minus in @sign, not the text."""
+        cases = [("INF", False), ("2", False), ("0", True), ("-3", True)]
+        for decimals, should_flag in cases:
+            with self.subTest(decimals=decimals):
+                issues = self.run_on(self._fact("2345.67", decimals, ' sign="-"'))
+                self.assertEqual(
+                    any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+                    should_flag,
+                    f"got {issues}",
+                )
 
     def test_unresolved_context_is_flagged(self):
         body = (

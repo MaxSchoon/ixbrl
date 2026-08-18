@@ -22,8 +22,12 @@ Checks performed:
 Usage:
   python check_facts.py <ixbrl.xhtml>
 
-Exit codes: 0 = clean; 1 = issues found, including a document that is not
-well-formed XML; 2 = usage error; 127 = lxml missing.
+A fact whose @format names a transformation this script does not decode is
+reported as a NOTE rather than judged. The note does not fail the run; it says
+plainly what was not evaluated, so "OK" never overstates the coverage.
+
+Exit codes: 0 = clean (notes do not fail the run); 1 = issues found, including
+a document that is not well-formed XML; 2 = usage error; 127 = lxml missing.
 """
 
 from __future__ import annotations
@@ -53,6 +57,14 @@ XSI_NIL = f"{{{NS['xsi']}}}nil"
 
 ISO_4217 = re.compile(r"^[A-Z]{3}$")
 
+# Transformations from the Inline XBRL Transformation Registry whose only
+# effect on a numeric fact is the separator convention. Everything else in the
+# registry is declined by fact_value() rather than guessed at.
+DOT_DECIMAL_FORMATS = frozenset(
+    {"numdotdecimal", "num-dot-decimal", "numdotdecimalin", "num-dot-decimal-in"}
+)
+COMMA_DECIMAL_FORMATS = frozenset({"numcommadecimal", "num-comma-decimal"})
+
 
 def fact_value(el: etree._Element) -> Decimal | None:
     """The numeric value an ix:nonFraction reports, or None if undecidable.
@@ -64,12 +76,29 @@ def fact_value(el: etree._Element) -> Decimal | None:
     not implement, and guessing at one would produce confident nonsense. A
     check that cannot see the value must decline to judge it.
     """
+    if len(el) or el.get("continuedAt"):
+        # A nested or continued fact takes its value from descendant content,
+        # which this function does not assemble. Reading `.text` alone would
+        # silently judge a fragment of the value.
+        return None
     text = (el.text or "").strip()
     if not text:
         return None
-    # Thousands separators and ordinary whitespace are safe to drop; anything
-    # else left over means the transformation is not one we can read.
-    cleaned = re.sub(r"[\s,\u00a0]", "", text)
+
+    # @format names a transformation from the registry, and the separator
+    # convention is part of it: under `num-comma-decimal`, "1,5" is one and a
+    # half. Stripping commas unconditionally turns that into fifteen. Only the
+    # two separator conventions below are decoded; any other transformation
+    # (dates, words, sign handling) is declined rather than guessed at.
+    fmt = (el.get("format") or "").rsplit(":", 1)[-1]
+    if not fmt:
+        cleaned = text  # no transformation: the text is already an XBRL numeric
+    elif fmt in DOT_DECIMAL_FORMATS:
+        cleaned = re.sub(r"[\s\u00a0,']", "", text)
+    elif fmt in COMMA_DECIMAL_FORMATS:
+        cleaned = re.sub(r"[\s\u00a0.']", "", text).replace(",", ".")
+    else:
+        return None
     try:
         value = Decimal(cleaned)
     except InvalidOperation:
@@ -107,10 +136,20 @@ def truncates_nonzero_digits(value: Decimal, decimals: str) -> bool:
     if decimals == "INF":
         return False  # infinite precision zeroes nothing
     try:
-        shifted = value.scaleb(int(decimals))
-    except (ValueError, InvalidOperation):
+        places = int(decimals)
+    except ValueError:
         return False
-    return shifted != shifted.to_integral_value()
+    # Exact coefficient arithmetic, not scaleb(): scaleb rounds to the active
+    # decimal context (28 significant digits by default), so a value longer
+    # than that would silently lose the very digit being tested.
+    digits, exponent = value.as_tuple()[1:]
+    if not isinstance(exponent, int):
+        return False  # NaN or Infinity carries a string exponent
+    shift = exponent + places
+    if shift >= 0:
+        return False  # no digit falls below the retained place
+    dropped = digits[shift:]
+    return any(dropped)
 
 
 def canonical_fact_text(value: str) -> str:
@@ -171,6 +210,11 @@ def check(path: Path) -> list[str]:
     issues: list[str] = []
 
     nf_facts, nn_facts, continuations = find_facts(root)
+    # Facts whose reported value this script could not decode, and which the
+    # decimals check therefore did not evaluate. Counted rather than dropped: a
+    # check that quietly covers less than it appears to is worse than one that
+    # says so, and "no issues found" would otherwise overstate the coverage.
+    undecodable = 0
 
     # --- ix:nonFraction required attributes ---
     for el in nf_facts:
@@ -195,7 +239,9 @@ def check(path: Path) -> list[str]:
         decimals = el.get("decimals")
         if decimals and not nil_present:
             value = fact_value(el)
-            if value is not None and truncates_nonzero_digits(value, decimals):
+            if value is None:
+                undecodable += 1
+            elif truncates_nonzero_digits(value, decimals):
                 issues.append(
                     f"ix:nonFraction at line {el.sourceline} has decimals="
                     f"'{decimals}', which interprets non-zero digits of "
@@ -320,6 +366,13 @@ def check(path: Path) -> list[str]:
                 f"values {sorted(values)} (lines {lines})"
             )
 
+    if undecodable:
+        issues.append(
+            f"NOTE: {undecodable} numeric fact(s) carry a @format this script "
+            "does not decode, so EFM 6.5.37 was not evaluated for them. "
+            "Arelle checks these; this is a coverage gap, not a defect."
+        )
+
     return issues
 
 
@@ -331,14 +384,21 @@ def main() -> int:
     if not path.exists():
         print(f"File not found: {path}", file=sys.stderr)
         return 2
-    issues = check(path)
-    if not issues:
-        print(f"OK — {path.name} passes pre-flight checks.")
-        return 0
-    print(f"{len(issues)} issue(s) in {path.name}:")
-    for i, msg in enumerate(issues, 1):
-        print(f"  {i}. {msg}")
-    return 1
+    findings = check(path)
+    # A NOTE reports what could not be evaluated, so it is not a defect and
+    # must not fail the run. It is still printed: a coverage gap the operator
+    # cannot see is the same as no gap at all.
+    notes = [f for f in findings if f.startswith("NOTE")]
+    issues = [f for f in findings if not f.startswith("NOTE")]
+    if issues:
+        print(f"{len(issues)} issue(s) in {path.name}:")
+        for i, msg in enumerate(issues, 1):
+            print(f"  {i}. {msg}")
+    else:
+        print(f"OK: {path.name} passes pre-flight checks.")
+    for note in notes:
+        print(f"  {note}")
+    return 1 if issues else 0
 
 
 if __name__ == "__main__":
