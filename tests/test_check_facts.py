@@ -826,6 +826,34 @@ class CheckFactsTestCase(unittest.TestCase):
         self.assertEqual(self.run_on(padded), self.run_on(plain))
         self.assertEqual(self.run_on(padded), [])
 
+    def test_padded_decimals_and_escape_are_read(self):
+        """decimals, precision and escape all collapse whitespace.
+
+        A padded `decimals=" INF "` previously failed to parse and fell through
+        to "no truncation", which happens to be the right answer for INF and
+        the wrong reason for it. An attribute of nothing but spaces carries no
+        value at all and counts as absent.
+        """
+        self.assertEqual(self.defects(self._fact("2345.67", " INF ")), [])
+        issues = self.run_on(self._fact("2345.67", " -3 "))
+        self.assertTrue(
+            any("6.5.37" in i and not i.startswith("NOTE") for i in issues),
+            f"padded finite decimals not read: {issues}",
+        )
+        whitespace_only = self.run_on(self._fact("5", "   "))
+        self.assertTrue(
+            any("missing @decimals" in i for i in whitespace_only),
+            f"an empty @decimals counted as present: {whitespace_only}",
+        )
+        padded_escape = (
+            CONTEXT_AND_UNIT + '<ix:nonNumeric name="e:N" contextRef="c1"'
+            ' escape=" true "><p>unclosed</ix:nonNumeric>'
+        )
+        self.assertTrue(
+            any("not well-formed" in i for i in self.run_on(doc(padded_escape))),
+            "a padded @escape was not read",
+        )
+
     def test_xsi_nil_is_case_sensitive(self):
         """Boolean literals are lower case; "TRUE" is not one of them.
 

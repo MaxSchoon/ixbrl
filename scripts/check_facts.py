@@ -408,8 +408,11 @@ def check(path: Path) -> list[str]:
         for attr in ("contextRef", "unitRef"):
             if not ncname(el, attr):
                 issues.append(f"ix:nonFraction missing @{attr} at line {el.sourceline}")
-        decimals_present = bool(el.get("decimals"))
-        precision_present = bool(el.get("precision"))
+        # decimalsType and precision collapse whitespace, so an attribute of
+        # nothing but spaces carries no value and counts as absent.
+        decimals = collapse(el.get("decimals") or "")
+        decimals_present = bool(decimals)
+        precision_present = bool(collapse(el.get("precision") or ""))
         # xsi:nil is xs:boolean: whitespace-collapsing, and case-sensitive.
         # Lower-casing accepted "TRUE", which is not a boolean literal.
         nil_present = collapse(el.get(XSI_NIL) or "") in {"true", "1"}
@@ -424,7 +427,6 @@ def check(path: Path) -> list[str]:
                 "ix:nonFraction has mutually exclusive attributes set "
                 f"(decimals, precision, xsi:nil) at line {el.sourceline}"
             )
-        decimals = el.get("decimals")
         if decimals and not nil_present:
             value = fact_value(el)
             if value is None:
@@ -441,7 +443,7 @@ def check(path: Path) -> list[str]:
         if not ncname(el, "contextRef"):
             issues.append(f"ix:nonNumeric missing @contextRef at line {el.sourceline}")
         # @escape is xs:boolean, so "1" is as true as "true".
-        if (el.get("escape") or "").strip() in {"true", "1"}:
+        if collapse(el.get("escape") or "") in {"true", "1"}:
             try:
                 etree.fromstring(f"<wrap>{el.text or ''}</wrap>", parser)
             except etree.XMLSyntaxError as exc:
