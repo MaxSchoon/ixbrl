@@ -7,10 +7,11 @@ silent-failure category of mistakes preparers most often make.
 Checks performed:
   - Every ix:nonFraction has contextRef, unitRef, and exactly one of
     decimals, precision, or xsi:nil="true".
-  - Every ix:nonNumeric has contextRef. If escape="true" the body is
-    treated as XHTML; flag if it does not parse.
-  - Continuation chains (continuedAt → ix:continuation@id) form a tree
-    with no cycles, no dangling references, and a single root per chain.
+  - Every ix:nonNumeric has contextRef. Where @escape is true, in either of
+    its boolean spellings, the body is treated as XHTML and flagged if it
+    does not parse.
+  - Continuation chains (continuedAt → ix:continuation@id) resolve, are
+    referenced at most once each, and contain no cycles.
   - A finite @decimals does not zero out non-zero digits of the reported
     value (EDGAR XBRL Guide 9.5, validation EFM 6.5.37).
   - All contextRef values resolve to a defined xbrli:context.
@@ -26,7 +27,9 @@ cheaper imitation of it was wrong in both directions. Run Arelle for it.
 Usage:
   python check_facts.py <ixbrl.xhtml>
 
-A fact whose @format names a transformation this script does not decode is
+A fact whose reported value cannot be decoded here, because @format names a
+transformation this script does not implement, because the value comes from
+descendant or continued content, or because the text is not a number, is
 reported as a NOTE rather than judged. The note does not fail the run; it says
 plainly what was not evaluated, so "OK" never overstates the coverage.
 
