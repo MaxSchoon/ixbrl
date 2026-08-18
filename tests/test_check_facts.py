@@ -695,17 +695,36 @@ class CheckFactsTestCase(unittest.TestCase):
                 )
 
     def test_escape_accepts_either_boolean_spelling(self):
-        """@escape is xs:boolean, so "1" is as true as "true"."""
+        """@escape is xs:boolean, so "1" is as true as "true".
+
+        The escaped content must be entity-encoded, or the DOCUMENT is
+        malformed and the parser fails before the @escape branch is reached.
+        An earlier version of this test wrote the markup raw and so passed
+        whatever the branch did, which is no test at all.
+        """
         for spelling in ("true", "1"):
             with self.subTest(escape=spelling):
-                body = (
-                    CONTEXT_AND_UNIT + '<ix:nonNumeric name="e:N" contextRef="c1"'
-                    f' escape="{spelling}"><p>unclosed</ix:nonNumeric>'
+                issues = self.run_on(self._escaped(spelling, "&lt;p&gt;unclosed"))
+                self.assertTrue(any("escape=" in i for i in issues), f"got {issues}")
+        # A false spelling must leave the content unexamined.
+        for spelling in ("false", "0", ""):
+            with self.subTest(escape=spelling):
+                issues = self.run_on(self._escaped(spelling, "&lt;p&gt;unclosed"))
+                self.assertFalse(
+                    any("escape=" in i for i in issues), f"{spelling!r}: {issues}"
                 )
-                issues = self.run_on(doc(body))
-                self.assertTrue(
-                    any("not well-formed" in i for i in issues), f"got {issues}"
-                )
+        # Well-formed escaped content is not a finding either.
+        self.assertEqual(
+            self.run_on(self._escaped("true", "&lt;p&gt;closed&lt;/p&gt;")), []
+        )
+
+    @staticmethod
+    def _escaped(spelling, content):
+        attribute = f' escape="{spelling}"' if spelling else ""
+        return doc(
+            CONTEXT_AND_UNIT + '<ix:nonNumeric name="e:N" contextRef="c1"'
+            f"{attribute}>{content}</ix:nonNumeric>"
+        )
 
     def test_apostrophe_formats_also_accept_the_base_separator(self):
         """The apos transformations ADD apostrophes; they do not replace.
@@ -845,12 +864,11 @@ class CheckFactsTestCase(unittest.TestCase):
             any("missing @decimals" in i for i in whitespace_only),
             f"an empty @decimals counted as present: {whitespace_only}",
         )
-        padded_escape = (
-            CONTEXT_AND_UNIT + '<ix:nonNumeric name="e:N" contextRef="c1"'
-            ' escape=" true "><p>unclosed</ix:nonNumeric>'
-        )
         self.assertTrue(
-            any("not well-formed" in i for i in self.run_on(doc(padded_escape))),
+            any(
+                "escape=" in i
+                for i in self.run_on(self._escaped(" true ", "&lt;p&gt;unclosed"))
+            ),
             "a padded @escape was not read",
         )
 
