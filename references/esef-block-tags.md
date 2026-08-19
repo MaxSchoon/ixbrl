@@ -623,9 +623,13 @@ for one of them.
 > **How to reproduce the catalog.** Take the Annex II tables from the
 > Official Journal text of Delegated Regulation (EU) 2026/283, collect every
 > label ending `[text block]` from Table 1 and from Table 2 separately, and
-> resolve each to a QName through the IFRS Taxonomy 2025-03-27 English label
-> linkbase, falling back to the ESEF package's own `esef_cor` labels for the
-> ESMA-defined elements. Confirm each resulting QName appears in
+> resolve each to a QName in two passes. First match the label against the
+> IFRS Taxonomy common English label linkbase for the generation the Annex
+> cites. Then, for whatever does not match, derive the element name from the
+> label and confirm that name appears in the ESEF taxonomy package; the labels
+> of elements entering or leaving with a standard change live in the
+> standard-specific label files rather than the common one, which is why the
+> first pass misses them. Confirm every resulting QName appears in
 > `esef_taxonomy-2025_12_31.zip` before listing it. That is how the catalog
 > above was built, and re-running it against a later Annex II is how to
 > refresh it.

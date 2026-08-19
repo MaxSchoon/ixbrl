@@ -267,45 +267,60 @@ def check_attribution() -> None:
 
 
 # A source marker in prose, `[S7]`, and the entry that defines it, written as
-# a bold marker at the head of a list item.
+# a bold marker at the head of a list item. Identifiers stay strings: `[S2]`
+# and `[S02]` are different markers to a reader, and folding them to an int
+# would hide one shadowing the other.
 SOURCE_MARKER = re.compile(r"\[S(\d+)\]")
 SOURCE_ENTRY = re.compile(r"^\s*-?\s*\*\*\[S(\d+)\]\*\*", re.M)
+SOURCE_HEADING = re.compile(r"^#{1,3} .*\bsources?\b.*$", re.M | re.I)
 
 
 def check_citation_markers() -> None:
     """Every `[S7]` marker resolves to an entry, and every entry is cited.
 
-    Only some references use this convention; a file that uses no markers is
-    skipped rather than required to adopt it.
+    Only some references use this convention; a file that uses none is skipped
+    rather than required to adopt it.
+
+    Citations are counted from the body ABOVE the source list, not from the
+    list itself. An entry carries its own marker, so counting the whole file
+    would make every entry look cited. Excluding only each entry's first line
+    is not enough either: entries wrap, and a continuation line can cite a
+    different source, which would keep that source looking cited after its
+    last real citation was deleted.
 
     This is the invariant that lets `.markdownlint-cli2.jsonc` switch MD052
     off. markdownlint reads `[S7]` as a shortcut reference link and wants a
     link definition, which this repository deliberately does not write. That
-    rule is only safe to disable while something else checks that a marker
-    points at a real source and that no source goes uncited, which is what a
-    reader actually depends on. Before this existed, the rationale for
-    disabling MD052 named a check that did not exist.
+    rule is only safe to disable while something else checks what a reader
+    depends on: that a marker points at a real source, and that no source goes
+    uncited. Before this existed, the rationale for disabling MD052 named a
+    check that did not exist.
     """
     mark = len(errors)
     checked = 0
     for path in sorted((ROOT / "references").rglob("*.md")):
         text = path.read_text(encoding="utf-8")
-        # Count citations from the prose only. An entry line carries its own
-        # marker, so counting it would make every entry look cited and the
-        # uncited half of this check could never fire.
-        prose = "\n".join(
-            line for line in text.splitlines() if not SOURCE_ENTRY.match(line)
-        )
-        used = {int(n) for n in SOURCE_MARKER.findall(prose)}
-        defined = {int(m.group(1)) for m in SOURCE_ENTRY.finditer(text)}
+        label = path.relative_to(ROOT).as_posix()
+
+        entries = list(SOURCE_ENTRY.finditer(text))
+        heading = SOURCE_HEADING.search(text)
+        body = text[: heading.start()] if heading else text
+        if heading and entries and entries[0].start() < heading.start():
+            fail(f"{label}: a source entry appears above the source heading")
+        used = set(SOURCE_MARKER.findall(body))
+        defined: set[str] = set()
+        for match in entries:
+            if match.group(1) in defined:
+                fail(f"{label}: source entry [S{match.group(1)}] is defined twice")
+            defined.add(match.group(1))
         if not used and not defined:
             continue
-        label = path.relative_to(ROOT).as_posix()
+
         checked += 1
-        for orphan in sorted(used - defined):
+        for orphan in sorted(used - defined, key=int):
             fail(f"{label}: [S{orphan}] is cited but has no source entry")
-        for unused in sorted(defined - used):
-            fail(f"{label}: source entry [S{unused}] is never cited")
+        for unused in sorted(defined - used, key=int):
+            fail(f"{label}: source entry [S{unused}] is never cited in the body")
     if not failures_since(mark):
         print(f"Citation markers OK ({checked} file(s) using the convention)")
 
