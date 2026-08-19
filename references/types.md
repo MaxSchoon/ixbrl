@@ -226,11 +226,14 @@ explicitly flagged.**
   XBRL 2.1 declares no `xbrli:fraction` element. The fact is the
   taxonomy-defined concept element itself, carrying `xbrli:numerator`
   and `xbrli:denominator` children in place of a simple value:
-  `<myTaxonomy:oneThird contextRef="numC1" unitRef="u1"><numerator>1</numerator><denominator>3</denominator></myTaxonomy:oneThird>`.
-  The denominator must be non-zero and finite, and `@precision` and
-  `@decimals` must not appear on such a fact. In Inline XBRL the same
-  fact is tagged with `ix:fraction`, wrapping `ix:numerator` and
-  `ix:denominator`.
+  `<myTaxonomy:oneThird contextRef="numC1" unitRef="u1"><xbrli:numerator>1</xbrli:numerator><xbrli:denominator>3</xbrli:denominator></myTaxonomy:oneThird>`.
+  Both children are global elements in the
+  `http://www.xbrl.org/2003/instance` namespace and the instance schema
+  sets `elementFormDefault="qualified"`, so they are namespace-qualified
+  in every instance. The denominator must be non-zero and finite, and
+  `@precision` and `@decimals` must not appear on such a fact. In Inline
+  XBRL the same fact is tagged with `ix:fraction`, wrapping
+  `ix:numerator` and `ix:denominator`.
 
 ## Concept declaration attributes that depend on item type
 

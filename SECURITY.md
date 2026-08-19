@@ -28,10 +28,20 @@ ambient cache unless the caller passes `--packages <taxonomy>.zip
    `npx skills add MaxSchoon/ixbrl` resolves the `skills` CLI from npm at run
    time and then fetches this repository from GitHub, and `pip install
    arelle-release` resolves Arelle and its runtime dependencies from PyPI
-   unpinned. Pin both where you need a reproducible install
-   (`npx skills@<version> add ...`, `pip install arelle-release==<version>`).
-   We fix defects in this repository's own workflows and pins; a compromised
-   upstream package belongs to its registry and its maintainers.
+   unpinned. Version pins narrow the drift and do not make either install
+   reproducible. `npx skills@<version> add ...` pins the CLI, not this
+   repository: the CLI clones a branch, its ref syntax is the fragment
+   `MaxSchoon/ixbrl#<ref>` (a bare `@<sha>` is read as a skill-name filter),
+   and that ref reaches `git clone --branch`, which takes a branch or tag
+   and rejects a commit SHA. `pip install arelle-release==<version>` pins
+   Arelle alone; its runtime dependencies are declared as ranges
+   (`lxml!=6.0.0,<7,>=4`, `numpy<3,>=1`) and pip verifies no artifact hashes
+   unless a fully pinned requirements file is installed with
+   `--require-hashes`. For a reproducible environment, clone this
+   repository at a known commit and install Arelle from a hash-pinned
+   requirements file. We fix defects in this repository's own workflows and
+   pins; a compromised upstream package belongs to its registry and its
+   maintainers.
 
 ## Reporting a vulnerability
 

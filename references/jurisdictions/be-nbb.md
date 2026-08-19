@@ -31,7 +31,7 @@ wrong regime.
 | Situation | Profile | Section |
 |---|---|---|
 | A Belgian company, association or foundation must file its statutory annual accounts | NBB Central Balance Sheet Office: `be-gaap` / `nbb-cbso`, classic XBRL 2.1 | [Profile: NBB Central Balance Sheet Office](#profile-nbb-cbso) |
-| A listed issuer must publish an annual financial report as regulated information | FSMA / ESEF: Inline XBRL via eCorporate into STORI | [Profile: FSMA / ESEF](#profile-fsma-esef) |
+| A listed issuer must publish an annual financial report as regulated information | FSMA / ESEF: Inline XBRL via `corp.doc.` into STORI | [Profile: FSMA / ESEF](#profile-fsma-esef) |
 | A company, non-resident or legal entity must file its income-tax return | Biztax: `be-tax`, classic XBRL 2.1, FPS Finance | [Profile: Biztax](#profile-biztax) |
 
 Belgium runs one of Europe's oldest mandatory XBRL regimes; the NBB Central
@@ -45,7 +45,7 @@ entity may touch in the same financial year:
    **`nbb-cbso`** taxonomy. The centrepiece a Belgian-market conversion product
    serves.
 2. **FSMA / ESEF**: **listed-issuer** annual financial reports (AFRs), filed
-   via **eCorporate** into the **STORI** storage mechanism.
+   via `corp.doc.` into the **STORI** storage mechanism.
 3. **Biztax**: corporate / legal-entity / non-resident **income-tax returns**
    in FPS Finance's **`be-tax`** taxonomy.
 
@@ -61,7 +61,7 @@ one you are producing before writing a single tag.
 4. NBB Central Balance Sheet Office: mandate and the Filing 2.0 application
 5. NBB `be-gaap` taxonomy: versions, architecture, model / entry-point matrix
 6. NBB accepted formats, controls, decimals, language, fees
-7. FSMA / ESEF: the listed-issuer layer (eCorporate, STORI)
+7. FSMA / ESEF: the listed-issuer layer (`corp.doc.`, STORI)
 8. Biztax: the corporate income-tax return (`be-tax`, FPS Finance)
 9. CSRD / ESRS in Belgium and the Omnibus I effect on digital tagging
 10. Stakeholders and governance
@@ -286,7 +286,7 @@ ESEF-RTS mark-up rules are published.
 
 <a id="profile-fsma-esef"></a>
 
-## Profile: FSMA / ESEF, the listed-issuer layer (eCorporate, STORI)
+## Profile: FSMA / ESEF, the listed-issuer layer (`corp.doc.`, STORI)
 
 The **FSMA** (Financial Services and Markets Authority; NL *Autoriteit voor
 Financiële Diensten en Markten*) is Belgium's securities regulator / NCA.
@@ -299,11 +299,16 @@ Alternext issuers), filed since 1 January 2011.
 
 ### Filing channel and mechanics
 
-**Filing channel and mechanics** (per FSMA FAQ **FSMA_2021_19**):
+**Filing channel and mechanics** (per FSMA FAQ **FSMA_2021_19**, updated
+**10 July 2026**):
 
-- Issuers upload to **eCorporate**; regulated info there is automatically
-  recorded in **STORI**. The ESEF AFR is filed with the FSMA via eCorporate,
-  **not** with the NBB CBSO.
+- Issuers upload to the FSMA Portal (<https://portal.fsma.be/>) application
+  **"Filing of corporate and financial documents"**, which the FSMA
+  abbreviates **`corp.doc.`** and which replaced **eCorporate** on **10 July
+  2026**; regulated info uploaded in the production environment is
+  automatically recorded in **STORI**, and test-environment uploads are not.
+  The ESEF AFR is filed with the FSMA via `corp.doc.`, **not** with the NBB
+  CBSO.
 - ESEF is mandatory in Belgium for **financial years beginning on or after
   1 January 2021**; Belgium exercised the EU one-year optional postponement
   (RD of 6 September 2021, BS 17 September 2021, inserting art. 12/1 into the
@@ -319,9 +324,9 @@ Alternext issuers), filed since 1 January 2011.
   PDF may be uploaded only as an **attachment**.
 - **Deadline:** public by the earlier of **30 days before the AGM** or **4 months
   after year-end**.
-- eCorporate's technical checks return a validation file that **does not guarantee
-  full ESEF-Regulation compliance**; a temporary ESEF test environment previews
-  validation without publishing to STORI.
+- `corp.doc.`'s technical checks return a validation file that **does not
+  guarantee full ESEF-Regulation compliance**; a temporary ESEF test
+  environment previews validation without publishing to STORI.
 
 For the ESEF taxonomy, tagging, anchoring, and RTS rules, defer to
 `references/esef.md`; this is only the Belgian filing-mechanism overlay.
@@ -454,7 +459,7 @@ channels:
   national format; there is no EU-mandated iXBRL for unlisted entities' annual
   accounts.
 - **Transparency Directive 2004/109/EC + ESEF RTS (Delegated Regulation (EU)
-  2019/815)** land at **FSMA / eCorporate / STORI**, the only Belgian iXBRL
+  2019/815)** land at **FSMA / `corp.doc.` / STORI**, the only Belgian iXBRL
   regime. Generic ESEF mechanics → `references/esef.md`; Belgian overlay → the
   *FSMA / ESEF* profile.
 - **CSRD (Directive (EU) 2022/2464)** flows through the WVV/CSA and FSMA
@@ -478,9 +483,10 @@ EDINET, ESEF, FERC, NL, ROS, UK**: no `be-gaap` (NBB CBSO) and no `be-tax`
 Per regime:
 
 1. **FSMA / ESEF (iXBRL): covered by the generic ESEF plugin.** The AFR package
-   validates like any other member state's; the Belgian layer (eCorporate, STORI,
-   `.xbri`, deadlines) is **filing-mechanism policy, not encoded in Arelle**. Use
-   `--plugins 'inlineXbrlDocumentSet|validate/ESEF'` (see `references/esef.md`).
+   validates like any other member state's; the Belgian layer (`corp.doc.`,
+   STORI, `.xbri`, deadlines) is **filing-mechanism policy, not encoded in
+   Arelle**. Use `--plugins 'inlineXbrlDocumentSet|validate/ESEF'` (see
+   `references/esef.md`).
 2. **NBB `be-gaap` and Biztax `be-tax`: no profile-aware plugin.** The
    statutory-model selection rules, fee/deadline logic, and specific-model
    PDF-only rule are **not encoded in Arelle**. Enforce them in your pipeline.
@@ -583,9 +589,9 @@ The institutional map a Belgian filing product must hold in its head:
   BNI/INR non-resident, RPB/IPM legal-entities tax); XBRL 2.1 + Dimensions 1.0 +
   Formula 1.0, annual by assessment year.
 - **FSMA**: securities regulator / NCA; supervises listed-issuer periodic
-  information, operates eCorporate and the STORI OAM (RD 23 February 2010,
-  effective 1 January 2011), and supervises listed-issuer ESRS disclosure (RD 16
-  March 2025).
+  information, operates `corp.doc.` (formerly eCorporate) and the STORI OAM
+  (RD 23 February 2010, effective 1 January 2011), and supervises
+  listed-issuer ESRS disclosure (RD 16 March 2025).
 - **NBB, prudential hat**: also the banks/insurers prudential supervisor
   running separate **EBA/EIOPA DPM supervisory reporting (OneGate)**, distinct
   from the CBSO regime (see `references/dpm.md`). Consequence: specific-model
@@ -655,13 +661,22 @@ entry notes what it establishes.
 
 **FSMA, ESEF / STORI:**
 
-- ESEF & eCorporate FAQ FSMA_2021_19 (ESEF as official AFR, filed via eCorporate
-  not NBB, `.xbri`, PDF as attachment, test env, deadlines):
+- ESEF & `corp.doc.` FAQ FSMA_2021_19 of 22 December 2021, updated
+  10 July 2026 (ESEF as official AFR, filed via `corp.doc.` not NBB,
+  `.xbri`, PDF as attachment, test env, deadlines):
   <https://www.fsma.be/sites/default/files/media/files/2021-12/fsma_2021_19_en.pdf>
+- Handbook FSMA_2013_16-2 of 10 July 2026, *Filing corporate and financial
+  documents* (FSMA Portal access, ESEF upload and validation, STORI
+  publication):
+  <https://www.fsma.be/sites/default/files/media/files/2023-09/fsma_2013_16-2_en.pdf>
+- Launch of the new FSMA Portal, 8 July 2026 (Portal replaces eCorporate;
+  eCorporate withdrawn 9 July 2026):
+  <https://www.fsma.be/en/news/launch-new-fsma-portal>
 - STORI OAM (designated RD 23 Feb 2010, effective 1 Jan 2011):
   <https://www.fsma.be/en/stori-belgian-official-mechanism-storage-regulated-information>
   (NL: <https://www.fsma.be/nl/informatie-van-genoteerde-vennootschappen-stori>)
-- Periodic information (eCorporate→STORI auto-record; AFR deadline):
+- Periodic information (upload→STORI auto-record; AFR deadline; page still
+  uses the pre-July-2026 name eCorporate):
   <https://www.fsma.be/en/faq/periodic-information>
 
 **FPS Finance, Biztax (`be-tax`):**

@@ -70,7 +70,18 @@ Minimum rules:
 - **`xbrldt:contextElement` lives on the `all`/`notAll` has-hypercube arc**, not on `hypercube-dimension`. It picks `segment` or `scenario`.
 - **ESEF is scenario-only.** Reporting Manual §2.1.3 forbids `xbrli:segment`; `xbrli:scenario` may contain only `xbrldi:explicitMember` / `xbrldi:typedMember`.
 - **"Axis" ≠ XDT vocabulary.** XDT uses *dimensions*. "Axis" is FASB/IFRS taxonomy convention (SEC EDGAR XBRL Filing Guide §3.5): a label suffix marking explicit dimensions.
-- **Closed hypercubes are exclusive, not exhaustive.** `@xbrldt:closed="true"` restricts the `segment`/`scenario` chosen by `@xbrldt:contextElement` to dimensions *declared by that hypercube*; no others may appear. It does **not** require every declared dimension to be stated: a dimension with a default member may be omitted and is treated as present at its default (XDT 1.0 §3.1.4.3.2). Reading it as "exactly" contradicts the default-member rule above: the default may not be emitted, so a hypercube with a defaulted dimension could never be satisfied.
+- **Closed hypercubes are exclusive, not exhaustive.**
+  `@xbrldt:contextElement` names the one container in which the
+  hypercube's own dimensions must be present, but
+  `@xbrldt:closed="true"` restricts **both** containers: no dimension
+  value in `xbrli:segment` or in `xbrli:scenario` may belong to a
+  dimension this hypercube does not declare (XDT 1.0 [Def, 21]). It
+  does **not** require every declared dimension to be stated: a
+  dimension with a default member may be omitted and is treated as
+  present at its default (XDT 1.0 [Def, 20]). Reading it as "exactly"
+  contradicts the default-member rule above: the default may not be
+  emitted, so a hypercube with a defaulted dimension could never be
+  satisfied.
 - **Error namespaces split:** `xbrldie:*` is instance-level (e.g., `PrimaryItemDimensionallyInvalidError`); `xbrldte:*` is taxonomy/DTS-level (e.g., `HasHypercubeMissingContextElementAttributeError`, `TooManyDefaultMembersError`).
 
 See `references/dimensions.md` for the full arcrole table, error codes, explicit-vs-typed contrast, and per-regime axis examples (IFRS, US-GAAP / SRT / DEI, SBR, EBA DPM).
