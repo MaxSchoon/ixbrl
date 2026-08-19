@@ -272,8 +272,23 @@ def check_attribution() -> None:
 # would hide one shadowing the other.
 SOURCE_MARKER = re.compile(r"\[S(\d+)\]")
 SOURCE_ENTRY = re.compile(r"^\s*-?\s*\*\*\[S(\d+)\]\*\*", re.M)
-FENCE = re.compile(r"^```.*?^```", re.M | re.S)
-SOURCE_HEADING_GAP = re.compile(r"^#{1,4} ", re.M)
+# Fenced blocks, backtick or tilde, indented or not. Masked before anything is
+# scanned: an entry-shaped example inside a fence would otherwise be read as a
+# real definition and would move the source-list boundary.
+FENCE = re.compile(r"^[ \t]*(`{3,}|~{3,}).*?^[ \t]*\1[ \t]*$", re.M | re.S)
+# The credit line every reference carries. It is not body prose, so a marker
+# appearing in it is not a citation anyone made.
+ATTRIBUTION = re.compile(r"^\*Part of the iXBRL Skill\b.*$", re.M)
+
+
+def mask_fences(text: str) -> str:
+    """Blank out fenced blocks, preserving every character offset.
+
+    Offsets matter here: the source-list boundary is a position in this text,
+    so deleting rather than blanking would shift everything after the first
+    fence.
+    """
+    return FENCE.sub(lambda m: re.sub(r"[^\n]", " ", m.group()), text)
 
 
 def check_citation_markers() -> None:
@@ -290,7 +305,8 @@ def check_citation_markers() -> None:
         cited after its last real citation was deleted. Nor is a heading a safe
         boundary: one reference has a section called "When to escalate to primary
         sources" well above its actual list, and cutting there would drop real
-        citations. The first entry is the list.
+        citations. The first entry is the list. A list grouped under its own
+        subheadings is fine: its citations sit above it either way.
 
         This is the invariant that lets `.markdownlint-cli2.jsonc` switch MD052
         off. markdownlint reads `[S7]` as a shortcut reference link and wants a
@@ -303,13 +319,12 @@ def check_citation_markers() -> None:
     mark = len(errors)
     checked = 0
     for path in sorted((ROOT / "references").rglob("*.md")):
-        text = path.read_text(encoding="utf-8")
+        text = mask_fences(path.read_text(encoding="utf-8"))
         label = path.relative_to(ROOT).as_posix()
 
         entries = list(SOURCE_ENTRY.finditer(text))
         body = text[: entries[0].start()] if entries else text
-        # A marker inside a fenced block is sample text, not a citation.
-        used = set(SOURCE_MARKER.findall(FENCE.sub("", body)))
+        used = set(SOURCE_MARKER.findall(ATTRIBUTION.sub("", body)))
         defined: set[str] = set()
         for match in entries:
             if match.group(1) in defined:
@@ -323,13 +338,6 @@ def check_citation_markers() -> None:
             fail(f"{label}: [S{orphan}] is cited but has no source entry")
         for unused in sorted(defined - used, key=int):
             fail(f"{label}: source entry [S{unused}] is never cited in the body")
-        for match in entries[1:]:
-            # A gap of prose between entries means the list is interleaved
-            # with body text, and the boundary above would have cut it short.
-            gap = text[entries[0].end() : match.start()]
-            if SOURCE_HEADING_GAP.search(gap):
-                fail(f"{label}: prose with a heading sits inside the source list")
-                break
     if not failures_since(mark):
         print(f"Citation markers OK ({checked} file(s) using the convention)")
 
