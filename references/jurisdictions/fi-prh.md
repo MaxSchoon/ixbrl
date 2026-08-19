@@ -813,7 +813,7 @@ given in [S6] and [S9].
   Packaging: XHTML only, no PDF; report assured, in FI/SV; ESEF ZIP
   internal structure; adoption-date + profit-decision as free-form XHTML in
   **main folder**; PDF in ZIP blocks ytj.fi; ESMA naming (LEI + `YYYY-MM-DD`
-  + `fi`/`sv`); language rule (**Accounting Act ch. 3 s. 5**; Board
+  - `fi`/`sv`); language rule (**Accounting Act ch. 3 s. 5**; Board
   statement 2084/3.12.2024); format basis ch. 7 ss. 22–24 & 24a; ESRS XBRL
   taxonomy not yet adopted.
 - **[S9]** Finlex, PRH-identifiers decision **PRH/1088/01/2026**:

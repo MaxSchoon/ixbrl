@@ -2,7 +2,6 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
-
 Every namespace URI, element name, and arcrole below was verified against the specifications listed under **Sources**.
 
 ## Generic Links 1.0

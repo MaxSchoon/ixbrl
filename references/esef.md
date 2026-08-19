@@ -2,7 +2,6 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
-
 Working reference for iXBRL annual financial reports under the EU ESEF mandate. Verify the operative version of every cited rule against the live source at filing date.
 
 ## 1. Legal basis

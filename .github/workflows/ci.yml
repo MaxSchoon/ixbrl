@@ -63,6 +63,14 @@ jobs:
       - name: Skill guardrails (size, description, references, asset cross-refs)
         run: python3 tests/check_skill.py
 
+      # Pinned so a new markdownlint release cannot fail this required check
+      # without a deliberate bump. The rules this repository does not follow
+      # are disabled in .markdownlint-cli2.jsonc, each with its reason, so a
+      # failure here is a real formatting defect rather than a convention
+      # disagreement.
+      - name: Markdown lint (markdownlint-cli2)
+        run: npx --yes markdownlint-cli2@0.18.1
+
       # No-op until references/jurisdictions/ exists; wired now so the gate is
       # in place before the migration rather than added after it.
       - name: Reference structure (profile-first shape)

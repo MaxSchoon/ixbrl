@@ -2,7 +2,6 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
-
 ## Legal basis
 
 The mandatory block-tagging regime for European listed-issuer annual
