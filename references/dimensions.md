@@ -1,9 +1,9 @@
-# XBRL Dimensions (XDT) — Hypercubes, Axes, and Dimensional Contexts
+# XBRL Dimensions (XDT): Hypercubes, Axes, and Dimensional Contexts
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
 
-A bare XBRL fact is one-dimensional (concept × context × unit). Real reporting is multi-dimensional — by segment, share class, maturity bucket, counterparty. **XBRL Dimensions 1.0** ("XDT") adds orthogonal slicing via hypercubes attached to primary items, with dimension values carried in the `xbrli:segment` or `xbrli:scenario` container. Every regulator (ESMA, SEC, EBA, EIOPA, KvK/SBR) builds on the same XDT model; only the placement policy and axis choices vary.
+A bare XBRL fact is one-dimensional (concept × context × unit). Real reporting is multi-dimensional: by segment, share class, maturity bucket, counterparty. **XBRL Dimensions 1.0** ("XDT") adds orthogonal slicing via hypercubes attached to primary items, with dimension values carried in the `xbrli:segment` or `xbrli:scenario` container. Every regulator (ESMA, SEC, EBA, EIOPA, KvK/SBR) builds on the same XDT model; only the placement policy and axis choices vary.
 
 ## The XDT model
 
@@ -14,16 +14,16 @@ is `http://xbrl.org/2005/xbrldt`; the instance namespace `xbrldi` is
 
 Core definitions (XDT §2):
 
-- **Primary item declaration** — an element in `xbrli:item`
+- **Primary item declaration**: an element in `xbrli:item`
   substitution group that is *not* a hypercube and *not* a dimension;
   this is what carries fact values.
-- **Hypercube** — abstract element, substitution group
+- **Hypercube**: abstract element, substitution group
   `xbrldt:hypercubeItem`. A set of dimensions that together defines an
   admissible space of contexts for one or more primary items.
-- **Dimension** — abstract element, substitution group
+- **Dimension**: abstract element, substitution group
   `xbrldt:dimensionItem`. Two flavours: explicit (members are
   taxonomy-defined QNames) and typed (members are XML element values).
-- **Domain / member** — for explicit dimensions, members are
+- **Domain / member**: for explicit dimensions, members are
   item-substitution-group concepts wired through `dimension-domain`
   and `domain-member` relationships.
 
@@ -43,11 +43,26 @@ only.
 
 ## "Axis" naming convention
 
-**Axis**, **Domain**, **Member** are **not** XDT spec vocabulary — XDT uses "dimensions", "domains", "members". "Axis" is a naming convention adopted by the major standard taxonomies. SEC *EDGAR XBRL Filing Guide* (Sept 2024, §3.5): *"in this document as in all SEC standard taxonomies a taxonomy-defined dimension is called an Axis"*. The IFRS Taxonomy follows the same convention: every explicit dimension declaration in `full_ifrs-cor_2024-03-27.xsd` ends in `Axis` (e.g. `ifrs-full:ConsolidatedAndSeparateFinancialStatementsAxis`, `ifrs-full:RetrospectiveApplicationAndRetrospectiveRestatementAxis`). Treat "Axis" as a label suffix synonymous with "explicit dimension"; it never appears in the XDT spec or in instance documents.
+**Axis** is not XDT spec vocabulary; the spec calls these elements
+dimensions. **Domain** and **Member** are spec vocabulary: XDT defines
+a domain member declaration and a dimension domain, and two of the six
+arcroles are `dimension-domain` and `domain-member`. What the standard
+taxonomies add is the convention of ending element names in `Axis`,
+`Domain`, and `Member`. SEC *EDGAR XBRL Filing Guide* (Sept 2024,
+§3.5): *"in this document as in all SEC standard taxonomies a
+taxonomy-defined dimension is called an Axis"*. The IFRS Taxonomy
+follows the same convention: every explicit dimension declaration in
+`full_ifrs-cor_2024-03-27.xsd` ends in `Axis` (e.g.
+`ifrs-full:ConsolidatedAndSeparateFinancialStatementsAxis`,
+`ifrs-full:RetrospectiveApplicationAndRetrospectiveRestatementAxis`).
+Treat `Axis` as a name suffix synonymous with "explicit dimension".
+The word never appears in the XDT spec; in an instance an
+Axis-suffixed QName appears as the value of
+`xbrldi:explicitMember/@dimension`, as in the example below.
 
 ## Explicit vs typed dimensions
 
-**Explicit dimension** — domain members are taxonomy-defined QNames.
+**Explicit dimension**: domain members are taxonomy-defined QNames.
 An instance reports a value via `xbrldi:explicitMember`:
 
 ```xml
@@ -60,7 +75,7 @@ XDT §3.1.4.3.2 requires the `dimension` attribute to be the QName of
 an explicit dimension declaration and the element content to be the
 QName of a member of that dimension's domain.
 
-**Typed dimension** — the domain is described by an arbitrary XML
+**Typed dimension**: the domain is described by an arbitrary XML
 Schema element. The dimension declaration carries
 `xbrldt:typedDomainRef` as an `xs:anyURI` containing an XPointer
 fragment identifier pointing to the global element declaration of the
@@ -95,13 +110,23 @@ A dimension MAY declare exactly one default member via a
 whose value is the default for its dimension. Doing so raises
 `xbrldie:DefaultValueUsedInInstanceError`.
 
-SEC EDGAR XBRL Filing Guide §10.7.1 presentation rule: *"If the default member of an Axis does not appear in an effective presentation relationship base set, then the only facts that can be displayed by that presentation base set are facts in contexts having a non-defaulted member on that Axis."* §5.6 (formerly EFM v68 §6.8.19): do not declare "Total" domain members — the default member fills that role. SEC reports emit the default member's QName only in *presentation* arcs and `xbrldi:explicitMember` only for non-default values.
+SEC EDGAR XBRL Filing Guide §10.7.1 presentation rule: *"If the default
+member of an Axis does not appear in an effective presentation
+relationship base set, then the only facts that can be displayed by
+that presentation base set are facts in contexts having a non-defaulted
+member on that Axis."* §5.7 (formerly EFM v68 §6.8.19): do not declare
+"Total" domain members; the default member fills that role. SEC reports
+carry the default member's QName in the definition linkbase, as the
+target of the `dimension-default` arc and usually of the axis's
+`dimension-domain` arc, and in the presentation relationships that let
+defaulted facts render; `xbrldi:explicitMember` carries only non-default
+values.
 
 ## Segment vs scenario placement
 
 XDT §2.3.2 places `@xbrldt:contextElement` **on the has-hypercube arc**
-(i.e., `all` / `notAll` arcs from primary item to hypercube) — **not**
-on `hypercube-dimension` arcs. The attribute is declared as an
+(i.e., `all` / `notAll` arcs from primary item to hypercube), **not** on
+`hypercube-dimension` arcs. The attribute is declared as an
 `xs:token` restricted to `segment` or `scenario`. It tells the
 dimensional processor which container in the instance context
 (`xbrli:segment` or `xbrli:scenario`) must contain the dimension
@@ -115,8 +140,8 @@ container MUST NOT be used in contexts."* The Arelle ESEF validator
 emits two error codes against this rule (confirmed in
 `arelle/plugin/validate/ESEF/ESEF_Current/ValidateXbrlFinally.py`):
 
-- `ESEF.2.1.3.segmentUsed` — *xbrli:segment container MUST NOT be used in contexts*.
-- `ESEF.2.1.3.scenarioContainsNonDimensionalContent` — *xbrli:scenario in contexts MUST NOT contain any other content than defined in XBRL Dimensions specification*.
+- `ESEF.2.1.3.segmentUsed`: *xbrli:segment container MUST NOT be used in contexts*.
+- `ESEF.2.1.3.scenarioContainsNonDimensionalContent`: *xbrli:scenario in contexts MUST NOT contain any other content than defined in XBRL Dimensions specification*.
 
 In ESEF, `xbrli:scenario` may contain only `xbrldi:explicitMember` and
 `xbrldi:typedMember`; nothing else.
@@ -126,27 +151,38 @@ In ESEF, `xbrli:scenario` may contain only `xbrldi:explicitMember` and
 `@xbrldt:closed` is declared on has-hypercube arcs as `xs:boolean`
 with **default `false`** (XDT §2.3.3). Semantics:
 
-- `closed="false"` (open, the default) — additional dimensions in the indicated container are tolerated; the hypercube's enumerated dimensions must still validate, but the context may contain dimensions outside the set.
-- `closed="true"` (closed) — the indicated container (`segment` or `scenario` per `@xbrldt:contextElement`) must contain *only* dimensions from this hypercube and *exactly* the declared dimensions; any unexpected dimension value invalidates the hypercube.
+- `closed="false"` (open, the default): the context may carry
+  dimension values outside this hypercube's set. Each dimension of the
+  hypercube must still resolve, either from a dimension value in the
+  container named by `@xbrldt:contextElement` or from that dimension's
+  default member (XDT [Def, 20]).
+- `closed="true"` (closed): neither the `segment` nor the `scenario`
+  container of the context may carry a dimension value whose dimension
+  is not a dimension of this hypercube (XDT [Def, 21]); the restriction
+  covers both containers, not only the one named by
+  `@xbrldt:contextElement`. A declared dimension may still be absent
+  from the context when it has a default member, which supplies the
+  value implicitly. Emitting that default explicitly fires
+  `xbrldie:DefaultValueUsedInInstanceError`.
 
 Closed hypercubes are how regulators express "this primary item may
 only be reported with these dimensions and no others."
 
 ## Dimensional validity errors
 
-Instance-level errors (XDT §3.2 — `xbrldie:` namespace):
+Instance-level errors (XDT §3.2, `xbrldie:` namespace):
 
 | Code | Meaning | Typical fix |
 |---|---|---|
 | `xbrldie:PrimaryItemDimensionallyInvalidError` | Fact's primary item is reported with a context that does not satisfy the DRS for the hypercubes it belongs to. | Check the fact's hypercube DRS; remove illegal dimension values or add the missing required ones. |
-| `xbrldie:DefaultValueUsedInInstanceError` | An `xbrldi:explicitMember` reports the dimension's default member explicitly. | Remove the explicit default — defaults are implicit. |
+| `xbrldie:DefaultValueUsedInInstanceError` | An `xbrldi:explicitMember` reports the dimension's default member explicitly. | Remove the explicit default; defaults are implicit. |
 | `xbrldie:IllegalTypedDimensionContentError` | The XML inside `xbrldi:typedMember` does not validate against the schema referenced by `xbrldt:typedDomainRef`. | Fix the typed-dimension XML to match the referenced element declaration. |
 | `xbrldie:RepeatedDimensionInInstanceError` | Same dimension reported twice in the same context's segment/scenario. | Remove the duplicate `xbrldi:explicitMember` / `xbrldi:typedMember`. |
 | `xbrldie:ExplicitMemberNotExplicitDimensionError` | `xbrldi:explicitMember/@dimension` references a typed dimension. | Use `xbrldi:typedMember` instead. |
 | `xbrldie:TypedMemberNotTypedDimensionError` | `xbrldi:typedMember/@dimension` references an explicit dimension. | Use `xbrldi:explicitMember` instead. |
 | `xbrldie:ExplicitMemberUndefinedQNameError` | The QName content of `xbrldi:explicitMember` is not a member of the dimension's domain. | Use a domain member that is in scope via `dimension-domain` / `domain-member` arcs. |
 
-Taxonomy-level errors (XDT §4 — `xbrldte:` namespace, distinct from
+Taxonomy-level errors (XDT §4, `xbrldte:` namespace, distinct from
 `xbrldie:`) include:
 
 - `xbrldte:HasHypercubeMissingContextElementAttributeError`
@@ -162,7 +198,7 @@ Taxonomy-level errors (XDT §4 — `xbrldte:` namespace, distinct from
 
 ## How dimensions show up in each regime
 
-**ESEF / IFRS** — most-used axes (all in the `ifrs-full` namespace,
+**ESEF / IFRS.** Most-used axes (all in the `ifrs-full` namespace,
 taxonomy 2024-03-27):
 
 - `ifrs-full:ConsolidatedAndSeparateFinancialStatementsAxis`
@@ -172,26 +208,26 @@ taxonomy 2024-03-27):
 - `ifrs-full:ContinuingAndDiscontinuedOperationsAxis`
 - `ifrs-full:CarryingAmountAccumulatedDepreciationAmortisationAndImpairmentAndGrossCarryingAmountAxis`
 
-**SEC EDGAR (us-gaap + srt + dei)** — the EDGAR XBRL Filing Guide
+**SEC EDGAR (us-gaap + srt + dei).** The EDGAR XBRL Filing Guide
 spends its dimensions chapter on a small set:
 
 - `us-gaap:StatementBusinessSegmentsAxis` with members like custom `acme:AviationSegmentMember`
 - `us-gaap:StatementClassOfStockAxis` (default `us-gaap:ClassOfStockDomain`)
-- `srt:ConsolidationItemsAxis` — used to report consolidating, eliminations, parent-only
+- `srt:ConsolidationItemsAxis`: used to report consolidating, eliminations, parent-only
 - `srt:RangeAxis` (members `srt:MinimumMember`, `srt:MaximumMember`, `srt:WeightedAverageMember`)
-- `dei:LegalEntityAxis` — for parent and subsidiaries; the default is "all entities consolidated"
+- `dei:LegalEntityAxis`: for parent and subsidiaries; the default is "all entities consolidated"
 
-**Dutch SBR / KvK** — uses the same XDT machinery via the NT
+**Dutch SBR / KvK** uses the same XDT machinery via the NT
 (Nederlandse Taxonomie) entry points; `bw2-titel9` defines line items,
 and member axes are declared in extension/structure schemas (see KvK
 iXBRL deposit and NT taxonomy on sbr-nl.nl).
 
-**EBA DPM (COREP/FINREP) and EIOPA Solvency II** — heavily
+**EBA DPM (COREP/FINREP) and EIOPA Solvency II** are heavily
 *typed-dimension* rather than explicit. Counterparty IDs, deal IDs,
 and instrument IDs are typed dimensions whose `xbrldt:typedDomainRef`
 points to schema-validated string or pattern types.
 
-## Authoring an extension hypercube — checklist
+## Authoring an extension hypercube: checklist
 
 1. Declare the hypercube element (`substitutionGroup="xbrldt:hypercubeItem"`, `abstract="true"`).
 2. Declare each new dimension element (`substitutionGroup="xbrldt:dimensionItem"`, `abstract="true"`); for typed dimensions add `xbrldt:typedDomainRef`.
@@ -202,16 +238,16 @@ points to schema-validated string or pattern types.
 
 ## Pitfalls and review checklist
 
-1. Emitting the default member explicitly — fires `xbrldie:DefaultValueUsedInInstanceError`. Remove it from the context.
-2. Putting dimensions in `xbrli:segment` for an ESEF filing — fires `ESEF.2.1.3.segmentUsed`. Move to `scenario`.
-3. Putting non-dimensional XML in `xbrli:scenario` for ESEF — fires `ESEF.2.1.3.scenarioContainsNonDimensionalContent`. Strip everything except `xbrldi:*Member`.
-4. Using `xbrldi:explicitMember` for a typed dimension or vice versa — fires `xbrldie:ExplicitMemberNotExplicitDimensionError` / `TypedMemberNotTypedDimensionError`.
-5. Same dimension twice in one context — fires `xbrldie:RepeatedDimensionInInstanceError`. Merge or pick one.
-6. Forgetting `@xbrldt:contextElement` on an `all` / `notAll` arc — fires `xbrldte:HasHypercubeMissingContextElementAttributeError`. The attribute is mandatory.
-7. Declaring a "Total" custom member on a SEC filing — violates EDGAR XBRL Filing Guide §5.6 (formerly EFM v68 §6.8.19); use the existing default member instead.
-8. Presenting an axis without showing the default member — facts in the default context become invisible per EDGAR XBRL Filing Guide §10.7.1. Either show the default in the presentation tree, or accept that only non-default facts will render.
-9. `xbrldt:typedDomainRef` without an XPointer fragment — fires `xbrldte:TypedDimensionURIError`.
-10. Two `dimension-default` arcs for the same dimension — fires `xbrldte:TooManyDefaultMembersError`. Only one default per dimension.
+1. Emitting the default member explicitly fires `xbrldie:DefaultValueUsedInInstanceError`. Remove it from the context.
+2. Putting dimensions in `xbrli:segment` for an ESEF filing fires `ESEF.2.1.3.segmentUsed`. Move to `scenario`.
+3. Putting non-dimensional XML in `xbrli:scenario` for ESEF fires `ESEF.2.1.3.scenarioContainsNonDimensionalContent`. Strip everything except `xbrldi:*Member`.
+4. Using `xbrldi:explicitMember` for a typed dimension or vice versa fires `xbrldie:ExplicitMemberNotExplicitDimensionError` / `TypedMemberNotTypedDimensionError`.
+5. Reporting the same dimension twice in one context fires `xbrldie:RepeatedDimensionInInstanceError`. Merge or pick one.
+6. Forgetting `@xbrldt:contextElement` on an `all` / `notAll` arc fires `xbrldte:HasHypercubeMissingContextElementAttributeError`. The attribute is mandatory.
+7. Declaring a "Total" custom member on a SEC filing violates EDGAR XBRL Filing Guide §5.7 (formerly EFM v68 §6.8.19); use the existing default member instead.
+8. Presenting an axis without showing the default member: facts in the default context become invisible per EDGAR XBRL Filing Guide §10.7.1. Either show the default in the presentation tree, or accept that only non-default facts will render.
+9. `xbrldt:typedDomainRef` without an XPointer fragment fires `xbrldte:TypedDimensionURIError`.
+10. Declaring two `dimension-default` arcs for the same dimension fires `xbrldte:TooManyDefaultMembersError`. Only one default per dimension.
 
 ## Sources
 
@@ -234,7 +270,7 @@ download paths returned 404 for guessed URLs); the "Axis is a taxonomy
 convention, not an XDT term" claim is grounded in the SEC EDGAR XBRL
 Filing Guide §3.5 and corroborated by every Axis-suffixed element in
 the IFRS 2024-03-27 labels linkbase. The current SEC XBRL validation
-rules — historically labelled "EFM 6.5/6.6" — now live in the *EDGAR
+rules, historically labelled "EFM 6.5/6.6", now live in the *EDGAR
 XBRL Filing Guide* (xbrl-guide.pdf) rather than EFM Volume II; the
 older EFM section numbers are preserved as parenthetical "(Formerly
 EFM v68 § 6.6.x)" cross-references in the new Guide.

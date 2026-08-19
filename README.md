@@ -1,7 +1,7 @@
 # iXBRL Skill
 
 An open, primary-source-grounded skill for working with **Inline XBRL (iXBRL)** and the
-underlying XBRL stack — covering the major regulators (SEC EDGAR, ESMA
+underlying XBRL stack, covering the major regulators (SEC EDGAR, ESMA
 ESEF, UK FRC / Companies House / HMRC, Dutch SBR / KvK / AFM, EBA, EIOPA),
 the IFRS Accounting Taxonomy, FASB US-GAAP, and the Arelle validation
 toolchain.
@@ -98,12 +98,12 @@ fasb.org, frc.org.uk, sbr-nl.nl, eba.europa.eu, eiopa.europa.eu,
 Arelle's GitHub repositories, and the Arelle iXBRL Viewer
 documentation). Each `references/*.md` ends with a
 `Sources` list of the URLs consulted. Versions and rule numbers were
-verified at the time of writing — re-check the publisher's page before
+verified at the time of writing; re-check the publisher's page before
 relying on a specific version for a regulated filing.
 
 ## Install
 
-This is an AI-agent skill — a self-contained directory of markdown and
+This is an AI-agent skill: a self-contained directory of markdown and
 scripts that any agent harness supporting the
 [skill convention](https://skills.sh) can load.
 
@@ -123,7 +123,7 @@ the [`skills`](https://www.skills.sh) CLI can install it directly:
 npx skills add MaxSchoon/ixbrl
 ```
 
-skills.sh has no separate submission step — its directory is populated
+skills.sh has no separate submission step; its directory is populated
 from CLI install telemetry. The skill becomes discoverable (via
 `npx skills find ixbrl`) and climbs the listing as people install it
 with the command above.
@@ -139,18 +139,19 @@ The skill is harness-agnostic. It works with any AI-agent runtime that:
 
 That includes terminal-based coding agents, IDE-integrated agents,
 chat-based agents, and SDK-built custom agents. The skill makes no
-assumptions about which model or vendor you use — only about the
+assumptions about which model or vendor you use, only about the
 skill-loading convention.
 
 The bundled scripts require Python 3.10+, `lxml`, and (for full
 validation) `pip install arelle-release`. The skill is useful even
-without those dependencies — the references work on their own.
+without those dependencies; the references work on their own.
 
 ## License
 
-Dual-licensed by content type: **Apache-2.0** for code (`scripts/`, `tests/`) —
-see [`LICENSE`](LICENSE) — and **CC BY 4.0** for content (`SKILL.md`,
-`references/`, `assets/`) — see [`LICENSE-CONTENT`](LICENSE-CONTENT).
+Dual-licensed by content type: **Apache-2.0** for code (`scripts/`,
+`tests/`; see [`LICENSE`](LICENSE)) and **CC BY 4.0** for content
+(`SKILL.md`, `references/`, `assets/`; see
+[`LICENSE-CONTENT`](LICENSE-CONTENT)).
 
 **If you redistribute or publicly share this material, or an adaptation of it**,
 attribution is a licence condition (CC BY 4.0 §3(a), Apache-2.0 §4):
@@ -158,8 +159,8 @@ attribution is a licence condition (CC BY 4.0 §3(a), Apache-2.0 §4):
 > iXBRL Skill by Max Schoon (Doc2iXBRL), https://github.com/MaxSchoon/ixbrl,
 > licensed under CC BY 4.0. [Modified. | Unmodified.]
 
-**If you use it** — to review filings, generate report packages, or inform
-software you write yourself — you must credit it:
+**If you use it** (to review filings, generate report packages, or inform
+software you write yourself), you must credit it:
 
 > Uses the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — https://doc2ixbrl.com
 
@@ -181,13 +182,13 @@ right manual; it does not replace professional judgement.
 
 ## Contributing
 
-Issues and pull requests welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md)
+Issues and pull requests welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md)
 for the full workflow, the [issue templates](.github/ISSUE_TEMPLATE) for the
 right place to file, and [`SUPPORT.md`](SUPPORT.md) for where to get help. Two
 principles govern every change:
 
 1. **Source discipline.** Every new factual claim must cite a primary
-   authoritative source — a spec section or a regulator publication URL the
+   authoritative source: a spec section or a regulator publication URL the
    contributor has actually fetched.
 2. **Generality.** This is a public, openly licensed skill. No
    product-specific naming, no internal jargon, no jurisdiction-narrow
@@ -200,6 +201,7 @@ report a security or filing-integrity problem privately, see
 ## Contact
 
 Questions, collaboration, or corrections: **contact@doc2ixbrl.com**. For
-anything that could affect filing integrity — a rule or scaffold in the skill
-that would produce a non-compliant filing — please report it privately (see
-[`SECURITY.md`](SECURITY.md)) before opening a public issue.
+anything that could affect filing integrity (a rule or scaffold in the
+skill that would produce a non-compliant filing), please report it
+privately (see [`SECURITY.md`](SECURITY.md)) before opening a public
+issue.

@@ -2,32 +2,56 @@
 
 This repository is an AI-agent skill: markdown reference material, runnable
 iXBRL/XBRL scaffolds (`assets/`), and small, dependency-light Python and
-shell validation helpers (`scripts/`). It executes no network calls on its
-own and ships no secrets. The realistic risk surface is:
+shell validation helpers (`scripts/`). It ships no secrets.
+`scripts/check_facts.py` parses locally with networking disabled;
+`scripts/validate_with_arelle.sh` execs Arelle, which resolves a
+document's taxonomy references over the network and writes to Arelle's
+ambient cache unless the caller passes `--packages <taxonomy>.zip
+--internetConnectivity offline` and a controlled cache directory
+(SKILL.md, "Bundled scripts"). The realistic risk surface is:
 
-1. **Filing-integrity defects** — a rule, instruction, or scaffold in the
+1. **Filing-integrity defects**: a rule, instruction, or scaffold in the
    skill that would lead an agent (or a person) to produce a **non-compliant**
    iXBRL/XBRL filing for any supported regulator (SEC EDGAR, ESMA ESEF, UK
    FRC / Companies House / HMRC, Dutch SBR / KvK / AFM, EBA, EIOPA). We treat
    these with the same seriousness as a security bug, because the downstream
    consequence is regulatory.
-2. **Scaffold safety** — a template in `assets/` that passes `xmllint` /
+2. **Scaffold safety**: a template in `assets/` that passes `xmllint` /
    Arelle locally but produces output a regulator's validator rejects, or
    that resolves cross-file references to the wrong target.
-3. **Script safety** — any way `scripts/check_facts.py` or
+3. **Script safety**: any way `scripts/check_facts.py` or
    `scripts/validate_with_arelle.sh` could be made to do something unexpected
    with a crafted input document.
-4. **Supply chain** — the GitHub Actions workflows and their pinned actions.
+4. **Supply chain**: the GitHub Actions workflows and their pinned actions,
+   and the pinned Python dev dependencies in `requirements-dev.txt` that CI
+   installs. The two install paths in the README sit outside that pinned set:
+   `npx skills add MaxSchoon/ixbrl` resolves the `skills` CLI from npm at run
+   time and then fetches this repository from GitHub, and `pip install
+   arelle-release` resolves Arelle and its runtime dependencies from PyPI
+   unpinned. Version pins narrow the drift and do not make either install
+   reproducible. `npx skills@<version> add ...` pins the CLI, not this
+   repository: the CLI clones a branch, its ref syntax is the fragment
+   `MaxSchoon/ixbrl#<ref>` (a bare `@<sha>` is read as a skill-name filter),
+   and that ref reaches `git clone --branch`, which takes a branch or tag
+   and rejects a commit SHA. `pip install arelle-release==<version>` pins
+   Arelle alone; its runtime dependencies are declared as ranges
+   (`lxml!=6.0.0,<7,>=4`, `numpy<3,>=1`) and pip verifies no artifact hashes
+   unless a fully pinned requirements file is installed with
+   `--require-hashes`. For a reproducible environment, clone this
+   repository at a known commit and install Arelle from a hash-pinned
+   requirements file. We fix defects in this repository's own workflows and
+   pins; a compromised upstream package belongs to its registry and its
+   maintainers.
 
 ## Reporting a vulnerability
 
 **Please do not open a public issue for a security or filing-integrity
 problem.** Instead, use one of:
 
-- **GitHub private vulnerability reporting** — the "Report a vulnerability"
+- **GitHub private vulnerability reporting**: the "Report a vulnerability"
   button under the repository's **Security** tab (preferred; keeps the
   report private until a fix ships).
-- **Email** — **contact@doc2ixbrl.com**, subject line starting `SECURITY:`.
+- **Email**: **contact@doc2ixbrl.com**, subject line starting `SECURITY:`.
 
 Include: what's wrong, the file/line or validator code involved, the impact
 (e.g. "would produce an ESEF filing that fails `ESEF.2.2.1`"), and a
@@ -37,7 +61,7 @@ is a correctness/compliance claim.
 ## What to expect
 
 - Acknowledgement within a few working days.
-- An assessment, and — for confirmed issues — a fix on a private branch,
+- An assessment, and (for confirmed issues) a fix on a private branch,
   merged once verified.
 - Credit in the release notes if you'd like it (tell us your preferred name).
 

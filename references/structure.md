@@ -1,4 +1,4 @@
-# XBRL Structural Model — DTS, XLink, Linkbases, OIM
+# XBRL Structural Model: DTS, XLink, Linkbases, OIM
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
@@ -17,10 +17,10 @@ Every XBRL linkbase is a **directed graph**.
 - **Containers** are XLink **extended links** (`link:presentationLink`,
   `link:calculationLink`, `link:definitionLink`, `link:labelLink`,
   `link:referenceLink`, `link:footnoteLink`), each carrying an
-  `xlink:role` URI that names the *Extended Link Role* (ELR) — a
+  `xlink:role` URI that names the *Extended Link Role* (ELR), a
   partition of the graph into per-statement views.
 
-Read any XBRL question through "which graph, which arcrole, which ELR?" — confusion usually dissolves.
+Read any XBRL question through "which graph, which arcrole, which ELR?" Confusion usually dissolves.
 
 **Nesting rules** in an instance flow from this model:
 
@@ -29,7 +29,7 @@ Read any XBRL question through "which graph, which arcrole, which ELR?" — conf
 - Inside a hypercube graph (definition linkbase): primary item → `all`/`notAll` → hypercube → `hypercube-dimension` → dimension → `dimension-domain` → domain → `domain-member` → member (recursive). See `references/dimensions.md`.
 - Tuples nest concept declarations: a tuple's `complexType` contains the child item declarations directly; instance documents nest the child elements inside the tuple parent.
 
-## DTS — Discoverable Taxonomy Set
+## DTS: Discoverable Taxonomy Set
 
 A **Discoverable Taxonomy Set (DTS)** is the closure of taxonomy
 schemas and linkbases reachable from a starting point via a fixed set
@@ -46,11 +46,11 @@ XBRL linkbases are XLink 1.1 documents. XBRL 2.1 §3.5 specialises
 XLink for taxonomies. The relevant XLink element types
 (`xlink:type` attribute values) used in XBRL:
 
-- `simple` — used on `link:schemaRef`, `link:linkbaseRef`, `link:roleRef`, `link:arcroleRef` (one-shot pointers).
-- `extended` — used on the linkbase containers: `link:presentationLink`, `link:calculationLink`, `link:definitionLink`, `link:labelLink`, `link:referenceLink`, `link:footnoteLink` (XBRL 2.1 §3.5.3).
-- `locator` — used on `link:loc` to point at a concept in a schema via `xlink:href`.
-- `resource` — used on `link:label`, `link:reference`, `link:footnote`.
-- `arc` — used on `link:presentationArc`, `link:calculationArc`, `link:definitionArc`, `link:labelArc`, `link:referenceArc`, `link:footnoteArc`.
+- `simple` is used on `link:schemaRef`, `link:linkbaseRef`, `link:roleRef`, `link:arcroleRef` (one-shot pointers).
+- `extended` is used on the linkbase containers: `link:presentationLink`, `link:calculationLink`, `link:definitionLink`, `link:labelLink`, `link:referenceLink`, `link:footnoteLink` (XBRL 2.1 §3.5.3).
+- `locator` is used on `link:loc` to point at a concept in a schema via `xlink:href`.
+- `resource` is used on `link:label`, `link:reference`, `link:footnote`.
+- `arc` is used on `link:presentationArc`, `link:calculationArc`, `link:definitionArc`, `link:labelArc`, `link:referenceArc`, `link:footnoteArc`.
 
 The XLink attributes XBRL relies on are `xlink:href`, `xlink:label`,
 `xlink:from`, `xlink:to`, `xlink:role`, `xlink:arcrole`, `xlink:show`,
@@ -110,7 +110,7 @@ standard definition arcroles enumerated in XBRL 2.1 §5.2.6.2:
 
 XBRL Dimensions (XDT) adds further arcroles
 (`hypercube-dimension`, `dimension-domain`, `domain-member`,
-`dimension-default`, `all`, `notAll`) on definition arcs — see
+`dimension-default`, `all`, `notAll`) on definition arcs. See
 `references/dimensions.md`.
 
 ### Reference linkbase
@@ -141,7 +141,7 @@ Issuers create custom ELRs to carve presentation/calculation/definition networks
 
 ## Tuples (legacy)
 
-XBRL 2.1 §4.9 defines tuples — elements in the `xbrli:tuple`
+XBRL 2.1 §4.9 defines tuples: elements in the `xbrli:tuple`
 substitution group that group a set of related child items into a
 single compound fact. The spec defines duplicate tuples in §4.10.
 Tuples were the original mechanism for repeated structures (subsidiary
@@ -151,7 +151,7 @@ Modern reporting taxonomies prefer dimensions. ESEF rule
 **`ESEF.2.4.1.tupleElementUsed`** flags any use of a tuple as an error.
 SEC EDGAR EFM similarly discourages tuples.
 
-## Footnotes — XBRL model vs iXBRL `ix:footnote`
+## Footnotes: XBRL model vs iXBRL `ix:footnote`
 
 XBRL 2.1 §4.11 defines the footnote model. Footnotes live inside an
 instance, in a `link:footnoteLink` extended link with
@@ -170,8 +170,8 @@ arc is `link:footnoteArc` with arcrole
 
 Inline XBRL 1.1 introduces inline analogues: `ix:footnote` for the
 footnote text inside the host XHTML, and `ix:relationship` for
-connecting facts to footnotes — listed as one of the three substantive
-new features in iXBRL 1.1.
+connecting facts to footnotes (listed as one of the three substantive
+new features in iXBRL 1.1).
 
 > Per-regulator: SBR forbids footnotes entirely (rule `FR-NL-6.01`).
 
@@ -198,9 +198,10 @@ they want a structured fact list rather than parsing XHTML.
 ### xBRL-CSV
 
 A CSV serialization of the OIM, designed for high-volume regulatory
-reporting. EBA's DPM 2.0 framework adopts xBRL-CSV; reports
-referencing periods on or after **31 March 2026** must be filed in
-xBRL-CSV under the EBA reporting framework migration.
+reporting. EBA's DPM 2.0 framework adopts xBRL-CSV; reports with a
+reference date on or after **31 March 2026** must be submitted and
+resubmitted in xBRL-CSV. MiCA, Pillar 3 and Instant Payments reports
+are xBRL-CSV regardless of reference date, and DORA is plain CSV.
 
 For an iXBRL skill, OIM matters because:
 
@@ -215,14 +216,14 @@ Indexed at
 https://specifications.xbrl.org/work-product-index-versioning-versioning-1.0.html.
 The versioning report communicates concept renames, deprecations,
 namespace migrations, and other taxonomy diffs between two taxonomy
-versions. Adoption is uneven — IFRS Foundation publishes versioning
+versions. Adoption is uneven: IFRS Foundation publishes versioning
 reports for their taxonomy releases; SEC EDGAR and ESEF do not require
 filers to consume them.
 
 ## Nil values and per-regulator policy
 
 `xsi:nil="true"` is an XML Schema construct. In XBRL it asserts that
-a concept is reported but has no value — the element appears in the
+a concept is reported but has no value; the element appears in the
 instance with no content. The `xsi:nil` attribute itself is W3C XML
 Schema; XBRL 2.1 does not redefine it.
 
@@ -230,24 +231,24 @@ Per-regulator policy (validate against the current Reporting Manual /
 Filer Manual at filing time, since policy here is precise and changes
 by manual revision):
 
-- **SBR (Dutch)** — forbids `xsi:nil="true"` on facts (rule `FR-NL-5.07`).
-- **ESEF** — permits `xsi:nil` for empty cells in tagged tables under conditions in the ESEF Reporting Manual §2.2.5.
-- **SEC EDGAR** — discourages `xsi:nil` and EFM rejects nil values on most tagged facts.
+- **SBR (Dutch)** forbids `xsi:nil="true"` on facts (rule `FR-NL-5.07`).
+- **ESEF** permits `xsi:nil` for empty cells in tagged tables under conditions in the ESEF Reporting Manual §2.2.5.
+- **SEC EDGAR** discourages `xsi:nil` and EFM rejects nil values on most tagged facts.
 
 ## `link:schemaRef` / `linkbaseRef` / `roleRef` / `arcroleRef` in instances
 
 XBRL 2.1 §4.2, §4.3, §3.5.2.4, §3.5.2.5 govern these four
 instance-side pointers:
 
-- **`link:schemaRef`** — required, simple link, points at a taxonomy schema. The `xlink:href` is the entry-point schema URL. `xlink:type` MUST be `simple`. There must be at least one in any XBRL instance.
-- **`link:linkbaseRef`** — optional simple link pointing at a linkbase that should be added to the DTS for this instance only. The standard `xlink:role` values include:
+- **`link:schemaRef`**: required, simple link, points at a taxonomy schema. The `xlink:href` is the entry-point schema URL. `xlink:type` MUST be `simple`. There must be at least one in any XBRL instance.
+- **`link:linkbaseRef`**: optional simple link pointing at a linkbase that should be added to the DTS for this instance only. The standard `xlink:role` values include:
   - `http://www.xbrl.org/2003/role/presentationLinkbaseRef`
   - `http://www.xbrl.org/2003/role/calculationLinkbaseRef`
   - `http://www.xbrl.org/2003/role/definitionLinkbaseRef`
   - `http://www.xbrl.org/2003/role/labelLinkbaseRef`
   - `http://www.xbrl.org/2003/role/referenceLinkbaseRef`
-- **`link:roleRef`** — declares any custom `xlink:role` URIs used by the instance's footnote links. Points at the `link:roleType` declaration in a schema.
-- **`link:arcroleRef`** — same role for custom arcroles used in the instance's footnote arcs.
+- **`link:roleRef`**: declares any custom `xlink:role` URIs used by the instance's footnote links. Points at the `link:roleType` declaration in a schema.
+- **`link:arcroleRef`**: declares any custom `xlink:arcrole` URIs used by the instance's footnote arcs. Points at the `link:arcroleType` declaration in a schema.
 
 In an Inline XBRL document, these four elements live inside
 `ix:references` in the host XHTML's `<head>` and behave identically to
@@ -256,7 +257,7 @@ the equivalents in a standalone xBRL-XML instance.
 ## Sources
 
 - https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html (DTS §3.1, XLink usage §3.5, linkbase definitions §5.2, role/arcrole types §5.1.3 / §5.1.4, tuples §4.9, footnotes §4.11, instance refs §4.2 / §4.3)
-- https://www.w3.org/TR/xlink11/ (XLink 1.1 — `xlink:type`, `xlink:href`, `xlink:label`, `xlink:from`, `xlink:to`, `xlink:role`, `xlink:arcrole`, `xlink:show`, `xlink:actuate`)
+- https://www.w3.org/TR/xlink11/ (XLink 1.1: `xlink:type`, `xlink:href`, `xlink:label`, `xlink:from`, `xlink:to`, `xlink:role`, `xlink:arcrole`, `xlink:show`, `xlink:actuate`)
 - https://specifications.xbrl.org/work-product-index-inline-xbrl-inline-xbrl-1.1.html (Inline XBRL 1.1 work-product index)
 - https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18/inlineXBRL-part1-REC-2013-11-18.html (`ix:footnote`, `ix:relationship`)
 - https://specifications.xbrl.org/work-product-index-open-information-model-open-information-model-1.0.html (OIM 1.0 work-product index)
@@ -266,7 +267,6 @@ the equivalents in a standalone xBRL-XML instance.
 > part of the asked-for scope; re-verify against the current regulator
 > manual before relying on them: ESEF rule
 > `ESEF.2.4.1.tupleElementUsed`; SBR rules `FR-NL-5.07` and
-> `FR-NL-6.01`; ESEF Reporting Manual §2.2.5 nil-value policy; EBA
-> xBRL-CSV cutover date; LRR negated-label roles. The `ESEF.*` codes
-> are also separately verified in `references/validation.md` against
-> the Arelle source.
+> `FR-NL-6.01`; ESEF Reporting Manual §2.2.5 nil-value policy; LRR
+> negated-label roles. The `ESEF.*` codes are also separately verified
+> in `references/validation.md` against the Arelle source.

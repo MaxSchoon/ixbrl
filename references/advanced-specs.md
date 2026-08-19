@@ -1,4 +1,4 @@
-# Advanced XBRL Specs — Generic Links, Functions Registry, Versioning
+# Advanced XBRL Specs: Generic Links, Functions Registry, Versioning
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
@@ -9,18 +9,18 @@ Every namespace URI, element name, and arcrole below was verified against the sp
 
 ### What it extends
 
-XBRL 2.1 defines five "standard" linkbases — presentation, calculation, definition, label, reference — built on W3C XLink, each with predetermined semantics (e.g., `link:calculationArc` must connect two `xbrli:item` concepts per XBRL 2.1 §5).
+XBRL 2.1 defines five "standard" linkbases: presentation, calculation, definition, label, and reference. All are built on W3C XLink, each with predetermined semantics (e.g., `link:calculationArc` must connect two `xbrli:item` concepts per XBRL 2.1 §5).
 
 **Generic Links 1.0** (XBRL International Recommendation, 22 June 2009) "generalises this by providing a link type with no predefined semantics or constraints." Per §1: *"one quickly finds oneself wishing to use the power of XLink to associate information with, and express relationships between XML elements that are not XBRL concepts."*
 
-Generic Links lets a spec author build new relationships — between facts, resources, or arbitrary XML elements anywhere in the DTS — without inventing a new XLink language each time. It is the plumbing layer for nearly every post-2008 XBRL specification.
+Generic Links lets a spec author build new relationships (between facts, resources, or arbitrary XML elements anywhere in the DTS) without inventing a new XLink language each time. It is the plumbing layer for nearly every post-2008 XBRL specification.
 
 ### gen:* elements and arcs
 
 The Generic Links specification defines two concrete elements:
 
-- `<gen:link>` — an XBRL extended link in the substitution group of `xl:extended` capable of carrying arbitrary children.
-- `<gen:arc>` — an arc in the substitution group of `xl:arc` that establishes a relationship between resources or locators inside a `<gen:link>`.
+- `<gen:link>`: an XBRL extended link in the substitution group of `xl:extended` capable of carrying arbitrary children.
+- `<gen:arc>`: an arc in the substitution group of `xl:arc` that establishes a relationship between resources or locators inside a `<gen:link>`.
 
 Verified `gen` namespace URI: **`http://xbrl.org/2008/generic`**
 (Table 1 of the Recommendation; this column is normative). The
@@ -31,7 +31,7 @@ companion error namespace is `http://xbrl.org/2008/generic/error`
 `xbrlgene:violatedCyclesConstraint`.
 
 > Generic Links 1.0 itself does **not** define a `gen:reference`
-> element — it only defines the link and the arc.
+> element; it only defines the link and the arc.
 > References-as-resources are the job of the companion specification
 > below.
 
@@ -40,8 +40,8 @@ companion error namespace is `http://xbrl.org/2008/generic/error`
 Generic Links sits at the centre of a three-spec cluster on
 specifications.xbrl.org under "Generic Links":
 
-- **Generic Labels 1.0** — Recommendation, 24 October 2011. Lets you attach a label resource to *any* XML element, not just an XBRL concept. Verified namespace: **`http://xbrl.org/2008/label`**.
-- **Generic References 1.0** — Recommendation, also 24 October 2011 (sibling of Generic Labels). Same idea for references to authoritative literature.
+- **Generic Labels 1.0**: Recommendation, 24 October 2011. Lets you attach a label resource to *any* XML element, not just an XBRL concept. Verified namespace: **`http://xbrl.org/2008/label`**.
+- **Generic References 1.0**: Recommendation, also 24 October 2011 (sibling of Generic Labels). Same idea for references to authoritative literature.
 
 Both depend on Generic Links 1.0 as their substrate.
 
@@ -50,18 +50,18 @@ taxonomies often refer to "generic labels" without specifying that
 this is a separate XBRL spec. If you see `link:linkbase` declaring a
 `gen:link` with `roleType` `http://www.xbrl.org/2008/role/link` and
 `label` resources in the `http://xbrl.org/2008/label` namespace, that
-is the Generic Labels 1.0 mechanism — not standard `link:label`.
+is the Generic Labels 1.0 mechanism, not standard `link:label`.
 
 ### Use cases (Formula, Table Linkbase, Versioning)
 
 Generic Links is the substrate for almost every modern XBRL extension
 that needs custom relationships:
 
-- **Formula 1.0** — variable sets, filters, and assertions are wired together with generic arcs.
-- **Table Linkbase 1.0** — table, breakdown, and definition node hierarchies are entirely generic-link-based; the table linkbase has no native XLink syntax of its own.
-- **Versioning 1.0** — concept-correspondence and label/reference event identifiers ride on top of Generic Links.
-- **Generic Preferred Label 1.0** — listed as a separate spec group on specifications.xbrl.org and built on Generic Links.
-- Regulator-specific linkbases — ESEF anchoring relationships, EDGAR custom relationships, and EBA filing rules all extend the same `gen:link` / `gen:arc` substrate.
+- **Formula 1.0**: variable sets, filters, and assertions are wired together with generic arcs.
+- **Table Linkbase 1.0**: table, breakdown, and definition node hierarchies are entirely generic-link-based; the table linkbase has no native XLink syntax of its own.
+- **Versioning 1.0**: concept-correspondence and label/reference event identifiers ride on top of Generic Links.
+- **Generic Preferred Label 1.0**: listed as a separate spec group on specifications.xbrl.org and built on Generic Links.
+- Regulator-specific linkbases: ESEF anchoring relationships, EDGAR custom relationships, and EBA filing rules all extend the same `gen:link` / `gen:arc` substrate.
 
 The dependency chain is explicit in the Versioning Base 1.0
 Recommendation §1.1: *"This specification depends upon … Generic Link
@@ -73,7 +73,7 @@ Specification."*
 ### Purpose
 
 The Functions Registry is a curated catalogue of XPath 2.0 functions
-with XBRL-specific semantics — operating on facts, contexts, units,
+with XBRL-specific semantics, operating on facts, contexts, units,
 periods, dimensions, and concept properties. It exists because XBRL
 Formula and Table Linkbase need to ask questions XPath cannot natively
 answer ("what is the period type of this fact?", "what is the value
@@ -81,7 +81,7 @@ of dimension D on fact F?"). The registry index page is
 https://specifications.xbrl.org/registries/functions-registry-1.0/index.html,
 last updated 2024-02-20 according to the page header.
 
-The registry currently contains roughly **158 entries** — 121 with
+The registry currently contains roughly **158 entries**: 121 with
 status `REC` (Recommendation) and 37 with status `CR` (Candidate
 Recommendation, primarily the newer `f:` and `r:` Open-Information-
 Model functions added 2023-05-25).
@@ -92,17 +92,23 @@ Recommendation (22 June 2009) governs how implementations are tested.
 
 ### Function categories with verified examples
 
-Three function namespaces are present in the registry:
+Five function namespaces are present in the registry. Three hold
+Recommendation status:
 
-- `xfi` — XBRL Functions for Instances. Verified namespace URI: **`http://www.xbrl.org/2008/function/instance`**.
-- `xff` — XBRL Formula Functions (a smaller library, e.g., uncovered-aspect helpers).
-- `xfm` — XBRL math functions added 29 October 2018 (REC).
-- `f:` and `r:` — newer OIM-era functions in Candidate Recommendation status.
+- `xfi`: XBRL Functions for Instances. Verified namespace URI: **`http://www.xbrl.org/2008/function/instance`**.
+- `xff`: XBRL Formula Functions (a smaller library, e.g., uncovered-aspect helpers). Verified namespace URI: **`http://www.xbrl.org/2010/function/formula`**.
+- `xfm`: XBRL math functions added 29 October 2018. Verified namespace URI: **`http://www.xbrl.org/2008/function/math`**.
+
+Two were added for the Open Information Model and stand at Candidate
+Recommendation status:
+
+- `f`: fact-level functions. Verified namespace URI: **`https://xbrl.org/CR/2024-02-14/function/fact`**.
+- `r`: report-level functions. Verified namespace URI: **`https://xbrl.org/CR/2024-02-14/function/report`**.
 
 Function categories with verified QNames and signatures (each lifted
 directly from the registry table):
 
-**Context — period/entity/unit:**
+**Context (period/entity/unit):**
 
 - `xfi:context($item as schema-element(xbrli:item)) returns element(xbrli:context)`
 - `xfi:period($item as schema-element(xbrli:item)) returns element(xbrli:period)`
@@ -120,10 +126,12 @@ directly from the registry table):
 
 - `xfi:is-numeric($concept as xs:QName) returns xs:boolean`
 - `xfi:is-non-numeric($concept as xs:QName) returns xs:boolean`
+- `xfi:concept-balance($concept-name as xs:QName) returns xs:string`
+- `xfi:concept-period-type($concept-name as xs:QName) returns xs:string`
 
 **Aspect equality (used heavily by Formula filters):**
 
-- `xfi:s-equal`, `xfi:u-equal`, `xfi:v-equal`, `xfi:c-equal`, `xfi:p-equal`, `xfi:pc-equal`, `xfi:pcu-equal` — node-set aspect comparisons.
+- `xfi:s-equal`, `xfi:u-equal`, `xfi:v-equal`, `xfi:c-equal`, `xfi:p-equal`, `xfi:pc-equal`, `xfi:pcu-equal` (node-set aspect comparisons).
 - `xfi:duplicate-item`, `xfi:duplicate-tuple`.
 
 **Formula uncovered-aspect helpers:**
@@ -140,14 +148,18 @@ directly from the registry table):
 `f:dimension-value($fact, $dimension)`, `f:entity-identifier`,
 `f:unit-numerators`, `f:decimals`, `r:facts()`, `r:non-nil-facts()`.
 
-> **Honest gap note:** Function names commonly cited in older XBRL
-> literature — `xfi:concept-balance`, `xfi:concept-period-type`,
-> `xfi:fact-explicit-dimension-value` — are *not* present in the
-> entries verified in the index table. They likely live in the
-> **Dimensional Functions** add-on or in `xfi`'s schema module rather
-> than the headline registry index. Treat any such name as unverified
-> until you cross-check the registry XML at
-> https://xbrl.org/functionregistry/functionregistry.xml.
+> **Registry status note:** `xfi:concept-balance` (entry 90201),
+> `xfi:concept-period-type` (90202) and
+> `xfi:fact-explicit-dimension-value` (90309) are all in the registry
+> index at Recommendation status. The index carries an `OIM` column
+> beside the `Status` column, and the two are independent.
+> `concept-balance` and `concept-period-type` are marked `supported`.
+> `fact-explicit-dimension-value` is marked `deprecated`, and its entry
+> page states that the function may be used in OIM-compatible Formula
+> rules but its use is not recommended. Read the `OIM` column, not the
+> `Status` column alone, before relying on an `xfi` name in a rule
+> written against the Open Information Model. Index:
+> https://specifications.xbrl.org/registries/functions-registry-1.0/index.html
 
 ### How taxonomies use them
 
@@ -156,7 +168,7 @@ Two consumption surfaces:
 1. **Formula 1.0 assertions and filters.** A `va:valueAssertion` test, a `cf:conceptName` filter, or a `gf:generalFilter` body is an XPath 2.0 expression that may invoke any registered function. Example pattern: `xfi:period-end($v) gt xs:dateTime("2024-12-31T00:00:00")`.
 2. **Table Linkbase node selectors.** Aspect-node and rule-node bodies use the same XPath dialect; functions like `xfi:period-instant` and `xff:uncovered-aspect` drive the cell coordinates.
 
-For filers, this is mostly invisible — the regulator's filing rules
+For filers, this is mostly invisible: the regulator's filing rules
 are encoded as Formula linkbases and the validator (Arelle, UBmatrix,
 etc.) evaluates them against the submitted instance. But when a rule
 fails, the error trace will name the specific `xfi:` function that
@@ -170,10 +182,10 @@ know what these functions actually compute.
 Versioning 1.0 is published as a **modular** Recommendation set (all
 dated 27 February 2013):
 
-- **Versioning Base** — Recommendation
-- **Versioning Concept Use** — Recommendation
-- **Versioning Concept Details** — Recommendation
-- **Versioning Dimensions** — Recommendation
+- **Versioning Base**: Recommendation
+- **Versioning Concept Use**: Recommendation
+- **Versioning Concept Details**: Recommendation
+- **Versioning Dimensions**: Recommendation
 
 Two further documents (Relationship Sets and Versioning Report
 Content) sit at Public Working Draft status only.
@@ -186,9 +198,9 @@ companion error namespace is `http://xbrl.org/2013/versioning-base/error`
 
 Per Versioning Base §2, a report uses a three-tier hierarchy:
 
-- **Assignments** (`<ver:assignment>`) — group changes by Assignment Category (e.g., equivalent meaning, technical only).
-- **Actions** (`<ver:action>`) — describe one logical migration step.
-- **Events** (`<ver:event>`) — the atomic, machine-actionable changes inside an action.
+- **Assignments** (`<ver:assignment>`): group changes by Assignment Category (e.g., equivalent meaning, technical only).
+- **Actions** (`<ver:action>`): describe one logical migration step.
+- **Events** (`<ver:event>`): the atomic, machine-actionable changes inside an action.
 
 The report also names a **From DTS** and a **To DTS** (the two
 taxonomy versions being compared) via `<ver:fromDTS>` and
@@ -199,14 +211,14 @@ linking related reports.
 
 Versioning Base defines only two Event types in the base layer:
 
-- `<ver:namespaceRename>` — Namespace Rename Event.
-- `<ver:roleChange>` — Role Change Event.
+- `<ver:namespaceRename>`: Namespace Rename Event.
+- `<ver:roleChange>`: Role Change Event.
 
 Everything else is delegated to extension modules:
 
-- **Versioning Concept Use** — concept additions, deletions, and changes in concept *use* (e.g., abstract→concrete).
-- **Versioning Concept Details** — XML Schema attribute changes (type changes, substitution group), XBRL concept attribute changes (balance, period type), label events, reference events, tuple content model events, and concept-correspondence linking. Error codes include `vercde:invalidConceptCorrespondence`, `vercde:invalidConceptLabelIdentifier`, `vercde:invalidConceptReferenceIdentifier`.
-- **Versioning Dimensions** — dimension and hypercube-specific events.
+- **Versioning Concept Use**: concept additions, deletions, and changes in concept *use* (e.g., abstract→concrete).
+- **Versioning Concept Details**: XML Schema attribute changes (type changes, substitution group), XBRL concept attribute changes (balance, period type), label events, reference events, tuple content model events, and concept-correspondence linking. Error codes include `vercde:invalidConceptCorrespondence`, `vercde:invalidConceptLabelIdentifier`, `vercde:invalidConceptReferenceIdentifier`.
+- **Versioning Dimensions**: dimension and hypercube-specific events.
 
 Together these cover the practical migration scenarios filers
 encounter: a concept being renamed across namespaces, a balance
@@ -220,7 +232,7 @@ domain changing, or a tuple gaining a new permitted child.
 > release were not freshly fetched in this run. The Versioning Base
 > contributor list does include Haiko Philipp of the IFRS Foundation,
 > consistent with industry practice that the IFRS Foundation publishes
-> versioning reports alongside annual IFRS Taxonomy releases — but
+> versioning reports alongside annual IFRS Taxonomy releases. But
 > treat that as a strong but unverified expectation rather than a cited
 > fact. Re-verify against the IFRS Foundation taxonomy publication
 > page at filing time.
@@ -233,7 +245,7 @@ conformance suite at
 For filers, the practical importance is unchanged regardless of
 regulator adoption: when a taxonomy renames `IncomeTaxExpense` to
 `ProfitOrLossIncomeTaxExpense` between FY2024 and FY2025 versions, a
-versioning report — if the issuer publishes one — gives tooling a
+versioning report (if the issuer publishes one) gives tooling a
 deterministic mapping so prior-period comparatives can be re-tagged
 automatically rather than re-mapped by hand. Where no versioning
 report exists, that diff has to be reconstructed manually from release

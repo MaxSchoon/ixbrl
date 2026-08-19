@@ -3,7 +3,7 @@
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
 
-Inline XBRL embeds XBRL facts inside an XHTML host document — one file serves both the human reader and the structured-data consumer.
+Inline XBRL embeds XBRL facts inside an XHTML host document: one file serves both the human reader and the structured-data consumer.
 
 ## ix:* elements
 
@@ -25,40 +25,40 @@ Inline XBRL embeds XBRL facts inside an XHTML host document — one file serves 
 
 ## Key fact attributes
 
-- `contextRef` — IDREF to `xbrli:context` (entity + period + dimensions). Required on every fact.
-- `unitRef` — IDREF to `xbrli:unit`. Required on numeric facts.
-- `decimals` — Reported precision as decimal places (positive: digits after decimal; negative: rounding scale, e.g., `-3` = thousands; `INF` = exact).
-- `precision` — Significant digits. Mutually exclusive with `decimals` on the same fact.
-- `scale` — Inline-only multiplier as a power of 10 applied to the rendered text before producing the canonical XBRL value. E.g., `scale="3"` on rendered "1,234" yields fact `1234000`.
-- `sign` — `-` to negate the parsed value (Inline-only; pairs with parentheses formatting in HTML).
-- `format` — QName of a TRR transform (e.g., `ixt:numdotdecimal`) that converts rendered text to canonical XBRL lexical form.
-- `escape` — On `ix:nonNumeric`: `true` keeps inner XHTML markup as part of the fact value; `false` (default) takes text content only.
-- `continuedAt` — IDREF chain pointer to the next `ix:continuation` (or `ix:footnote`) segment.
-- `target` — Names an output document target so a single Inline document can produce multiple XBRL reports.
+- `contextRef`: IDREF to `xbrli:context` (entity + period + dimensions). Required on every fact.
+- `unitRef`: IDREF to `xbrli:unit`. Required on numeric facts.
+- `decimals`: Reported precision as decimal places (positive: digits after decimal; negative: rounding scale, e.g., `-3` = thousands; `INF` = exact).
+- `precision`: Significant digits. Mutually exclusive with `decimals` on the same fact.
+- `scale`: Inline-only multiplier as a power of 10 applied to the rendered text before producing the canonical XBRL value. E.g., `scale="3"` on rendered "1,234" yields fact `1234000`.
+- `sign`: `-` to negate the parsed value (Inline-only; pairs with parentheses formatting in HTML).
+- `format`: QName of a TRR transform (e.g., `ixt:num-dot-decimal`) that converts rendered text to canonical XBRL lexical form.
+- `escape`: on `ix:nonNumeric`, `true` keeps inner XHTML markup as part of the fact value; `false` (default) takes text content only.
+- `continuedAt`: IDREF chain pointer to the next `ix:continuation` (or `ix:footnote`) segment.
+- `target`: Names an output document target so a single Inline document can produce multiple XBRL reports.
 
 ## decimals vs precision
 
 `decimals` counts digits relative to the decimal point (negative for rounding to thousands/millions); `precision` counts significant digits regardless of magnitude. XBRL 2.1 §4.6.3–4.6.4 makes them mutually exclusive on a single fact.
 
-**Exactly one of `decimals` or `precision` is required on every non-nil numeric fact.** Nil-valued facts (`xsi:nil="true"`) must omit both. SEC EDGAR and Dutch SBR require `decimals`, forbid `precision`, and forbid `decimals="INF"`.
+**Exactly one of `decimals` or `precision` is required on every non-nil numeric fact.** Nil-valued facts (`xsi:nil="true"`) must omit both. SEC EDGAR and Dutch SBR require `decimals` and forbid `precision`. `INF` is **not** forbidden: the EDGAR XBRL Guide section 6.6.4 prescribes it for an exactly reported amount. What is forbidden is a `decimals` that misstates the value's accuracy, which `EFM.6.05.37` catches in the direction that is decidable from the document.
 
-## Transformation Registry (TRR 4)
+## Transformation Registry (TRR 5)
 
-The Transformation Registry defines named transformations (QNames in the `ixt` namespace) that Inline XBRL processors apply to rendered text to derive canonical XBRL lexical values — handling locale formatting, date orderings, sign conventions, boolean text.
+The Transformation Registry defines named transformations (QNames in the `ixt` namespace) that Inline XBRL processors apply to rendered text to derive canonical XBRL lexical values: handling locale formatting, date orderings, sign conventions, boolean text.
 
-**TRR 4** is the current registered version (Recommendation, namespace `http://www.xbrl.org/inlineXBRL/transformation/2022-02-16`).
+**TRR 5** is the current registered version (Recommendation of 16 February 2022, namespace `http://www.xbrl.org/inlineXBRL/transformation/2022-02-16`). TRR 4 is the previous Recommendation, namespace `http://www.xbrl.org/inlineXBRL/transformation/2020-02-12`. TRR 6 is a Public Working Draft. The `ixt` prefix must be bound to the namespace of the registry whose names the document actually uses; the hyphen-less spellings of TRR 3 and earlier do not resolve in TRR 4 or TRR 5.
 
 Categories and representative names:
 
-- **Numbers**: `ixt:numdotdecimal`, `ixt:numcommadecimal`, `ixt:num-dot-decimal-apos`, `ixt:numdotdecimalin`, `ixt:numunitdecimal`, `ixt:zerodash`, `ixt:nocontent`, `ixt:fixed-zero`, `ixt:fixed-empty`.
-- **Dates**: `ixt:datedaymonthyear`, `ixt:datemonthdayyear`, `ixt:dateyearmonthday`, `ixt:datedaymonthyearen`, `ixt:datemonthyear`, `ixt:dateyearmonth`, `ixt:dateerayearmonthdayjp`.
-- **Booleans**: `ixt:booleanfalse`, `ixt:booleantrue`.
+- **Numbers**: `ixt:num-dot-decimal`, `ixt:num-comma-decimal`, `ixt:num-dot-decimal-apos`, `ixt:num-comma-decimal-apos`, `ixt:num-unit-decimal`, `ixt:num-unit-decimal-apos`.
+- **Fixed values**: `ixt:fixed-zero` (dashes standing for zero), `ixt:fixed-empty`, `ixt:fixed-true`, `ixt:fixed-false`.
+- **Dates**: `ixt:date-day-month-year`, `ixt:date-month-day-year`, `ixt:date-year-month-day`, `ixt:date-day-monthname-year-en`, `ixt:date-month-year`, `ixt:date-year-month`, `ixt:date-jpn-era-year-month-day`.
 
 Example:
 
 ```xml
 <ix:nonFraction name="us-gaap:Revenues" contextRef="c1" unitRef="usd"
-                decimals="-3" format="ixt:numdotdecimal" scale="3">1,234</ix:nonFraction>
+                decimals="-3" format="ixt:num-dot-decimal" scale="3">1,234</ix:nonFraction>
 ```
 
 Produces canonical fact value `1234000`.
@@ -67,20 +67,20 @@ Produces canonical fact value `1234000`.
 
 `xbrli:context` carries the dimensional anchor for facts (XBRL 2.1 §4.7).
 
-- `entity` — Required `<xbrli:identifier scheme="...">value</xbrli:identifier>`. The `scheme` is an absolute URI naming the identifier authority (e.g., LEI scheme, SEC CIK URL); the body is the entity's identifier within that scheme.
-- `period` — Exactly one of:
+- `entity`: Required `<xbrli:identifier scheme="...">value</xbrli:identifier>`. The `scheme` is an absolute URI naming the identifier authority (e.g., LEI scheme, SEC CIK URL); the body is the entity's identifier within that scheme.
+- `period`: exactly one of:
   - `<xbrli:instant>YYYY-MM-DD</xbrli:instant>` (point in time, e.g., balance-sheet date),
   - `<xbrli:startDate>…</xbrli:startDate><xbrli:endDate>…</xbrli:endDate>` (duration, for flow concepts),
   - `<xbrli:forever/>` (no temporal bound).
-- `scenario` — Optional. Reporting scenario context (budget vs. actual). Used by XDT for typed/explicit dimension members on flow-type concepts.
-- `segment` — Optional. Entity sub-classification (business unit, geography). Used by XDT for dimensions tied to the reporting entity itself.
+- `scenario`: Optional. Reporting scenario context (budget vs. actual). Used by XDT for typed/explicit dimension members on flow-type concepts.
+- `segment`: Optional. Entity sub-classification (business unit, geography). Used by XDT for dimensions tied to the reporting entity itself.
 
 ## XBRL 2.1 units
 
 `xbrli:unit` declares the measurement (XBRL 2.1 §4.8).
 
-- **Single measure**: `<xbrli:measure>iso4217:EUR</xbrli:measure>` — one QName from a measure namespace. Monetary facts must use ISO 4217 currency codes via the `iso4217` namespace (`iso4217:EUR`, `iso4217:USD`). Pure-number ratios use `xbrli:pure`; share counts use `xbrli:shares`.
-- **Divide**: composite units like EUR/share — `iso4217:EUR` ÷ `xbrli:shares`.
+- **Single measure**: `<xbrli:measure>iso4217:EUR</xbrli:measure>`, one QName from a measure namespace. Monetary facts must use ISO 4217 currency codes via the `iso4217` namespace (`iso4217:EUR`, `iso4217:USD`). Pure-number ratios use `xbrli:pure`; share counts use `xbrli:shares`.
+- **Divide**: composite units like EUR/share (`iso4217:EUR` ÷ `xbrli:shares`).
 
 ```xml
 <xbrli:unit id="usdPerShare">
@@ -99,15 +99,15 @@ measure is in the `iso4217` namespace.
 XDT layers analytical axes onto XBRL 2.1 contexts (XDT §1–§3).
 
 - **Hypercubes** (`xbrldt:hypercubeItem`) bundle a set of dimension axes that constrain a primary item. Linked from the definition linkbase via `hypercube-dimension`, `domain-member`, `dimension-domain`, `dimension-default` arcroles.
-- **Explicit dimensions** — Axis whose members are pre-enumerated `xbrli:item` domain members; carried as `<xbrldi:explicitMember dimension="qn">qn:Member</xbrldi:explicitMember>`.
-- **Typed dimensions** — Axis whose member values are open-ended XML simple types (e.g., property IDs); carried as `<xbrldi:typedMember dimension="qn"><ext:Element>value</ext:Element></xbrldi:typedMember>`.
-- **all vs notAll** — `xbrldt:all` arc states the primary item MUST report against the hypercube's axes; `xbrldt:notAll` excludes a sub-cube. Closed hypercubes (`@xbrldt:closed="true"`) restrict to the listed members only.
-- **Default members** — A `dimension-default` arc names the implicit member when an explicit dimension is absent from the context. A fact reported without that explicit dimension is treated as if it carried the default.
-- **Segment vs scenario placement** — Each dimension is bound to either `xbrli:segment` or `xbrli:scenario` via `xbrldt:contextElement` on the hypercube-dimension arc; mismatched placement is a DTS error.
+- **Explicit dimensions**: Axis whose members are pre-enumerated `xbrli:item` domain members; carried as `<xbrldi:explicitMember dimension="qn">qn:Member</xbrldi:explicitMember>`.
+- **Typed dimensions**: Axis whose member values are open-ended XML simple types (e.g., property IDs); carried as `<xbrldi:typedMember dimension="qn"><ext:Element>value</ext:Element></xbrldi:typedMember>`.
+- **all vs notAll**: `xbrldt:all` arc states the primary item MUST report against the hypercube's axes; `xbrldt:notAll` excludes a sub-cube. `@xbrldt:closed="true"` on a has-hypercube arc admits no dimension in the context's `xbrli:segment` or `xbrli:scenario` other than the hypercube's own dimensions (XDT §2.3.3); a hypercube dimension that has a default member may still be absent, because the default applies implicitly. Which members a dimension may take comes from the `dimension-domain`/`domain-member` network less anything marked `xbrldt:usable="false"`, independently of `@xbrldt:closed`.
+- **Default members**: A `dimension-default` arc names the implicit member when an explicit dimension is absent from the context. A fact reported without that explicit dimension is treated as if it carried the default.
+- **Segment vs scenario placement**: `xbrldt:contextElement` is required on the `all` / `notAll` has-hypercube arc, not on `hypercube-dimension` arcs, and names the container (`xbrli:segment` or `xbrli:scenario`) that must hold the values of every dimension of that hypercube (XDT §2.3.2, [Def, 20]). Omitting it fires `xbrldte:HasHypercubeMissingContextElementAttributeError`. A dimension value placed in the other container does not satisfy the hypercube: the dimension then resolves only from its default member, and where it has none the fact fires `xbrldie:PrimaryItemDimensionallyInvalidError`.
 
 ## Calculation linkbase weights
 
-Calculation arcs (XBRL 2.1 §5.2.5) use arcrole `summation-item` to assert that a parent fact equals the weighted sum of its children within the same context (matching period type, entity, dimensions). `@weight` is a non-zero decimal — typically **+1** when the child contributes with the parent's natural sign, **−1** when it reverses sign (contra accounts, deductions in subtotals).
+Calculation arcs (XBRL 2.1 §5.2.5) use arcrole `summation-item` to assert that a parent fact equals the weighted sum of its children within the same context (matching period type, entity, dimensions). `@weight` is a non-zero decimal: typically **+1** when the child contributes with the parent's natural sign, **−1** when it reverses sign (contra accounts, deductions in subtotals).
 
 Weights validate only when child concepts have compatible **balance** types (debit/credit). Balance assignment on `monetaryItemType` concepts drives sign convention: asset-balance child into asset-balance parent → `weight="1"`; credit-balance contra into debit-balance subtotal → `weight="-1"`.
 
@@ -118,6 +118,6 @@ A processor reports a **calculation inconsistency** (not an error) when the pare
 ## Sources
 
 - https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18/inlineXBRL-part1-REC-2013-11-18.html
-- https://specifications.xbrl.org/work-product-index-inline-xbrl-transformation-registry-4.html
+- https://specifications.xbrl.org/work-product-index-inline-xbrl-transformation-registry-5.html
 - https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html
-- https://www.xbrl.org/Specification/XDT/REC-2006-09-18/XDT-REC-2006-09-18.html
+- https://www.xbrl.org/specification/dimensions/rec-2012-01-25/dimensions-rec-2006-09-18+corrected-errata-2012-01-25-clean.html
