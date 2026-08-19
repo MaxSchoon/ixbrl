@@ -397,8 +397,13 @@ taxonomy family by accounting framework*).
 ### Packaging and artifact shape: XHTML-in-ZIP, NOT `.xbri`
 
 **All financial-statement documents must be filed in machine-readable web
-format (XHTML). PDF is not accepted** (Word/PDF may be converted to XHTML
-with free online tools) [S1][S8]. The notification maximum size is **200
+format (XHTML). PDF is not accepted** [S1][S8]. PRH notes that a Word or PDF
+document can be converted to XHTML, and its own pages mention free online
+converters. Do not act on that for a real filing: an unfiled financial
+statement is confidential, and it commonly carries personal data of directors
+and auditors, so uploading one to a third-party service is a disclosure the
+filer has not agreed to. Convert locally, or with a tool the firm has
+assessed. The notification maximum size is **200
 MB** [S1][S6][S10]. On artifact shape the binding rule is
 PRH/1087/01/2026 s. 2: *"Tämän määräyksen mukaan ilmoitettavat asiakirjat
 on ilmoitettava XHTML-muodossa tai zip-pakettina"*, so **XHTML alone or a
