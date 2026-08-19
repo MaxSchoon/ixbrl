@@ -83,27 +83,19 @@ ISO_4217 = re.compile(r"^[A-Z]{3}$")
 ISO_4217_NS = "http://www.xbrl.org/2003/iso4217"
 
 
-# Transformations from the Inline XBRL Transformation Registry whose only
-# effect on a numeric fact is the separator convention. Everything else in the
-# registry is declined by fact_value() rather than guessed at.
-# Names are matched on the local part, so both the hyphenated spellings of
-# Transformation Registry 4/5 and the camelCase of the earlier registries hit.
-# `num-unit-decimal` is deliberately absent: its final group is the fraction,
-# not a thousands group, so it is a transformation rather than a separator
-# convention and is declined like any other.
-# Registry 5 gives the apostrophe grouping its own transformations rather than
-# folding it into the base ones, and accepts several apostrophe-like
-# A transformation is named by an EXPANDED QName, so the namespace and the
-# local part identify it together. Validating them separately would accept a
-# pairing that no registry publishes, such as an early namespace combined with
-# a name introduced years later.
-# Only the two modern registries are decoded. TR1 to TR3 state materially
-# different input grammars for the same conventions, including three-digit
-# grouping and a different treatment of spaces around the decimal mark, so one
-# shared decoder cannot honour all of them: the grammar that is right for TR4
-# is too permissive for TR3. A legacy transformation is therefore declined and
-# reported as a coverage gap, rather than decoded by a grammar that is not its
-# own and given a confident EFM verdict it has not earned.
+# The two Transformation Registry versions this module decodes. A
+# transformation is named by an EXPANDED QName, so a namespace and a local part
+# identify it together; validating them apart would accept a pairing no
+# registry publishes, such as an early namespace with a name introduced years
+# later.
+#
+# TR1 to TR3 are declined outright. They state materially different input
+# grammars for the same conventions, including three-digit grouping and a
+# different treatment of spaces around the decimal mark, so one shared decoder
+# cannot honour all of them: the grammar that is right for TR4 is too
+# permissive for TR3. Declining costs a reported coverage gap, where decoding
+# by a grammar that is not the transformation's own would produce a confident
+# EFM verdict it has not earned.
 TR4 = "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12"
 TR5 = "http://www.xbrl.org/inlineXBRL/transformation/2022-02-16"
 
