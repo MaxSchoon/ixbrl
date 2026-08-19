@@ -410,8 +410,13 @@ first time in annual and interim reports for financial year 2024 (§ 18)
 - Listed financial groups reporting IFRS **consolidated** accounts tag
   with **ESEF + DKFIN**, using the IFRS entry points in DKFIN [S5].
 - Financial entities preparing a CSRD sustainability report or Taxonomy-
-  Regulation Art. 8 reporting tag with **DKFIN plus** the EU
-  sustainability taxonomies (ESRS / Art. 8) per the ESEF regulation [S5].
+  Regulation Art. 8 reporting will tag with **DKFIN plus** the EU
+  sustainability taxonomies (ESRS / Art. 8), which Finanstilsynet itself
+  calls *"de kommende EU-taksonomier"*, the **forthcoming** ones, with the
+  duty grounded in the ESEF regulation [S5]. Neither taxonomy has been
+  adopted, and the substituted Art. 29d suspends mark-up until they are
+  (*CSRD / ESRS trajectory*), so do **not** require ESRS or Art. 8 mark-up
+  of a filing today [S5][S10].
 
 DKFIN has **eight top-level entry points** by entity type [S5]: (1)
 alternative investment fund managers and investment management companies;

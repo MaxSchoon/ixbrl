@@ -33,10 +33,16 @@ cleanly into XBRL-XML, where each fact is a verbose XML element. DPM
 2.0 re-architects the metamodel and pivots the file format from
 **xBRL-XML** to **xBRL-CSV** for the heavy modules.
 
-> **Honest gap:** The "31 March 2026" cutover date for xBRL-CSV
-> mandatory filing was not independently re-verified against an EBA
-> primary source in this run. Treat the cutover as expected timing
-> from EBA reporting-framework documentation, not verified here, and
+> **Verified for France, not re-verified at EBA level:** the
+> ACPR/Banque de France FAQ *Passage au format xBRL-CSV 03/2026* (v.2,
+> February 2026) states the cutover in terms: "À compter de l'arrêté
+> du 31/03/2026 ... Les remises au format xBRL-XML ne seront plus
+> acceptées". That fixes the date for French banking remittances only:
+> earlier reference dates stay in xBRL-XML, corrections and late
+> filings included whatever the deposit date, as do the national
+> SUR-domain collections (RUBA) and the whole Solvency II insurance
+> track. The equivalent cutover in EBA reporting-framework
+> documentation was not independently re-verified in this run, so
 > re-confirm against the live EBA Reporting Frameworks page at filing
 > time.
 
@@ -211,10 +217,11 @@ extension-taxonomy semantics, anchoring conventions, or output format.
 - https://www.eiopa.europa.eu/tools-and-data/supervisory-reporting-dpm-and-xbrl_en (EIOPA "DPM and XBRL"; Solvency II Taxonomy 2.9.1 PWD; 2.8.2 prior release; IORP and PEPP framework history)
 - https://specifications.xbrl.org/work-product-index-table-linkbase-table-linkbase-1.0.html (Table Linkbase 1.0 Recommendation, 2014-03-18 with errata 2024-12-17)
 - https://www.xbrl.org/Specification/xbrl-csv/ (xBRL-CSV 1.0 Recommendation directory; REC-2021-10-13 and REC-2021-10-13+errata-2023-04-19 confirmed)
+- https://esurfi.banque-france.fr/system/files/2026-02/FAQ%20-%20xBRL-CSV%20VF2_fevrier%202026_0.pdf (ACPR/Banque de France FAQ, *Passage au format xBRL-CSV 03/2026*, v.2 February 2026: xBRL-XML no longer accepted from the 31/03/2026 reference date; prior reference dates, corrections and late filings stay xBRL-XML; SUR-domain national taxonomies including RUBA out of scope)
 
 ### Honest gaps
 
-- "31 March 2026" DPM 2.0 cutover date not independently re-verified from a primary EBA source in this run.
+- "31 March 2026" xBRL-CSV cutover confirmed for French banking remittances by the ACPR FAQ of February 2026; the equivalent DPM 2.0 cutover date in EBA reporting-framework documentation was not independently re-verified from a primary EBA source in this run.
 - Canonical Eurofiling filing-indicators specification URL and exact `find:` namespace URI not freshly confirmed (eurofiling.info paths returned 404).
 - A Solvency II 2.10.0 PWD was not visible on the EIOPA page in this run; the latest PWD confirmed is 2.9.1.
 - EUCLID / CRTS / IRIS transport-system names not independently confirmed.

@@ -2,8 +2,13 @@
 
 This repository is an AI-agent skill: markdown reference material, runnable
 iXBRL/XBRL scaffolds (`assets/`), and small, dependency-light Python and
-shell validation helpers (`scripts/`). It executes no network calls on its
-own and ships no secrets. The realistic risk surface is:
+shell validation helpers (`scripts/`). It ships no secrets.
+`scripts/check_facts.py` parses locally with networking disabled;
+`scripts/validate_with_arelle.sh` execs Arelle, which resolves a
+document's taxonomy references over the network and writes to Arelle's
+ambient cache unless the caller passes `--packages <taxonomy>.zip
+--internetConnectivity offline` and a controlled cache directory
+(SKILL.md, "Bundled scripts"). The realistic risk surface is:
 
 1. **Filing-integrity defects**: a rule, instruction, or scaffold in the
    skill that would lead an agent (or a person) to produce a **non-compliant**
@@ -17,7 +22,9 @@ own and ships no secrets. The realistic risk surface is:
 3. **Script safety**: any way `scripts/check_facts.py` or
    `scripts/validate_with_arelle.sh` could be made to do something unexpected
    with a crafted input document.
-4. **Supply chain**: the GitHub Actions workflows and their pinned actions.
+4. **Supply chain**: the GitHub Actions workflows and their pinned actions,
+   and the pinned Python dev dependencies in `requirements-dev.txt` that CI
+   installs.
 
 ## Reporting a vulnerability
 

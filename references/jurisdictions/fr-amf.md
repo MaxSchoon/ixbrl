@@ -318,10 +318,14 @@ French-authority pointer.
   (EBA/XBRL/2026/06, 26 June 2026) is already published for framework 4.3
   (expected Q4 2026). This artifact churns fast: verify both the EBA
   version and what eSurfi has actually adopted at filing date [S16].
-- **Migration signal.** From the **03/2026** reference date, entry
-  points previously in **xBRL-XML** must be submitted as **xBRL-CSV**
-  (zip, base64 inside the OneGate XML envelope); non-conforming
-  remittances are rejected [S16].
+- **Migration signal.** From the **03/2026** reference date, the
+  enumerated banking entry points previously in **xBRL-XML** (AE, the
+  COREP modules, FINREP9, FP, the REM modules, SBPCR/SBPIFRS9,
+  SEPA_IPR; the Résolution entry points MREL-TLAC,
+  NOTIF_IMPRACTICABILITY and RESOL 1/2 moved at 12/2025) must be
+  submitted as **xBRL-CSV** (zip, base64 inside the OneGate XML
+  envelope); non-conforming remittances are rejected. RUBA and the
+  other national SUR-domain collections are out of scope [S16].
 
 All *annule et remplace* (replace-mode) plain xBRL, **not Inline
 iXBRL**, a distinct DPM pipeline. See `references/dpm.md`.
@@ -433,7 +437,11 @@ France is an EU Member State; the France layer sits on the EU rails in
 - **Non-IFRS-consolidated RFA:** plain XHTML, no XBRL; check
   well-formed XHTML only [S2][S7].
 - **ACPR is a different profile:** EBA/EIOPA DPM taxonomies (Eurofiling),
-  plain xBRL not inline, OneGate, xBRL-XML today → xBRL-CSV from 03/2026.
+  plain xBRL not inline, OneGate. Banking entry points are **xBRL-CSV**
+  from the 03/2026 reference date; **xBRL-XML** stays in force for
+  earlier reference dates (corrections and late filings alike, whatever
+  the deposit date), for RUBA and the other national SUR-domain
+  collections, and for the whole Solvency II insurance track [S16][S17].
   Use EBA/EIOPA taxonomy packages + the current EBA Filing Rules
   (v5.8 as of Feb 2026), **not** the ESEF disclosure system
   [S16][S17][S18]. See `references/dpm.md`.
