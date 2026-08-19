@@ -39,7 +39,7 @@ Mismatching period type to concept class causes `xbrldie:PrimaryItemDimensionall
 
 ## 4. Identifier scheme constancy
 
-Every `<xbrli:identifier scheme="...">` in an instance must use the **same scheme URI**: ESEF → LEI scheme (`http://standards.iso.org/iso/17442`); SEC → CIK scheme (`http://www.sec.gov/CIK`); SBR → KvK scheme. Mixing schemes silently produces "duplicate fact" errors because consumers treat differently-scheme'd entities as different.
+Every `<xbrli:identifier scheme="...">` in an instance must use the **same scheme URI**: ESEF → LEI scheme (`http://standards.iso.org/iso/17442`); SEC → CIK scheme (`http://www.sec.gov/CIK`); SBR → KvK scheme. Mixing schemes does not create duplicate facts, it prevents them: two facts are duplicates only when their contexts are c-equal, and c-equality requires `xbrli:identifier` elements that are s-equal in both scheme and value (XBRL 2.1 §4.10). A second scheme splits the report across two entity identities, so a figure tagged twice is kept as two facts about two entities and calculation, duplicate, and comparison checks stop binding. The named violations are profile rules: ESEF Reporting Manual Guidance 2.1.4 requires all entity identifiers and schemes in contexts to have identical content (`ESEF.2.1.4.multipleIdentifiers`), and SEC EFM 6.5.1 fixes the scheme at `http://www.sec.gov/CIK` while 6.5.3 requires every context identifier to equal the registrant's CIK.
 
 ## 5. Dimensions and axes: XDT is the substrate of every regime
 

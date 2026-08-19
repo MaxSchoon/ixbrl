@@ -222,7 +222,15 @@ explicitly flagged.**
 
 ### Fractions
 
-- `xbrli:fractionItemType`: facts of this type are reported in `xbrli:fraction` elements (numerator/denominator), not as a simple value.
+- `xbrli:fractionItemType`: the only item type with complex content.
+  XBRL 2.1 declares no `xbrli:fraction` element. The fact is the
+  taxonomy-defined concept element itself, carrying `xbrli:numerator`
+  and `xbrli:denominator` children in place of a simple value:
+  `<myTaxonomy:oneThird contextRef="numC1" unitRef="u1"><numerator>1</numerator><denominator>3</denominator></myTaxonomy:oneThird>`.
+  The denominator must be non-zero and finite, and `@precision` and
+  `@decimals` must not appear on such a fact. In Inline XBRL the same
+  fact is tagged with `ix:fraction`, wrapping `ix:numerator` and
+  `ix:denominator`.
 
 ## Concept declaration attributes that depend on item type
 
@@ -280,3 +288,4 @@ by the DTS resolver, (5)–(7) by careful schema-aware processing, and
 - https://www.xbrl.org/2005/xbrldt-2005.xsd
 - https://www.xbrl.org/Specification/dimensions/REC-2012-01-25/dimensions-REC-2012-01-25.html
 - https://www.xbrl.org/Specification/oim/REC-2021-10-13/oim-REC-2021-10-13.html
+- https://www.xbrl.org/specification/inlinexbrl-part1/rec-2013-11-18/inlinexbrl-part1-rec-2013-11-18.html

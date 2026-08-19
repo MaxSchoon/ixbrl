@@ -101,7 +101,7 @@ XDT layers analytical axes onto XBRL 2.1 contexts (XDT §1–§3).
 - **Hypercubes** (`xbrldt:hypercubeItem`) bundle a set of dimension axes that constrain a primary item. Linked from the definition linkbase via `hypercube-dimension`, `domain-member`, `dimension-domain`, `dimension-default` arcroles.
 - **Explicit dimensions**: Axis whose members are pre-enumerated `xbrli:item` domain members; carried as `<xbrldi:explicitMember dimension="qn">qn:Member</xbrldi:explicitMember>`.
 - **Typed dimensions**: Axis whose member values are open-ended XML simple types (e.g., property IDs); carried as `<xbrldi:typedMember dimension="qn"><ext:Element>value</ext:Element></xbrldi:typedMember>`.
-- **all vs notAll**: `xbrldt:all` arc states the primary item MUST report against the hypercube's axes; `xbrldt:notAll` excludes a sub-cube. Closed hypercubes (`@xbrldt:closed="true"`) restrict to the listed members only.
+- **all vs notAll**: `xbrldt:all` arc states the primary item MUST report against the hypercube's axes; `xbrldt:notAll` excludes a sub-cube. `@xbrldt:closed="true"` on a has-hypercube arc admits no dimension in the context's `xbrli:segment` or `xbrli:scenario` other than the hypercube's own dimensions (XDT §2.3.3); a hypercube dimension that has a default member may still be absent, because the default applies implicitly. Which members a dimension may take comes from the `dimension-domain`/`domain-member` network less anything marked `xbrldt:usable="false"`, independently of `@xbrldt:closed`.
 - **Default members**: A `dimension-default` arc names the implicit member when an explicit dimension is absent from the context. A fact reported without that explicit dimension is treated as if it carried the default.
 - **Segment vs scenario placement**: Each dimension is bound to either `xbrli:segment` or `xbrli:scenario` via `xbrldt:contextElement` on the hypercube-dimension arc; mismatched placement is a DTS error.
 
@@ -120,4 +120,4 @@ A processor reports a **calculation inconsistency** (not an error) when the pare
 - https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18/inlineXBRL-part1-REC-2013-11-18.html
 - https://specifications.xbrl.org/work-product-index-inline-xbrl-transformation-registry-5.html
 - https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html
-- https://www.xbrl.org/Specification/XDT/REC-2006-09-18/XDT-REC-2006-09-18.html
+- https://www.xbrl.org/specification/dimensions/rec-2012-01-25/dimensions-rec-2006-09-18+corrected-errata-2012-01-25-clean.html

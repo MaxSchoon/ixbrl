@@ -268,8 +268,8 @@ syntactic ack) of directory D00B. **Not XBRL and not iXBRL** [S13].
 - **EDI-TDFC** (machine-to-machine) or **EFI** (online form) are the two
   channels; EDI-TDFC is mandatory for the *déclaration de résultats* of
   the real regimes (BIC RN, IS RN, BA RN) [S14].
-- *API Entreprise* re-exposes liasse data as structured JSON, again
-  structured but **not XBRL** [S11].
+- *API Entreprise* re-exposes the DGFiP *liasse fiscale* imprimés as
+  structured JSON, again structured but **not XBRL** [S34].
 
 EDI-TDFC is wholly distinct from any iXBRL obligation; an iXBRL product
 does not address the *liasse fiscale*.
@@ -608,6 +608,7 @@ Verify the operative version of every cited rule at filing date.
 - **[S30]** Directive **(EU) 2026/470** (Omnibus I), 24 Feb 2026, OJ L 26 Feb 2026, amends CSRD Art. 29d (recital 24: mark-up suspended until Reg. 2019/815 updated; recital 25: Member-State board-responsibility limit): <https://eur-lex.europa.eu/eli/dir/2026/470/oj/eng>
 - **[S31]** EFRAG, *EFRAG provides its technical advice on draft simplified (Amended) ESRS to the European Commission* (EFRAG SRB approval 28 Nov 2025; delivered 3 Dec 2025): <https://www.efrag.org/en/news-and-calendar/news/efrag-provides-its-technical-advice-on-draft-simplified-esrs-to-the-european-commission>
 - **[S32]** BODACC, *Bulletin officiel des annonces civiles et commerciales* (publicité des actes enregistrés au RNE): <https://www.bodacc.fr/>
+- **[S34]** API Entreprise, *Liasses fiscales* (DGFiP endpoint `/v4/dgfip/unites_legales/{siren}/liasses_fiscales/{year}`; « Format de l'information : Donnée structurée JSON »): <https://entreprise.api.gouv.fr/catalogue/dgfip/liasses_fiscales>
 
 For anything ESEF-general, return to `references/esef.md`. When a question concerns
 a rule version newer than this file cites, or a French mechanism not

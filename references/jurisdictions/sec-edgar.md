@@ -35,7 +35,9 @@ this is a live check, never a remembered fact.
 operative version at <https://www.sec.gov/submit-filings/edgar-filer-manual>
 before citing a chapter or section number: chapter 6 ("Interactive
 Data") is the Inline XBRL chapter, and its numbering moves between
-versions.
+versions. Version 69 (March 2024) removed the Inline XBRL technical
+detail from chapter 6 into the EDGAR XBRL Guide, and the Release 26.3
+draft, deploying 14 September 2026, removes what remains.
 
 ### Recent rule updates (last ~24 months)
 
@@ -145,10 +147,13 @@ have at least one occurrence outside `ix:hidden`.
 
 ### Decimals, units, and signs
 
-EDGAR XBRL Guide sections 9.5 and 6.6.4, validated by EFM 6.5.17 and 6.5.37:
+EDGAR XBRL Guide sections 6.6.4, 8.6 and 9.5. EFM Volume II version 69
+(March 2024) moved this detail out of chapter 6, so the section numbers
+6.5.17 and 6.5.37 are EFM v68 numbering, which the Guide keeps in its
+"EFM v68 Ref" column and EDGAR keeps in its error codes:
 
 - Every numeric `ix:nonFraction` carries a `decimals` attribute. `precision` is
-  not allowed (`EFM.6.05.17`).
+  not allowed (Guide section 8.6, `EFM.6.05.17`).
 - The literal `INF` is permitted for `decimals`. Guide section 6.6.4 gives `INF`
   as the correct value for an exactly reported monetary amount, percentage or
   basis-point figure; a rounded amount takes a finite integer instead (`-3`
@@ -181,9 +186,11 @@ EDGAR XBRL Guide sections 9.5 and 6.6.4, validated by EFM 6.5.17 and 6.5.37:
 
 ### Common EFM error and warning codes
 
-Codes verbatim, with the EFM section that drives them:
+Codes verbatim, with the EFM v68 section each one cites. The current
+chapter 6 no longer contains these sections; the EDGAR XBRL Guide
+reproduces the numbers in its "EFM v68 Ref" column:
 
-| Code | Meaning | EFM § |
+| Code | Meaning | EFM v68 § |
 |---|---|---|
 | EFM.6.05.01 | CIK / identifier convention violation | 6.5.1 |
 | EFM.6.05.11 | Duplicate or equivalent units must be deduplicated | 6.5.11 |
@@ -251,7 +258,10 @@ positions on officer certifications or auditor assurance.
 
 ## Authorities and governance
 
-Most-cited iXBRL rules:
+Most-cited iXBRL rules, in EFM v68 numbering. Version 69 (March 2024)
+moved this material to the EDGAR XBRL Guide, and the operative chapter 6
+now runs only to 6.6; the Guide and the EDGAR error codes still cite
+these numbers:
 
 - **EFM 6.4**: Submission of Interactive Data (which forms, attachment names, EX-101 vs. embedded iXBRL).
 - **EFM 6.5**: *Syntax of Instances*. Master section for Inline XBRL syntax checks.
@@ -271,7 +281,8 @@ Most-cited iXBRL rules:
 
 Volume II PDF: https://www.sec.gov/files/edgar/filermanual/efmvol2.pdf
 Chapter 6 split: https://www.sec.gov/files/edgar/filermanual/efmvol2-c6.pdf
-EDGAR XBRL Guide (plain-language companion): https://www.sec.gov/files/edgar/filer-information/specifications/xbrl-guide.pdf
+EDGAR XBRL Guide (SEC staff; carries the Inline XBRL technical detail
+removed from chapter 6): https://www.sec.gov/files/edgar/filer-information/specifications/xbrl-guide.pdf
 
 ## Sources
 

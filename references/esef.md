@@ -160,7 +160,7 @@ do not displace the EU-level XHTML / iXBRL obligations.
 ESEF imposes **two complementary regimes** on issuers preparing IFRS
 consolidated AFRs:
 
-- **Detailed tagging** (Article 4(1) and Annex II point 1; mandatory from FY2020 under Article 8). Each numeric line item in the four primary statements (Statement of Financial Position, Statement of P&L / OCI, Statement of Changes in Equity, Statement of Cash Flows) is tagged with an `ix:nonFraction` pointing to the matching IFRS or extension concept. Contexts, units (`iso4217:EUR`), decimals, signs all required. Calculation linkbase relationships must reconcile (subject to rounding).
+- **Detailed tagging** (Article 4(1) and Annex II point 1; mandatory from FY2020 under Article 8). Each numeric line item in the four primary statements (Statement of Financial Position, Statement of P&L / OCI, Statement of Changes in Equity, Statement of Cash Flows) is tagged with an `ix:nonFraction` pointing to the matching IFRS or extension concept. Each fact carries `contextRef`, `unitRef` (`iso4217:EUR` for monetary items) and `decimals`; Manual §2.2.1 requires `decimals` and rules out `precision`. The `sign` attribute appears only where the fact is negative, and `-` is its only permitted value (Inline XBRL 1.1 §10.1.1); under Manual 1.6.1 assets, equity, liabilities, income, costs and cash flows are all reported as positive figures, with the balance attribute and calculation weights carrying the arithmetic. Calculation linkbase relationships must reconcile (subject to rounding).
 - **Block tagging** (Article 4(2) and the Annex II point that applies to the issuer's standard, taking the `text block` elements of the relevant Annex II Table; mandatory from FY2022, and governed for financial years from 2026 by Table 1 for IAS 1 filers or Table 2 for IFRS 18 filers). A note disclosure that corresponds to a text-block element of the Annex II Table is wrapped in its entirety in an `ix:nonNumeric` element with `escape="true"`. The obligation reaches those disclosures, not every note in the report. The aim is structured retrieval of narrative; auditors should expect explicit tags like `ifrs-full:DisclosureOfBasisOfPreparationOfFinancialStatementsExplanatory` plus *escaped* HTML preserving tables, lists, and headings inside the block.
 
 A typical narrative block tag:
@@ -345,6 +345,7 @@ errors.
 - https://www.esma.europa.eu/sites/default/files/2026-04/esef_taxonomy_2025_documentation.pdf
 - https://www.esma.europa.eu/issuer-disclosure/electronic-reporting
 - https://github.com/Arelle/Arelle/tree/master/arelle/plugin/validate/ESEF
+- https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18/inlineXBRL-part1-REC-2013-11-18.html
 - https://www.xbrl.org/Specification/taxonomy-package/REC-2016-04-19/taxonomy-package-REC-2016-04-19.html
 - https://www.xbrl.org/guidance/esef-rules-anchoring-extensions/
 - https://www.xbrl.org/guidance/esef-rules-anchoring-extensions-examples/

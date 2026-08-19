@@ -115,7 +115,17 @@ Regulation 2019/815 directly from EUR-Lex or load the ESMA-published
 - `ifrs-full:DisclosureOfSignificantAccountingPoliciesExplanatory`: "Disclosure of significant accounting policies [text block]"
 - `ifrs-full:DisclosureOfBasisOfPreparationOfFinancialStatementsExplanatory`: "Disclosure of basis of preparation of financial statements [text block]"
 - `ifrs-full:DisclosureOfAccountingJudgementsAndEstimatesExplanatory`: "Disclosure of accounting judgements and estimates [text block]"
-- `ifrs-full:DisclosureOfInitialApplicationOfStandardsOrInterpretationsExplanatory`: "Disclosure of initial application of standards or interpretations [text block]" (illustrated as a voluntary/Annex VI element in Figure 4)
+
+### Voluntary Annex VI elements illustrated in the Manual
+
+Figure 4 illustrates a note on the adoption of new standards marked up
+with an element that Annex II does not contain. The Manual prints the
+marker "Voluntary" against that tag. Footnote 21 to §1.9.1 places such
+complements in Annex VI and states they do not prevail over the
+mandatory elements, so this mark-up is an addition to the Annex II set,
+never a substitute for it.
+
+- `ifrs-full:DescriptionOfInitialApplicationOfStandardsOrInterpretations`: "Disclosure of initial application of standards or interpretations [text block]", typed `text block`, referenced to IAS 8.28. Present in Annex VI, absent from Annex II.
 
 ### Income statement / finance items (verified in Manual §1.9, Figures 2–3, 5)
 

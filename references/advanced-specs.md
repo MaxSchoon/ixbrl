@@ -126,6 +126,8 @@ directly from the registry table):
 
 - `xfi:is-numeric($concept as xs:QName) returns xs:boolean`
 - `xfi:is-non-numeric($concept as xs:QName) returns xs:boolean`
+- `xfi:concept-balance($concept-name as xs:QName) returns xs:string`
+- `xfi:concept-period-type($concept-name as xs:QName) returns xs:string`
 
 **Aspect equality (used heavily by Formula filters):**
 
@@ -146,14 +148,18 @@ directly from the registry table):
 `f:dimension-value($fact, $dimension)`, `f:entity-identifier`,
 `f:unit-numerators`, `f:decimals`, `r:facts()`, `r:non-nil-facts()`.
 
-> **Honest gap note:** Function names commonly cited in older XBRL
-> literature (`xfi:concept-balance`, `xfi:concept-period-type`,
-> `xfi:fact-explicit-dimension-value`) are *not* present in the
-> entries verified in the index table. They likely live in the
-> **Dimensional Functions** add-on or in `xfi`'s schema module rather
-> than the headline registry index. Treat any such name as unverified
-> until you cross-check the registry XML at
-> https://xbrl.org/functionregistry/functionregistry.xml.
+> **Registry status note:** `xfi:concept-balance` (entry 90201),
+> `xfi:concept-period-type` (90202) and
+> `xfi:fact-explicit-dimension-value` (90309) are all in the registry
+> index at Recommendation status. The index carries an `OIM` column
+> beside the `Status` column, and the two are independent.
+> `concept-balance` and `concept-period-type` are marked `supported`.
+> `fact-explicit-dimension-value` is marked `deprecated`, and its entry
+> page states that the function may be used in OIM-compatible Formula
+> rules but its use is not recommended. Read the `OIM` column, not the
+> `Status` column alone, before relying on an `xfi` name in a rule
+> written against the Open Information Model. Index:
+> https://specifications.xbrl.org/registries/functions-registry-1.0/index.html
 
 ### How taxonomies use them
 
