@@ -104,16 +104,16 @@ XBRL 2.1. XML-syntactic parent-child arcs with `weight` attributes;
 brittle in the face of dimensional facts, nil values, duplicates, and
 rounding/`decimals` mismatches.
 
-**Calculations 1.1**: XBRL Recommendation 14 February 2024. Provides
-"improved handling of rounded and duplicate facts, particularly
-relevant to Inline XBRL-based reporting" and updates calculation
-functionality to leverage Open Information Model semantics rather than
-the XML syntactic definitions of XBRL 2.1.
+**Calculations 1.1**: XBRL Recommendation 22 February 2023, with errata
+corrections to 14 February 2024. Provides "improved handling of rounded
+and duplicate facts, particularly relevant to Inline XBRL-based reporting"
+and updates calculation functionality to leverage Open Information Model
+semantics rather than the XML syntactic definitions of XBRL 2.1.
 
 Practical implications:
 
 - Reporting in OIM-semantic terms means duplicate facts (which iXBRL produces routinely when the same concept is tagged in multiple places) no longer trip false calc errors when their values agree within their declared precision.
-- Rounding tolerance is computed from the strictest declared `decimals` across the operands.
+- Consistency is decided by interval arithmetic, not by one tolerance. Each fact yields a fact value interval from its own `decimals` (round-to-nearest: `[v - 0.5 * 10^-d, v + 0.5 * 10^-d]`, and the point `[v, v]` for `INF`; truncation mode uses the half-open truncated interval). Duplicate facts for a data point intersect their intervals, each contribution interval is multiplied by the arc weight, the contribution intervals are summed, and the binding is consistent when that sum overlaps the reported total's interval (Calculations 1.1 sections 5.2 to 5.7). Because the half-widths add, one coarse operand such as `decimals="-3"` widens the allowance for the whole binding.
 - Calc 1.1 is opt-in at the specification level: its relationships use the arcrole `https://xbrl.org/2023/arcrole/summation-item`, with no `www`, forming a network independent of the XBRL 2.1 arcrole `http://www.xbrl.org/2003/arcrole/summation-item`. A processor may optionally apply Calc 1.1 semantics to the legacy relationships as well, but the two networks stay distinct. Verified against the ESMA ESEF 2025 taxonomy, whose calculation linkbases carry 2652 arcs and only the 2023 arcrole.
 
 **Adoption status (2026):** ESEF **requires** Calc 1.1. Delegated Regulation
