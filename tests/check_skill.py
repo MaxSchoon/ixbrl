@@ -274,8 +274,9 @@ SOURCE_MARKER = re.compile(r"\[S(\d+)\]")
 SOURCE_ENTRY = re.compile(r"^\s*-?\s*\*\*\[S(\d+)\]\*\*", re.M)
 # Fenced blocks, backtick or tilde, indented or not. Masked before anything is
 # scanned: an entry-shaped example inside a fence would otherwise be read as a
-# real definition and would move the source-list boundary.
-FENCE = re.compile(r"^[ \t]*(`{3,}|~{3,}).*?^[ \t]*\1[ \t]*$", re.M | re.S)
+# real definition and would move the source-list boundary. An unclosed fence
+# runs to the end of the document, as CommonMark says it does.
+FENCE = re.compile(r"^[ \t]*(`{3,}|~{3,}).*?(?:^[ \t]*\1[ \t]*$|\Z)", re.M | re.S)
 # The credit line every reference carries. It is not body prose, so a marker
 # appearing in it is not a citation anyone made.
 ATTRIBUTION = re.compile(r"^\*Part of the iXBRL Skill\b.*$", re.M)
