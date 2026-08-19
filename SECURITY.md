@@ -24,7 +24,14 @@ ambient cache unless the caller passes `--packages <taxonomy>.zip
    with a crafted input document.
 4. **Supply chain**: the GitHub Actions workflows and their pinned actions,
    and the pinned Python dev dependencies in `requirements-dev.txt` that CI
-   installs.
+   installs. The two install paths in the README sit outside that pinned set:
+   `npx skills add MaxSchoon/ixbrl` resolves the `skills` CLI from npm at run
+   time and then fetches this repository from GitHub, and `pip install
+   arelle-release` resolves Arelle and its runtime dependencies from PyPI
+   unpinned. Pin both where you need a reproducible install
+   (`npx skills@<version> add ...`, `pip install arelle-release==<version>`).
+   We fix defects in this repository's own workflows and pins; a compromised
+   upstream package belongs to its registry and its maintainers.
 
 ## Reporting a vulnerability
 

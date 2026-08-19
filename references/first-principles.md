@@ -39,7 +39,26 @@ Mismatching period type to concept class causes `xbrldie:PrimaryItemDimensionall
 
 ## 4. Identifier scheme constancy
 
-Every `<xbrli:identifier scheme="...">` in an instance must use the **same scheme URI**: ESEF → LEI scheme (`http://standards.iso.org/iso/17442`); SEC → CIK scheme (`http://www.sec.gov/CIK`); SBR → KvK scheme. Mixing schemes does not create duplicate facts, it prevents them: two facts are duplicates only when their contexts are c-equal, and c-equality requires `xbrli:identifier` elements that are s-equal in both scheme and value (XBRL 2.1 §4.10). A second scheme splits the report across two entity identities, so a figure tagged twice is kept as two facts about two entities and calculation, duplicate, and comparison checks stop binding. The named violations are profile rules: ESEF Reporting Manual Guidance 2.1.4 requires all entity identifiers and schemes in contexts to have identical content (`ESEF.2.1.4.multipleIdentifiers`), and SEC EFM 6.5.1 fixes the scheme at `http://www.sec.gov/CIK` while 6.5.3 requires every context identifier to equal the registrant's CIK.
+XBRL 2.1 requires only that each `<xbrli:identifier>` carry a non-empty
+`scheme` URI (§4.7.3.1); it imposes no constancy across contexts. Every
+filing profile in scope does impose it, and each fixes its own scheme.
+ESEF: Reporting Manual Guidance 2.1.1 fixes the scheme at
+`http://standards.iso.org/iso/17442`, and Guidance 2.1.4 requires all
+entity identifiers and schemes in contexts to have identical content
+(`ESEF.2.1.4.multipleIdentifiers`). SEC: EFM 6.5.1 fixes the scheme at
+`http://www.sec.gov/CIK`, 6.5.2 requires the content to be the
+registrant's CIK, and 6.5.3 requires every `xbrli:identifier` in the
+instance to have identical content. SBR Handelsregister: Reporting
+Manual G3-1-1_2 fixes the scheme at `http://www.kvk.nl/kvk-id`, and
+G3-1-4_1 repeats the identical-content rule (`multipleIdentifiers`); a
+Dutch deposit made by the direct-ESEF route carries the LEI scheme
+instead. Mixing schemes does not create duplicate facts, it prevents
+them: two facts are duplicates only when their contexts are c-equal,
+and c-equality requires `xbrli:identifier` elements that are s-equal in
+both scheme and value (XBRL 2.1 §4.10). A second scheme splits the
+report across two entity identities, so a figure tagged twice is kept
+as two facts about two entities and calculation, duplicate, and
+comparison checks stop binding.
 
 ## 5. Dimensions and axes: XDT is the substrate of every regime
 

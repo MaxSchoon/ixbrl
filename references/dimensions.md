@@ -110,7 +110,17 @@ A dimension MAY declare exactly one default member via a
 whose value is the default for its dimension. Doing so raises
 `xbrldie:DefaultValueUsedInInstanceError`.
 
-SEC EDGAR XBRL Filing Guide §10.7.1 presentation rule: *"If the default member of an Axis does not appear in an effective presentation relationship base set, then the only facts that can be displayed by that presentation base set are facts in contexts having a non-defaulted member on that Axis."* §5.6 (formerly EFM v68 §6.8.19): do not declare "Total" domain members; the default member fills that role. SEC reports emit the default member's QName only in *presentation* arcs and `xbrldi:explicitMember` only for non-default values.
+SEC EDGAR XBRL Filing Guide §10.7.1 presentation rule: *"If the default
+member of an Axis does not appear in an effective presentation
+relationship base set, then the only facts that can be displayed by
+that presentation base set are facts in contexts having a non-defaulted
+member on that Axis."* §5.7 (formerly EFM v68 §6.8.19): do not declare
+"Total" domain members; the default member fills that role. SEC reports
+carry the default member's QName in the definition linkbase, as the
+target of the `dimension-default` arc and usually of the axis's
+`dimension-domain` arc, and in the presentation relationships that let
+defaulted facts render; `xbrldi:explicitMember` carries only non-default
+values.
 
 ## Segment vs scenario placement
 
@@ -234,7 +244,7 @@ points to schema-validated string or pattern types.
 4. Using `xbrldi:explicitMember` for a typed dimension or vice versa fires `xbrldie:ExplicitMemberNotExplicitDimensionError` / `TypedMemberNotTypedDimensionError`.
 5. Reporting the same dimension twice in one context fires `xbrldie:RepeatedDimensionInInstanceError`. Merge or pick one.
 6. Forgetting `@xbrldt:contextElement` on an `all` / `notAll` arc fires `xbrldte:HasHypercubeMissingContextElementAttributeError`. The attribute is mandatory.
-7. Declaring a "Total" custom member on a SEC filing violates EDGAR XBRL Filing Guide §5.6 (formerly EFM v68 §6.8.19); use the existing default member instead.
+7. Declaring a "Total" custom member on a SEC filing violates EDGAR XBRL Filing Guide §5.7 (formerly EFM v68 §6.8.19); use the existing default member instead.
 8. Presenting an axis without showing the default member: facts in the default context become invisible per EDGAR XBRL Filing Guide §10.7.1. Either show the default in the presentation tree, or accept that only non-default facts will render.
 9. `xbrldt:typedDomainRef` without an XPointer fragment fires `xbrldte:TypedDimensionURIError`.
 10. Declaring two `dimension-default` arcs for the same dimension fires `xbrldte:TooManyDefaultMembersError`. Only one default per dimension.

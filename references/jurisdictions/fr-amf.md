@@ -287,15 +287,21 @@ French-authority pointer.
   **OneGate** (`onegate.banque-france.fr`; test at
   `onegate-test.banque-france.fr`) [S15][S17].
 - **Insurance.** The **annual** ENS communication obligation is set by
-  **instruction ACPR 2023-I-02**; the ENS **submission format/modalities**
-  are set by **instruction 2022-I-13**, both stated verbatim on the live
-  ACPR ENS page [S18]. Solvency II quantitative states and the
-  national-specific states (ENS) are submitted in **XBRL** on the EIOPA
-  taxonomy and, for the ENS, an ACPR-provided taxonomy the ACPR calls
-  **RAN** (a *taxonomy* name, **not** a state) [S18]. Two ENS carry
-  special applicability: **FR.29.01** (Solvency-II-data / internal-model
-  state) and **FR.11.01** (*réserve de capitalisation*), both confirmed
-  on that page [S18]. The ENS are remitted annually **within four months
+  **instruction ACPR 2025-I-02** (16 April 2025); the ENS **submission
+  format/modalities** are set by **instruction 2023-I-09** (17 July 2023,
+  consolidated as modified by 2025-I-07) [S35]. Both successors are
+  already in the Registre officiel: **2026-I-10** replaces 2025-I-02 from
+  **31 December 2026**, and **2026-I-07** replaces 2023-I-09 from
+  **30 January 2027** [S35]. The ACPR ENS topic page still names the
+  abrogated 2023-I-02 and 2022-I-13; take the instruction numbers from
+  the Registre officiel, not from that page [S18]. Solvency II
+  quantitative states and the national-specific states (ENS) are
+  submitted in **XBRL** on the EIOPA taxonomy and, for the ENS, an
+  ACPR-provided taxonomy the ACPR calls **RAN** (a *taxonomy* name,
+  **not** a state) [S18]. Two ENS carry special applicability:
+  **FR.29.01** (Solvency-II-data / internal-model state) and
+  **FR.11.01** (*réserve de capitalisation*), both confirmed on that
+  page [S18]. The ENS are remitted annually **within four months
   of the annual close**, and bind **solo (individual) organismes only,
   FR.29.01 excepted** [S18]. That four-month rule is ENS-specific: the
   Solvency II QRT deadlines (14 weeks solo / 20 weeks group) and the
@@ -609,6 +615,7 @@ Verify the operative version of every cited rule at filing date.
 - **[S31]** EFRAG, *EFRAG provides its technical advice on draft simplified (Amended) ESRS to the European Commission* (EFRAG SRB approval 28 Nov 2025; delivered 3 Dec 2025): <https://www.efrag.org/en/news-and-calendar/news/efrag-provides-its-technical-advice-on-draft-simplified-esrs-to-the-european-commission>
 - **[S32]** BODACC, *Bulletin officiel des annonces civiles et commerciales* (publicité des actes enregistrés au RNE): <https://www.bodacc.fr/>
 - **[S34]** API Entreprise, *Liasses fiscales* (DGFiP endpoint `/v4/dgfip/unites_legales/{siren}/liasses_fiscales/{year}`; « Format de l'information : Donnée structurée JSON »): <https://entreprise.api.gouv.fr/catalogue/dgfip/liasses_fiscales>
+- **[S35]** ACPR, *Registre officiel : instructions*: <https://acpr.banque-france.fr/fr/reglementation/registre-officiel/instructions> (instruction 2026-I-07 du 10 juillet 2026, art. 5 : « La présente instruction remplace l'instruction n° 2023-I-09 du 17 juillet 2023 et entre en vigueur le 30 janvier 2027 »; instruction 2026-I-10 du 10 juillet 2026 : « Elle entre en vigueur le 31 décembre 2026 »)
 
 For anything ESEF-general, return to `references/esef.md`. When a question concerns
 a rule version newer than this file cites, or a French mechanism not

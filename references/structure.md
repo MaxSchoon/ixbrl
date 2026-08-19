@@ -198,9 +198,10 @@ they want a structured fact list rather than parsing XHTML.
 ### xBRL-CSV
 
 A CSV serialization of the OIM, designed for high-volume regulatory
-reporting. EBA's DPM 2.0 framework adopts xBRL-CSV; reports
-referencing periods on or after **31 March 2026** must be filed in
-xBRL-CSV under the EBA reporting framework migration.
+reporting. EBA's DPM 2.0 framework adopts xBRL-CSV; reports with a
+reference date on or after **31 March 2026** must be submitted and
+resubmitted in xBRL-CSV. MiCA, Pillar 3 and Instant Payments reports
+are xBRL-CSV regardless of reference date, and DORA is plain CSV.
 
 For an iXBRL skill, OIM matters because:
 
@@ -266,7 +267,6 @@ the equivalents in a standalone xBRL-XML instance.
 > part of the asked-for scope; re-verify against the current regulator
 > manual before relying on them: ESEF rule
 > `ESEF.2.4.1.tupleElementUsed`; SBR rules `FR-NL-5.07` and
-> `FR-NL-6.01`; ESEF Reporting Manual §2.2.5 nil-value policy; EBA
-> xBRL-CSV cutover date; LRR negated-label roles. The `ESEF.*` codes
-> are also separately verified in `references/validation.md` against
-> the Arelle source.
+> `FR-NL-6.01`; ESEF Reporting Manual §2.2.5 nil-value policy; LRR
+> negated-label roles. The `ESEF.*` codes are also separately verified
+> in `references/validation.md` against the Arelle source.
