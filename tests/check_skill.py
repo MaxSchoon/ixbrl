@@ -272,29 +272,33 @@ def check_attribution() -> None:
 # would hide one shadowing the other.
 SOURCE_MARKER = re.compile(r"\[S(\d+)\]")
 SOURCE_ENTRY = re.compile(r"^\s*-?\s*\*\*\[S(\d+)\]\*\*", re.M)
-SOURCE_HEADING = re.compile(r"^#{1,3} .*\bsources?\b.*$", re.M | re.I)
+FENCE = re.compile(r"^```.*?^```", re.M | re.S)
+SOURCE_HEADING_GAP = re.compile(r"^#{1,4} ", re.M)
 
 
 def check_citation_markers() -> None:
     """Every `[S7]` marker resolves to an entry, and every entry is cited.
 
-    Only some references use this convention; a file that uses none is skipped
-    rather than required to adopt it.
+        Only some references use this convention; a file that uses none is skipped
+        rather than required to adopt it.
 
-    Citations are counted from the body ABOVE the source list, not from the
-    list itself. An entry carries its own marker, so counting the whole file
-    would make every entry look cited. Excluding only each entry's first line
-    is not enough either: entries wrap, and a continuation line can cite a
-    different source, which would keep that source looking cited after its
-    last real citation was deleted.
+    Citations are counted from the body ABOVE the source list, and the list
+        begins at its first entry. An entry carries its own marker, so counting
+        the whole file would make every entry look cited. Excluding only each
+        entry's first line is not enough either: entries wrap, and a continuation
+        line can cite a different source, which would keep that source looking
+        cited after its last real citation was deleted. Nor is a heading a safe
+        boundary: one reference has a section called "When to escalate to primary
+        sources" well above its actual list, and cutting there would drop real
+        citations. The first entry is the list.
 
-    This is the invariant that lets `.markdownlint-cli2.jsonc` switch MD052
-    off. markdownlint reads `[S7]` as a shortcut reference link and wants a
-    link definition, which this repository deliberately does not write. That
-    rule is only safe to disable while something else checks what a reader
-    depends on: that a marker points at a real source, and that no source goes
-    uncited. Before this existed, the rationale for disabling MD052 named a
-    check that did not exist.
+        This is the invariant that lets `.markdownlint-cli2.jsonc` switch MD052
+        off. markdownlint reads `[S7]` as a shortcut reference link and wants a
+        link definition, which this repository deliberately does not write. That
+        rule is only safe to disable while something else checks what a reader
+        depends on: that a marker points at a real source, and that no source goes
+        uncited. Before this existed, the rationale for disabling MD052 named a
+        check that did not exist.
     """
     mark = len(errors)
     checked = 0
@@ -303,11 +307,9 @@ def check_citation_markers() -> None:
         label = path.relative_to(ROOT).as_posix()
 
         entries = list(SOURCE_ENTRY.finditer(text))
-        heading = SOURCE_HEADING.search(text)
-        body = text[: heading.start()] if heading else text
-        if heading and entries and entries[0].start() < heading.start():
-            fail(f"{label}: a source entry appears above the source heading")
-        used = set(SOURCE_MARKER.findall(body))
+        body = text[: entries[0].start()] if entries else text
+        # A marker inside a fenced block is sample text, not a citation.
+        used = set(SOURCE_MARKER.findall(FENCE.sub("", body)))
         defined: set[str] = set()
         for match in entries:
             if match.group(1) in defined:
@@ -321,6 +323,13 @@ def check_citation_markers() -> None:
             fail(f"{label}: [S{orphan}] is cited but has no source entry")
         for unused in sorted(defined - used, key=int):
             fail(f"{label}: source entry [S{unused}] is never cited in the body")
+        for match in entries[1:]:
+            # A gap of prose between entries means the list is interleaved
+            # with body text, and the boundary above would have cut it short.
+            gap = text[entries[0].end() : match.start()]
+            if SOURCE_HEADING_GAP.search(gap):
+                fail(f"{label}: prose with a heading sits inside the source list")
+                break
     if not failures_since(mark):
         print(f"Citation markers OK ({checked} file(s) using the convention)")
 
