@@ -81,10 +81,16 @@ Verified literally from ESMA32-60-254 Rev (14 October 2025), §1.9.1–1.9.3:
 text of Delegated Regulation (EU) 2026/283, which applies to financial years
 beginning on or after 1 January 2026. Every label ending `[text block]` was
 taken from Table 1 (IAS 1, Annex II point 2) and Table 2 (IFRS 18, point 3),
-then resolved to a QName against the IFRS Taxonomy 2025-03-27 English label
-linkbase and the ESEF 2025 taxonomy package. Every QName below was confirmed
-to exist in that package. Nothing here is inferred from a figure or a
-secondary source.
+then resolved to a QName in two passes. 214 of the labels matched a standard
+label in the IFRS Taxonomy 2025-03-27 common English label linkbase. The
+remaining twelve carry effective or expiry dates of 2027-01-01, which places
+them in the IAS 1 retirement and IFRS 18 introduction cohort, and their labels
+live in the standard-specific label files rather than the common one; each was
+resolved instead by deriving the element name from its label and confirming
+that name appears in the ESEF package. Every one of the 225 QNames below was
+confirmed present in `esef_taxonomy-2025_12_31.zip`. All are `ifrs-full`
+elements; no ESMA-defined element appears in either table. Nothing here is
+inferred from a figure or a secondary source.
 
 | | Count |
 |---|---|

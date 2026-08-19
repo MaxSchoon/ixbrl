@@ -28,10 +28,11 @@
     // syntax adds punctuation to text that is already a citation.
     "MD034": false,
 
-    // Inline HTML. `<a id="...">` anchors are load-bearing. Every internal
-    // link in the repository targets one, rather than a heading-derived
-    // anchor, so that a heading can be reworded without breaking references.
-    "MD033": false,
+    // Inline HTML, narrowed to the anchor element. `<a id="...">` anchors are
+    // load-bearing: every internal link in the repository targets one rather
+    // than a heading-derived anchor, so a heading can be reworded without
+    // breaking references. Any other inline HTML is still reported.
+    "MD033": { "allowed_elements": ["a"] },
 
     // Table column style. Tables are written unpadded. Padding them to align
     // pipes would rewrite every table for no reader benefit.
@@ -48,10 +49,6 @@
     // each registry its own "Purpose" and "Adoption" subsection under its own
     // parent, which is the clearest structure. Only a repeat under the same
     // parent is a real problem.
-    "MD024": { "siblings_only": true },
-
-    // First-line heading. A pull request template opens with the first
-    // section a contributor fills in, not with a title nobody reads.
-    "MD041": false
+    "MD024": { "siblings_only": true }
   }
 }

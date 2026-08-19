@@ -266,11 +266,56 @@ def check_attribution() -> None:
         print("Attribution and licence surface OK")
 
 
+# A source marker in prose, `[S7]`, and the entry that defines it, written as
+# a bold marker at the head of a list item.
+SOURCE_MARKER = re.compile(r"\[S(\d+)\]")
+SOURCE_ENTRY = re.compile(r"^\s*-?\s*\*\*\[S(\d+)\]\*\*", re.M)
+
+
+def check_citation_markers() -> None:
+    """Every `[S7]` marker resolves to an entry, and every entry is cited.
+
+    Only some references use this convention; a file that uses no markers is
+    skipped rather than required to adopt it.
+
+    This is the invariant that lets `.markdownlint-cli2.jsonc` switch MD052
+    off. markdownlint reads `[S7]` as a shortcut reference link and wants a
+    link definition, which this repository deliberately does not write. That
+    rule is only safe to disable while something else checks that a marker
+    points at a real source and that no source goes uncited, which is what a
+    reader actually depends on. Before this existed, the rationale for
+    disabling MD052 named a check that did not exist.
+    """
+    mark = len(errors)
+    checked = 0
+    for path in sorted((ROOT / "references").rglob("*.md")):
+        text = path.read_text(encoding="utf-8")
+        # Count citations from the prose only. An entry line carries its own
+        # marker, so counting it would make every entry look cited and the
+        # uncited half of this check could never fire.
+        prose = "\n".join(
+            line for line in text.splitlines() if not SOURCE_ENTRY.match(line)
+        )
+        used = {int(n) for n in SOURCE_MARKER.findall(prose)}
+        defined = {int(m.group(1)) for m in SOURCE_ENTRY.finditer(text)}
+        if not used and not defined:
+            continue
+        label = path.relative_to(ROOT).as_posix()
+        checked += 1
+        for orphan in sorted(used - defined):
+            fail(f"{label}: [S{orphan}] is cited but has no source entry")
+        for unused in sorted(defined - used):
+            fail(f"{label}: source entry [S{unused}] is never cited")
+    if not failures_since(mark):
+        print(f"Citation markers OK ({checked} file(s) using the convention)")
+
+
 def main() -> int:
     check_skill()
     check_reference_links()
     check_asset_crossrefs()
     check_attribution()
+    check_citation_markers()
     if errors:
         print(f"\n{len(errors)} guardrail failure(s).")
         return 1

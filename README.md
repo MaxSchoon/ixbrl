@@ -45,7 +45,7 @@ Load one. Do not load them all.
 | `registries.md` | Label Role Registry, Data Types Registry, URI conventions |
 | `taxonomies.md` | Which taxonomy applies, which version, who issues it |
 | `esef.md` | ESEF legal basis, anchoring, block tagging, `ESEF.*` codes |
-| `esef-block-tags.md` | The Annex II Table 2 mandatory block-tag list |
+| `esef-block-tags.md` | Every Annex II mandatory block-tag element, both tables |
 | `dpm.md` | EBA and EIOPA DPM, Table Linkbase, filing indicators |
 | `conversion.md` | Turning a PDF or Word document into faithful iXBRL |
 | `viewer.md` | Preparing and driving the Arelle iXBRL Viewer for review |
