@@ -272,24 +272,51 @@ def check_attribution() -> None:
 # would hide one shadowing the other.
 SOURCE_MARKER = re.compile(r"\[S(\d+)\]")
 SOURCE_ENTRY = re.compile(r"^\s*-?\s*\*\*\[S(\d+)\]\*\*", re.M)
-# Fenced blocks, backtick or tilde, indented or not. Masked before anything is
-# scanned: an entry-shaped example inside a fence would otherwise be read as a
-# real definition and would move the source-list boundary. An unclosed fence
-# runs to the end of the document, as CommonMark says it does.
-FENCE = re.compile(r"^[ \t]*(`{3,}|~{3,}).*?(?:^[ \t]*\1[ \t]*$|\Z)", re.M | re.S)
-# The credit line every reference carries. It is not body prose, so a marker
-# appearing in it is not a citation anyone made.
-ATTRIBUTION = re.compile(r"^\*Part of the iXBRL Skill\b.*$", re.M)
+# A fenced block opens on a line of three or more backticks or tildes and
+# closes on a line of at least as many of the SAME character. A regex
+# backreference cannot express "at least as long", and trying made a longer
+# closing fence either miss the block or swallow the rest of the file, so this
+# is scanned a line at a time instead.
+FENCE_OPEN = re.compile(r"^[ \t]*(`{3,}|~{3,})")
+# An inline code span: a run of backticks closed by an equal run on the same
+# line. `[S1]` inside one is an example, not a citation.
+INLINE_CODE = re.compile(r"(`+)[^\n]*?\1")
 
 
 def mask_fences(text: str) -> str:
-    """Blank out fenced blocks, preserving every character offset.
+    """Blank out fenced blocks and inline code, preserving every offset.
 
     Offsets matter here: the source-list boundary is a position in this text,
     so deleting rather than blanking would shift everything after the first
-    fence.
+    fence. An unclosed fence runs to the end of the document, as CommonMark
+    says it does.
     """
-    return FENCE.sub(lambda m: re.sub(r"[^\n]", " ", m.group()), text)
+    out: list[str] = []
+    marker = ""
+    for line in text.split("\n"):
+        if marker:
+            closing = line.strip()
+            out.append(" " * len(line))
+            if (
+                closing
+                and closing[0] == marker[0]
+                and closing == closing[0] * len(closing)
+                and len(closing) >= len(marker)
+            ):
+                marker = ""
+            continue
+        opened = FENCE_OPEN.match(line)
+        if opened:
+            marker = opened.group(1)
+            out.append(" " * len(line))
+            continue
+        out.append(INLINE_CODE.sub(lambda m: " " * len(m.group()), line))
+    return "\n".join(out)
+
+
+# The credit line every reference carries. It is not body prose, so a marker
+# appearing in it is not a citation anyone made.
+ATTRIBUTION = re.compile(r"^\*Part of the iXBRL Skill\b.*$", re.M)
 
 
 def check_citation_markers() -> None:
