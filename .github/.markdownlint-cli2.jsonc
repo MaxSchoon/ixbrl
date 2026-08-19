@@ -1,0 +1,6 @@
+// The pull request template opens with the first section a contributor fills
+// in, not with a title nobody reads. Every other file in the repository still
+// needs a top-level heading, so MD041 is suppressed here rather than globally.
+{
+  "config": { "MD041": false }
+}

@@ -588,6 +588,7 @@ can and cannot be gated deterministically:
    scripts/validate_with_arelle.sh report.zip core   # base XBRL 2.1
    scripts/validate_with_arelle.sh report.zip esef   # ESEF.* rules
    ```
+
 4. **Bank prudential (supervisory DPM): covered by the EBA plugin**, a
    **separate regime** from all three above. See `references/dpm.md`.
 
