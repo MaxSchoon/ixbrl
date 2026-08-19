@@ -266,11 +266,116 @@ def check_attribution() -> None:
         print("Attribution and licence surface OK")
 
 
+# A source marker in prose, `[S7]`, and the entry that defines it, written as
+# a bold marker at the head of a list item. Identifiers stay strings: `[S2]`
+# and `[S02]` are different markers to a reader, and folding them to an int
+# would hide one shadowing the other.
+SOURCE_MARKER = re.compile(r"\[S(\d+)\]")
+SOURCE_ENTRY = re.compile(r"^\s*-?\s*\*\*\[S(\d+)\]\*\*", re.M)
+# A fenced block opens on a line of three or more backticks or tildes and
+# closes on a line of at least as many of the SAME character. A regex
+# backreference cannot express "at least as long", and trying made a longer
+# closing fence either miss the block or swallow the rest of the file, so this
+# is scanned a line at a time instead.
+FENCE_OPEN = re.compile(r"^[ \t]*(`{3,}|~{3,})")
+# An inline code span: a run of backticks closed by an equal run on the same
+# line. `[S1]` inside one is an example, not a citation.
+INLINE_CODE = re.compile(r"(`+)[^\n]*?\1")
+
+
+def mask_fences(text: str) -> str:
+    """Blank out fenced blocks and inline code, preserving every offset.
+
+    Offsets matter here: the source-list boundary is a position in this text,
+    so deleting rather than blanking would shift everything after the first
+    fence. An unclosed fence runs to the end of the document, as CommonMark
+    says it does.
+    """
+    out: list[str] = []
+    marker = ""
+    for line in text.split("\n"):
+        if marker:
+            closing = line.strip()
+            out.append(" " * len(line))
+            if (
+                closing
+                and closing[0] == marker[0]
+                and closing == closing[0] * len(closing)
+                and len(closing) >= len(marker)
+            ):
+                marker = ""
+            continue
+        opened = FENCE_OPEN.match(line)
+        if opened:
+            marker = opened.group(1)
+            out.append(" " * len(line))
+            continue
+        out.append(INLINE_CODE.sub(lambda m: " " * len(m.group()), line))
+    return "\n".join(out)
+
+
+# The credit line every reference carries. It is not body prose, so a marker
+# appearing in it is not a citation anyone made.
+ATTRIBUTION = re.compile(r"^\*Part of the iXBRL Skill\b.*$", re.M)
+
+
+def check_citation_markers() -> None:
+    """Every `[S7]` marker resolves to an entry, and every entry is cited.
+
+        Only some references use this convention; a file that uses none is skipped
+        rather than required to adopt it.
+
+    Citations are counted from the body ABOVE the source list, and the list
+        begins at its first entry. An entry carries its own marker, so counting
+        the whole file would make every entry look cited. Excluding only each
+        entry's first line is not enough either: entries wrap, and a continuation
+        line can cite a different source, which would keep that source looking
+        cited after its last real citation was deleted. Nor is a heading a safe
+        boundary: one reference has a section called "When to escalate to primary
+        sources" well above its actual list, and cutting there would drop real
+        citations. The first entry is the list. A list grouped under its own
+        subheadings is fine: its citations sit above it either way.
+
+        This is the invariant that lets `.markdownlint-cli2.jsonc` switch MD052
+        off. markdownlint reads `[S7]` as a shortcut reference link and wants a
+        link definition, which this repository deliberately does not write. That
+        rule is only safe to disable while something else checks what a reader
+        depends on: that a marker points at a real source, and that no source goes
+        uncited. Before this existed, the rationale for disabling MD052 named a
+        check that did not exist.
+    """
+    mark = len(errors)
+    checked = 0
+    for path in sorted((ROOT / "references").rglob("*.md")):
+        text = mask_fences(path.read_text(encoding="utf-8"))
+        label = path.relative_to(ROOT).as_posix()
+
+        entries = list(SOURCE_ENTRY.finditer(text))
+        body = text[: entries[0].start()] if entries else text
+        used = set(SOURCE_MARKER.findall(ATTRIBUTION.sub("", body)))
+        defined: set[str] = set()
+        for match in entries:
+            if match.group(1) in defined:
+                fail(f"{label}: source entry [S{match.group(1)}] is defined twice")
+            defined.add(match.group(1))
+        if not used and not defined:
+            continue
+
+        checked += 1
+        for orphan in sorted(used - defined, key=int):
+            fail(f"{label}: [S{orphan}] is cited but has no source entry")
+        for unused in sorted(defined - used, key=int):
+            fail(f"{label}: source entry [S{unused}] is never cited in the body")
+    if not failures_since(mark):
+        print(f"Citation markers OK ({checked} file(s) using the convention)")
+
+
 def main() -> int:
     check_skill()
     check_reference_links()
     check_asset_crossrefs()
     check_attribution()
+    check_citation_markers()
     if errors:
         print(f"\n{len(errors)} guardrail failure(s).")
         return 1

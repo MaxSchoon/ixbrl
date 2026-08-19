@@ -105,15 +105,19 @@ xmllint --noout assets/*.xml assets/*.xsd assets/*.xhtml
 # 2. Skill guardrails (size, frontmatter, references, asset cross-refs)
 python3 tests/check_skill.py
 
-# 3. Code gate — only if you changed scripts/ or tests/
+# 3. Markdown lint — rules this repo does not follow are disabled, with
+#    reasons, in .markdownlint-cli2.jsonc, so a hit here is a real defect
+npx --yes markdownlint-cli2@0.18.1
+
+# 4. Code gate — only if you changed scripts/ or tests/
 .venv/bin/python -m ruff check scripts tests
 .venv/bin/python -m ruff format --check scripts tests
 shellcheck scripts/*.sh
 
-# 4. Optional: full Arelle validation
+# 5. Optional: full Arelle validation
 ./scripts/validate_with_arelle.sh assets/ixbrl-skeleton.xhtml
 
-# 5. Optional: fact sanity check
+# 6. Optional: fact sanity check
 python3 scripts/check_facts.py assets/ixbrl-skeleton.xhtml
 ```
 

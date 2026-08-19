@@ -98,7 +98,7 @@ of them up front.
 | Generic Links (`gen:*`), Functions Registry (`xfi:*`, `xff:*`, `xfm:*`, `f:*`, `r:*`), Versioning (concept renames, deprecations, migrations) | `references/advanced-specs.md` |
 | Label Role Registry (negated labels), Data Types Registry (`textBlockItemType`, `percentItemType`, ESRS quantity types), URI resolution conventions | `references/registries.md` |
 | DPM (EBA/EIOPA), Table Linkbase, filing indicators, COREP/FINREP/Solvency II, xBRL-CSV migration | `references/dpm.md` |
-| ESEF mandatory block-tag list (Annex II Table 2), block-tag selection guidance, `ix:continuation` for split disclosures | `references/esef-block-tags.md` |
+| ESEF mandatory block-tag list (every Annex II element, IAS 1 and IFRS 18 tables), block-tag selection guidance, `ix:continuation` for split disclosures | `references/esef-block-tags.md` |
 | Converting a PDF / Word / accounts-production document to faithful iXBRL: preserving hierarchy, abstracts, dates, completeness; the content-level review pass | `references/conversion.md` |
 | Real-world Inline XBRL examples by country (ESEF/UKSEF markets); viewer output, xBRL-JSON, report packages, validation messages | <https://filings.xbrl.org/> and API docs at <https://filings.xbrl.org/docs/api> |
 | Preparing and using the Arelle iXBRL Viewer for interactive review: `--save-viewer`, document sets, stub/review modes, fact inspector, search, table export, Calc 1.1 toolbar | `references/viewer.md` |

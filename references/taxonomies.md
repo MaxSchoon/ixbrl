@@ -2,7 +2,6 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
-
 The major XBRL/iXBRL taxonomies in active use globally for statutory and supervisory reporting. Each section: issuer, current version, entry points, filing scope, download URLs. Versions verified against issuer websites; re-check before relying on a specific version for a filing.
 
 **Last verified (UTC): 2026-05-04.** Treat all "current version" references as point-in-time.
@@ -30,6 +29,7 @@ instrument classification, nature-dependent electricity contracts);
 Annual Improvements Volume 11.
 
 **Common entry points:**
+
 - Full IFRS Accounting Standards entry point (IAS 1 application baseline)
 - Early Application of IFRS 18
 - Management Commentary (Practice Statement 1)
@@ -69,6 +69,7 @@ an entity-specific extension taxonomy with anchored extension concepts.
 Labels and documentation ship in all 24 EU official languages.
 
 **Mandatory tagging scope:**
+
 - **Primary financial statements:** detailed element-by-element tagging
   (since financial year 2020).
 - **Notes to consolidated IFRS financial statements:** **block tagging**
@@ -85,6 +86,7 @@ competent authorities (AFM, AMF, BaFin, CNMV, etc.) operate the actual
 filing infrastructure.
 
 **Download:**
+
 - https://www.esma.europa.eu/electronic-reporting/esef-taxonomy
 - https://www.esma.europa.eu/document/esef-taxonomy-2024
 - https://www.esma.europa.eu/sites/default/files/library/esma32-60-254_esef_reporting_manual.pdf
@@ -104,6 +106,7 @@ the SEC formally "accepts" each annual release for use in EDGAR filings.
 Until acceptance, the prior year's taxonomy applies.
 
 **Common namespaces:**
+
 - `us-gaap`: FASB-authored core US GAAP concepts.
 - `srt`: SEC Reporting Taxonomy. Cross-cutting concepts (schedules,
   ranges, disposal groups) used across US GAAP and IFRS filers with the
@@ -126,6 +129,7 @@ issuers, 11-K). Foreign private issuers using IFRS file under the IFRS
 Taxonomy as accepted by the SEC, not the FASB GRT.
 
 **Download:**
+
 - https://www.fasb.org/page/detail?pageId=/projects/FASB-Taxonomies/2025-gaap-financial-reporting-taxonomy.html
 - https://www.fasb.org/projects/fasb-taxonomies
 - https://xbrl.fasb.org/resources/annualrelease/2025/GAAP_Financial_Reporting_Taxonomy_Release_Notes.pdf
@@ -143,6 +147,7 @@ released 18 October 2024. FRC guidance: only the latest and penultimate
 versions should be in active use simultaneously.
 
 **Taxonomies in the Suite:**
+
 - **UK IFRS:** UK companies preparing accounts under UK-adopted IFRS.
 - **FRS 101:** Reduced Disclosure Framework (subsidiaries of IFRS
   groups).
@@ -160,6 +165,7 @@ versions should be in active use simultaneously.
   accounts.
 
 **Filing scope:**
+
 - Companies House statutory accounts (most UK companies, in iXBRL).
 - HMRC Corporation Tax computations and accounts attached to CT600
   (mandatory iXBRL).
@@ -181,6 +187,7 @@ HMRC codes, Irish `validate/ROS`), the closed-taxonomy / no-anchoring
 design, and the end-to-end review checklist, see `references/jurisdictions/uk-frc.md`.
 
 **Download:**
+
 - https://www.frc.org.uk/library/standards-codes-policy/accounting-and-reporting/frc-taxonomies/
 - https://www.frc.org.uk/library/standards-codes-policy/accounting-and-reporting/frc-taxonomies/current-frc-taxonomy-suites/2026-frc-taxonomy-suite/
 - https://www.gov.uk/file-your-company-annual-accounts
@@ -206,6 +213,7 @@ application guidance; KvK applies BW2/RJ (and IFRS) for trade-register
 deposits; AFM extends ESEF/IFRS for listed-issuer AFRs.
 
 **Common entry points:**
+
 - KvK Dutch GAAP entry points by company-size class: micro, small,
   medium, large (different disclosure depths under Title 9 Book 2 BW).
   The size class is itself a tagged fact (`bw2-titel9:LegalEntitySize`)
@@ -219,6 +227,7 @@ deposits; AFM extends ESEF/IFRS for listed-issuer AFRs.
   payroll, and ICP returns.
 
 **Namespaces (complementary, not interchangeable):**
+
 - `bw2-titel9:` Civil Code Title 9 core concepts.
 - `rj:` RJ extension concepts including cash-flow statement detail.
 - `kvk:` KvK metadata and entity-size dimensions.
@@ -250,6 +259,7 @@ to-end review checklist in `references/jurisdictions/nl-sbr.md` *Review workflow
 verdict reasoning in *Calculation linkbase scope-bleed*.
 
 **Download:**
+
 - https://www.sbr-nl.nl/werken-met-sbr/taxonomie/documentatie-nederlandse-taxonomie
 - https://www.sbr-nl.nl/werken-met-sbr/taxonomie/architectuur-en-ontwikkelingen
 
@@ -285,6 +295,7 @@ other regulated entities, reporting to national competent authorities
 under CRR/CRD.
 
 **Download:**
+
 - https://www.eba.europa.eu/risk-and-data-analysis/reporting-frameworks
 - https://www.eba.europa.eu/risk-and-data-analysis/reporting-frameworks/reporting-framework-42
 

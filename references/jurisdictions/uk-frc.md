@@ -414,7 +414,6 @@ tax-clearance applications. [Revenue TDM Part 41A-03-01 §2.1.1]
 
 ### Filer classification: what changes which absences are defects
 
-
 Two classifiers drive the mandatory-item and audit-concept logic: the
 **accounting framework** and the **audit / regime status**. Both are
 detected from the instance, not assumed.
@@ -432,7 +431,6 @@ Status classifiers the validator branches on: **audited vs audit-exempt**
 **abridged/abbreviated**, **small vs medium regime**, **group vs
 single**, **LLP vs company**, plus a separate **charity** path. [Arelle
 `validate/UK`; see *Validation*]
-
 
 Mandatory items are **receiver-specific**, and the two published
 instruments do not carry the same list. Split them before declaring an

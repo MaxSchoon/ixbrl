@@ -1,0 +1,54 @@
+// markdownlint configuration for this repository.
+//
+// Several default rules contradict conventions this repository holds on
+// purpose. Each is disabled here with the reason, so that a markdownlint run
+// produces a signal worth reading rather than sixteen hundred lines of noise
+// that everyone learns to ignore. Anything not listed stays enabled.
+{
+  "globs": ["**/*.md"],
+  "ignores": [".venv", "node_modules"],
+  "config": {
+    // Citation markers. The references cite sources as `[S1]`, `[S7]` and so
+    // on, resolving to a list at the foot of each file. markdownlint reads
+    // those as shortcut reference links and wants link definitions. Adding
+    // them, or escaping every marker, would change how thirty files read for
+    // a linter's benefit. tests/check_skill.py already enforces the invariant
+    // that matters: every marker resolves to an entry, and every entry is
+    // cited. See issue #24.
+    "MD052": false,
+
+    // Line length. Some references hard-wrap prose at roughly 70 to 76
+    // columns and some are written one line per paragraph. Tables and source
+    // URLs exceed any limit in both. A single ceiling would flag one of the
+    // two styles wholesale.
+    "MD013": false,
+
+    // Bare URLs. Source lists are bare URLs deliberately: they are meant to
+    // be copied into a fetch, and wrapping each in angle brackets or link
+    // syntax adds punctuation to text that is already a citation.
+    "MD034": false,
+
+    // Inline HTML, narrowed to the anchor element. `<a id="...">` anchors are
+    // load-bearing: every internal link in the repository targets one rather
+    // than a heading-derived anchor, so a heading can be reworded without
+    // breaking references. Any other inline HTML is still reported.
+    "MD033": { "allowed_elements": ["a"] },
+
+    // Table column style. Tables are written unpadded. Padding them to align
+    // pipes would rewrite every table for no reader benefit.
+    "MD060": false,
+
+    // Emphasis as heading. Bold labels group entries inside a source list,
+    // for example "**Regime A: E-Bilanz**" above the sources that establish
+    // it. They are list labels, not sections. Promoting them to headings
+    // would put them in the document outline, which the jurisdiction files
+    // structure deliberately and tests/check_reference_structure.py checks.
+    "MD036": false,
+
+    // Duplicate headings, restricted to siblings. A registry reference gives
+    // each registry its own "Purpose" and "Adoption" subsection under its own
+    // parent, which is the clearest structure. Only a repeat under the same
+    // parent is a real problem.
+    "MD024": { "siblings_only": true }
+  }
+}
