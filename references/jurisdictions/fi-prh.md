@@ -327,12 +327,13 @@ and *Packaging: the ESEF ZIP re-used for the Trade Register*.
 - **Directive (EU) 2026/470 (Omnibus I).** Of **24 Feb 2026**, OJ L 2026/470
   publ. **26.2.2026**, **in force 18 March 2026** (20th day after publication);
   amends Dirs 2006/43/EC, **2013/34/EU**, (EU) 2022/2464, 2024/1760 [S13].
-  The directive amends **Art. 29d of the Accounting Directive
-  (2013/34/EU)**, the digital-format/mark-up article the CSRD inserted.
-  Recital 24 (preambular, explaining the enacting article) specifies that
-  **until marking-up rules are adopted via Delegated Regulation (EU)
-  2019/815, undertakings are not required to mark up their sustainability
-  reporting** [S13]. This **expressly suspends the ESRS digital-tagging
+  **Art. 2 point (9) replaces Art. 29d of the Accounting Directive
+  (2013/34/EU)**, the digital-format/mark-up article the CSRD inserted. Both
+  paragraphs of the substituted Art. 29d provide that **until such rules on
+  the marking-up are adopted by way of Delegated Regulation (EU) 2019/815,
+  undertakings shall not be required to mark up their sustainability
+  reporting** [S13]; recital 24 is the preambular explanation of that
+  enacting text, not its source. This **expressly suspends the ESRS digital-tagging
   obligation at EU level**, matching PRH's national position (see *Filing
   channels, signatures, deadline, tax forwarding, language*); it also lets
   Member States **limit** management-body collective responsibility to
@@ -525,8 +526,9 @@ Act **chapter 3, section 5**, and Finnish Accounting Board statement
 markup is not yet required** in the sustainability report or its assurance
 report. Two independent grounds run in parallel and should not be collapsed
 into one: at **EU level**, the Commission has not adopted an **ESRS XBRL
-taxonomy** (EFRAG work), and Omnibus I recital 24 suspends the mark-up duty
-until marking-up rules are adopted via Reg (EU) 2019/815 [S8][S13];
+taxonomy** (EFRAG work), and the Art. 29d that Omnibus I Art. 2 point (9)
+substitutes suspends the mark-up duty until marking-up rules are adopted
+via Reg (EU) 2019/815 [S8][S13];
 **nationally**, PRH/1087/01/2026 s. 3 lets the toimintakertomus and the
 assurance report stay plain XHTML for as long as PRH has confirmed no
 applicable PRH identifiers for those sections [S6]. Because item 2 of s. 1
@@ -838,9 +840,11 @@ given in [S6] and [S9].
 - **[S13]** EUR-Lex, **Directive (EU) 2026/470** (Omnibus I), OJ L 2026/470,
   publ. 26.2.2026, "In force": <https://eur-lex.europa.eu/eli/dir/2026/470/oj/eng>.
   Of 24 Feb 2026; amends Dirs 2006/43/EC, 2013/34/EU, (EU) 2022/2464,
-  2024/1760; amends **Art. 29d of 2013/34/EU** (recital 24) so that until mark-up
-  rules are adopted via Reg 2019/815, undertakings are **not required to mark
-  up sustainability reporting**; MS may limit collective responsibility to
+  2024/1760. **Art. 2 point (9)** replaces **Art. 29d of 2013/34/EU**: until
+  mark-up rules are adopted via Reg 2019/815, undertakings **shall not be
+  required to mark up** their sustainability reporting (recital 24 explains
+  the same point in the preamble). **Art. 2 point (11)** amends Art. 33(1):
+  MS may limit collective responsibility to
   publication in the electronic format. (18 Mar 2026 in-force = 20th day after
   OJ publication.)
 - **[S14]** FIN-FSA, issuer disclosure obligation / ESEF:
