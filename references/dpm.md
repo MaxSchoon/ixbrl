@@ -1,4 +1,4 @@
-# Data Point Model (DPM) — Banking and Insurance Supervisory Reporting
+# Data Point Model (DPM): Banking and Insurance Supervisory Reporting
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
@@ -10,7 +10,7 @@ The XBRL world has two architectures. Inline XBRL regimes (ESEF, EDGAR, KvK, FRC
 The **Data Point Model (DPM)** is a multidimensional metamodel
 maintained by the **European Banking Authority (EBA)** and the
 **European Insurance and Occupational Pensions Authority (EIOPA)**. It
-defines, in database form, every supervisory data point — its
+defines, in database form, every supervisory data point: its
 business meaning, the metric it expresses, and the dimensions
 (counterparty, currency, maturity, exposure class, accounting
 portfolio, etc.) that qualify it. Both the human-readable supervisory
@@ -33,12 +33,25 @@ cleanly into XBRL-XML, where each fact is a verbose XML element. DPM
 2.0 re-architects the metamodel and pivots the file format from
 **xBRL-XML** to **xBRL-CSV** for the heavy modules.
 
-> **Honest gap:** The "31 March 2026" cutover date for xBRL-CSV
-> mandatory filing was not independently re-verified against an EBA
-> primary source in this run. Treat the cutover as expected timing
-> from EBA reporting-framework documentation, not verified here, and
-> re-confirm against the live EBA Reporting Frameworks page at filing
-> time.
+> **EBA level, verified:** the EBA Reporting framework 4.2 page states
+> the CSV adoption policy in terms: "For the reports with reference
+> dates >= 31/03/2026, all the submitted or resubmitted reports must be
+> in xBRL-CSV format ... For the reports with reference dates <
+> 31/03/2026, EBA accept both xBRL-XML and xBRL-CSV report for all the
+> submission and resubmission." The obligation originally carried a
+> 31/12/2025 reference date and the EBA moved it to 31/03/2026 with the
+> Reporting framework 4.1 hotfix. Four report types sit outside the
+> date entirely: MiCA, Pillar 3 and Instant Payments are xBRL-CSV
+> regardless of reference date, and DORA is plain CSV.
+>
+> **France, verified:** the ACPR/Banque de France FAQ *Passage au
+> format xBRL-CSV 03/2026* (v.2, February 2026) carries the same date
+> into the national collection: "À compter de l'arrêté du 31/03/2026
+> ... Les remises au format xBRL-XML ne seront plus acceptées". The
+> French scoping is narrower than the EBA rule: earlier reference dates
+> stay in xBRL-XML, corrections and late filings included whatever the
+> deposit date, as do the national SUR-domain collections (RUBA) and
+> the whole Solvency II insurance track.
 
 ## EBA Reporting Frameworks (COREP / FINREP / etc.)
 
@@ -48,9 +61,9 @@ to 2.3, with the highest currently published version being
 Older versions such as 4.2 and 4.3 are also listed. The frameworks
 bundle the modules a credit institution or investment firm must file:
 
-- **COREP** — Common Reporting: own funds, capital requirements, large exposures, leverage ratio, NSFR/LCR liquidity.
-- **FINREP** — Financial Reporting: IFRS-grounded supervisory financial statements at consolidated and solo level.
-- **Resolution / MREL** — resolution planning data and minimum requirement for own funds and eligible liabilities.
+- **COREP** (Common Reporting): own funds, capital requirements, large exposures, leverage ratio, NSFR/LCR liquidity.
+- **FINREP** (Financial Reporting): IFRS-grounded supervisory financial statements at consolidated and solo level.
+- **Resolution / MREL**: resolution planning data and minimum requirement for own funds and eligible liabilities.
 - **Asset Encumbrance**, **Funding Plans**, **Remuneration**, **Pillar 3** (now flowing through the EBA Pillar 3 Data Hub), **MiCA** (crypto-asset issuers and CASPs), **DORA** (operational resilience register of ICT-third-party arrangements), **Instant Payments** reporting.
 
 ## EIOPA Solvency II and IORP DPM
@@ -77,7 +90,7 @@ taxonomy authors to define a tabular layout of facts. The resulting
 tables can be used for both presentation and data entry."
 
 A Table Linkbase table is built from **breakdowns** along three
-structural axes — typically rows ("y"), columns ("x"), and an
+structural axes: typically rows ("y"), columns ("x"), and an
 optional sheet axis ("z") used for repeating the same template across,
 e.g., currency or country. Each axis tree contains nodes that pin
 down primary items (concepts) and dimension members; rendering
@@ -88,7 +101,7 @@ walking Table Linkbase definitions, not separate hand-authored
 layouts.
 
 By contrast, a presentation linkbase only orders concepts in a tree
-for display — it has no concept of rows-times-columns cells.
+for display; it has no concept of rows-times-columns cells.
 
 ## Filing indicators (find namespace)
 
@@ -116,17 +129,17 @@ attribute.
 
 DPM distinguishes **closed** from **open** tables.
 
-- A **closed table** fixes both the row and column membership — F 01.01 (FINREP balance sheet) has a regulatorily defined set of rows (Cash balances, Financial assets held for trading, …) and columns (Carrying amount, Accumulated impairment, …).
-- An **open table** lets the filer enumerate rows or columns at submission time: large exposures (C 28/C 29/C 30), AnaCredit-style loan-level templates, and many Solvency II asset-by-asset templates (S.06.02 list of assets) are open. Open tables rely heavily on **typed dimensions** — XBRL dimensions whose members are not enumerated in the taxonomy but supplied by the filer as data (a counterparty ID, an asset ID, a contract reference). The xBRL-CSV pivot in DPM 2.0 is largely motivated by the inefficiency of XML for these open, row-per-record tables.
+- A **closed table** fixes both the row and column membership: F 01.01 (FINREP balance sheet) has a regulatorily defined set of rows (Cash balances, Financial assets held for trading, …) and columns (Carrying amount, Accumulated impairment, …).
+- An **open table** lets the filer enumerate rows or columns at submission time: large exposures (C 28/C 29/C 30), AnaCredit-style loan-level templates, and many Solvency II asset-by-asset templates (S.06.02 list of assets) are open. Open tables rely heavily on **typed dimensions**: XBRL dimensions whose members are not enumerated in the taxonomy but supplied by the filer as data (a counterparty ID, an asset ID, a contract reference). The xBRL-CSV pivot in DPM 2.0 is largely motivated by the inefficiency of XML for these open, row-per-record tables.
 
 ## Metrics vs primary items
 
-In DPM terminology a **metric** is the primary item — the "what is
+In DPM terminology a **metric** is the primary item: the "what is
 measured" of a fact. Metrics are coded with stable identifiers
 (commonly `mi`-prefixed in the DPM dictionary, e.g., `mi1`, `mi500`)
 and carry properties such as data type (monetary, decimal, string,
 percent, boolean), period type (instant/duration), and balance
-(debit/credit, where applicable). **Members** populate dimensions —
+(debit/credit, where applicable). **Members** populate dimensions;
 e.g., an "Accounting portfolio" dimension takes members like "Held for
 trading", "Amortised cost", "FVOCI". A table cell binds a single
 metric to a vector of dimension members; the resulting tuple is the
@@ -152,7 +165,7 @@ modules.
 ## Filing flow (filer → NCA → EBA/EIOPA)
 
 For banking modules, EU credit institutions and investment firms file
-to their **National Competent Authority** — DNB in the Netherlands,
+to their **National Competent Authority**: DNB in the Netherlands,
 BaFin in Germany, ACPR in France, Bank of Italy, Bank of Spain, etc.
 The NCA validates and onward-transmits the data to the EBA's
 secondary-reporting infrastructure. The EBA "Secondary reporting"
@@ -177,13 +190,13 @@ assertions** distributed as part of the taxonomy. They cover:
 - **intra-template arithmetic** (sum of subcategories equals reported total),
 - **cross-template consistency** (a value in COREP matches the corresponding value in FINREP).
 
-Filers run validation locally — Arelle and commercial DPM-aware
-processors load the formula linkbase and report violations — and NCAs
+Filers run validation locally (Arelle and commercial DPM-aware
+processors load the formula linkbase and report violations), and NCAs
 re-run the same rules at intake.
 
-## DPM and Inline XBRL — what's connected, what's not
+## DPM and Inline XBRL: what's connected, what's not
 
-DPM reports are normally **xBRL-XML or xBRL-CSV** — they are not
+DPM reports are normally **xBRL-XML or xBRL-CSV**. They are not
 Inline XBRL. The reason is purpose. Inline XBRL is a delivery format
 that embeds machine-readable facts inside an HTML document a human
 will actually read: the ESEF annual financial report, an SEC EDGAR
@@ -201,20 +214,22 @@ XBRL standard but **diverge sharply above it**: DPM is dimension-led
 and template-driven, with table-linkbase rendering and filing
 indicators; iXBRL regimes are concept-led, presentation-tree driven,
 and embedded in an HTML carrier. A tool that handles both must keep
-them as separate processing pipelines — they do not share
+them as separate processing pipelines: they do not share
 extension-taxonomy semantics, anchoring conventions, or output format.
 
 ## Sources
 
-- https://www.eba.europa.eu/risk-and-data-analysis/reporting/reporting-frameworks (EBA Reporting Frameworks index — Reporting framework 4.4 down to 2.3; module list including COREP, FINREP, Resolution, MREL, Asset Encumbrance, Funding Plans, Remuneration, Pillar 3, MiCA, DORA, Instant Payments)
+- https://www.eba.europa.eu/risk-and-data-analysis/reporting/reporting-frameworks (EBA Reporting Frameworks index: Reporting framework 4.4 down to 2.3; module list including COREP, FINREP, Resolution, MREL, Asset Encumbrance, Funding Plans, Remuneration, Pillar 3, MiCA, DORA, Instant Payments)
 - https://www.eba.europa.eu/risk-and-data-analysis/reporting/dpm-data-dictionary (EBA DPM Data Dictionary; DPM Standard 1.0 → 2.0 Refit project; "Towards an enhanced DPM standard 2.0"; DPM Xplor and DPM table layout tools)
 - https://www.eiopa.europa.eu/tools-and-data/supervisory-reporting-dpm-and-xbrl_en (EIOPA "DPM and XBRL"; Solvency II Taxonomy 2.9.1 PWD; 2.8.2 prior release; IORP and PEPP framework history)
 - https://specifications.xbrl.org/work-product-index-table-linkbase-table-linkbase-1.0.html (Table Linkbase 1.0 Recommendation, 2014-03-18 with errata 2024-12-17)
 - https://www.xbrl.org/Specification/xbrl-csv/ (xBRL-CSV 1.0 Recommendation directory; REC-2021-10-13 and REC-2021-10-13+errata-2023-04-19 confirmed)
+- https://esurfi.banque-france.fr/system/files/2026-02/FAQ%20-%20xBRL-CSV%20VF2_fevrier%202026_0.pdf (ACPR/Banque de France FAQ, *Passage au format xBRL-CSV 03/2026*, v.2 February 2026: xBRL-XML no longer accepted from the 31/03/2026 reference date; prior reference dates, corrections and late filings stay xBRL-XML; SUR-domain national taxonomies including RUBA out of scope)
+- https://www.eba.europa.eu/risk-and-data-analysis/reporting-frameworks/reporting-framework-42 (EBA Reporting framework 4.2, "CSV adoption policy": xBRL-CSV obligation moved from reference date 31/12/2025 to 31/03/2026; reference dates on or after 31/03/2026 must be xBRL-CSV for submission and resubmission; MICA, PILLAR3, INSTANT PAYMENT and DORA always CSV regardless of reference date)
+- https://www.eba.europa.eu/sites/default/files/2025-11/f54ced05-870e-4dd0-a591-ecbcac2e32d4/faq_for_reporting_innovations_and_upcoming_releases_v2.pdf (EBA *FAQ for Reporting Innovations (release 4.0 and beyond)*, v2 November 2025, Q10: from reference date 03/2026 only xBRL-CSV is accepted on Euclid; DORA is plain CSV, Pillar 3 Data Hub always xBRL-CSV)
 
 ### Honest gaps
 
-- "31 March 2026" DPM 2.0 cutover date not independently re-verified from a primary EBA source in this run.
 - Canonical Eurofiling filing-indicators specification URL and exact `find:` namespace URI not freshly confirmed (eurofiling.info paths returned 404).
 - A Solvency II 2.10.0 PWD was not visible on the EIOPA page in this run; the latest PWD confirmed is 2.9.1.
 - EUCLID / CRTS / IRIS transport-system names not independently confirmed.

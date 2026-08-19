@@ -1,5 +1,5 @@
 <!--
-Thanks for contributing to the iXBRL skill! Keep PRs focused — one logical
+Thanks for contributing to the iXBRL skill! Keep PRs focused. One logical
 change each. Cite a primary source (spec section or regulator publication you
 actually fetched) for every factual claim you add or change. See CONTRIBUTING.md.
 -->
@@ -12,7 +12,7 @@ actually fetched) for every factual claim you add or change. See CONTRIBUTING.md
 
 - [ ] Spec-citation correction (skill said X, the spec/regulator says Y)
 - [ ] Regulator update (new ESEF / EFM / FRC / SBR / NT / DPM version)
-- [ ] Scaffold change (`assets/` — skeleton, schema, linkbases, package)
+- [ ] Scaffold change (`assets/`: skeleton, schema, linkbases, package)
 - [ ] Trigger fix (skill fires when it shouldn't / misses when it should)
 - [ ] Script change (`scripts/check_facts.py`, `scripts/validate_with_arelle.sh`)
 - [ ] Docs / structure
@@ -22,7 +22,7 @@ actually fetched) for every factual claim you add or change. See CONTRIBUTING.md
 
 <!--
 For every technical claim added or changed, cite the section or URL you
-actually fetched, with its version/date — e.g. `iXBRL 1.1 §13.1.2`,
+actually fetched, with its version/date. For example: `iXBRL 1.1 §13.1.2`,
 `EFM 6.5.21`, `ESEF Reporting Manual G.4.1.3`, or a pinned regulator URL.
 Update the `Sources` list at the end of the affected references/*.md.
 -->
@@ -35,7 +35,7 @@ Update the `Sources` list at the end of the affected references/*.md.
 - [ ] Primary-source citation (spec section or pinned URL) for every new/changed claim
 - [ ] `Sources` list updated in the affected `references/*.md`
 - [ ] Language stays harness-neutral and product-independent (tool behaviour labelled as such)
-- [ ] Attribution language unweakened — no new text describing credit as optional, requested, or not required
+- [ ] Attribution language unweakened: no new text describing credit as optional, requested, or not required
 - [ ] `SKILL.md` still under 32 KiB and the frontmatter `description` under 1024 chars
 - [ ] Asset integrity, if `assets/` touched:
       `xmllint --noout assets/*.xml assets/*.xsd assets/*.xhtml`

@@ -23,7 +23,7 @@ creator, source, licence, and whether you changed it.
 > [Modified. | Unmodified.]
 
 CC BY allows any "reasonable manner based on the medium", so the wording may
-differ — the four elements are what matter.
+differ; the four elements are what matter.
 
 For code under Apache-2.0, ship `NOTICE` per §4(d).
 
@@ -66,11 +66,11 @@ generated document's `<head>`:
 ```
 
 This is the standard HTML mechanism for recording which tool produced a
-document, and it is deliberately **declared, not hidden** — no steganography,
+document, and it is deliberately **declared, not hidden**: no steganography,
 nothing covert in a document someone signs.
 
 **What is established.** A standalone `<meta>` in `<head>` is not an `ix:`
-element, so it is not mapped into the target XBRL document — the reported facts,
+element, so it is not mapped into the target XBRL document; the reported facts,
 contexts and units are unaffected. Inline XBRL 1.1 builds the target instance
 from mapped `ix:` elements only. Nothing in the ESEF Reporting Manual, the
 KvK/SBR Reporting Manual, the SEC EFM (which expressly permits `<META>` in the
@@ -93,13 +93,13 @@ worth a client's filing.
 ### 3. Redistributing the skill, or a derivative of it
 
 Ship [`NOTICE`](NOTICE) unchanged, and keep the copyright and licence notices.
-That is Apache-2.0 §4(d) and CC BY 4.0 §3(a). If you modified it, say so — CC BY
-4.0 §3(a)(1)(B) requires indicating modifications.
+That is Apache-2.0 §4(d) and CC BY 4.0 §3(a). If you modified it, say so.
+CC BY 4.0 §3(a)(1)(B) requires indicating modifications.
 
 ### 4. Building software with it
 
-If your firm uses this skill to help develop software — an iXBRL product, a
-filing tool, an internal validator, a review pipeline — credit it. The skill
+If your firm uses this skill to help develop software (an iXBRL product, a
+filing tool, an internal validator, a review pipeline), credit it. The skill
 shaped the work even when none of its text ships in your binary.
 
 Put the credit where your users or auditors would look for provenance: an about
@@ -142,9 +142,9 @@ documentation page, a methodology note, or an open-source acknowledgements list.
 
 For agents and crawlers resolving terms automatically:
 
-- [`rsl.xml`](rsl.xml) — Really Simple Licensing 1.0, referencing CC BY 4.0
+- [`rsl.xml`](rsl.xml): Really Simple Licensing 1.0, referencing CC BY 4.0
   with `payment type="attribution"`.
-- [`llms.txt`](llms.txt) — identity and the exact citation string.
+- [`llms.txt`](llms.txt): identity and the exact citation string.
 
 ## Questions
 

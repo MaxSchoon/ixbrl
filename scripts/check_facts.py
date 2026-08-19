@@ -7,22 +7,34 @@ silent-failure category of mistakes preparers most often make.
 Checks performed:
   - Every ix:nonFraction has contextRef, unitRef, and exactly one of
     decimals, precision, or xsi:nil="true".
-  - Every ix:nonNumeric has contextRef. If escape="true" the body is
-    treated as XHTML; flag if it does not parse.
-  - Continuation chains (continuedAt → ix:continuation@id) form a tree
-    with no cycles, no dangling references, and a single root per chain.
-  - decimals="INF" not used (rejected by SEC EFM and discouraged in ESEF).
+  - Every ix:nonNumeric has contextRef. Where @escape is true, in either of
+    its boolean spellings, the body is treated as XHTML and flagged if it
+    does not parse.
+  - Continuation chains (continuedAt → ix:continuation@id) resolve, are
+    referenced at most once each, and contain no cycles.
+  - A finite @decimals does not zero out non-zero digits of the reported
+    value (EDGAR XBRL Guide 9.5, validation EFM 6.5.37).
   - All contextRef values resolve to a defined xbrli:context.
   - All unitRef values resolve to a defined xbrli:unit.
   - Currency unit measures match ISO 4217 alpha-3 patterns.
-  - Duplicate facts (same concept + contextRef + unitRef) report consistent
-    values modulo decimals.
+
+NOT checked here, on purpose: whether duplicate facts report consistent
+values. Deciding that needs the semantics of contexts, units, targets, nil and
+the normative duplicate-consistency rule, which is a model of the report
+rather than a reading of the document. Arelle already has that model; a
+cheaper imitation of it was wrong in both directions. Run Arelle for it.
 
 Usage:
   python check_facts.py <ixbrl.xhtml>
 
-Exit codes: 0 = clean; 1 = issues found, including a document that is not
-well-formed XML; 2 = usage error; 127 = lxml missing.
+A fact whose reported value cannot be decoded here, because @format names a
+transformation this script does not implement, because the value comes from
+descendant or continued content, or because the text is not a number, is
+reported as a NOTE rather than judged. The note does not fail the run; it says
+plainly what was not evaluated, so "OK" never overstates the coverage.
+
+Exit codes: 0 = clean (notes do not fail the run); 1 = issues found, including
+a document that is not well-formed XML; 2 = usage error; 127 = lxml missing.
 """
 
 from __future__ import annotations
@@ -50,19 +62,294 @@ NS = {
 # access, so derive the one from the other rather than repeating the URI.
 XSI_NIL = f"{{{NS['xsi']}}}nil"
 
+
+def ncname(el: etree._Element, attribute: str) -> str:
+    """An NCName-typed attribute, whitespace-collapsed as its type requires.
+
+    `contextRef`, `unitRef`, `continuedAt` and `id` are NCNames, which collapse
+    whitespace, so `contextRef=" c1 "` names the same context as `contextRef=
+    "c1"`. Comparing the raw strings reported a conformant document's contexts
+    and units as unresolved, and could invent a dangling continuation.
+    """
+    return collapse(el.get(attribute) or "")
+
+
 ISO_4217 = re.compile(r"^[A-Z]{3}$")
 
+# A currency measure is identified by this namespace and its local part, not by
+# the prefix a document happens to bind to it. Matching the literal string
+# "iso4217:" skipped a measure under any other prefix, and accepted one whose
+# prefix was bound somewhere else entirely.
+ISO_4217_NS = "http://www.xbrl.org/2003/iso4217"
 
-def canonical_fact_text(value: str) -> str:
-    """Return a stable comparison key for simple numeric duplicate checks."""
-    text = value.strip()
+
+# The two Transformation Registry versions this module decodes. A
+# transformation is named by an EXPANDED QName, so a namespace and a local part
+# identify it together; validating them apart would accept a pairing no
+# registry publishes, such as an early namespace with a name introduced years
+# later.
+#
+# TR1 to TR3 are declined outright. They state materially different input
+# grammars for the same conventions, including three-digit grouping and a
+# different treatment of spaces around the decimal mark, so one shared decoder
+# cannot honour all of them: the grammar that is right for TR4 is too
+# permissive for TR3. Declining costs a reported coverage gap, where decoding
+# by a grammar that is not the transformation's own would produce a confident
+# EFM verdict it has not earned.
+TR4 = "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12"
+TR5 = "http://www.xbrl.org/inlineXBRL/transformation/2022-02-16"
+
+ASCII_DIGITS = frozenset("0123456789")
+
+# An NCName, optionally prefixed by one. @format is checked against this before
+# resolution, because `:num-dot-decimal` has an empty prefix that a bare
+# rpartition reads as "no prefix", resolving it against the default namespace
+# as though it were well formed.
+#
+# Transcribed from the XML 1.0 NameStartChar and NameChar productions, minus
+# the colon, which is what separates an NCName from a Name. Python's `\w` is
+# not a substitute: it excludes the combining marks of #x300-#x36F, so a
+# perfectly legal prefix such as "a" followed by U+0301 would be declined.
+_NAME_START = (
+    "A-Za-z_"
+    "\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u02ff\u0370-\u037d\u037f-\u1fff"
+    "\u200c-\u200d\u2070-\u218f\u2c00-\u2fef\u3001-\ud7ff"
+    "\uf900-\ufdcf\ufdf0-\ufffd\U00010000-\U000effff"
+)
+_NAME_CHAR = _NAME_START + r"0-9\-." + "\u00b7\u0300-\u036f\u203f-\u2040"
+_NCNAME = rf"[{_NAME_START}][{_NAME_CHAR}]*"
+QNAME = re.compile(rf"(?:{_NCNAME}:)?{_NCNAME}")
+
+# The xs:decimal lexical space. Decimal() is far more permissive: it accepts
+# digit-group underscores and exponent notation, so "1_000" and "1E5" would
+# parse into numbers no conformant document can express, and the decimals check
+# would then pronounce on a value the document never stated.
+XS_DECIMAL = re.compile(r"[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)")
+
+# Exactly the characters the input patterns of `num-dot-decimal-apos` and
+# `num-comma-decimal-apos` accept as the group separator. U+FF07 FULLWIDTH
+# APOSTROPHE belongs only to `num-unit-decimal-apos`, which this module
+# declines, so accepting it here would decode a document the registry does not.
+APOSTROPHES = "'\u0060\u00b4\u2019\u2032"
+SPACES = " \u00a0"
+
+# (namespace, local name) -> (group separators, decimal mark). Only
+# transformations whose sole effect is the separator convention appear here.
+# `num-unit-decimal` and its apos variant are absent on purpose: their trailing
+# group is the fraction rather than a thousands group, so reading one means
+# implementing the transformation, not reading a separator.
+#
+# The apostrophe variants ADD the apostrophes to the base separator; they do
+# not replace it, so `1,234.56` is valid under `num-dot-decimal-apos`.
+_DOT = (",", ".")
+_COMMA = (".", ",")
+_DOT_APOS = ("," + APOSTROPHES, ".")
+_COMMA_APOS = ("." + APOSTROPHES, ",")
+# Each pairing below was confirmed against that registry's own specification.
+SEPARATOR_FORMATS = {
+    **{(ns, "num-dot-decimal"): _DOT for ns in (TR4, TR5)},
+    **{(ns, "num-comma-decimal"): _COMMA for ns in (TR4, TR5)},
+    (TR5, "num-dot-decimal-apos"): _DOT_APOS,
+    (TR5, "num-comma-decimal-apos"): _COMMA_APOS,
+}
+
+
+def split_qname(el: etree._Element, value: str) -> tuple[str | None, str]:
+    """Resolve a QName-valued element body to (namespace, local part).
+
+    The namespace is what identifies the name; the prefix is only how this
+    document spells it. Reading the prefix instead means a measure written
+    `curr:USD` is missed and one written `iso4217:USD` under a prefix bound
+    elsewhere is mistaken for a currency.
+    """
+    prefix, _, local = value.rpartition(":")
+    return el.nsmap.get(prefix or None), local or value
+
+
+def resolve_transformation(
+    el: etree._Element, raw_format: str
+) -> tuple[str, str] | None:
+    """Resolve @format to a separator convention, or None to decline it.
+
+    The name is a QName, so its prefix must resolve through the element's
+    in-scope namespaces to a published registry namespace. Matching only the
+    local part would decode `fake:num-dot-decimal` from an unrelated namespace
+    as though it were the registry transformation of that name.
+    """
+    # xs:QName collapses whitespace, so a padded name is still that name.
+    raw_format = collapse(raw_format)
+    if not QNAME.fullmatch(raw_format):
+        return None  # not a QName at all, so it names no transformation
+    prefix, _, local = raw_format.rpartition(":")
+    # An unprefixed name still resolves, through the default namespace.
+    namespace = el.nsmap.get(prefix or None)
+    if namespace is None:
+        return None
+    return SEPARATOR_FORMATS.get((namespace, local))
+
+
+def collapse(text: str) -> str:
+    """Apply XML `whiteSpace="collapse"`, which the registry patterns assume.
+
+    Only the four XML whitespace characters take part. `str.strip()` also
+    removes Unicode spaces such as U+2009 THIN SPACE, which collapsing does
+    not, so a value surrounded by them would have been accepted as though the
+    surrounding characters were not there.
+    """
+    for character in "\t\n\r":
+        text = text.replace(character, " ")
+    return re.sub(r" +", " ", text).strip(" ")
+
+
+def decode_separators(text: str, groups: str, decimal_mark: str) -> str | None:
+    """Strip the group separators, or None if the text does not fit the pattern.
+
+    Follows the registry's own input pattern rather than a tidier one. The
+    integer part is any run of digits and group separators, in any arrangement,
+    and the fraction is digits and spaces after a single decimal mark. Runs of
+    separators and a leading or trailing one are all permitted, so `1,,234.56`
+    and `1. 5` are valid inputs and are decoded. An earlier version rejected
+    them as malformed, which turned conformant documents into coverage gaps.
+
+    Digits are ASCII only. `str.isdigit()` is true of Arabic-Indic and
+    fullwidth digits, which these patterns do not admit and which `Decimal`
+    would then parse into a number the document never stated.
+    """
+    if text.count(decimal_mark) > 1:
+        return None
+    whole, mark, fraction = text.partition(decimal_mark)
+    if mark and not fraction:
+        return None  # a decimal mark with nothing after it
+    separators = groups + SPACES
+    if any(c not in separators and c not in ASCII_DIGITS for c in whole):
+        return None
+    if any(c not in SPACES and c not in ASCII_DIGITS for c in fraction):
+        return None
+    whole = "".join(c for c in whole if c in ASCII_DIGITS)
+    fraction = "".join(c for c in fraction if c in ASCII_DIGITS)
+    if not whole and not fraction:
+        return None
+    return f"{whole or '0'}.{fraction}" if fraction else whole
+
+
+def fact_value(el: etree._Element) -> Decimal | None:
+    """The numeric value an ix:nonFraction reports, or None if undecidable.
+
+    The reported value is the rendered text adjusted by @scale and @sign, so
+    all three are needed before any arithmetic rule can be applied to it.
+    Returns None whenever the text cannot be read as a number with confidence:
+    @format may name a transformation from the registry that this script does
+    not implement, and guessing at one would produce confident nonsense. A
+    check that cannot see the value must decline to judge it.
+    """
+    if len(el) or ncname(el, "continuedAt"):
+        # A nested or continued fact takes its value from descendant content,
+        # which this function does not assemble. Reading `.text` alone would
+        # silently judge a fragment of the value.
+        return None
+    text = collapse(el.text or "")
     if not text:
-        return text
+        return None
+
+    # @format names a transformation from the registry, and the separator
+    # convention is part of it: under `num-comma-decimal`, "1,5" is one and a
+    # half. Stripping commas unconditionally turns that into fifteen.
+    raw_format = el.get("format")
+    if raw_format is None:
+        # With no transformation the text must already be an XBRL numeric,
+        # which is xs:decimal and nothing looser.
+        if not XS_DECIMAL.fullmatch(text):
+            return None
+        cleaned = text
+    else:
+        convention = resolve_transformation(el, raw_format)
+        if convention is None:
+            return None
+        decoded = decode_separators(text, *convention)
+        if decoded is None:
+            return None
+        cleaned = decoded
     try:
-        parsed = Decimal(text)
+        value = Decimal(cleaned)
     except InvalidOperation:
-        return text
-    return format(parsed.normalize(), "f")
+        return None
+    if not value.is_finite():
+        # "NaN" and "Infinity" are legal Decimal literals but not legal XBRL
+        # numeric values. Accepting them would put a nonsense figure into a
+        # finding message and hand a non-finite value to the arithmetic below.
+        return None
+    scale = el.get("scale")
+    if scale is not None:
+        try:
+            places = int(collapse(scale))
+        except ValueError:
+            return None
+        # Shift the exponent rather than calling scaleb(), which rounds to the
+        # active decimal context and would drop a digit from a value longer
+        # than 28 significant figures before it could ever be tested.
+        sign, digits, exponent = value.as_tuple()
+        if not isinstance(exponent, int):
+            return None
+        try:
+            value = Decimal((sign, digits, exponent + places))
+        except (OverflowError, ValueError, InvalidOperation):
+            # A @scale far outside any real reporting range: the exponent will
+            # not fit. That is a malformed document, but this checker's job is
+            # to report rather than to crash on one.
+            return None
+    # @sign is not a whitespace-collapsing type, so its value is read as
+    # written. Exactly "-" means negative; anything else, padding included, is
+    # not a value this attribute may take.
+    sign = el.get("sign") or ""
+    if sign == "-":
+        # copy_negate() flips the sign without consulting the decimal context.
+        # Unary minus rounds to 28 significant digits, which silently dropped
+        # the low-order digit of a long value before it could be tested.
+        value = value.copy_negate()
+    elif sign:
+        # @sign is an enumeration whose only member is "-". Anything else is
+        # not a value this script understands, and reading it as "not negative"
+        # would report the wrong number with total confidence.
+        return None
+    return value
+
+
+def truncates_nonzero_digits(value: Decimal, decimals: str) -> bool:
+    """Does this @decimals interpret a non-zero digit of `value` as zero?
+
+    EDGAR XBRL Guide section 9.5: "If the decimals attribute of a numeric fact
+    is not INF, then the value is interpreted as if certain digits were zero.
+    An instance must not contain usage that cause non-zero digits to be
+    interpreted as zero." Validation EFM 6.5.37.
+
+    `decimals="d"` zeroes every digit below the 10**-d place, so the rule holds
+    exactly when value * 10**d is an integer. The guide stresses that the test
+    is asymmetric: a decimals FINER than the value's own accuracy is fine --
+    1,000,000 may carry any decimals greater than -6 -- because zeroing digits
+    that are already zero loses nothing. Only coarsening is an error.
+
+    This is the decidable half of the decimals rules. Whether a filer SHOULD
+    have used INF (guide section 6.6.4: INF for an exactly reported amount)
+    depends on the accuracy of the underlying figure, which is not present in
+    the document, so it is deliberately not checked here.
+    """
+    if decimals == "INF":
+        return False  # infinite precision zeroes nothing
+    try:
+        places = int(decimals)
+    except ValueError:
+        return False
+    # Exact coefficient arithmetic, not scaleb(): scaleb rounds to the active
+    # decimal context (28 significant digits by default), so a value longer
+    # than that would silently lose the very digit being tested.
+    digits, exponent = value.as_tuple()[1:]
+    if not isinstance(exponent, int):
+        return False  # NaN or Infinity carries a string exponent
+    shift = exponent + places
+    if shift >= 0:
+        return False  # no digit falls below the retained place
+    dropped = digits[shift:]
+    return any(dropped)
 
 
 def find_facts(
@@ -111,16 +398,26 @@ def check(path: Path) -> list[str]:
     issues: list[str] = []
 
     nf_facts, nn_facts, continuations = find_facts(root)
+    # Facts whose reported value this script could not decode, and which the
+    # decimals check therefore did not evaluate, for any reason. Counted
+    # rather than dropped: a
+    # check that quietly covers less than it appears to is worse than one that
+    # says so, and "no issues found" would otherwise overstate the coverage.
+    undecodable = 0
 
     # --- ix:nonFraction required attributes ---
     for el in nf_facts:
         for attr in ("contextRef", "unitRef"):
-            if not el.get(attr):
+            if not ncname(el, attr):
                 issues.append(f"ix:nonFraction missing @{attr} at line {el.sourceline}")
-        decimals_present = bool(el.get("decimals"))
-        precision_present = bool(el.get("precision"))
-        nil_value = (el.get(XSI_NIL) or "").lower()
-        nil_present = nil_value in {"true", "1"}
+        # decimalsType and precision collapse whitespace, so an attribute of
+        # nothing but spaces carries no value and counts as absent.
+        decimals = collapse(el.get("decimals") or "")
+        decimals_present = bool(decimals)
+        precision_present = bool(collapse(el.get("precision") or ""))
+        # xsi:nil is xs:boolean: whitespace-collapsing, and case-sensitive.
+        # Lower-casing accepted "TRUE", which is not a boolean literal.
+        nil_present = collapse(el.get(XSI_NIL) or "") in {"true", "1"}
         present_count = sum((decimals_present, precision_present, nil_present))
         if present_count == 0:
             issues.append(
@@ -132,17 +429,23 @@ def check(path: Path) -> list[str]:
                 "ix:nonFraction has mutually exclusive attributes set "
                 f"(decimals, precision, xsi:nil) at line {el.sourceline}"
             )
-        if el.get("decimals") == "INF":
-            issues.append(
-                f"ix:nonFraction uses decimals='INF' at line {el.sourceline} "
-                f"(rejected by SEC EFM; discouraged elsewhere)"
-            )
+        if decimals and not nil_present:
+            value = fact_value(el)
+            if value is None:
+                undecodable += 1
+            elif truncates_nonzero_digits(value, decimals):
+                issues.append(
+                    f"ix:nonFraction at line {el.sourceline} has decimals="
+                    f"'{decimals}', which interprets non-zero digits of "
+                    f"{value} as zero (EFM 6.5.37)"
+                )
 
     # --- ix:nonNumeric required attributes ---
     for el in nn_facts:
-        if not el.get("contextRef"):
+        if not ncname(el, "contextRef"):
             issues.append(f"ix:nonNumeric missing @contextRef at line {el.sourceline}")
-        if el.get("escape") == "true":
+        # @escape is xs:boolean, so "1" is as true as "true".
+        if collapse(el.get("escape") or "") in {"true", "1"}:
             try:
                 etree.fromstring(f"<wrap>{el.text or ''}</wrap>", parser)
             except etree.XMLSyntaxError as exc:
@@ -153,30 +456,29 @@ def check(path: Path) -> list[str]:
 
     # --- Context resolution ---
     defined_contexts = {
-        c.get("id") for c in root.findall(".//xbrli:context", NS) if c.get("id")
+        ncname(c, "id") for c in root.findall(".//xbrli:context", NS) if c.get("id")
     }
     defined_units = {
-        u.get("id") for u in root.findall(".//xbrli:unit", NS) if u.get("id")
+        ncname(u, "id") for u in root.findall(".//xbrli:unit", NS) if u.get("id")
     }
     for el in nf_facts + nn_facts:
-        cref = el.get("contextRef")
+        cref = ncname(el, "contextRef")
         if cref and cref not in defined_contexts:
             issues.append(f"contextRef='{cref}' not defined (line {el.sourceline})")
     for el in nf_facts:
-        uref = el.get("unitRef")
+        uref = ncname(el, "unitRef")
         if uref and uref not in defined_units:
             issues.append(f"unitRef='{uref}' not defined (line {el.sourceline})")
 
     # --- Currency unit sanity ---
     for u in root.findall(".//xbrli:unit", NS):
         for measure in u.findall(".//xbrli:measure", NS):
-            txt = (measure.text or "").strip()
-            if txt.startswith("iso4217:"):
-                code = txt.split(":", 1)[1]
-                if not ISO_4217.match(code):
-                    issues.append(
-                        f"unit @id='{u.get('id')}' has non-ISO-4217 measure '{txt}'"
-                    )
+            txt = collapse(measure.text or "")
+            namespace, code = split_qname(measure, txt)
+            if namespace == ISO_4217_NS and not ISO_4217.match(code):
+                issues.append(
+                    f"unit @id='{u.get('id')}' has non-ISO-4217 measure '{txt}'"
+                )
 
     # --- Continuation chains ---
     # Built with an explicit loop rather than a comprehension so the keys narrow
@@ -184,13 +486,13 @@ def check(path: Path) -> list[str]:
     # comprehension does not narrow the key type for a checker.
     cont_by_id: dict[str, etree._Element] = {}
     for continuation in continuations:
-        continuation_id = continuation.get("id")
+        continuation_id = ncname(continuation, "id")
         if continuation_id:
             cont_by_id[continuation_id] = continuation
     starters = nf_facts + nn_facts + list(continuations)
     targets = defaultdict(int)
     for el in starters:
-        ref = el.get("continuedAt")
+        ref = ncname(el, "continuedAt")
         if ref:
             targets[ref] += 1
             if ref not in cont_by_id:
@@ -205,7 +507,7 @@ def check(path: Path) -> list[str]:
                 f"attributes (must be unique)"
             )
 
-    next_ref = {cid: c.get("continuedAt") for cid, c in cont_by_id.items()}
+    next_ref = {cid: ncname(c, "continuedAt") or None for cid, c in cont_by_id.items()}
 
     # Walk iteratively, not recursively. @continuedAt is single-valued, so a
     # continuation chain is a linked list rather than a branching tree — the
@@ -239,22 +541,14 @@ def check(path: Path) -> list[str]:
     for cid in cont_by_id:
         walk_chain(cid)
 
-    # --- Duplicate facts: same concept+context+unit, different value ---
-    grouped: dict[tuple[str | None, str | None, str | None], list[etree._Element]] = (
-        defaultdict(list)
-    )
-    for el in nf_facts:
-        key = (el.get("name"), el.get("contextRef"), el.get("unitRef"))
-        if all(key):
-            grouped[key].append(el)
-    for key, els in grouped.items():
-        values = {canonical_fact_text(e.text or "") for e in els}
-        if len(values) > 1:
-            lines = ", ".join(str(e.sourceline) for e in els)
-            issues.append(
-                f"Duplicate fact {key[0]} in context {key[1]} reports inconsistent "
-                f"values {sorted(values)} (lines {lines})"
-            )
+    if undecodable:
+        issues.append(
+            f"NOTE: {undecodable} numeric fact(s) had a reported value this "
+            "script could not decode (an unsupported @format, a nested or "
+            "continued fact, or text that is not a number), so EFM 6.5.37 was "
+            "not evaluated for them. Arelle checks these; this is a coverage "
+            "gap, not a defect."
+        )
 
     return issues
 
@@ -264,17 +558,27 @@ def main() -> int:
         print(__doc__)
         return 2
     path = Path(sys.argv[1])
-    if not path.exists():
-        print(f"File not found: {path}", file=sys.stderr)
+    if not path.is_file():
+        # `exists()` is true for a directory, which then raised deep inside the
+        # parser. The operator gets a usage error instead.
+        problem = "Not a file" if path.exists() else "File not found"
+        print(f"{problem}: {path}", file=sys.stderr)
         return 2
-    issues = check(path)
-    if not issues:
-        print(f"OK — {path.name} passes pre-flight checks.")
-        return 0
-    print(f"{len(issues)} issue(s) in {path.name}:")
-    for i, msg in enumerate(issues, 1):
-        print(f"  {i}. {msg}")
-    return 1
+    findings = check(path)
+    # A NOTE reports what could not be evaluated, so it is not a defect and
+    # must not fail the run. It is still printed: a coverage gap the operator
+    # cannot see is the same as no gap at all.
+    notes = [f for f in findings if f.startswith("NOTE")]
+    issues = [f for f in findings if not f.startswith("NOTE")]
+    if issues:
+        print(f"{len(issues)} issue(s) in {path.name}:")
+        for i, msg in enumerate(issues, 1):
+            print(f"  {i}. {msg}")
+    else:
+        print(f"OK: {path.name} passes pre-flight checks.")
+    for note in notes:
+        print(f"  {note}")
+    return 1 if issues else 0
 
 
 if __name__ == "__main__":
