@@ -586,9 +586,9 @@ authoritative path is:
 
 **How large the list is.** Counting distinct labels ending `[text block]` in
 the Annex II tables of Delegated Regulation (EU) 2026/283 gives **224** for
-Table 1 (IAS 1) and **217** for Table 2 (IFRS 18). Resolved to elements those
-are **225** distinct QNames, 216 in both tables, 8 in Table 1 alone and 1 in
-Table 2 alone. Labels and elements differ by one because
+Table 1 (IAS 1) and **217** for Table 2 (IFRS 18). Those labels resolve to
+**225** distinct elements: 216 appear in both tables, 8 in Table 1 alone and 1
+in Table 2 alone. Labels and elements differ by one because
 `DisclosureOfReclassificationsOrChangesInPresentationExplanatory` carries a
 different standard label in each table. Earlier revisions of this file said
 roughly 250, which was high and unsourced.

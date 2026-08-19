@@ -107,7 +107,7 @@ python3 tests/check_skill.py
 
 # 3. Markdown lint — rules this repo does not follow are disabled, with
 #    reasons, in .markdownlint-cli2.jsonc, so a hit here is a real defect
-npx markdownlint-cli2@0.18.1
+npx --yes markdownlint-cli2@0.18.1
 
 # 4. Code gate — only if you changed scripts/ or tests/
 .venv/bin/python -m ruff check scripts tests
