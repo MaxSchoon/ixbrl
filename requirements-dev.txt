@@ -21,3 +21,7 @@ lxml-stubs==0.5.1
 # These must not use line-oriented regex: the reference files contain `#` shell
 # comments inside bash fences, which a regex heading matcher miscounts.
 markdown-it-py==4.2.0
+
+# CA bundle for scripts/dts_profile.py's online walks. python.org macOS builds
+# ship no system CA bundle, and the script uses certifi's when it is importable.
+certifi==2026.6.17

@@ -158,6 +158,34 @@ bill is **pending in Parliament as of 2026-08-18**, referred to the
 Commerce Committee (talousvaliokunta) 27 May 2026 with no committee report
 yet, so filing stays voluntary until enacted [S18].
 
+### DTS and vintages
+
+Which taxonomy release to load, where it lives, and what PRH accepts.
+Vocabulary and column order are fixed in `references/dts.md`
+§ Vocabulary. Verified 2026-08-21 by downloading the package. Two facts
+the rest of this file does not make explicit: the national SBR taxonomy
+is a **Eurofiling DPM / Table Linkbase** framework (coded metrics such as
+`fi_met:ei661` and dimensions from the `suomi.fi` dictionary, one directory
+per table with `-rend.xml` breakdowns, `find:filingIndicator` values that
+name the tables filed, as PRH's own sample instance shows), not a
+presentation-tree taxonomy; and **no entry-point URI dereferences**
+(`http://www.valtiokonttori.fi/…` returns 403), so resolution is by the
+package catalog only.
+
+| Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
+|---|---|---|---|---|---|---|
+| **`SBR-DPM-2025-12-31_fix_2026-02-19`** | `http://www.valtiokonttori.fi/fi/fr/xbrl/crr/fws/oytp/kpl-2016-12/2025-10-16/mod/oytp_gaap_{ind,con}.xsd` (note the entry-point date, 2025-10-16) (companies); `lstp_*` under `…/lstp/tiltoia_2018/2025-10-16/`; `vytp_*` under `…/vytp/stmtpa_2016/2025-10-16/`; foundations `stp/` and `stk/` still at `…/kpl-2016-12/2022-09-30/` ("ei päivitetty vuonna 2025") | `https://avoindata.suomi.fi/data/dataset/644a8ee5-1de5-4f9d-a7bf-ef5edfcb619a/resource/0f00c1d5-cc7b-4159-909d-05df806de1c6/download/sbr-dpm-2025-12-31_fix_2026-02-19.zip` (200; its manifest still says `tp:version` `SBR-DPM-2025-12-31`) | financial periods starting on or after **1 Jan 2026** | the version PRH names for markup | current | prh.fi taxonomiat page; package |
+| `SBR-DPM-2025-12-31` | same modules | the unfixed zip on the same dataset page | superseded before use | labelled "VANHA VERSIO, ÄLÄ KÄYTÄ" (old version, do not use) | withdrawn | avoindata dataset page |
+| `kpl-2016-12/2022-09-30`, `2019-11-06`, `2019-03-28` | `…/oytp/kpl-2016-12/<date>/mod/oytp_gaap_{ind,con}.xsd`, shipped inside the current package | current package | periods before 2026 | still accepted by PRH | legacy, supported | prh.fi taxonomiat page |
+| IFRS Accounting Taxonomy 2025 / 2024; ESEF 2024 / 2022 | IFRS Foundation and ESMA entry points (`references/esef.md` § DTS and vintages) | | per period | both IFRS vintages and ESEF 2024 and 2022 accepted; ESEF 2023 and 2025 not listed | current | prh.fi taxonomiat page |
+
+PRH's cadence rule: it confirms the company-financial-reporting parts of
+the SBR specification annually by year-end, and the confirmed
+specification applies to periods beginning the following year. Note that
+the entry-point date (`2025-10-16`), the package name (`2025-12-31`) and
+the fix date (`2026-02-19`) are three different strings for one release;
+select by the package, not by a date template.
+
 ### Bi-temporal cheatsheet: which vintage applies to which period
 
 As with every iXBRL regime, ask for each rule: *was this in force when

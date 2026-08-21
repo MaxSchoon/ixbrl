@@ -52,9 +52,57 @@ against. So before reviewing or validating, pin:
 3. **The entry point** (= which schema is in `link:schemaRef`). Entry
    point choice is concept-bearing: it determines which concepts are
    in-DTS, what dimension defaults apply, and which presentation /
-   calculation linkbases are active. A Microbedrijf entry point makes
-   most of the bw2-titel9 disclosure concepts unbound; a Groot entry
-   point makes them available.
+   calculation linkbases are active. In the **classic XBRL tree** a
+   Microbedrijf entry point makes most of the bw2-titel9 disclosure
+   concepts unbound and a Groot entry point makes them available; in the
+   **KvK Inline XBRL tree** the entry point is selected by financial year
+   and accounting basis only, never by size (see *DTS and vintages*
+   below and `references/dts.md`).
+
+### DTS and vintages
+
+Which release to load, where it lives, and when it is accepted. Vocabulary
+and column order are fixed in `references/dts.md` § Vocabulary. Verified
+2026-08-21: every entry point marked 200 was fetched that day. Resolve the
+live directory before trusting a documented but unpublished URL.
+
+**KvK Inline XBRL tree** (`https://www.nltaxonomie.nl/kvk/<YYYY-MM-DD>/`).
+Three annual-report entry points per release, selected by **financial year
+and accounting basis**; the package also declares `kvk-cor.xsd` and
+`kvk-all.xsd` as non-filing utility entry points, so a package manager
+lists five.
+
+| Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
+|---|---|---|---|---|---|---|
+| **2025-12-31** ("KVK taxonomie 2025") | `https://www.nltaxonomie.nl/kvk/2025-12-31/kvk-annual-report-nlgaap-ext.xsd` (200), `…/kvk-annual-report-ifrs-ext.xsd` (200), `…/kvk-annual-report-other.xsd` (200) | `https://www.sbr-nl.nl/sites/default/files/2025-12/kvk-2025_taxonomie.zip` (`tp:publicationDate` 2025-12-31) plus the core packages `bw2-titel9`, `rj`, `ncgc`, `wnt`, `ww` of the same date | FY2025: RTS 2025 art. 9, financial years beginning on or after 2025-01-01, may be applied earlier | any of the **three most recent** KVK taxonomy versions (FAQ 2.2.5, 2026-02-12 and 2026-07-10 editions); RM 2026 Guidance 4.1.2 lists it for FY2024, FY2025 and FY2026 reports, "this year's report using last year's taxonomy, or this year's taxonomy for last year's report" | current | RTS 2025 Annex VI; RM 2025 / 2026 § 4.1.2 and § 5.1.3; package manifest |
+| **2024-12-31** ("KVK taxonomie 2024") | `https://www.nltaxonomie.nl/kvk/2024-12-31/kvk-annual-report-nlgaap-ext.xsd` (200), `…/kvk-annual-report-ifrs-ext.xsd` (200), `…/kvk-annual-report-other-gaap.xsd` (200; **`-other-gaap`, renamed `-other` from 2025-12-31**) | `kvk-2024_taxonomie.zip`, linked from `https://www.sbr-nl.nl/sbr-domeinen/handelsregister/kvk-documentatie-boekjaar-2024` | FY2024 (RTS 2024 era; RM 2026 table row "2024") | accepted for FY2024, FY2025 and FY2026 reports while it remains one of the three most recent | accepted | RM 2026 § 4.1.2 and § 5.1.3; FAQ 2.2.5 worked examples |
+| 2024-03-31 | `https://www.nltaxonomie.nl/kvk/2024-03-31/kvk-annual-report-{nlgaap-ext,ifrs-ext,other-gaap}.xsd` (200) | not found on sbr-nl.nl | pilot era; no RTS or RM names it | cited in no current RTS, RM or FAQ | retired (still served) | live directory listing |
+| 2026-12-31 ("KVK taxonomy 2026") | `https://www.nltaxonomie.nl/kvk/2026-12-31/kvk-annual-report-{nlgaap-ext,ifrs-ext,other}.xsd` (**404** on 2026-08-21) | not published | FY2026: RTS 2026 Annex VI | will join the three-version window once published | not yet published; SBR release calendar: definitive 2026-10-29, production 2026-12-09 | RTS 2026 Annex VI; RM 2026 § 4.1.2; `https://www.sbr-nl.nl/werken-met-sbr/taxonomie/releasekalender` |
+
+No retirement dates are published: a release dies when the third one after
+it appears (the 2024-03-31 vintage is the observed case). The **NBA
+auditor's report taxonomy 2.1**, `https://www.nltaxonomie.nl/nba/2.1/`, is
+a separate DTS the packaged auditor's report references (RTS Chapter 3
+Annex I Table 2).
+
+**Classic XBRL tree** (`http://www.nltaxonomie.nl/nt<NN>/kvk/<YYYYMMDD>/`,
+plain http). 27 entry points per generation under `entrypoints/`, selected
+by **entity size and sector**, fixed framework, no extensions. The
+unsuffixed release directory is the test of publication; `.a` (alfa) and
+`.b` (bèta) directories persist for every generation.
+
+| Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
+|---|---|---|---|---|---|---|
+| **NT20** `20251210` | `http://www.nltaxonomie.nl/nt20/kvk/20251210/entrypoints/kvk-rpt-jaarverantwoording-2025-nlgaap-{micro,klein,middelgroot,groot}[-publicatiestukken][-verticaal].xsd` and the sector variants (200; header "Release date: October 31, 2025") | `https://www.sbr-nl.nl/werken-met-sbr/taxonomie/documentatie-nederlandse-taxonomie` | financial years beginning on or after 2025-01-01 | listed in RTS 2025 **and** RTS 2026 Chapter 3 Annex I Table 1 | current | RTS 2025 / 2026 Chapter 3 Annex I; live directory |
+| **NT19** `20241211` | `http://www.nltaxonomie.nl/nt19/kvk/20241211/entrypoints/kvk-rpt-jaarverantwoording-2024-…` (200) | same page | FY beginning on or after 2024-01-01 | listed in RTS 2025 and RTS 2026 | accepted | same |
+| **NT18** `20231213` | `http://www.nltaxonomie.nl/nt18/kvk/20231213/entrypoints/kvk-rpt-jaarverantwoording-2023-…` (200) | same page | FY beginning on or after 2023-01-01 | listed in RTS 2025 only; **dropped from RTS 2026 Chapter 3 Annex I** | superseded once RTS 2026 governs the deposit | same |
+| NT21 `20261209` | `…/nt21/kvk/20261209.a/` (April 2026) and `…/20261209.b/` (August 2026) exist; `…/20261209/entrypoints/…` **404** | not published | FY beginning on or after 2026-01-01 (RTS 2026 Chapter 3 Annex I) | listed in RTS 2026 as supported; not yet filable | pre-release; calendar: definitive 2026-10-29, production 2026-12-09 | release calendar (page dated 2026-07-30); live directory |
+
+Two citation traps in the RTS itself: "Annex I" exists in **both** chapters
+(Chapter 2 iXBRL: a legend; Chapter 3 XBRL: the supported-version table),
+so cite "RTS 2026 Chapter 3 Annex I"; and Annex VI prints two namespaces
+wrongly (`…/bw2/…` for `bw2-titel9`, `…/ncgc/…/wnt-cor` for `wnt`). The
+schema's own `targetNamespace` is the authority.
 
 ### Two taxonomy trees, same prefix family
 
@@ -244,23 +292,28 @@ URI value such as
 It is **not** an XDT context axis and should not appear as an
 `xbrldi:explicitMember`. The size class dictates:
 
-- Which KvK entry point schema is in `link:schemaRef`.
 - Which disclosures are mandatory (Klein omits many notes; Groot must
   include everything Title 9 requires plus the auditor's report).
 - Whether the auditor's report (controleverklaring) is required at all.
 
-| Size class | `kvk:LegalEntitySize` fact value | Auditor's report required | Typical entry point family (FY2025 KvK NL-GAAP) |
+It does **not** select the iXBRL entry point. All four official FY2025
+size-class example packages (`demicrobv`, `dekleinebv`,
+`demiddelgrotebv`, `degrotebv`) import the same
+`kvk-annual-report-nlgaap-ext.xsd`; size-specific entry points exist only
+in the classic XBRL tree (see *DTS and vintages*).
+
+| Size class | `kvk:LegalEntitySize` fact value | Auditor's report required | Classic **XBRL**-tree entry point family (NT20, FY2025 NL-GAAP); not used by iXBRL |
 |---|---|---|---|
 | Micro | `kvk:LegalEntitySizeMicroMember` | No | `kvk-rpt-jaarverantwoording-2025-nlgaap-micro` |
 | Klein | `kvk:LegalEntitySizeSmallMember` | No | `kvk-rpt-jaarverantwoording-2025-nlgaap-klein` |
 | Middelgroot | `kvk:LegalEntitySizeMediumMember` | Yes | `kvk-rpt-jaarverantwoording-2025-nlgaap-middelgroot` |
 | Groot | `kvk:LegalEntitySizeLargeMember` | Yes | `kvk-rpt-jaarverantwoording-2025-nlgaap-groot` |
 
-(Specialised entry points exist for banks, insurers, pension funds,
-healthcare, housing, non-profit / fundraising organisations,
-cooperatives, cv/vof, foundations, etc.; the suffix `-publicatiestukken`
-selects publication-only accounts and `-verticaal` selects the
-vertical balance-sheet layout.)
+(In the classic tree, specialised entry points exist for banks, insurers,
+pension funds, healthcare, housing, non-profit / fundraising
+organisations, cooperatives, cv/vof, foundations, etc.; the suffix
+`-publicatiestukken` selects publication-only accounts and `-verticaal`
+selects the vertical balance-sheet layout.)
 
 A common reviewer slip: applying Middelgroot disclosure expectations
 to a Klein filing, or vice versa. Pin the size class first; it changes

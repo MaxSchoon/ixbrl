@@ -56,12 +56,19 @@ regulated markets (Transparency Directive). The ESEF taxonomy *extends*
 the IFRS Accounting Taxonomy with EU-specific dimensions, entry points,
 and architecture.
 
-**Current version:** **ESEF Taxonomy 2024**, with the **2025 ESEF
-taxonomy dated 2025-03-27** also published by ESMA. The 2025 taxonomy
-reflects the IASB's 2025 IFRS taxonomy and IFRS 18 (mandatory tagging
-effective 1 January 2027, early application allowed). The ESEF 2025
-taxonomy becomes mandatory for AFRs covering financial years starting on
-or after **1 January 2026**.
+**Current version:** **ESEF Taxonomy 2024** (namespace date 2024-03-27),
+mandated by Delegated Regulation (EU) 2025/19 for financial years
+beginning on or after 1 January 2025, and **ESEF Taxonomy 2025**
+(namespace date 2025-03-27, files published 21 April 2026), mandated by
+**Delegated Regulation (EU) 2026/283** (adopted 12 December 2025, OJ 18
+March 2026) for financial years beginning on or after **1 January 2026**,
+with early application for FY2025 permitted. The 2025 taxonomy reflects
+the IASB's 2025 IFRS taxonomy and IFRS 18 (effective 1 January 2027,
+early application allowed; IFRS 18 and 19 elements usable once
+EU-endorsed). ESMA's statement that it does not plan to amend the ESEF RTS
+or taxonomy in 2026 concerns a further amendment, not 2026/283. The
+per-release table with links and windows is `references/esef.md` § DTS
+and vintages; how to read any DTS is `references/dts.md`.
 
 **Core architecture:** Filers reference the ESMA "core" entry point
 `esef_cor.xsd`, which imports the IFRS Accounting Taxonomy. Issuers add
@@ -97,7 +104,8 @@ filing infrastructure.
 United States. Accepted and operationalized by the SEC.
 
 **Current version:** **2025 GAAP Financial Reporting Taxonomy (GRT)**,
-accepted by the SEC on **18 March 2025**. The SEC concurrently accepted
+accepted by EDGAR on **17 March 2025** (Release 25.1; FASB announced the
+acceptance on 18 March). The SEC concurrently accepted
 the **2025 SEC Reporting Taxonomy (SRT)** and the **2025 GAAP Employee
 Benefit Plan Taxonomy (EBPT)**.
 
@@ -214,12 +222,16 @@ deposits; AFM extends ESEF/IFRS for listed-issuer AFRs.
 
 **Common entry points:**
 
-- KvK Dutch GAAP entry points by company-size class: micro, small,
-  medium, large (different disclosure depths under Title 9 Book 2 BW).
-  The size class is itself a tagged fact (`bw2-titel9:LegalEntitySize`)
-  and the entry point choice is concept-bearing. It changes which
-  concepts are in-DTS. See `references/jurisdictions/nl-sbr.md` *Entry point by entity-size class* for the
-  size-class table.
+- **Classic XBRL tree**: KvK Dutch GAAP entry points by company-size
+  class: micro, small, medium, large (different disclosure depths under
+  Title 9 Book 2 BW), 27 per NT generation. The entry point choice is
+  concept-bearing and changes which concepts are in-DTS.
+- **KvK Inline XBRL tree**: three annual-report entry points per release,
+  selected by financial year and accounting basis
+  (`kvk-annual-report-{nlgaap-ext,ifrs-ext,other}.xsd`), never by size.
+  The size class travels as the fact `kvk:LegalEntitySize`. Both trees,
+  with links and acceptance windows, are tabulated in
+  `references/jurisdictions/nl-sbr.md` *DTS and vintages*.
 - KvK IFRS entry points where the entity reports under IFRS but files at
   the trade register.
 - AFM ESEF / IFRS for Dutch listed-issuer AFRs (extends ESEF core).
@@ -280,10 +292,15 @@ reports referencing periods ≥ 31 March 2026 must be filed in **xBRL-CSV**
 
 ### EBA: COREP / FINREP
 
-**Current version:** The EBA Reporting Frameworks page currently
-publishes **Reporting Framework 4.4** as the latest release, with 4.2
-and 4.3 also listed for prior reference dates. Re-verify the operative
-framework version against the EBA page at filing date.
+**Current version:** **Reporting Framework 4.2** (Q4 2025, hotfix and
+FINREP9DP artefacts February 2026) is the latest *released* framework;
+4.3 (expected Q2 2026) and 4.4 (expected Q3 2026) are announced for
+later reference dates, and on 2026-08-21 the 4.3 page carried "Taxonomy
+package 4.3" and "Sample files 4.3" headings with **no downloadable
+artefact** behind them. An earlier edition of this file had that
+inverted. Per-release table with
+package URLs and reference-date windows: `references/dpm.md` § DTS and
+vintages. Re-verify against the EBA page at filing date.
 
 **Modules:** COREP (own funds, large exposures, leverage, NSFR/LCR),
 FINREP (IFRS-based supervisory financials), Resolution planning, MREL,
@@ -301,10 +318,13 @@ under CRR/CRD.
 
 ### EIOPA: Solvency II and IORP
 
-**Current version:** The EIOPA "DPM and XBRL" page currently references
-**Solvency II Taxonomy 2.9.1 PWD** (with DPM Dictionary, Annotated
-Templates, and IRRD annotated templates at 2.9.1) and **2.8.2** as a
-prior release. Pension fund (IORP) reporting moved from 2.7.1
+**Current version:** **Solvency II 2.8.2** is the version in production
+(applicable from the Q4 / annual 2024 reference periods until Q4 / annual
+2026 included); **2.10.0 Final** was published 3 July 2026 for reference
+periods from Q1 2027, and **IRRD 2.11.0 Final** on 27 July 2026. "2.9.1
+PWD" appears on the EIOPA page only as a change-log baseline. EIOPA
+remains xBRL-XML; the xBRL-CSV switch above is an EBA rule. Per-release
+table: `references/dpm.md` § DTS and vintages. Pension fund (IORP) reporting moved from 2.7.1
 (applicable until Q4/2024) to 2.9.0 (applicable from Q1/2025).
 Re-verify against the live EIOPA page before relying on a specific
 version.

@@ -3,7 +3,9 @@
 > A vendor-neutral skill for AI agents that review, validate, and generate
 > Inline XBRL (iXBRL) financial filings across ESEF, SEC EDGAR, UK FRC,
 > Dutch SBR/KvK, Danish ÅRL, Finnish PRH, French AMF, German HGB, and Belgian
-> NBB regimes.
+> NBB regimes, with a reference on the Discoverable Taxonomy Set (how a fact
+> resolves to its concept, label and statement; which taxonomy release was
+> operative when) and a script that walks any DTS.
 
 Made by Max Schoon, Founder, Doc2iXBRL — https://doc2ixbrl.com
 

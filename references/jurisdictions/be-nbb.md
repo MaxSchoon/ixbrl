@@ -94,6 +94,37 @@ re-read the live NBB **Taxonomy** page for the exact patch level in force on
 the closing date; a search-index snapshot can lag the live page by a patch
 (this session saw a `26.0.10` snapshot against a live `26.0.15`).
 
+### DTS and vintages
+
+Which `be-gaap` framework to load, where it lives, and when the Filing
+application accepts it. Vocabulary and column order are fixed in
+`references/dts.md` § Vocabulary. Verified 2026-08-21 by downloading
+`nbb-cbso-26.0.15`. What the package shows that the profile below does
+not: it declares **72 entry points** (22 XBRL, 46 PDF, 2 OCR, 2
+reference), so **consolidated annual accounts (`m120-f-p`) have no XBRL
+entry point in 26.0, only a PDF model**; statement membership is encoded
+in 679 **section schemas** under `fws/26.0/sect/` assembled by each entry
+point's imports and grouped by NBB's own arcrole
+`http://www.nbb.be/fr/xbrl/section-group`; labels are in **four**
+languages (de, en, fr, nl) under the standard role plus four NBB roles
+(`rub` the statutory rubric code, `sign`, `pdfLabel`, `sectionLabel`);
+validation is Formula 1.0 split by rule owner (`-legal-`, `-nbb-`,
+`-other-`, `-sb-formula.xml`) with **no calculation and no reference
+linkbase**; and no entry-point URI dereferences
+(`http://www.nbb.be/be/fr/cbso/fws/26.0/mod/m02/m02-f.xsd` returns 404).
+
+| Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
+|---|---|---|---|---|---|---|
+| **`nbb-cbso-26.0.15`** (framework 26.0) | 72 entry points under `http://www.nbb.be/be/fr/cbso/fws/26.0/mod/<model>/<model>-{f,a,o,p}.xsd`; adds `m90-f` (CbCR, an XBRL section, not Inline XBRL) | `https://www.nbb.be/doc/ba/xbrl/taxo2026/nbb-cbso-26.0.15.zip` (200, 60.7 MB) | accounts closing in the 26.0 window (the application selects by **closing date**, not upload date) | in production since **2 Jan 2026** | current | nbb.be Taxonomy page; package manifest |
+| `nbb-cbso-25.0.11` (framework 25.0) | same model set without `m90-f` | `https://www.nbb.be/doc/ba/xbrl/taxo2025/nbb-cbso-25.0.11.zip` (URL pattern inferred, not fetched) | accounts closing in the 25.0 window (FY2024 closings) | released 6 Jan 2025; accepted for its window | accepted | nbb.be chronological page |
+| `nbb-cbso-23.0.8` (framework 23.0) | 23.0 model set | not fetched | earlier closings | released 3 Apr 2023 | superseded | nbb.be chronological page |
+| `pfs-*` (`pfs-full`, `pfs-abbr`, `pfs-mic`, `pfs-npo-*`) | `/be/fr/pfs/ci/{full,abbreviated,micro}/2019-04-01`, `/be/fr/pfs/npo/…` | in the archive | before 2022 | **not loadable by Filing 2.0**; convert through its "Convert an old file" tool | retired architecture | nbb.be chronological page |
+
+Two date limits that catch early-year filings: micro models cannot be used
+for financial years beginning before 1 January 2016; without-capital and
+association micro models cannot be used for years closed before 1 May
+2019.
+
 <a id="profile-nbb-cbso"></a>
 
 ## Profile: NBB Central Balance Sheet Office, statutory annual accounts

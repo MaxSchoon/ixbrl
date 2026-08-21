@@ -66,6 +66,43 @@ State the balance date and taxonomy generation back to the user before
 declaring any defect. "This violates ÅRL taxonomy 20251001 control X for
 a 2025 balance date" is reviewable; "this is wrong" is not.
 
+### DTS and vintages
+
+Which release to load, where it lives, and what is accepted when.
+Vocabulary and column order are fixed in `references/dts.md`
+§ Vocabulary. Verified 2026-08-21 by downloading and unpacking the
+packages; publication dates are read from each package's
+`tp:publicationDate`.
+
+**The namespace host is not a download location.** Every `schemaRef`
+must begin with `http://archprod.service.eogs.dk/taxonomy/` (control
+`TH01`, Fejl), and that host returns 404 for every path. The package's
+`META-INF/catalog.xml` rewrites
+`http://archprod.service.eogs.dk/taxonomy/20251001/` to the files inside
+the zip; load the package, never the URL.
+
+| Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
+|---|---|---|---|---|---|---|
+| **20251001** (`tp:identifier` `http://www.erst.dk/XBRL20251001`, `tp:publicationDate` 2025-11-15) | 24 declared: seven DKGAAP filing entry points `http://archprod.service.eogs.dk/taxonomy/20251001/entryDanishGAAP{BalanceSheetAccountForm,BalanceSheetAccountByCurrentAndLongTermForm}IncomeStatementBy{Nature,Function}IncludingManagementsReviewStatisticsAndTax20251001.xsd`, `…/entryDanishGAAPExcludingBalanceSheetIncomeStatementIncludingManagementsReview20251001.xsd` (the IFRS/ESEF companion), `…/entryDKGAAPRequiredInformation20251001.xsd`, `…/entryAll.xsd` (accession only); eight DFSA / DKFIN `entryDFSA*.xsd`; UVM entry points | `https://erhvervsstyrelsen.dk/sites/default/files/2025-11/XBRL20251001-20251120.zip` | årsrapporter with balance date on or after 2025-01-01 must be Inline XBRL (control `FR83`); ERST "anbefaler" (recommends) the 2025 or the 2024 taxonomy | no published acceptance matrix; the package's `frm_injection/` carries ERST's current formula controls for vintages **20201001 to 20251001**, the strongest machine-readable evidence of the window | current, recommended | package manifest; Kontroller corpus; ERST "Taksonomier, aktuelle" |
+| **20241001** (`tp:publicationDate` 2024-10-01) | 23 declared; DFSA / DKFIN entry points first appear here | `https://erhvervsstyrelsen.dk/sites/default/files/2024-11/AARL%20taksonomi%E2%80%93version-20241001%20%28zip-fil%29.zip` | FY2024 onward; DKFIN mandatory from FY2025 | recommended alternative to 20251001; in `frm_injection` | accepted, recommended | same |
+| **20231001** (2023-10-01) | 16 declared | `https://erhvervsstyrelsen.dk/sites/default/files/2023-11/XBRL20231001_20231108.zip` | FY2023 onward | carried in `frm_injection`, so still validated at ERST against the **current** controls | accepted (inferred from the package, not from a published rule) | "historiske" page, updated 2025-11-25 |
+| **20221001** (2022-10-01) | 15 declared | `https://erhvervsstyrelsen.dk/sites/default/files/2022-11/XBRL20221001-20221117.zip` | FY2022 onward | in `frm_injection` | accepted (inferred) | same |
+| **20211001** (2021-10-01) | 13 declared | `https://erhvervsstyrelsen.dk/sites/default/files/2021-11/XBRL20211001_20211105_0459.zip` | FY2021 onward | in `frm_injection` | accepted (inferred) | same |
+| 20201001 | not unpacked | `https://erhvervsstyrelsen.dk/sites/default/files/2021-11/XBRL20201001_20210115_1135%20%284%29.zip` | FY2020 onward | oldest vintage in `frm_injection` | accepted (inferred) | same |
+| 20191001 and older (20171001, 20161001, 20151001, 20140701, 20130401, 20121001, 20110701, 20101108; no 20181001 exists) | | listed on the "historiske" page | | **not** in `frm_injection` | likely not accepted; not confirmed | same |
+| DK-IFRS stand-alone (20211220 last; 20191220, 20171220, …) | | "historiske" page | | phased out; IFRS filers use the ÅRL companion entry point plus ESEF | retired | same |
+
+No 2026 release existed on 2026-08-21; the cadence is one `YYYY1001`
+release published each November. Per release ERST publishes a machine
+diff (`compare-DKGAAP-2025-vs-2024_0.zip`) and a human change summary.
+
+The fact that decides validation here: ERST **back-ports** its current
+control set into older vintages through `frm_injection/`, so a 2022-vintage
+filing is judged at the receiver against 2025 controls. Validating against
+the pristine 2022 package reproduces the wrong rule set; inject the current
+formula package first (`HowToDoInjectionOfFormulaIntoDkgaapYYYY.txt` in the
+package says how).
+
 <a id="profile-arl-arsrapport"></a>
 
 ## Profile: ÅRL årsrapport deposited with Erhvervsstyrelsen
@@ -214,11 +251,14 @@ mellemstor / C stor / D) [S3][S8].
 
 ### ÅRL taxonomy architecture, versions, and entry points
 
-**Official root URL:** `http://archprod.service.eogs.dk/taxonomy/`,
-controlled by the DCCA. Files are placed under
+**Official root URI:** `http://archprod.service.eogs.dk/taxonomy/`,
+controlled by the DCCA. Namespaces and `schemaRef` values take the form
 `{root}/{yyyymmdd publication date}/{optional 3-letter component}/{file}`,
 with the official location embedded per-file as an `officialURI`
-processing instruction [S4].
+processing instruction [S4]. **The host serves nothing under that path
+(404 on every probe, 2026-08-21)**: it is an identifier, and the files are
+distributed only in the taxonomy package whose catalog rewrites the prefix
+(see *DTS and vintages*).
 
 **Modular components** (three-letter namespace prefixes) [S4]:
 
@@ -254,10 +294,15 @@ schemaRef must contain `http://archprod.service.eogs.dk/taxonomy/`
 `TH10`: no `linkbaseRef`, no `roleRef`, exactly one `schemaRef` [S8];
 `TH02`: the entrypoint must be usable / an absolute URI [S2].
 
-> **Honest gap.** The concrete `20251001` entry-point schema filenames and
-> the full account-vs-report × by-nature-vs-by-function matrix were **not
-> enumerated**: the ZIP/JSP and English technical PDF linked on the
-> Taksonomier-aktuelle page [S3] were not downloaded.
+The `20251001` entry-point filenames are enumerated in *DTS and vintages*
+above, read from the package manifest. The selection axis is
+balance-sheet form (account form, or account form split by current and
+long term) × income-statement form (by nature, by function), plus the
+"excluding balance sheet and income statement" companion for IFRS/ESEF
+filers and the required-information entry point; the older "account vs
+report form" framing of [S4] no longer matches the shipped set.
+`entryTotal.xsd` is on disk but not declared as an entry point; do not
+file against it.
 
 ### iXBRL format rules: one self-contained XHTML
 

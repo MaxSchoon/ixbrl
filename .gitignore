@@ -8,3 +8,9 @@
 # Python bytecode artifacts
 __pycache__/
 *.py[cod]
+
+# Session ledgers and other agent-process records are private to the
+# operator and are never published with the skill.
+**/session-ledger/
+docs/session-ledger/
+session-ledger/

@@ -39,7 +39,8 @@ Load one. Do not load them all.
 | `first-principles.md` | The eight things that decide whether tagged output is right, in any jurisdiction |
 | `spec.md` | Inline XBRL 1.1, XBRL 2.1, XDT, Transformation Registry, calculation semantics |
 | `types.md` | QNames, item types, concept attributes |
-| `structure.md` | DTS, linkbases, roles, tuples, OIM, instance pointers |
+| `structure.md` | Linkbases, roles, tuples, OIM, instance pointers |
+| `dts.md` | How a DTS works and how to read one: discovery, entry points, packages and catalogs, fact to concept to label to statement, six regulator DTSs compared by measurement, valid time vs acceptance window |
 | `dimensions.md` | Hypercubes, axes, default members, `xbrldie:*` errors |
 | `advanced-specs.md` | Generic links, Functions Registry, Versioning |
 | `registries.md` | Label Role Registry, Data Types Registry, URI conventions |
@@ -55,7 +56,10 @@ Load one. Do not load them all.
 
 One file per regime, under `references/jurisdictions/`. Each opens with a
 profile table, because most jurisdictions run more than one filing regime and
-picking the wrong one wastes the whole review.
+picking the wrong one wastes the whole review, and each carries a *DTS and
+vintages* table: the releases, their entry points and packages, the
+financial years they are for, and the deposit window in which the receiver
+accepts them, with a source per row.
 
 | File | Regime |
 |---|---|
@@ -73,11 +77,12 @@ much as a rule, and harder to find.
 
 ### The scripts
 
-Knowing the rules is not the same as checking the file. Two scripts do that.
+Knowing the rules is not the same as checking the file. Three scripts do that.
 
 | Script | Catches | Cost |
 |---|---|---|
-| `scripts/check_facts.py` | Missing `decimals`, dangling continuation chains, undefined contexts and units, non-ISO currency measures, `decimals="INF"`, inconsistent duplicate facts | Milliseconds, no network, standard library plus `lxml` |
+| `scripts/check_facts.py` | Missing `decimals`, dangling continuation chains, undefined contexts and units, non-ISO currency measures, a finite `decimals` that zeroes reported digits | Milliseconds, no network, standard library plus `lxml` |
+| `scripts/dts_profile.py` | What the taxonomy actually declares: unresolved `schemaRef`s and locators, concepts by type and period, label roles and languages, calculation arcrole (1.0 vs 1.1), dimensions and `targetRole`, presentation depth; and everything the DTS says about one concept (`--concept`) | Seconds from a package offline; minutes for a first online walk of US-GAAP, cached after |
 | `scripts/validate_with_arelle.sh` | Everything the regulator's own validator catches | An Arelle run |
 
 Run the cheap one first. It finds the errors that would waste an Arelle cycle,
