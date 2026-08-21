@@ -157,13 +157,19 @@ def check_reference_links() -> None:
             if rel not in known:
                 fail(f"{label}: link to references/{rel} does not resolve")
 
-        # paths/ is local-only and gitignored; its links are checked only
-        # where the directory is present.
-        if PATHS.is_dir():
-            for rel in sorted(set(PATH_LINK.findall(text))):
-                checked += 1
-                if not (PATHS / rel).is_file():
-                    fail(f"{label}: link to paths/{rel} does not resolve")
+        # paths/ is local-only and gitignored, so a tracked file may not
+        # link into it at all: the link would be dead for every reader of
+        # the published tree. Where the directory is present locally the
+        # link is additionally checked to resolve.
+        for rel in sorted(set(PATH_LINK.findall(text))):
+            checked += 1
+            if not PATHS.is_dir():
+                fail(
+                    f"{label}: links to paths/{rel}, "
+                    "which is not part of the published tree"
+                )
+            elif not (PATHS / rel).is_file():
+                fail(f"{label}: link to paths/{rel} does not resolve")
 
         # Sibling form only makes sense from inside references/.
         if src.is_relative_to(references):
