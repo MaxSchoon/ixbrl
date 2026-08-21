@@ -57,10 +57,12 @@ at least one document or locator did not resolve (the report lists them, so
 from __future__ import annotations
 
 import argparse
+import importlib
 import json
 import posixpath
 import re
 import shutil
+import ssl
 import sys
 import tempfile
 import urllib.error
@@ -289,6 +291,19 @@ class Catalog:
         return uri
 
 
+def ssl_context() -> ssl.SSLContext:
+    """The default TLS context, with certifi's bundle when the interpreter
+    ships none (python.org macOS builds until their certificate script runs).
+    """
+    context = ssl.create_default_context()
+    try:
+        certifi = importlib.import_module("certifi")
+    except ImportError:
+        return context
+    context.load_verify_locations(cafile=certifi.where())
+    return context
+
+
 class Fetcher:
     """Reads a document by URI: local file, or HTTP(S) through a disk cache.
 
@@ -334,12 +349,20 @@ class Fetcher:
             return None, "offline and not in cache"
         request = urllib.request.Request(uri, headers={"User-Agent": USER_AGENT})
         try:
-            with urllib.request.urlopen(request, timeout=FETCH_TIMEOUT_SECONDS) as r:
+            with urllib.request.urlopen(
+                request, timeout=FETCH_TIMEOUT_SECONDS, context=ssl_context()
+            ) as r:
                 data = r.read()
         except urllib.error.HTTPError as exc:
             return None, f"HTTP {exc.code}"
         except (urllib.error.URLError, TimeoutError, OSError) as exc:
-            return None, f"fetch failed: {exc}"
+            reason = f"fetch failed: {exc}"
+            if "CERTIFICATE_VERIFY_FAILED" in reason:
+                reason += (
+                    " (this Python has no CA bundle: pip install certifi, or set "
+                    "SSL_CERT_FILE to a PEM bundle, or pass --package / --offline)"
+                )
+            return None, reason
         self.network_fetches += 1
         if cached is not None:
             cached.parent.mkdir(parents=True, exist_ok=True)
