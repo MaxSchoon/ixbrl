@@ -53,16 +53,6 @@ profiles:
 
 ## Start here: choose a filing profile
 
-Load this when the regulator is **PRH** (Patentti- ja rekisterihallitus /
-Finnish Patent and Registration Office) and the filing is a **digital
-financial statement** ("digitaalinen tilinpäätös", colloquially
-*digitilinpäätös*) deposited with the **Finnish Trade Register**
-(kaupparekisteri). Trigger conditions: a Finnish `osakeyhtiö` (limited
-company) or `osuuskunta` (co-operative), the words *digitilinpäätös* /
-*SBR-taksonomia* / *PRH-tunnisteet*, an `avoindata.fi` SBR taxonomy, the
-PRH iXBRL REST interface, or an ESEF ZIP being re-filed to the Trade
-Register.
-
 Finland is **not** a report-package (`.xbri`) regime: a deposit is **XHTML
 alone or a plain ZIP of XHTML** (PRH/1087 s. 2 permits either), and for a
 listed issuer it is the **ESEF ZIP** re-used.

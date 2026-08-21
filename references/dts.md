@@ -2,6 +2,10 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** the question is which concept a fact binds to, which label in which role and language, which network a concept is in, whether a QName is declared at all, which taxonomy release was operative for a report, or how to resolve a `schemaRef` offline.
+
+**Do not load this when:** the question is how the linkbases are wired in general (`references/structure.md`), or is dimensional design (`references/dimensions.md`), or is a regime's filing rule (the jurisdiction file).
+
 Load this when the question is "which concept does this fact bind to", "which
 label, in which role and language", "which network is this concept in", "is this
 QName even declared", "which taxonomy version was operative for this report",

@@ -55,13 +55,6 @@ profiles:
 
 ## Start here: choose a filing profile
 
-Load this when the regulator is **KvK (Kamer van Koophandel)**, **AFM**
-(Dutch listed issuer, where ESEF rules dominate but SBR overlays apply),
-**Belastingdienst** (corporate income tax, VAT, ICP, payroll), or
-**DNB**, or when the file uses `bw2-titel9:`, `rj:`, or `kvk:`
-namespaces. For ESEF-only listed-issuer questions, prefer
-`references/esef.md` and only return here for SBR-specific overlays.
-
 | Situation | Profile | Section |
 |---|---|---|
 | An NL legal entity deposits its own adopted annual accounts (NL-GAAP or IFRS, Micro to Groot) with the Handelsregister as an iXBRL Report Package | KvK Handelsregister iXBRL annual accounts | [Profile: KvK Handelsregister iXBRL annual accounts](#profile-kvk-ixbrl-annual-accounts) |

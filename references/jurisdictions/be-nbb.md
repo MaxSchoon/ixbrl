@@ -44,17 +44,6 @@ profiles:
 - [Coverage and known limitations](#coverage-and-known-limitations)
 - [Sources](#sources)
 
-Load this when the filer is a **Belgian** entity and the regulator is the
-**National Bank of Belgium (NBB)** Central Balance Sheet Office (statutory annual
-accounts, `be-gaap` / `nbb-cbso`), the **FSMA** (listed-issuer AFR under ESEF), or
-**FPS Finance** (corporate income-tax return via **Biztax**, `be-tax`). For
-generic ESEF taxonomy / tagging / RTS mechanics, prefer `references/esef.md`; for the
-EBA/EIOPA supervisory DPM the NBB also runs as prudential supervisor, see
-`references/dpm.md`. This file carries **only the Belgian jurisdiction
-layer**. Its job is to stop a conversion product making the one mistake
-that gets a Belgian filing rejected: emitting the wrong *format* for the
-wrong regime.
-
 ## Start here: choose a filing profile
 
 | Situation | Profile | Section |

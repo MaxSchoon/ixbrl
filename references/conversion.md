@@ -4,7 +4,7 @@
 
 **Load this when:** a finished document (PDF, Word, or accounts-production output) is being turned into iXBRL, or a converted file passes every validator and still misrepresents the statements.
 
-**Do not load this when:** a validator has emitted a code (`references/validation.md`); the defects catalogued here are the ones no validator reports.
+**Do not load this when:** you need the meaning of a validator code (`references/validation.md`); the defects catalogued here are the ones no validator reports, and a `references/defect-causes.md` row that names a section here is the one exception.
 
 Most iXBRL is not authored from scratch. It is *converted*: a finished
 set of financial statements already exists as a PDF, a Word file, or a

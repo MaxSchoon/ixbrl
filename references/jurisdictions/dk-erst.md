@@ -57,15 +57,6 @@ profiles:
 
 ## Start here: choose a filing profile
 
-Load this when the regulator is **Erhvervsstyrelsen** (the Danish
-Business Authority / DCCA), when the filing is a Danish **årsrapport**
-(annual report) deposited through **Regnskab Indberet** (Regnskab Basis,
-Regnskab Special, or the system-til-system API), or when the file binds
-the `gsd:`, `fsa:`, `arr:`, `mrv:`, `sob:`, `cmn:` namespaces or resolves
-a `link:schemaRef` under `http://archprod.service.eogs.dk/taxonomy/`.
-For financial-sector entities (banks, insurers, pension funds, fund
-managers) the sub-regime is **Finanstilsynet's DKFIN** taxonomy; see the *DKFIN* profile.
-
 | Situation | Profile | Section |
 |---|---|---|
 | A Danish entity in reporting class A/B/C/D deposits an årsrapport prepared under ÅRL (Danish GAAP), through Regnskab Basis, Regnskab Special, or system-til-system | ÅRL årsrapport | [Profile: ÅRL årsrapport](#profile-arl-arsrapport) |

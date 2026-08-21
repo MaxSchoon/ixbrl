@@ -46,10 +46,9 @@ in hand skips to step 3; a confirmed cause skips to step 5.
    the next. If every candidate is refuted, the symptom needs a new
    candidate, not a forced fit: say so, and go back to the rule.
 5. **Locate it in the code, at the stage the confirmed cause names.**
-   Only now open the generator, and open it at that stage (concept
-   selection, context assignment, unit and decimals, sign and label,
-   network generation, hidden section, package assembly, validator
-   invocation). A symptom that appears for one filing and not another
+   Only now open the generator, and open it at that stage, one of the
+   thirteen named in `references/defect-causes.md` § "Pipeline stages".
+   A symptom that appears for one filing and not another
    points at a data-dependent branch at that stage; find the input that
    differs before reading further.
 6. **Fix at that stage, then re-run the check that confirmed the cause,

@@ -4,7 +4,7 @@
 
 **Load this when:** you are about to review a filing in a regime you have not worked in before, or a validator passes and the numbers still look wrong.
 
-**Do not load this when:** you need a regime's own rules or a named code's fix (the file under `references/jurisdictions/`, `references/esef.md`, or `references/validation.md`); nothing here is jurisdiction-specific.
+**Do not load this when:** you need a regime's own rules or a named code's meaning (the file under `references/jurisdictions/`, `references/esef.md`, or `references/validation.md`); nothing here is jurisdiction-specific. A `references/defect-causes.md` row that names a section here is routing you to the principle behind a code, which is what this file is for.
 
 Eight things that decide whether tagged output is right, independent of
 jurisdiction. `SKILL.md` points here; read it before a first review in an

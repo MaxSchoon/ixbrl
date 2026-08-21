@@ -18,63 +18,44 @@ Each step depends on the one before it being clean. Do not skip ahead to
 the content pass because the gate "looks fine"; do not stop at the gate
 because it is green.
 
-1. **Pin the regime, the profile, the period and the release.** Read the
-   period from `<xbrli:period>`; read the release from the `schemaRef`
-   namespace date and `META-INF/taxonomyPackage.xml`; ask for the
-   intended deposit date. Open the regime file's *Start here* table and
-   choose the filing profile, then its *DTS and vintages* table to check
-   that the release is valid for the period and accepted at deposit.
-   Load: the one `references/jurisdictions/*.md` for the regime
-   (`references/esef.md` for an ESEF filing); `references/dts.md`
-   § "Bi-temporal: valid time and acceptance window" if the two clocks
-   disagree. State all four back before opening the file in earnest.
-   *Stop condition for this step:* regime, profile, period, release and
-   deposit window written down, with the instrument that binds each.
-2. **Pin the filer's classification.** Size class, filer category, IFRS
-   versus national GAAP, consolidated versus separate scope: it changes
-   which absences are defects. Load: the regime file's profile section.
-3. **Run the deterministic gate, core first.**
-   `scripts/validate_with_arelle.sh <pkg> core`, then the operative
-   profile, with `--packages` for the operative taxonomy and the
-   calculation mode the regime prescribes. Capture every message,
-   warnings included. Record the Arelle release, plugins, command line,
-   packages and offline state beside the log (SKILL.md § "Evidence and
-   authority"). Load: `references/validation.md` § 8 for the workflow and
-   § 4 if the regime's calculation basis is in question.
-   *Stop condition:* a complete log from both runs, reproducible from the
-   recorded inputs.
-4. **Classify every finding.** Route each code through
-   `references/defect-causes.md` (symptom, what the package shows,
-   candidate causes, the confirming check, where the rule lives) and the
-   code tables in `references/validation.md` § 5. Separate real defects
-   from known artefacts the regime file names (dual-scope calculation
-   cross-binding, prefix-by-design noise, diagnostic-only warnings). Quote
-   the log line verbatim and route on its leading code.
-5. **Verify concept binding where the gate cannot.** Every fact's QName
-   must resolve to a concept declared in the operative DTS:
-   `scripts/dts_profile.py <entry> --package <pkg.zip> --concept <QName>`
-   for any concept in doubt; `scripts/check_facts.py <file>` for
-   contexts, units, decimals and continuations. Load:
+1. **Pin the regime, the profile, the period and the release.** Choose the
+   regime file (`references/taxonomies.md` maps country, framework and
+   namespace prefix to one), open its *Start here* table for the profile
+   and its *DTS and vintages* table for the release. Resolve the release
+   the way `references/dts.md` § "Entry points, packages, catalogs"
+   describes, from the authority entry point the package imports, not
+   from the extension's own `schemaRef`. Ask for the intended deposit
+   date. Load: the one `references/jurisdictions/*.md` (or
+   `references/esef.md`); `references/dts.md` § "Bi-temporal: valid time
+   and acceptance window" if the period and the deposit date select
+   different releases. *Stop condition for this step:* regime, profile,
+   period, release and deposit window written down, each with the
+   instrument that binds it.
+2. **Pin the filer's classification.** Load: the regime file's profile
+   section, which says which classifications change what is required.
+3. **Run the deterministic gate, core first, then the operative profile.**
+   Record the inputs beside the log (SKILL.md § "Evidence and
+   authority"). Load: `references/validation.md` § 8 for the workflow,
+   § 4 if the regime's calculation basis is in question. *Stop
+   condition:* a complete log from both runs, warnings included,
+   reproducible from the recorded inputs.
+4. **Classify every finding.** Quote each log line verbatim and route it
+   on its leading code through `references/defect-causes.md` and the code
+   tables in `references/validation.md` § 5; separate defects from the
+   artefacts the regime file names as known.
+5. **Verify concept binding where the gate cannot.** Load:
    `references/dts.md` § "From a fact to its concept, its label, its
-   statement".
-6. **Walk the report in the viewer.** Generate an Arelle iXBRL Viewer and
-   follow its checklist: highlight tagged facts, click each
-   primary-statement subtotal to read its calculation network, search
-   for hidden facts, sample a dozen facts across statements for period,
-   unit, decimals, scale and dimensional context. Load:
-   `references/viewer.md`.
-7. **Read the statements as a financial professional.** Does the balance
-   sheet balance, do the cash-flow categories reconcile, are signs
-   consistent, do extension concepts make accounting sense, do the
-   period-end metadata facts match the statements. Walk every statement
-   value by value against the source where one exists. Load:
-   `references/conversion.md` § 10; `references/first-principles.md`
-   whenever a validator passed but the numbers look wrong.
-8. **Check the package shape.** Root clutter, `.html` versus `.xhtml`,
-   `META-INF/taxonomyPackage.xml` and, for Report Packages 1.0,
-   `META-INF/reportPackage.json`; the regime's required companion
-   documents (the Dutch auditor's report as a separate tagged document).
-   Load: `references/esef.md` § 6, or the regime file's package section.
+   statement", which gives the rule and the `scripts/dts_profile.py` and
+   `scripts/check_facts.py` invocations.
+6. **Walk the report in the viewer.** Load: `references/viewer.md` and
+   follow its checklist to the end.
+7. **Read the statements as a financial professional, value by value
+   against the source.** Load: `references/conversion.md` § 10;
+   `references/first-principles.md` whenever a validator passed but the
+   numbers look wrong.
+8. **Check the package shape.** Load: `references/esef.md` § 6 for a
+   Report Packages 1.0 deposit, or the regime file's package section, and
+   the regime file for required companion documents.
 9. **Resolve, then re-run the check that found each defect.** A fix is
    done when the finding check passes again, not when the edit is made.
    If a fix belongs in a generator rather than in this package, hand the

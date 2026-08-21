@@ -55,16 +55,6 @@ profiles:
 - [Coverage and known limitations](#coverage-and-known-limitations)
 - [Sources](#sources)
 
-Load this when the regulator is **Companies House** (UK statutory
-accounts), **HM Revenue & Customs** (Corporation Tax CT600 accounts +
-computations), the **FCA National Storage Mechanism / UKSEF** (UK listed
-issuer AFRs), or **Irish Revenue (ROS)** iXBRL Corporation Tax filing,
-or when the file binds the FRC taxonomy family (FRS 101 / FRS 102 incl.
-FRS 105 / UK IFRS / Charities / UKSEF / Irish Revenue Extension). For a
-UK-listed issuer's ESEF-shaped obligation, read `references/esef.md` for the
-tagging mechanics and return here for the UK-specific DTR / NSM /
-UKSEF overlay.
-
 ## Start here: choose a filing profile
 
 Four receivers, **one taxonomy family**: Companies House, HMRC, the FCA
@@ -147,7 +137,7 @@ DPL standalone https://xbrl.frc.org.uk/dpl/<YYYY>-01-01/dpl-<YYYY>-01-01.xsd   (
 | **2024 suite** (`2024-01-01`, v1.0.0, released 3 Nov 2023) | pattern with `2024` | `https://www.frc.org.uk/documents/6566/FRC-2024-Taxonomy-v1.0.0_GJp67Do.zip`; Charities `…/6567/Charities-2024-Taxonomy-v1.0.0_l5PHCwA.zip` | Tagging Guide section 6.6: "should only be used prior to 1 January 2025" | CH accepted; HMRC: accounting periods ending on or before **31 Mar 2027** | accepted (contrary to the FRC's own use policy) | same |
 | **2023 suite** (`2023-01-01`, v1.0.1 hotfix 17 Feb 2023; v1.0.0 21 Oct 2022) | pattern with `2023` | 2023 suite v1.0.1 ZIP on the FRC historical page | Tagging Guide section 6.6: prior to 1 Jan 2025 only | CH accepted; HMRC: periods ending on or before **31 Mar 2026** | accepted at CH; closed at HMRC for later periods | same |
 | **2022 suite** (`2022-01-01`, v1.0.0, released 8 Oct 2021) | pattern with `2022` (no standalone DPL: `dpl/2022-01-01/…` returns 403) | 2022 suite ZIP on the FRC historical page | Tagging Guide section 6.6: prior to 1 Jan 2025 only | CH accepted; HMRC: periods ending on or before **31 Mar 2025** | accepted at CH; closed at HMRC | same |
-| UKSEF 2021 / 2022 (standalone taxonomies) | `https://xbrl.frc.org.uk/uksef/<YYYY>-01-01/…` for 2021 and 2022 only; 2023 onward return 403 | FRC historical pages | the FCA NSM's generally accepted taxonomies for the AFR deadlines they covered, both windows now expired | FCA NSM table; no longer accepted | retired; from the 2023 suite UKSEF is a multi-target-document *approach* whose FRC entry points import only `frc-core`, not a taxonomy | FCA NSM; FRC design document |
+| Standalone UKSEF taxonomy, 2021 / 2022 | `https://xbrl.frc.org.uk/uksef/<YYYY>-01-01/…` for 2021 and 2022 only; 2023 onward return 403 | FRC historical pages | the FCA NSM's generally accepted taxonomies for the AFR deadlines they covered, both windows now expired | FCA NSM table; no longer accepted | retired; from the 2023 suite there is no standalone UKSEF taxonomy, only the UKSEF entry points (IFRS-UKSEF, FRS-102-UKSEF) of the FRC suite, which import `frc-core` and leave the IFRS target to ESEF | FCA NSM; FRC design document |
 
 Read the two clocks apart. The Tagging Guide's section 6.6 is a preparation-quality
 position (an old suite cannot express new disclosures); the receivers'

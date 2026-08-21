@@ -52,8 +52,8 @@ Skills are loaded into agent runtimes that enforce real size limits. A
 bloated `SKILL.md` is silently truncated by some runtimes and crowds
 out other skills from the loadable index. Keep:
 
-- **YAML frontmatter `description`** ≤ **1024 characters** (Anthropic's
-  hard limit for SKILL.md descriptions). The description is what the
+- **YAML frontmatter `description`** ≤ **1024 characters** (the hard
+  limit the skill convention sets for SKILL.md descriptions). The description is what the
   runtime reads to decide whether to load this skill at all, so the
   budget is precious.
 - **`SKILL.md` file** ≤ **32 KiB (32,768 bytes)**, frontmatter
@@ -111,12 +111,12 @@ most worth defending in review.
   domain fact. The moment a path says which `decimals` value is right or
   what anchoring requires, that rule exists twice and the copies will
   diverge; put the rule in a reference and have the path name it. A path
-  that grows past roughly 120 lines (40 for a path that only composes
-  others) is restating references and must be cut back. Paths live at the
+  that grows past 120 lines (40 for a path that only composes others;
+  `tests/check_skill.py` enforces both) is restating references and must be cut back. Paths live at the
   repository root, not under `references/`, so the jurisdiction structure
   gate never sees them.
 - `references/*.md` hold the knowledge. Each opens with `Load this when`
-  and `Do not load this when`, one sentence each, decidable from the
+  and `Do not load this when`, one short paragraph each, decidable from the
   agent's situation; every file over 100 lines carries a contents list
   after the attribution line (jurisdiction files use a bold `Contents`
   line rather than a heading, because their landmarks are gated).

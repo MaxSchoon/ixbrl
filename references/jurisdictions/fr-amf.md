@@ -47,15 +47,6 @@ profiles:
 
 ## Start here: choose a filing profile
 
-Load this when the jurisdiction is **France**: a listed-issuer annual
-financial report filed with the **AMF** (Autorité des marchés
-financiers), the French statutory annual-accounts deposit, the *liasse
-fiscale*, or French banking/insurance supervisory reporting. For ESEF
-mechanics common to every EU Member State (legal basis, anchoring, block
-tagging, extension taxonomies, the `ESEF.*` codes) stay in `references/esef.md`;
-this file adds only the **France layer** on top of it and must not
-duplicate or contradict it.
-
 The single most useful thing here is to **stop an agent from treating a
 non-XBRL French obligation as an iXBRL job**. France has exactly one
 in-force *inline* XBRL mandate (ESEF, listed issuers with IFRS

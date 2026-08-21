@@ -2,9 +2,9 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
-**Load this when:** the package already validates and the remaining question is what the rendered document shows a reader.
+**Load this when:** a validation run has been made and the remaining question is what the rendered document shows a reader, or a partially tagged draft needs the viewer's review mode to show what is still untagged.
 
-**Do not load this when:** nothing has been validated yet; run the pipeline and read `references/validation.md` first.
+**Do not load this when:** no validation has been attempted yet; run the pipeline and read `references/validation.md` first. A deposit-quality review needs a clean gate; a draft review does not.
 
 Use the Arelle iXBRL Viewer as the **visual review workbench**, not as
 a replacement for validation. The viewer is the tool that makes visible

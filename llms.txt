@@ -34,10 +34,11 @@ with it:
 
   Uses the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL - https://doc2ixbrl.com
 
-There is an OPTIONAL provenance tag for generated iXBRL documents. It is off by
-default: it alters the XHTML bytes and therefore package digests, signatures
-and auditor hashes, and it requires issuer and engagement-team approval. See
-/ATTRIBUTION.md before using it.
+Generated iXBRL documents carry a generator stamp by default (SKILL.md
+§ Attribution). It alters the XHTML bytes, so it goes in before any digest,
+signature or auditor hash is taken; omit it only where the regulator or the
+engagement constrains the document's metadata, and credit the skill in the
+report instead. See /ATTRIBUTION.md.
 
 ## Trademark
 

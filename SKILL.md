@@ -22,16 +22,18 @@ Pick the row that matches the artifacts you have, not the topic you think
 the question is about. Where a row names a path, read that file first: it
 gives the order of work, the one or two references to load at each step,
 and the observable condition that ends the work. Jurisdiction is never a
-row here; it is step 1 of every path.
+row here; it is step 1 of every path, and when the regime is not
+stated, `references/taxonomies.md` maps country, framework and namespace
+prefix to the regime file.
 
-| What you have | What you are doing | Read first |
+| What you have | What the question is | Read first |
 |---|---|---|
-| A report package (`.xbri`, `.zip`) or an iXBRL document (`.xhtml`), and a question about whether it is correct or how to fix it | Reviewing a filing | `paths/review-a-package.md` |
-| A source document (PDF, DOCX, accounts export) or a data model, and no package yet | Compiling a filing | `paths/compile-a-package.md` |
-| A validator message, a wrong fact or a wrong rendering, **and** the code that produced the package | Tracing a defect to its cause in a generator | `paths/diagnose-a-defect.md` |
-| A generator, a corpus of real reports, and rounds to spend on it | Improving a generator against real filings | `paths/improvement-cycle.md` |
-| Source code that reads or writes XBRL, with no package under review | Building software | the reference index below, starting at `references/spec.md`, `references/types.md` and `references/dts.md`; treat validator and tool behaviour as evidence of an implementation, never as the normative rule |
-| A question, and no artifact | Answering or learning | the reference index below |
+| A report package (`.xbri`, `.zip`) or an iXBRL document (`.xhtml`), and a question about whether it is correct or how to fix it | whether this package is fit to file, or what to do about a defect in it | `paths/review-a-package.md` |
+| A source document (PDF, DOCX, accounts export) or a data model, and no package yet | how to get from this source to a package that is fit to file | `paths/compile-a-package.md` |
+| A validator message, a wrong fact or a wrong rendering, **and** the code that produced the package | where in that code the symptom comes from | `paths/diagnose-a-defect.md` |
+| A generator, a corpus of real reports, and rounds to spend on it | how to make the generator's output better, round after round | `paths/improvement-cycle.md` |
+| Source code that reads or writes XBRL, with no package under review | what the software must get right | the reference index below, starting at `references/first-principles.md`, `references/spec.md`, `references/types.md` and `references/dts.md`; treat validator and tool behaviour as evidence of an implementation, never as the normative rule |
+| A question, and no artifact | what a rule says, or why | the reference index below; for a bare validator code, meaning first (`references/validation.md`), causes second (`references/defect-causes.md`) |
 
 **Before any judgment about a package, pin the profile and the period.**
 Taxonomies and filing rules are versioned per financial year, and the
@@ -60,14 +62,15 @@ is a fact to tag, not a rule selector.
 Each path holds **ordering only**: the steps, the reference to load at
 each step, and the stop condition. Every rule it applies lives in a
 reference, which it names. If a path and a reference ever disagree, the
-reference is right and the path has a bug.
+reference is right and the path has a bug. The path file is
+authoritative; the *It ends when* column summarises its stop condition.
 
 | Path | Load it when | It ends when |
 |---|---|---|
-| `paths/review-a-package.md` | you must decide whether a package is fit to file, or resolve defects found in it | the deterministic gate is clean in the operative profile, every statement has been walked value by value, and each resolved defect's finding check has been re-run |
+| `paths/review-a-package.md` | you must decide whether a package is fit to file, or resolve defects found in it | the deterministic gate is clean in the operative profile, every statement has been walked value by value, and each resolved defect's finding check has been re-run, and the categorised report is written |
 | `paths/compile-a-package.md` | you are producing a package from a source document or data model | the review path's stop condition is met on the package you produced |
-| `paths/diagnose-a-defect.md` | a symptom in a package must be traced to the stage of a generator that caused it | one candidate cause is confirmed by its check, the fix is made at that stage, and the check plus the gate pass on a fresh package |
-| `paths/improvement-cycle.md` | you are running repeated rounds of convert, review, diagnose and fix against a corpus | the round's pre-registered defect budget is met or the corpus is exhausted, and the round's record lets the next round tell whether this one worked |
+| `paths/diagnose-a-defect.md` | a symptom in a package must be traced to the stage of a generator that caused it | one candidate cause is confirmed by its check, the fix is made at that stage, the check plus the gate pass on a fresh package, and the symptom, the refuted candidates, the confirmed cause and the check are recorded |
+| `paths/improvement-cycle.md` | you are running repeated rounds of convert, review, diagnose and fix against a corpus | the round's pre-registered defect budget is met or the corpus is exhausted, the reconverted corpus shows no defect class made worse, and the round's record lets the next round tell whether this one worked |
 
 ## Reference index
 
@@ -78,7 +81,6 @@ open with a contents list.
 | Read when the question is about | File |
 |---|---|
 | The eight things that decide whether tagged output is right in any regime: decimals, sign vs balance vs `preferredLabel`, period type, identifier scheme, dimensions, anchoring, block tagging, the hidden section; read before a first review in an unfamiliar regime and whenever a validator passes but the numbers look wrong | `references/first-principles.md` |
-| A symptom or validator code and what could have produced it: candidate causes by pipeline stage, each with the check that confirms or refutes it, and where the rule lives | `references/defect-causes.md` |
 | What `ix:nonFraction`, `decimals`, `scale`, `contextRef`, the transformation registry and calc weights mean; the iXBRL 1.1 and XBRL 2.1 mechanics of one fact | `references/spec.md` |
 | QNames and NCNames, substitution groups, item types (monetary, decimal, shares, pure, textBlock, date, boolean, QName), concept attributes (`periodType`, `balance`, `nillable`) | `references/types.md` |
 | The DTS: how discovery works, entry points vs packages vs catalogs, offline resolution, how a fact resolves to its concept, label and statement, six regulator DTSs compared by measurement, valid time vs acceptance window, and `scripts/dts_profile.py`; read when a QName does not resolve, a label or statement binding is in doubt, or a taxonomy version must be pinned | `references/dts.md` |
@@ -88,6 +90,7 @@ open with a contents list.
 | The Label Role Registry (negated labels), the Data Types Registry, URI resolution conventions | `references/registries.md` |
 | Which taxonomies exist, who issues them, who must file, and pointers to every regime's release table | `references/taxonomies.md` |
 | Arelle CLI and plugins, the formula linkbase, Calc 1.1 vs 1.0, the full anti-pattern list, and every error code family with cause and fix | `references/validation.md` |
+| A symptom or validator code and what could have produced it: candidate causes by pipeline stage, each with the check that confirms or refutes it, and where the rule lives | `references/defect-causes.md` |
 | Preparing and driving the Arelle iXBRL Viewer for a visual review: document sets, fact inspector, search, duplicate-fact cycle, Calc 1.1 toolbar, and what the viewer does not catch | `references/viewer.md` |
 | Turning a PDF, Word or accounts-production document into faithful iXBRL: hierarchy, abstracts, periods, completeness, the changes-in-equity matrix, calculation completeness, label discipline, the hidden section, and the content-level review checklist | `references/conversion.md` |
 | ESEF: legal basis, the Reporting Manual, anchoring, extension taxonomies, report packages, NCAs, `ESEF.*` codes, and the IFRS and ESEF release tables | `references/esef.md` |

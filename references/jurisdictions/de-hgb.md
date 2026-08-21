@@ -46,18 +46,6 @@ profiles:
 
 ## Start here: choose a filing profile
 
-Load this when the entity is German and the filing is one of three
-structured-reporting regimes: **E-Bilanz** (tax XBRL under § 5b EStG),
-**Offenlegung / Hinterlegung** (statutory publication of annual accounts
-under §§ 325 ff. HGB to the Unternehmensregister), or **ESEF** (listed
-Inlandsemittent under § 114 WpHG / § 328 Abs. 1 HGB, BaFin as NCA). The
-most important fact for an iXBRL practitioner is in *Which regime? The
-three-way split*: **only the ESEF regime is Inline XBRL**; the other two
-are plain XBRL 2.1 instances. For generic ESEF mechanics (anchoring,
-block tagging, Reporting Manual, report-package layout, `ESEF.*` codes) stay in `references/esef.md`; for bank/insurer
-prudential DPM reporting use `references/dpm.md`. This file carries **only the German
-jurisdiction layer**.
-
 | Situation | Profile | Section |
 |---|---|---|
 | Tax balance sheet and P&L to the Finanzverwaltung, transmitted over ELSTER/ERiC as a plain XBRL 2.1 instance | E-Bilanz | [Profile: E-Bilanz](#profile-e-bilanz) |
