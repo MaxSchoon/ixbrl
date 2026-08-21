@@ -81,6 +81,53 @@ four things:
 | CT Computational taxonomy (2021 / 2023 / 2024 / 2025 current) | **HMRC** | The tax computation attached to a CT600 |
 | Detailed Profit & Loss (DPL) | **HMRC** extension, published inside the FRC suite (namespace `http://xbrl.frc.org.uk/dpl/…`; standalone through FRC 2021 DPL, a section of each accounts entry point from FRC 2022) | The detailed P&L, tagged in the accounts **or** the computation, not both (see the *HMRC CT600* profile) |
 
+### DTS and vintages
+
+Which suite to load, where it lives, and which receiver accepts it when.
+Vocabulary and column order are fixed in `references/dts.md`
+§ Vocabulary. Verified 2026-08-21; every entry point below returned 200
+that day. The architecture behind the table: each accounts entry point is
+a thin shell (two imports, six `linkbaseRef`s) over one shared core,
+`https://xbrl.frc.org.uk/fr/<YYYY>-01-01/core/frc-core-<YYYY>-01-01.xsd`,
+so an entry point is a **presentation view over one concept set**, not a
+distinct concept set. Entry-point URLs are fully regular for every suite
+2022 to 2026:
+
+```text
+FRS 102        https://xbrl.frc.org.uk/FRS-102/<YYYY>-01-01/FRS-102-<YYYY>-01-01.xsd
+FRS 101        https://xbrl.frc.org.uk/FRS-101/<YYYY>-01-01/FRS-101-<YYYY>-01-01.xsd
+UK IFRS        https://xbrl.frc.org.uk/IFRS/<YYYY>-01-01/IFRS-<YYYY>-01-01.xsd
+FRS 102 UKSEF  https://xbrl.frc.org.uk/FRS-102/<YYYY>-01-01/UKSEF/FRS-102-<YYYY>-01-01.xsd
+IFRS UKSEF     https://xbrl.frc.org.uk/IFRS/<YYYY>-01-01/UKSEF/IFRS-<YYYY>-01-01.xsd
+DPL standalone https://xbrl.frc.org.uk/dpl/<YYYY>-01-01/dpl-<YYYY>-01-01.xsd   (2023 onward)
+```
+
+| Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
+|---|---|---|---|---|---|---|
+| **2026 suite** (`2026-01-01`, v1.0.0, released 18 Nov 2025) | pattern above with `2026` | `https://www.frc.org.uk/documents/8907/FRC-2026-Taxonomy-v1.0.0.zip`; Charities `…/8898/Charities-2026-Taxonomy-v1.0.0.zip`; Irish Revenue `…/8899/Irish-Revenue-2026-Taxonomy-v1.0.0.zip` | FRC Tagging Guide v13.0 section 6.6: "the latest version"; "All reporters may elect to use this 2026 taxonomy suite" | Companies House from ~1 Apr 2026 (XML Gateway Forum, 22 Dec 2025); HMRC: acceptance end "to be advised" | current | FRC 2026 suite page; Tagging Guide v13.0 § 6.6; CH forum; "Taxonomies accepted by HMRC" (updated 17 Apr 2026) |
+| **2025 suite** (`2025-01-01`, v1.0.0, released 18 Oct 2024) | pattern with `2025` | 2025 suite ZIP on the FRC 2025 page (7.8 MB) | Tagging Guide section 6.6: "the penultimate version" | CH accepted; HMRC end "to be advised" | accepted | same |
+| **2024 suite** (`2024-01-01`, v1.0.0, released 3 Nov 2023) | pattern with `2024` | `https://www.frc.org.uk/documents/6566/FRC-2024-Taxonomy-v1.0.0_GJp67Do.zip`; Charities `…/6567/Charities-2024-Taxonomy-v1.0.0_l5PHCwA.zip` | Tagging Guide section 6.6: "should only be used prior to 1 January 2025" | CH accepted; HMRC: accounting periods ending on or before **31 Mar 2027** | accepted (contrary to the FRC's own use policy) | same |
+| **2023 suite** (`2023-01-01`, v1.0.1 hotfix 17 Feb 2023; v1.0.0 21 Oct 2022) | pattern with `2023` | 2023 suite v1.0.1 ZIP on the FRC historical page | Tagging Guide section 6.6: prior to 1 Jan 2025 only | CH accepted; HMRC: periods ending on or before **31 Mar 2026** | accepted at CH; closed at HMRC for later periods | same |
+| **2022 suite** (`2022-01-01`, v1.0.0, released 8 Oct 2021) | pattern with `2022` (no standalone DPL: `dpl/2022-01-01/…` returns 403) | 2022 suite ZIP on the FRC historical page | Tagging Guide section 6.6: prior to 1 Jan 2025 only | CH accepted; HMRC: periods ending on or before **31 Mar 2025** | accepted at CH; closed at HMRC | same |
+| UKSEF 2021 / 2022 (standalone, `https://xbrl.frc.org.uk/uksef/…`) | the only standalone UKSEF taxonomies that exist; 2023 onward return 403 | FRC historical pages | listed by the FCA NSM as generally accepted taxonomies, both now expired | FCA NSM table | retired; from 2023 UKSEF is the multi-target-document *approach* whose FRC entry points import only `frc-core` | FCA NSM; FRC design document |
+
+Read the two clocks apart. The Tagging Guide's section 6.6 is a preparation-quality
+position (an old suite cannot express new disclosures); the receivers'
+tables are the acceptance rule, and they are more permissive. Never turn
+that section into a gate prediction. The FRC's own page says it: "The specific
+taxonomy versions that preparers can use, including dates for adoption,
+are governed by the requirements and guidance of the relevant data
+collectors".
+
+Three measured facts about the DTS itself that change how binding works
+here (`references/dts.md` § Six DTSs compared): the suite ships **no
+calculation linkbase** and states that the label, not the `balance`
+attribute, decides sign; the label roles are standard, documentation,
+verbose and terse plus the two deprecation roles (no negated, total or
+period roles), in English and **Welsh at near-parity**; and three proprietary definition arcroles (`inflow`,
+`outflow`, `crossref`) plus 2 356 `targetRole` arcs carry structure a
+standard processor ignores.
+
 ### Bi-temporal cheatsheet: which rule applied when
 
 For each rule, ask: *was this in force when this report was prepared?*

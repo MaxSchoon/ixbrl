@@ -39,12 +39,47 @@ versions. Version 69 (March 2024) removed the Inline XBRL technical
 detail from chapter 6 into the EDGAR XBRL Guide, and the Release 26.3
 draft, deploying 14 September 2026, removes what remains.
 
+### DTS and vintages
+
+Which GRT vintage to load, where it lives, and when EDGAR accepts it.
+Vocabulary and column order are fixed in `references/dts.md`
+§ Vocabulary. Verified 2026-08-21; every URL marked 200 was fetched that
+day (`sec.gov` answers only a descriptive `User-Agent`; `xbrl.fasb.org`
+serves every path below its root). The architecture: `us-gaap` core plus
+`srt` plus `dei` plus the SEC code lists; there are **no per-industry
+entry points** in any vintage back to 2016, the industry dimension lives in
+the statement modules (`stm/…`); `entire/us-gaap-entryPoint-std-YYYY.xsd`
+omits documentation labels, references and deprecated elements, which
+`…-all-YYYY.xsd` carries. The GRT uses **Calculations 1.1**
+(`https://xbrl.org/2023/arcrole/summation-item`) from the 2024 vintage;
+2022 and 2023 used the XBRL 2.1 arcrole.
+
+| Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
+|---|---|---|---|---|---|---|
+| **2026** GRT + SRT (FASB 15 Dec 2025) | `https://xbrl.fasb.org/us-gaap/2026/elts/us-gaap-2026.xsd`; `https://xbrl.fasb.org/srt/2026/elts/srt-2026.xsd`; entry points under `https://xbrl.fasb.org/us-gaap/2026/entire/` | `us-gaap-2026.zip`, `srt-2026.zip` in the same directories | SEC: "for the earliest reporting period that ends on or after **March 16, 2026**, but not for reporting periods that end before" | EDGAR Release 26.1, **16 Mar 2026**, onward; removal not announced | current | SEC 2026 taxonomies announcement; `https://www.sec.gov/files/edgartaxonomies.xml` (v77; the `/info/edgar/` path redirects here) |
+| **2025** GRT + SRT (FASB 16 Dec 2024) | `…/us-gaap/2025/elts/us-gaap-2025.xsd`; `…/srt/2025/elts/srt-2025.xsd` (200) | `us-gaap-2025.zip`, `srt-2025.zip` | periods ending on or after **17 Mar 2025** | EDGAR Release 25.1, **17 Mar 2025**, onward; removal not announced | accepted | SEC 2025 announcement |
+| **2024** GRT + SRT (FASB 14 Dec 2023) | `…/us-gaap/2024/elts/us-gaap-2024.xsd`; `…/srt/2024/elts/srt-2024.xsd` (200) | `us-gaap-2024.zip`, `srt-2024.zip` | periods ending on or after **18 Mar 2024** | EDGAR Release 24.1, **18 Mar 2024**; removal was due at Release 26.2 (June 2026), which the SEC **cancelled on 1 Jun 2026**; now planned for Release 26.3, **14 Sep 2026**, "may approve or disapprove" | **still accepted** on 2026-08-21; three vintages live at once | SEC Release 26.3 preview (14 Aug 2026); cancellation notice |
+| 2023 GRT + SRT (FASB 16 Dec 2022) | `…/us-gaap/2023/elts/us-gaap-2023.xsd` (200, still fetchable) | | periods ending on or after 20 Mar 2023 | EDGAR 23.1 (20 Mar 2023) to Release 25.2, **16 Jun 2025** | removed | SEC 25.2 announcement |
+| 2022 GRT + SRT (FASB 17 Dec 2021) | `…/us-gaap/2022/elts/us-gaap-2022.xsd` (200, still fetchable) | | periods ending on or after 21 Mar 2022 | EDGAR 22.1 (21 Mar 2022) to Release 24.2, **1 Jul 2024** | removed | SEC 24.2 announcement |
+| DEI, ECD, CYD, SBS, SRO, COUNTRY, CURRENCY, EXCH, NAICS, SIC, SNJ, STPR | `https://xbrl.sec.gov/<name>/2026/<name>-2026.xsd` (2026 core) | | same year as the GRT in the submission | 2024, 2025, 2026 accepted (`edgartaxonomies.xml` v77) | current | `edgartaxonomies.xml` |
+| IFRS (for FPIs) | `https://xbrl.ifrs.org/taxonomy/2025-03-27/full_ifrs/full_ifrs-cor_2025-03-27.xsd` | | the standing exception to version synchronisation | 2021, 2022, 2024, 2025 accepted; no IFRS 2026 row, because the IFRS Foundation issued no 2026 taxonomy and the 2025 taxonomy remains current for 2026 reporting | current | `edgartaxonomies.xml` |
+
+The rule, from the EDGAR XBRL Guide (August 2026) § 1: taxonomies are
+"updated at least annually … and removed from use after two years". In
+practice a vintage is added at the `NN.1` release in March and removed at
+the `NN.2` release in June or July two years later, a window of about two
+years and three months, stretched this year by the cancelled 26.2. **A
+fetchable URL is not an accepted vintage**: 2022 and 2023 still resolve
+and are refused. The machine-readable authority is
+`https://www.sec.gov/files/edgartaxonomies.xml`; the human pages no
+longer carry a table.
+
 ### Recent rule updates (last ~24 months)
 
 - **Pay-Versus-Performance**: Release **34-95607**, adopted 25 August 2022, effective 11 October 2022. Compliance for proxy / information statements with fiscal years ending on or after **16 December 2022**. Each value in the PVP table is separately tagged; footnote, relationship, and Tabular List disclosures are block-text tagged. Smaller reporting companies provide Inline XBRL beginning the third PVP filing. Tagging uses the 2022Q4 ECD taxonomy.
 - **Cybersecurity Risk Management, Strategy, Governance, and Incident Disclosure**: Release **33-11216 / 34-97989**, adopted 26 July 2023. New Form 8-K Item 1.05 (and 6-K equivalent) for material cybersecurity incidents, due four business days after materiality determination. Annual-report disclosures sit at **Reg S-K Item 106 on Form 10-K** and at **Item 16K on Form 20-F**, not Item 106 on both. The Inline XBRL tagging obligation runs **one year after** each disclosure's own compliance date, so the two dates differ and must not be conflated: **Form 10-K Item 106 / Form 20-F Item 16K** are tagged for **fiscal years ending on or after 15 December 2024**, while **Form 8-K Item 1.05 / 6-K** (material-incident disclosures) are tagged from **18 December 2024**. Both apply to **all registrants subject to these rules, including SRCs**. The SRC extension applied to the incident *disclosure*, not to tagging. The rules do **not** reach every filer: eligible Form 40-F filers, asset-backed issuers, and registered investment companies are outside them.
 - **Tailored Shareholder Reports**: Release **33-11125**, adopted 26 October 2022. Open-end funds (Form N-1A) must transmit streamlined annual / semi-annual shareholder reports in Form N-CSR using Inline XBRL for transmittals on or after **24 July 2024**.
-- **EDGAR 25.2 / 2026 Taxonomies Updates**: annual taxonomy refreshes (US-GAAP 2025, SRT 2025, DEI 2026) became loadable in EDGAR through 2025–2026. Filers transitioning concept usage should anchor any extensions to the new base elements.
+- **EDGAR 25.2 / 2026 Taxonomies Updates**: annual taxonomy refreshes (US-GAAP 2025, SRT 2025, DEI 2026) became loadable in EDGAR through 2025–2026. Filers transitioning concept usage should re-map extensions onto the new base elements where one is available and appropriate; anchoring arcs remain optional (see *Custom (extension) elements*).
 
 Note: Release **33-11038** is the *proposed* cybersecurity rule
 (March 2022). The final cybersecurity rule is **33-11216**. The
@@ -115,7 +150,7 @@ Extensions are declared in the filer's company schema
 - Declared in the filer's namespace, with a stable PascalCase name (no spaces).
 - Standard Label and (where applicable) Terse, Verbose, Negated, or Period-Start/End labels in a label linkbase.
 - Wired into a presentation linkbase under the appropriate parent and given a calculation-linkbase relationship if the value participates in an arithmetic roll-up.
-- **Anchored** to the closest base-taxonomy element via a `widerNarrower` (or comparable) definition-linkbase relationship (the SEC equivalent of ESEF anchoring); enforced for IFRS filers under the IFRS-Taxonomy entry-point rules.
+- **Not anchored.** Neither the EDGAR XBRL Guide (August 2026) nor EFM Volume II chapter 6 requires an extension to be anchored; the words "anchor" and "wider" do not occur in either. The ESMA `wider-narrower` arcrole is on EDGAR's list of supported base files, so an anchoring arc is *permitted*, never required. An earlier edition of this file stated the opposite.
 
 The EFM and EDGAR XBRL Guide explicitly require filers to use a base
 element when one is "available and appropriate" before creating an

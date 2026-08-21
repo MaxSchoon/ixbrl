@@ -81,6 +81,41 @@ Germany makes this acute on several axes at once:
 State the regime, the reporting year, and the taxonomy/rule version
 explicitly before you call anything a defect.
 
+### DTS and vintages
+
+Which HGB taxonomy to load, where it lives, and when ERiC accepts it.
+Vocabulary and column order are fixed in `references/dts.md`
+§ Vocabulary. Verified 2026-08-21 by downloading the 6.10 package. The
+architecture: a GCD module plus the GAAP modules (`de-gaap-ci`, `de-bra`,
+`de-fi`, `de-pi`, `de-ins`), each with **shells** as entry points (16 in
+6.10: `de-gaap-ci-2026-04-01-shell.xsd`, `-shell-fiscal.xsd`,
+`-shell-group.xsd` for consolidated accounts, `-shell-microbilg.xsd` and
+`-shell-fiscal-microbilg.xsd` as separate MicroBilG entry points, `-staffelform`
+shells for FI and PI). Admissibility (`Mussfeld`, `notPermittedFor`,
+`ValidSince` / `ValidThrough`, legal-form and sector gates) travels as
+**reference-linkbase parts** (`hgbref:*` under
+`mandatoryDisclosureRef`), not as element attributes. Labels are de and
+en in `label`, `terseLabel`, `documentation`, `definitionGuidance`, a
+60-character `terse60Label`, and `positiveLabel` / `negativeLabel`;
+presentation and calculation linkbases are split physically per statement.
+Entry-point URIs (`http://www.xbrl.de/taxonomies/…`) do not dereference;
+load the package. The package ships XBRL versioning linkbases against the
+prior year under `versioning/`.
+
+| Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
+|---|---|---|---|---|---|---|
+| **6.10** (taxonomy date 2026-04-01; BMF-Schreiben 8 Jun 2026) | `de-{gcd,gaap-ci,bra,fi,pi,ins}-2026-04-01-shell*.xsd` (16 shells) | `https://www.esteuer.de/download/taxonomie_20260615/germany-gaap-taxonomy-v6.10-2026-04-01-xbrl.zip` (200; note **`germany-`**, earlier years use `german-`); table linkbase `…/Tabellenlayouts-v6.10-2026-04-01-table-linkbase.zip` | Wirtschaftsjahre beginning **after 31 Dec 2026**; may be used for WJ 2026 or 2026/2027 | ERiC test cases from ~Nov 2026; live cases (Echtfälle) from ~May 2027 | published, not yet the live filing version | esteuer.de; BMF-Schreiben |
+| **6.9** (2025-04-01; BMF-Schreiben 10 Jun 2025) | `de-*-2025-04-01-shell*.xsd` | `https://www.esteuer.de/download/taxonomie_20250618/german-gaap-taxonomy-v6.9-2025-04-01-xbrl.zip` (200) | WJ beginning after 31 Dec 2025; usable for WJ 2025 or 2025/2026 | Echtfälle since ~May 2026 | **current filing version** | esteuer.de |
+| 6.8 (2024-04-01; BMF-Schreiben 27 May 2024) | `de-*-2024-04-01-shell*.xsd` | esteuer.de 2024 folder | WJ beginning after 31 Dec 2024; usable for WJ 2024 or 2024/2025 | Echtfälle since ~May 2025 | accepted for its window | esteuer.de |
+| 6.7 and earlier | `de-*-YYYY-04-01-shell*.xsd` | historical folders | per year, each with its own BMF-Schreiben | per year | historical | esteuer.de |
+| "Previewfassung Modernisierung Taxonomie" | | `…/taxonomie_20260615/Previewfassung_Modernisierung_Taxonomie.zip` | none: testing only | not accepted | preview | esteuer.de |
+
+The rule is a Wirtschaftsjahr rule, not a calendar rule, and each version
+is additionally tolerated ("nicht beanstandet") for the immediately
+preceding Wirtschaftsjahr; both that and whether ERiC had shipped
+Echtfall support at transmission time must agree before a version is
+called wrong.
+
 ---
 
 <a id="profile-e-bilanz"></a>
