@@ -2,9 +2,9 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
-**Load this when:** you are implementing or reading Generic Links (`gen:*`), the XBRL Functions Registry (`xfi:` / `xff:`), or a Versioning report: the plumbing beneath Formula, Table Linkbase and taxonomy migrations.
+**Load this when:** you are implementing or reading Generic Links (`gen:*`), the XBRL Functions Registry (`xfi:` / `xff:`), or a Versioning report: the plumbing beneath Formula, Table Linkbase and taxonomy migrations; or a package under review or construction turns out to carry one of them, in which case come here after the path.
 
-**Do not load this when:** the package under review or construction uses none of them, which is the usual case for a financial-reporting package; start at `references/structure.md` or `references/validation.md`, and return here after the path if the taxonomy carries `gen:*` links, `xfi:` / `xff:` functions or a Versioning report.
+**Do not load this when:** the package under review or construction uses none of them, which is the usual case for a financial-reporting package; start at `references/structure.md` or `references/validation.md`.
 
 Every namespace URI, element name, and arcrole below was verified against the specifications listed under **Sources**.
 

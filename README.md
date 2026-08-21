@@ -22,8 +22,8 @@ needs it, and scripts it runs when knowing is not enough.
 ### The entry point
 
 `SKILL.md` loads automatically when the skill triggers. It holds the routing
-logic and the few rules every path shares, and no domain reference
-material: match what is in front of the agent to one of four
+logic, the rules every path shares, and the skill's own attribution and
+editing notes, and no domain reference material: match what is in front of the agent to one of four
 paths or to the reference index, pin the profile and the period before any
 judgment, then go to the reference that answers the question.
 

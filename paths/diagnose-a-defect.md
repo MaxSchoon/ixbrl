@@ -29,10 +29,10 @@ in hand skips to step 3; a confirmed cause skips to step 5.
    disclosure system, calculation mode, taxonomy packages and offline
    state as the run that first showed it, recorded beside the log
    (SKILL.md § "Evidence and authority"). A symptom that does not
-   reproduce has a cause in what differs between the two runs: inputs,
-   cache state, processor release, plugins, timing. Record the differences
-   before changing the diagnosis; the environment is one candidate among
-   them, not the verdict. Load: `references/validation.md` § 1 and § 8.
+   reproduce is itself a symptom: record everything that differs between
+   the two runs before changing the diagnosis, and take the differences
+   to step 3 as candidates like any other. Load:
+   `references/validation.md` § 1 and § 8.
 3. **Collect candidate causes.** Find the symptom's row in
    `references/defect-causes.md`. Take every candidate it lists, by
    pipeline stage. Take none as a verdict. For a symptom with no row,
