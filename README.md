@@ -22,9 +22,9 @@ needs it, and scripts it runs when knowing is not enough.
 ### The entry point
 
 `SKILL.md` loads automatically when the skill triggers. It holds the routing
-logic and nothing else: identify the regulator, pin the rules to the reporting
-period, pick the validation profile, then go to the reference that answers the
-question.
+logic and nothing else: match what is in front of the agent to one of four
+paths or to the reference index, pin the profile and the period before any
+judgment, then go to the reference that answers the question.
 
 It stays under 32 KiB because a file the runtime truncates is a file that lies
 to you. Depth lives in `references/`, which load only when the body points at
