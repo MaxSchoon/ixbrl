@@ -61,9 +61,11 @@ is a fact to tag, not a rule selector.
 
 Each path holds **ordering only**: the steps, the reference to load at
 each step, and the stop condition. Every rule it applies lives in a
-reference, which it names. If a path and a reference ever disagree, the
-reference is right and the path has a bug. The path file is
-authoritative; the *It ends when* column summarises its stop condition.
+reference, which it names. Authority is by layer: a reference decides a
+domain rule, a path file decides ordering and its stop condition, and the
+*It ends when* column below only summarises the path. If a path and a
+reference disagree about a domain rule, the reference is right and the
+path has a bug.
 
 | Path | Load it when | It ends when |
 |---|---|---|
