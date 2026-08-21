@@ -2,7 +2,24 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** you are choosing or debugging a QName, NCName, SQName, substitution group, or item type, including which attributes a given item type permits on a concept declaration.
+
+**Do not load this when:** the concept is already settled and you need its behaviour in an instance (`references/spec.md`), or the question is which document declares it (`references/dts.md`).
+
 Every claim below is tied to a specification fetched live; URLs listed under **Sources**.
+
+## Contents
+
+- [NCName](#ncname)
+- [QName (lexical and value space)](#qname-lexical-and-value-space)
+- [xs:QName, xs:NCName, xs:Name (XML Schema datatypes)](#xml-schema-datatypes)
+- [SQName (XBRL OIM)](#sqname-xbrl-oim)
+- [Substitution groups](#substitution-groups)
+- [Item types: canonical catalog](#item-types-canonical-catalog)
+- [Concept declaration attributes that depend on item type](#concept-declaration-attributes-that-depend-on-item-type)
+- [SQName usage in xBRL-JSON and xBRL-CSV](#sqname-usage-in-xbrl-json-and-xbrl-csv)
+- [Common QName errors](#common-qname-errors)
+- [Sources](#sources)
 
 ## NCName
 
@@ -56,6 +73,8 @@ filings:
 For attribute names: an unprefixed attribute is **not** in any namespace
 (it is in "no namespace"). This differs from elements, where a default
 namespace applies to unprefixed names.
+
+<a id="xml-schema-datatypes"></a>
 
 ## xs:QName, xs:NCName, xs:Name (XML Schema datatypes)
 

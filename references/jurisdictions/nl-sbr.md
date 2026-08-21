@@ -15,6 +15,44 @@ profiles:
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** the receiver is Dutch (KvK, AFM, Belastingdienst or DNB), or the file uses the `bw2-titel9:`, `rj:` or `kvk:` namespaces.
+
+**Do not load this when:** the issuer is listed and the question is generic ESEF mechanics (`references/esef.md`); return here only for the SBR overlays.
+
+**Contents**
+
+- [Start here: choose a filing profile](#start-here-choose-a-filing-profile)
+- [Vintage and applicability](#vintage-and-applicability)
+  - [First: which Nederlandse Taxonomie applies?](#first-which-nederlandse-taxonomie-applies)
+  - [DTS and vintages](#dts-and-vintages)
+  - [Two taxonomy trees, same prefix family](#two-taxonomy-trees-same-prefix-family)
+  - [Bi-temporal cheatsheet (which rule applied when)](#bi-temporal-cheatsheet-which-rule-applied-when)
+  - [RTS essentials for SBR-domein Handelsregister (2025 / 2026)](#rts-essentials-for-sbr-domein-handelsregister-2025--2026)
+- [Profile: KvK Handelsregister iXBRL annual accounts](#profile-kvk-ixbrl-annual-accounts)
+  - [Entry point by entity-size class (Title 9 Book 2 BW)](#entry-point-by-entity-size-class-title-9-book-2-bw)
+  - [The dual-scope pattern (consolidated + separate)](#the-dual-scope-pattern-consolidated--separate)
+  - [What the RTS requires when both scopes are present](#what-the-rts-requires-when-both-scopes-are-present)
+  - [Placeholder membership across both scopes](#placeholder-membership-across-both-scopes)
+  - [Calculation linkbase scope-bleed, and why Calc 1.1 is the RTS basis](#calculation-linkbase-scope-bleed-and-why-calc-11-is-the-rts-basis)
+  - [Per-scope value-correctness: what Arelle won't catch](#per-scope-value-correctness-what-arelle-wont-catch)
+  - [Recurring KvK deposit-blocker patterns](#recurring-kvk-deposit-blocker-patterns)
+  - [The auditor's report (controleverklaring) in the package](#the-auditors-report-controleverklaring-in-the-package)
+  - [NBA Alert 50: accountant consent and conversion scope](#nba-alert-50-accountant-consent-and-conversion-scope)
+  - [Presentation linkbase: what KvK reviewers actually look at](#presentation-linkbase-what-kvk-reviewers-actually-look-at)
+- [Profile: art. 2:403 foreign group head report in iXBRL, a DIFFERENT package shape](#profile-kvk-403-foreign-group-head)
+- [Profile: art. 2:408 foreign group head report by PDF e-mail (before FY2028)](#profile-kvk-408-foreign-group-head-pdf)
+- [Jurisdiction-specific invariants](#jurisdiction-specific-invariants)
+  - [FR-NL- / FG-NL- (SBR Filing Rules / Filing Guidelines)](#fr-nl---fg-nl--sbr-filing-rules--filing-guidelines)
+  - [Recurring Dutch concept choices that are syntactically valid but wrong](#recurring-dutch-concept-choices-that-are-syntactically-valid-but-wrong)
+  - [Sign and balance: the Dutch flavour](#sign-and-balance-the-dutch-flavour)
+  - [Concept-period class: the silent mis-map](#concept-period-class-the-silent-mis-map)
+- [Validation: offline DTS resolution and `nltaxonomie.nl`](#validation-offline-dts-resolution-and-nltaxonomienl)
+- [Review workflow: a pragmatic NL review pass, in order](#review-workflow-a-pragmatic-nl-review-pass-in-order)
+- [Authorities and governance](#authorities-and-governance)
+  - [Relation to EU reporting](#relation-to-eu-reporting)
+- [Coverage and known limitations](#coverage-and-known-limitations)
+- [Sources: when to escalate to primary sources](#sources-when-to-escalate-to-primary-sources)
+
 ## Start here: choose a filing profile
 
 Load this when the regulator is **KvK (Kamer van Koophandel)**, **AFM**
@@ -857,7 +895,8 @@ before any content review.
 ### Sign and balance: the Dutch flavour
 
 Two SBR-specific traps on top of the universal rules in
-`SKILL.md` §"First principles":
+`references/first-principles.md`, in particular § *Sign convention,
+balance type, and `preferredLabel` are three different things*:
 
 - **Loss-labelled subtotals tagged positive.** `NetResultAfterTax` on
   a loss-making Dutch GAAP P&L must be **negative** in the canonical

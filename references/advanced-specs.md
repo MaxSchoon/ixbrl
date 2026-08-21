@@ -2,7 +2,18 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** you are implementing or reading Generic Links (`gen:*`), the XBRL Functions Registry (`xfi:` / `xff:`), or a Versioning report: the plumbing beneath Formula, Table Linkbase and taxonomy migrations.
+
+**Do not load this when:** you are reviewing or building a filing. None of these specifications appears in a financial-reporting package; start at `references/structure.md` or `references/validation.md`.
+
 Every namespace URI, element name, and arcrole below was verified against the specifications listed under **Sources**.
+
+## Contents
+
+- [Generic Links 1.0](#generic-links-10)
+- [XBRL Functions Registry](#xbrl-functions-registry)
+- [XBRL Versioning 1.0](#xbrl-versioning-10)
+- [Sources](#sources)
 
 ## Generic Links 1.0
 

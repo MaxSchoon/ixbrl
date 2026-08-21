@@ -2,7 +2,23 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** you need the meaning or the legal attributes of an `ix:*` element, a fact attribute (`decimals`, `contextRef`, `format`, `scale`), a context or unit skeleton, an `ixt:` transformation, or a calculation weight.
+
+**Do not load this when:** the question is about the names and datatypes themselves (`references/types.md`) or about how linkbases and the DTS are wired (`references/structure.md`).
+
 Inline XBRL embeds XBRL facts inside an XHTML host document: one file serves both the human reader and the structured-data consumer.
+
+## Contents
+
+- [ix:* elements](#ix-elements)
+- [Key fact attributes](#key-fact-attributes)
+- [decimals vs precision](#decimals-vs-precision)
+- [Transformation Registry (TRR 5)](#transformation-registry-trr-5)
+- [XBRL 2.1 contexts](#xbrl-21-contexts)
+- [XBRL 2.1 units](#xbrl-21-units)
+- [XBRL Dimensions (XDT)](#xbrl-dimensions-xdt)
+- [Calculation linkbase weights](#calculation-linkbase-weights)
+- [Sources](#sources)
 
 ## ix:* elements
 

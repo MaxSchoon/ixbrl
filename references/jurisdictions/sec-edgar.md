@@ -13,6 +13,22 @@ profiles:
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** the receiver is the SEC: an EDGAR Inline XBRL submission, an EDGAR Filer Manual chapter, a DEI / SRT / US-GAAP question, or an `EFM.6.05.*` code.
+
+**Do not load this when:** the filing is European (`references/esef.md` or the file under `references/jurisdictions/`); EDGAR neither anchors nor uses the ESEF package shape.
+
+**Contents**
+
+- [Start here: choose a filing profile](#start-here-choose-a-filing-profile)
+- [Vintage and applicability](#vintage-and-applicability)
+- [Profile: Operating companies (periodic and registration filings)](#profile-operating-company)
+- [Profile: Registered investment companies (funds)](#profile-investment-company)
+- [Jurisdiction-specific invariants](#jurisdiction-specific-invariants)
+- [Validation](#validation)
+- [Review workflow](#review-workflow)
+- [Authorities and governance](#authorities-and-governance)
+- [Sources](#sources)
+
 Reference for Inline XBRL submissions to the U.S. Securities and Exchange Commission. Verify the operative version of every cited rule against the EDGAR Filer Manual at filing date.
 
 ## Start here: choose a filing profile

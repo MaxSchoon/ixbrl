@@ -17,6 +17,44 @@ profiles:
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** the receiver is UK or Irish (Companies House, HMRC CT600, an FCA UKSEF filing, or Irish ROS), or the package uses the FRC taxonomy suite.
+
+**Do not load this when:** the question is generic ESEF anchoring or extension authoring (`references/esef.md`); the FRC suite is closed and nothing anchors.
+
+**Contents**
+
+- [Start here: choose a filing profile](#start-here-choose-a-filing-profile)
+- [Vintage and applicability](#vintage-and-applicability)
+  - [Taxonomy ownership split](#taxonomy-ownership-split)
+  - [DTS and vintages](#dts-and-vintages)
+  - [Bi-temporal cheatsheet: which rule applied when](#bi-temporal-cheatsheet-which-rule-applied-when)
+  - [The 2026 suite changed the audit-report tag set: a converter trap](#the-2026-suite-changed-the-audit-report-tag-set-a-converter-trap)
+  - [What the 2026 suite ships](#what-the-2026-suite-ships)
+- [Profile: Companies House (voluntary today, software-only from April 2028)](#profile-companies-house)
+- [Profile: HMRC CT600 (iXBRL accounts + computations, full tagging, DPL, long periods)](#profile-hmrc-ct600)
+  - [Long periods of account: separate computations, cross-document match](#long-periods-of-account-separate-computations-cross-document-match)
+  - [Detailed Profit & Loss (DPL)](#detailed-profit--loss-dpl)
+  - [CT technical mechanics and taxonomy-version enforcement](#ct-technical-mechanics-and-taxonomy-version-enforcement)
+- [Profile: FCA / UKSEF / National Storage Mechanism](#profile-fca-uksef)
+  - [UKSEF: the optional multi-target document](#uksef-the-optional-multi-target-document)
+- [Profile: Irish Revenue (ROS), a separate disclosure system](#profile-irish-revenue-ros)
+  - [The ROI mandate: phases, deferral thresholds, CT1 options, filing window](#the-roi-mandate-phases-deferral-thresholds-ct1-options-filing-window)
+- [Jurisdiction-specific invariants](#jurisdiction-specific-invariants)
+  - [Filer classification: what changes which absences are defects](#filer-classification-what-changes-which-absences-are-defects)
+  - [FRC XBRL Tagging Guide 2026 (v13.0): the numbered RULEs, and the closed-taxonomy inversion](#frc-xbrl-tagging-guide-2026-v130-the-numbered-rules-and-the-closed-taxonomy-inversion)
+  - [The structural inversion vs ESEF: extensions are discouraged](#the-structural-inversion-vs-esef-extensions-are-discouraged)
+  - [Generic-dimension pairing: the JFCVC.3315 pattern](#generic-dimension-pairing-the-jfcvc3315-pattern)
+- [Validation](#validation)
+  - [Companies House: the public XBRL Company Accounts Validator](#companies-house-the-public-xbrl-company-accounts-validator)
+  - [HMRC / Companies House: the Joint Filing Common Validation Checks (Arelle `validate/UK`)](#hmrc--companies-house-the-joint-filing-common-validation-checks-arelle-validateuk)
+- [Review workflow](#review-workflow)
+  - [A pragmatic UK review pass, in order](#a-pragmatic-uk-review-pass-in-order)
+  - [FRC "Structured Digital Reporting: Insights 2025/26" (design against these)](#frc-structured-digital-reporting-insights-202526-design-against-these)
+- [Authorities and governance](#authorities-and-governance)
+  - [Relation to EU/ESEF reporting: post-Brexit divergence](#relation-to-euesef-reporting-post-brexit-divergence)
+- [Coverage and known limitations](#coverage-and-known-limitations)
+- [Sources](#sources)
+
 Load this when the regulator is **Companies House** (UK statutory
 accounts), **HM Revenue & Customs** (Corporation Tax CT600 accounts +
 computations), the **FCA National Storage Mechanism / UKSEF** (UK listed
