@@ -106,6 +106,7 @@ XML_LANG = f"{{{NS['xml']}}}lang"
 XBRLI_PERIOD_TYPE = f"{{{NS['xbrli']}}}periodType"
 XBRLI_BALANCE = f"{{{NS['xbrli']}}}balance"
 XBRLDT_TYPED_DOMAIN_REF = f"{{{NS['xbrldt']}}}typedDomainRef"
+XBRLDT_TARGET_ROLE = f"{{{NS['xbrldt']}}}targetRole"
 
 XS_SCHEMA = f"{{{NS['xs']}}}schema"
 XS_ELEMENT = f"{{{NS['xs']}}}element"
@@ -125,7 +126,9 @@ LINK_LABEL = f"{{{NS['link']}}}label"
 LINK_REFERENCE = f"{{{NS['link']}}}reference"
 XBRLI_XBRL = f"{{{NS['xbrli']}}}xbrl"
 IX_REFERENCES = f"{{{NS['ix']}}}references"
+TP_ENTRY_POINT = f"{{{NS['tp']}}}entryPoint"
 TP_ENTRY_POINT_DOCUMENT = f"{{{NS['tp']}}}entryPointDocument"
+TP_NAME = f"{{{NS['tp']}}}name"
 CAT_REWRITE_URI = f"{{{NS['cat']}}}rewriteURI"
 
 # Substitution-group roots that make a global element an XBRL concept
@@ -432,6 +435,7 @@ class DTS:
     generic_links: Counter[str] = field(default_factory=Counter)
     resources_by_kind: Counter[str] = field(default_factory=Counter)
     unresolved_locators: int = 0
+    embedded_linkbases: int = 0
     # Locators whose href names no concept in the closure, by what they point
     # at: a role/arcrole type or another non-concept id (legitimate: generic
     # labels on ELRs), a document outside the closure (a boundary or
@@ -568,8 +572,17 @@ class Walker:
                 self.extract_schema(dts, uri, root)
         self.resolve_substitution_groups(dts)
         for uri, root in self.trees.items():
-            if dts.documents[uri].kind in ("linkbase", "instance", "inline"):
+            kind = dts.documents[uri].kind
+            if kind in ("linkbase", "instance", "inline"):
                 self.extract_links(dts, uri, root)
+            elif kind == "schema":
+                # Linkbases may be EMBEDDED in a schema at
+                # //xsd:schema/xsd:annotation/xsd:appinfo/* (XBRL 2.1
+                # section 3.2); a walk that reads only linkbaseRef targets
+                # under-counts them.
+                for embedded in root.iter(LINK_LINKBASE):
+                    dts.embedded_linkbases += 1
+                    self.extract_links(dts, uri, embedded)
 
     def extract_schema(self, dts: DTS, uri: str, root: etree._Element) -> None:
         tns = root.get("targetNamespace")
@@ -721,6 +734,9 @@ class Walker:
                     for k, v in arc.attrib.items()
                     if k in ("order", "weight", "preferredLabel", "use", "priority")
                 }
+                target_role = arc.get(XBRLDT_TARGET_ROLE)
+                if target_role:
+                    attrs["targetRole"] = target_role
                 for source in locs.get(from_label, ["?"]):
                     if to_label in resources:
                         for res in resources[to_label]:
@@ -787,24 +803,76 @@ def unpack_package(path: Path, workdir: Path) -> Path:
 
 
 def package_catalogs(extracted: Path) -> list[Path]:
-    return sorted(extracted.rglob("META-INF/catalog.xml"))
+    """The catalogs a processor may apply: only those beside a manifest.
 
-
-def package_starts(extracted: Path) -> list[str]:
-    """Entry points of a taxonomy package, or the reports of a report package.
-
-    Taxonomy Packages 1.0 section 3.2.2: `tp:entryPointDocument/@href`,
-    resolved against the manifest. Report Packages 1.0: the documents under
-    `reports/`. A package may be both, and then both sets are starts.
+    Report Packages 1.0 section 5.3: remappings apply only if the package is
+    also a taxonomy package; without `META-INF/taxonomyPackage.xml` the
+    `catalog.xml` is ignored. Honouring a bare catalog would resolve
+    documents a conformant processor would not, and make the profile lie.
     """
-    starts: list[str] = []
+    return sorted(
+        c
+        for c in extracted.rglob("META-INF/catalog.xml")
+        if (c.parent / "taxonomyPackage.xml").is_file()
+    )
+
+
+def package_entry_points(extracted: Path) -> list[tuple[str, list[str]]]:
+    """(name, [document URLs]) per tp:entryPoint, in manifest order.
+
+    Taxonomy Packages 1.0 section 3.2.2: an entry point is a SET of URLs that
+    together start discovery, so one entry point may list several documents
+    and a package may list several entry points. They are different DTSs and
+    are never merged silently.
+    """
+    out: list[tuple[str, list[str]]] = []
     for manifest in sorted(extracted.rglob("META-INF/taxonomyPackage.xml")):
         tree = etree.parse(str(manifest), secure_parser())
         base = manifest.resolve().as_uri()
-        for ep in tree.getroot().iter(TP_ENTRY_POINT_DOCUMENT):
-            href = ep.get("href")
-            if href:
-                starts.append(join(base, href))
+        for ep in tree.getroot().iter(TP_ENTRY_POINT):
+            names = [
+                " ".join((n.text or "").split()) for n in ep.iter(TP_NAME) if n.text
+            ]
+            docs = [
+                join(base, d.get("href") or "")
+                for d in ep.iter(TP_ENTRY_POINT_DOCUMENT)
+                if d.get("href")
+            ]
+            if docs:
+                out.append((names[0] if names else docs[0], docs))
+    return out
+
+
+def package_starts(extracted: Path, entry_point: str | None) -> list[str]:
+    """Starts for a package: one selected entry point, or its reports.
+
+    Report Packages 1.0: the documents under `reports/`. A package may be
+    both a report and a taxonomy package; then the reports are the starts
+    and the taxonomy package supplies the catalog.
+    """
+    starts: list[str] = []
+    entry_points = package_entry_points(extracted)
+    if entry_points:
+        if entry_point:
+            chosen = [
+                ep
+                for ep in entry_points
+                if entry_point in ep[0] or any(entry_point in d for d in ep[1])
+            ]
+        elif len(entry_points) == 1:
+            chosen = entry_points
+        else:
+            chosen = []
+        if not chosen:
+            listing = "\n".join(
+                f"  - {name}: {', '.join(docs)}" for name, docs in entry_points
+            )
+            raise ValueError(
+                f"the package declares {len(entry_points)} entry points; choose "
+                f"one with --entry-point <substring of its name or URL>:\n{listing}"
+            )
+        for _, docs in chosen:
+            starts.extend(docs)
     for reports in sorted(extracted.rglob("reports")):
         if reports.is_dir():
             for f in sorted(reports.rglob("*")):
@@ -969,6 +1037,11 @@ def profile(dts: DTS) -> dict[str, Any]:
             "dimensions_typed": sum(1 for d in dimensions if d.typed_domain_ref),
             "domain_members_distinct": len(domain_members),
             "primary_items_with_hypercube": len(primary_items),
+            # A dimensional relationship set may continue in ANOTHER extended
+            # link role through xbrldt:targetRole (XDT section 2.4.3), so
+            # per-ELR bucketing under-reports a hypercube's reach. The count
+            # says how often this DTS relies on that.
+            "arcs_with_targetRole": sum(1 for a in def_arcs if "targetRole" in a.attrs),
         },
         "labels": {
             "resources": sum(label_roles.values()),
@@ -984,6 +1057,7 @@ def profile(dts: DTS) -> dict[str, Any]:
         },
         "generic_links": dict(dts.generic_links.most_common()),
         "resources_by_kind": dict(dts.resources_by_kind.most_common()),
+        "embedded_linkbases": dts.embedded_linkbases,
         "unresolved_locators": dts.unresolved_locators,
         "unresolved_locators_by_kind": dict(dts.unresolved_locator_kinds.most_common()),
         "unresolved_locators_by_document": dict(
@@ -1160,7 +1234,8 @@ def render_markdown(p: dict[str, Any]) -> str:
         f"dimensions explicit {de['dimensions_explicit']}, "
         f"typed {de['dimensions_typed']}; "
         f"distinct domain members {de['domain_members_distinct']}; "
-        f"primary items with a hypercube {de['primary_items_with_hypercube']}.",
+        f"primary items with a hypercube {de['primary_items_with_hypercube']}; "
+        f"arcs continuing in another ELR via targetRole {de['arcs_with_targetRole']}.",
         "",
         *table(de["xdt_arcroles"], "XDT arcrole", "arcs"),
         "",
@@ -1259,6 +1334,7 @@ def build(
     offline: bool,
     follow_infrastructure: bool,
     max_documents: int,
+    entry_point: str | None = None,
 ) -> DTS:
     workdir = Path(tempfile.mkdtemp(prefix="dts-profile-"))
     try:
@@ -1274,7 +1350,7 @@ def build(
                 extracted = unpack_package(path, workdir)
                 for cat in package_catalogs(extracted):
                     catalog.load(cat)
-                resolved_starts.extend(package_starts(extracted))
+                resolved_starts.extend(package_starts(extracted, entry_point))
             else:
                 resolved_starts.append(to_uri(start))
         walker = Walker(
@@ -1302,6 +1378,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-documents", type=int, default=DEFAULT_MAX_DOCUMENTS)
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--concept", metavar="QNAME")
+    parser.add_argument(
+        "--entry-point",
+        metavar="SUBSTR",
+        help="when a package declares several entry points, the one to walk",
+    )
     args = parser.parse_args(argv)
 
     for start in args.starts:
@@ -1317,6 +1398,7 @@ def main(argv: list[str] | None = None) -> int:
             args.offline,
             args.follow_infrastructure,
             args.max_documents,
+            args.entry_point,
         )
     except (zipfile.BadZipFile, ValueError, etree.XMLSyntaxError) as exc:
         sys.stderr.write(f"cannot read start: {exc}\n")
