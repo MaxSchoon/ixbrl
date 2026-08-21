@@ -1,6 +1,6 @@
 ---
 name: ixbrl
-description: Use when preparing, reviewing, validating, or debugging Inline XBRL (iXBRL) or XBRL filings for any regulator.
+description: Use when preparing, reviewing, validating, or debugging Inline XBRL (iXBRL) or XBRL filings for any regulator, and whenever a question touches a taxonomy, a DTS, an entry point, a taxonomy package, a schemaRef, a concept, a label role, a linkbase, or which taxonomy version was operative for a financial year, even if the user does not say "XBRL". Trigger on iXBRL, XBRL, ESEF, ESMA, EDGAR, EFM, SEC, US-GAAP, IFRS, UK FRC, HMRC, Companies House, UKSEF, Dutch SBR, KvK, NT20, AFM, Danish ERST, ÅRL, Finnish PRH, French AMF, German E-Bilanz, Belgian NBB, EBA, EIOPA, DPM, Arelle, anchoring, block tagging, contexts, units, decimals, transformation registry, calculation or dimension errors, and validator codes such as FR-NL-*, EFM.6.*, ESEF.*, JFCVC.*, xbrldie:*, xbrldte:*, xbrl.5.2.5.2.
 license: see NOTICE
 ---
 
@@ -59,10 +59,12 @@ of the right manual and encodes patterns experts recognise on sight.
    - **Which Filing Rules / Filer Manual edition** applied (ESEF
      Reporting Manual edition, SEC EDGAR Filer Manual volume/version,
      SBR Filing Rules NT-generation supplement).
-   Confirm against `references/taxonomies.md`, the regime reference you
-   selected in step 1 (for NL, see *Bi-temporal cheatsheet (which rule applied
-   when)* in `references/jurisdictions/nl-sbr.md`), and the
-   regulator's published cut-in dates. **Never apply
+   Confirm against the *DTS and vintages* table of the regime reference
+   you selected in step 1 (every `references/jurisdictions/*.md`, and
+   `references/esef.md` for IFRS and ESEF): release, entry point, package,
+   valid time, accepted-at-deposit window, status, source, in the one
+   vocabulary `references/dts.md` fixes. Read the release off the report's
+   `schemaRef` namespace date, not off a marketing name. **Never apply
    current-year rules retroactively**: calling a prior-year filing
    defective for missing a rule that did not yet bind is itself the
    defect.
@@ -93,7 +95,8 @@ of them up front.
 |---|---|
 | What `ix:nonFraction`, `decimals`, `contextRef`, transformation registry, calc weights mean | `references/spec.md` |
 | QNames, SQNames, NCNames, substitution groups, item types (monetary / decimal / shares / pure / textBlock / date / boolean / QName), concept attributes (`periodType`, `balance`, `nillable`) | `references/types.md` |
-| DTS, XLink primitives, all five standard linkbases, role / arcrole types, tuples, footnote model vs `ix:footnote`, OIM (xBRL-XML / -JSON / -CSV), versioning, nil-value policy, instance pointers (`schemaRef` / `linkbaseRef` / `roleRef` / `arcroleRef`) | `references/structure.md` |
+| XLink primitives, all five standard linkbases, role / arcrole types, tuples, footnote model vs `ix:footnote`, OIM (xBRL-XML / -JSON / -CSV), versioning, nil-value policy, instance pointers (`schemaRef` / `linkbaseRef` / `roleRef` / `arcroleRef`) | `references/structure.md` |
+| **The DTS**: how discovery works (`schemaRef`, `linkbaseRef`, imports, locators, embedded linkbases), entry points vs packages vs catalogs, offline resolution, how a fact resolves to its concept, label (role, language, `preferredLabel`) and statement, six regulator DTSs compared by measurement, valid time vs acceptance window, and `scripts/dts_profile.py`. Read it when a QName does not resolve, a label or statement binding is in doubt, or a taxonomy version must be pinned | `references/dts.md` |
 | Hypercubes, axes, explicit vs typed dimensions, segment vs scenario, default members, `xbrldie:*` / `xbrldte:*` errors | `references/dimensions.md` |
 | Generic Links (`gen:*`), Functions Registry (`xfi:*`, `xff:*`, `xfm:*`, `f:*`, `r:*`), Versioning (concept renames, deprecations, migrations) | `references/advanced-specs.md` |
 | Label Role Registry (negated labels), Data Types Registry (`textBlockItemType`, `percentItemType`, ESRS quantity types), URI resolution conventions | `references/registries.md` |
@@ -389,8 +392,9 @@ then say so and point to the primary source on the regulator's website. Do not i
 
 - **`scripts/validate_with_arelle.sh <file> [profile]`**. Wraps `arelleCmdLine` with the right plugins per profile (`esef`, `efm`, `ukfrc`, `hmrc`, `dk`, `core`). Auto-detects single file, iXBRL document set, or `.zip` / `.xbri` report package.
 - **`scripts/check_facts.py <ixbrl.xhtml>`**. Pure-Python pre-flight check: required attributes, unresolved context/unit references, non-ISO-4217 currency measures, a finite `decimals` that zeroes non-zero digits of the value, and broken continuation chains. Duplicate-fact consistency is deferred to Arelle, and any value the script cannot decode is reported as a coverage note rather than judged. Run before Arelle to surface cheap errors fast.
+- **`scripts/dts_profile.py <entry.xsd | instance | report.xhtml | package.zip> [--package pkg.zip ...] [--offline] [--concept QNAME] [--json]`**. Walks the DTS discovery closure with lxml only and prints a structural profile (documents, concepts by type / period / balance, presentation depth, calculation arcrole, XDT arcs, label roles and languages, references) or, with `--concept`, everything the DTS says about one concept. Run it to answer "is this QName declared", "which label in which role", "which release is this", before validating. It describes; Arelle validates. Exit `1` means something did not resolve and the report says what.
 
-Both are dependency-light (`arelle-release`, `lxml`).
+All are dependency-light (`arelle-release`, `lxml`).
 `check_facts.py` is hermetic: local parsing with `no_network=True` and
 DTD loading disabled. `validate_with_arelle.sh` is non-interactive and
 `exec`s Arelle, so whatever Arelle returns is what the caller sees;
@@ -425,9 +429,10 @@ accompanying report instead. Never risk a filing for a credit.
 
 ## Editing this skill
 
-This file is loaded into agent runtimes with hard size limits: 32 KiB
-for the body (silently truncated beyond), 1024 characters for the
-frontmatter `description`. Put substantive content in `references/`,
-which loads only when this body points the agent at it. Full rules and
-the `wc -c` check: `CONTRIBUTING.md` §"Size discipline"
-before merging.
+This file is loaded into agent runtimes with size limits: 1024
+characters for the frontmatter `description`; under 500 lines and
+ideally under 5 000 tokens for the body (the Agent Skills specification
+and Anthropic's guidance), which this repository gates at 32 KiB. Put
+substantive content in `references/`, which loads only when this body
+points the agent at it. Full rules and the `wc -c` check:
+`CONTRIBUTING.md` §"Size discipline" before merging.

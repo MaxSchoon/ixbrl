@@ -79,6 +79,34 @@ funds, on its **"DPM and XBRL"** page. Confirmed directly:
 > confirmed in this run is 2.9.1. Re-check EIOPA before relying on a
 > specific version.
 
+## DTS and vintages: EBA and EIOPA
+
+Which framework release to load, where it lives, and for which reference
+dates. Vocabulary and column order follow `references/dts.md`
+§ Vocabulary. Verified 2026-08-21 by downloading the EBA 4.2 and EIOPA
+Solvency II 2.10.0 packages. No entry-point URI dereferences at either
+authority (`http://www.eba.europa.eu/eu/fr/xbrl/crr/fws/corep/4.2/mod/corep_of.xsd`
+and `http://eiopa.europa.eu/eu/xbrl/s2md/fws/solvency/solvency2/2026-06-30/mod/qrs.xsd`
+both return 403); load the package. Validity is machine-readable in two
+places: Eurofiling `model:fromDate` / `model:modificationDate` on element
+declarations, and (EBA only) `eba:documentation.FromReferenceDate` /
+`toReferenceDate` in each module's JSON. EBA ships an xBRL-CSV table
+template beside every module; EIOPA ships no JSON and remains xBRL-XML.
+
+| Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
+|---|---|---|---|---|---|---|
+| **EBA 4.2** (Q4 2025; hotfix and FINREP9DP artefacts 27 Feb 2026) | 50 modules `…/crr/fws/<framework>/4.2/mod/<module>.xsd` | `https://www.eba.europa.eu/sites/default/files/2026-01/b54d2c74-877c-4195-a32a-6591253d8b0f/taxo_package_4.2_hotfix.zip` (200, 65 MB); 4.2.1 FINREP9DP `…/2026-02/5ecd43ca-893a-4b72-a6aa-08e19d125926/taxonomy%20package%204.2.1%20%28FINREP9DP%29.zip` | module-specific: most from reference date **31 Mar 2026** (`corep_of.json` `FromReferenceDate 2026-03-31`), Resolution and MREL 12/2025, COREP OF 06/2026 | **xBRL-CSV mandatory for reference dates on or after 31 Mar 2026**; XML and CSV both accepted below that; MiCA, Pillar 3, Instant Payments, DORA always CSV; from 1 Jul 2026 Euclid rejects CSV files with a negative filing indicator | current released framework | EBA 4.2 page; EBA Filing Rules v5.8 (25 Feb 2026) |
+| EBA 4.3 (expected Q2 2026) | Third Country Branches, AMLA risk assessment | **no technical package published** | TCB 03/2027; AMLA 12/2026 | AMLA components "must not be used for data submissions" | announced, no artefacts | EBA 4.3 page |
+| EBA 4.4 (expected Q3 2026) | phase 1 FINREP (IFRS 18), DORA, Resolution, MREL, AMLA, Pillar 3; phase 2 ESG, COREP, AE, ALMM, LCR, … | not published | phase 1 from 12/2026, phase 2 from 09/2027 | | announced, no artefacts | EBA reporting-frameworks page |
+| EBA 4.1 (Q2 2025), 4.0 (from 12/2024) | MiCAR, Pillar 3; CRR3/CRD6 COREP, DORA | own pages | module-specific from 06/2025 and 03/2025 | superseded; 4.0 and 4.1 were the last to ship DPM 1.0 beside 2.0 | historical | EBA pages |
+| **EIOPA Solvency II 2.8.2** (15 Oct 2024; optional NACE 2.1 hotfix 30 Jun 2025, same entry points) | dated `mod/` set | `https://dev.eiopa.europa.eu/Taxonomy/Full/2.8.2/S2/EIOPA_SolvencyII_XBRL_Taxonomy_2.8.2_Final.zip` (200) | **Q4 / annual 2024 until Q4 / annual 2026 included** | in production | **the operative Solvency II version** | EIOPA DPM-and-XBRL page |
+| **EIOPA Solvency II 2.10.0** (Final, 3 Jul 2026; `publicationDate` 2026-06-30) | 17 modules `…/s2md/fws/solvency/solvency2/2026-06-30/mod/{qrs,qes,ars,aes,…}.xsd` | `https://dev.eiopa.europa.eu/Taxonomy/Full/2.10.0/S2/EIOPA_SolvencyII_XBRL_Taxonomy_2.10.0.zip` (200, 50 MB) | from **Q1 2027** | not yet in production | published, future-dated | EIOPA page; package manifest |
+| EIOPA IORP 2.9.0 hotfix (16 Jul 2024) and 2nd NACE hotfix (30 Jun 2025) | PF modules | `…/2.9.0_hotfix2/PF/EIOPA_PensionFunds_XBRL_Taxonomy_2.9.0_Hotfix2.zip` (200) | from 1 Jan 2025 until a new version is announced (2.7.1 closed after Q4 2024) | in production | current | EIOPA page |
+| EIOPA IRRD 2.11.0 (Final, 27 Jul 2026); FICOD 2.8.1 hotfix 2; PEPP PR 2.7.0 hotfix 3; PEPP KID 2.6.1 | own modules | `…/2.11.0/irrd/EIOPA_IRRD_XBRL_Taxonomy_2.11.0.zip` (200); FICOD and PEPP zips under the same host | IRRD not stated; FICOD from 31 Dec 2023; PEPP from Q4 2022 | IRRD not yet; others in production | published / current | EIOPA page |
+
+"2.9.1 PWD" survives on EIOPA's page only as the baseline of the 2.11.0
+change log; it is not a release to validate against.
+
 ## XBRL Table Linkbase 1.0
 
 The **XBRL Table Linkbase 1.0** Recommendation, dated **2014-03-18**

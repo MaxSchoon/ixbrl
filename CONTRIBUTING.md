@@ -56,16 +56,32 @@ out other skills from the loadable index. Keep:
   hard limit for SKILL.md descriptions). The description is what the
   runtime reads to decide whether to load this skill at all, so the
   budget is precious.
-- **`SKILL.md` body** ≤ **32 KiB (32,768 bytes)** and aim for **< 500
-  lines**. Codex CLI caps project documentation files at
-  `project_doc_max_bytes = 32 KiB` by default and silently truncates
-  beyond that; the cross-platform skill-authoring guidance treats 500
-  lines as the comfort ceiling.
+- **`SKILL.md` body** ≤ **32 KiB (32,768 bytes)**, and aim for **< 500
+  lines and < 5,000 tokens**. The line and token figures are the Agent
+  Skills specification's and Anthropic's own guidance ("once Claude loads
+  it, every token competes with conversation history"); the 32 KiB byte
+  gate is this repository's conservative belt for it. An earlier edition
+  of this file justified 32 KiB by Codex CLI's `project_doc_max_bytes`;
+  that setting governs the `AGENTS.md` instructions chain, not `SKILL.md`,
+  so the number stands and that reason does not.
 - **Aggregate skill-metadata budget** in Codex CLI is roughly **2% of
   the model's context window**, or 8,000 characters when the window is
-  unknown. Long descriptions get truncated first when many skills are
-  installed, so keep this skill's description tight even though 1024
-  characters are allowed.
+  unknown, and applies to the *list* of skills: Codex shortens
+  descriptions first when many skills are installed, then reads the full
+  `SKILL.md` of the one it selects. Front-load the trigger words in the
+  description so a shortened one still matches.
+- **Reference files over ~300 lines carry a table of contents** at the
+  top, because an agent that previews a long file with `head` sees the
+  contents list and can jump, where it would otherwise see one section
+  and conclude that is all there is. `references/dts.md` is the model.
+- **Dated facts are not "time-sensitive instructions".** Skill-authoring
+  guidance warns against instructions that silently go stale ("before
+  August 2025 use the old API"). The *DTS and vintages* tables and the
+  bi-temporal cheatsheets are the opposite: dated facts with a valid-time
+  column, an acceptance-window column, a status on a stated verification
+  date, and a primary source per row. They are what bi-temporal filing
+  work requires. Keep them in that table shape (`references/dts.md`
+  § Vocabulary) and re-verify the status column rather than deleting it.
 
 If you need to add substantive content, prefer extending a file in
 `references/` over expanding `SKILL.md`. Reference files load only

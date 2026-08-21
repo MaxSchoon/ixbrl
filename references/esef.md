@@ -251,6 +251,55 @@ mismatched ESEF entry point, untagged Annex II elements, anchoring
 failures, calculation inconsistencies, hidden facts that fail the
 `-esef-ix-hidden` discipline, external CSS / JS references.
 
+### DTS and vintages
+
+Which IFRS and ESEF release to load, where it lives, and which is
+operative when. Vocabulary and column order are fixed in
+`references/dts.md` § Vocabulary. Verified 2026-08-21: every URL marked
+200 was fetched that day. The architecture: `esef_cor.xsd` **imports the
+IFRS core by its canonical `xbrl.ifrs.org` URL** and links the IFRS
+English labels and references remotely; ESMA adds a handful of elements,
+its own ELRs, a formula linkbase and the 24-language labels, and
+**customises** the presentation, definition and calculation relationships
+rather than importing them. Concepts come from IFRS; relationships come
+from ESMA.
+
+**IFRS Accounting Taxonomy** (the Foundation collects no filings, so
+"accepted at deposit" means only which version it presents as current).
+Main entry point `full_ifrs_entry_point_<date>.xsd`; the "Essential"
+entry point for extenders carries an `_ext_` infix.
+
+| Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
+|---|---|---|---|---|---|---|
+| **2025** (`2025-03-27`, published 27 Mar 2025) | `https://xbrl.ifrs.org/taxonomy/2025-03-27/full_ifrs_entry_point_2025-03-27.xsd` (200); `…/full_ifrs_entry_point_ext_2025-03-27.xsd`; IFRS 18 early-application, management commentary, deprecated and combined entry points | gated download on ifrs.org | IFRS Accounting Standards issued at 1 Jan 2025 (IFRS 18, IFRS 19, IFRS 9/7 amendments, Annual Improvements Vol 11) | current; **no 2026 taxonomy** (every `…/taxonomy/2026-*` probe returns 404; ESMA, 21 Apr 2026, cites "the IFRS Foundation's decision not to issue a 2026 IFRS Accounting Taxonomy update") | current | release page; architecture guide ¶31; ESMA press release |
+| **2024** (`2024-03-27`, published 27 Mar 2024; technical correction 29 Aug 2024) | `https://xbrl.ifrs.org/taxonomy/2024-03-27/full_ifrs_entry_point_2024-03-27.xsd` (200) and eight further entry points incl. the latest bundled **IFRS for SMEs** | gated | standards issued at 1 Jan 2024 | superseded by 2025; still the base of ESEF 2024 | superseded (served) | release page |
+| 2023 (`2023-03-23`) | `https://xbrl.ifrs.org/taxonomy/2023-03-23/full_ifrs_entry_point_2023-03-23.xsd` (200) | gated | standards at 1 Jan 2023 | superseded; **never given legal effect in ESEF** (no ESEF 2023) | superseded (served) | release page |
+| 2022 (`2022-03-24`) | `https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs_entry_point_2022-03-24.xsd` (200) | gated | standards at 1 Jan 2022 | superseded | superseded (served) | release page |
+
+**ESEF taxonomy.** The filer entry point is always `esef_cor.xsd`; the
+relationships live in `esef_all.xsd` (2017 to 2024) or in
+`esef_ias_1.xsd` / `esef_ifrs_18.xsd` (2025). There is **no ESEF 2018
+and no ESEF 2023**. The regulation that mandates a release is numbered
+after the taxonomy it carries, and the two differ: Reg (EU) **2025**/19
+carries the **2024** update.
+
+| Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
+|---|---|---|---|---|---|---|
+| **ESEF 2024** (`2024-03-27`; package `tp:publicationDate` 2024-12-27) | `https://www.esma.europa.eu/taxonomy/2024-03-27/esef_cor.xsd` (200); `…/esef_all.xsd` (200) | `https://www.esma.europa.eu/sites/default/files/2025-01/esef_taxonomy_2024.zip` | Reg (EU) 2025/19 art. 2: "financial years beginning on or after 1 January 2025"; "may be applied" to earlier financial years | **mandated** for FY2025 onward; optional for FY2024 alongside ESEF 2022 | current, in force; **Calc 1.1** | EUR-Lex; ESMA landing page; package manifest |
+| **ESEF 2025** (`2025-03-27`; `tp:publicationDate` 2025-12-31; published 21 Apr 2026) | `https://www.esma.europa.eu/taxonomy/2025-03-27/esef_cor.xsd` (200); `…/esef_ias_1.xsd` (200); `…/esef_ifrs_18.xsd` (200); no `esef_all.xsd` | `https://www.esma.europa.eu/sites/default/files/2026-04/esef_taxonomy-2025_12_31.zip` | **no RTS amendment carries it**; aimed at preparing 2026 IFRS consolidated statements; IFRS 18 effective FY beginning on or after 1 Jan 2027, EU endorsement pending | published for preparation; "does not plan to amend the ESEF RTS or taxonomy in 2026" (ESMA) | published, not mandated; Calc 1.1 | ESMA press release 21 Apr 2026; ESEF 2025 Documentation § 3.4.7 |
+| **ESEF 2022** (`2022-03-24`; package v1.1 re-issued Dec 2023) | `https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor.xsd` (200); `…/esef_all.xsd` (200) | `https://www.esma.europa.eu/sites/default/files/2023-12/esef_taxonomy_2022_v1.1.zip` | Reg (EU) 2022/2553: FY beginning on or after 1 Jan 2023, early use permitted | the mandated version for FY2023 **and** FY2024 (no 2023 update; ESMA allowed it "for financial years beginning on or after 1 January 2024") | superseded for FY2025+; Calc 1.0 | EUR-Lex; ESMA 2024 press release |
+| ESEF 2021 (`2021-03-24`) | `…/2021-03-24/esef_cor.xsd` (200); `esef_all.xsd` (200) | `https://www.esma.europa.eu/sites/default/files/library/esef_taxonomy_2021.zip` | Reg (EU) 2022/352: FY beginning on or after 1 Jan 2022 | superseded | superseded; Calc 1.0 | EUR-Lex |
+| ESEF 2020 (`2020-03-16`) | `…/2020-03-16/esef_cor.xsd` (200) | `…/library/esef_taxonomy_2020.zip` | Reg (EU) 2020/1989 | superseded | superseded; Calc 1.0 | EUR-Lex |
+| ESEF 2019 (`2019-03-27`) | `…/2019-03-27/esef_cor.xsd` (200); `esef_all.xsd` (200) | `…/library/esef_taxonomy_2019.zip` | Reg (EU) 2019/815 as amended by 2019/2100: FY beginning on or after 1 Jan 2020 | historical | superseded; Calc 1.0 | EUR-Lex |
+| ESEF 2017 (`2017-03-31`) | `…/2017-03-31/esef_cor.xsd` (200) | not located | pre-RTS | historical | superseded | ESMA landing page |
+
+Two measured facts for anyone resolving labels: the 24-language labels
+for `ifrs-full` concepts are published by **ESMA, not the Foundation**
+(`esef_cor-lab-nl.xml` labels 5 094 concepts, 5 085 of them IFRS), and
+language is an **entry-point** choice in the package, not a runtime
+filter; loading `esef_cor.xsd` bare yields English only. The ESEF Reporting
+Manual in force is ESMA32-60-254, revision of **14 October 2025**.
+
 ## 6. Report package
 
 ESMA-mandated submissions are XBRL **Report Packages** built on the

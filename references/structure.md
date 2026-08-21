@@ -32,12 +32,20 @@ Read any XBRL question through "which graph, which arcrole, which ELR?" Confusio
 
 A **Discoverable Taxonomy Set (DTS)** is the closure of taxonomy
 schemas and linkbases reachable from a starting point via a fixed set
-of discovery pointers. XBRL 2.1 §3.1 lists them: `xs:include`,
-`xs:import`, `link:linkbaseRef`, `link:roleRef`, `link:arcroleRef`,
-`link:schemaRef` in an instance, plus the `xlink:href` of every
-locator. The DTS is the transitive closure.
+of discovery pointers (definition: XBRL 2.1 §1.4; rules: §3.2):
+`xs:include`, `xs:import`, `link:linkbaseRef` (in an instance or in a
+schema's `appinfo`), `link:roleRef`, `link:arcroleRef`,
+`link:schemaRef` in an instance, the `xlink:href` of every locator, and
+linkbases embedded in a schema's `appinfo`. The instance is a starting
+point but not a member; the DTS is the transitive closure.
 
 Every fact references a concept by QName, and that concept must be declared by a schema in the DTS. A missing `link:schemaRef`, `link:linkbaseRef`, or `xs:import` produces an unresolved concept and the instance fails Arelle / XBRL Formula validation. When a fact appears as `xbrl.5.1.5` "concept not found" or "schema not in DTS", the first question is: "is the taxonomy in the DTS?"
+
+The full treatment, including entry points, packages and catalogs, how
+a fact resolves to its concept, label and statement, a measured
+comparison of six regulator DTSs, the bi-temporal model, and
+`scripts/dts_profile.py` to walk a DTS yourself, is
+`references/dts.md`.
 
 ## XLink primitives in XBRL
 
