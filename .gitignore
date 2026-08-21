@@ -14,3 +14,6 @@ __pycache__/
 **/session-ledger/
 docs/session-ledger/
 session-ledger/
+
+# Local-only working files; never published
+paths/
