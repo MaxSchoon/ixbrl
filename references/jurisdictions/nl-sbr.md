@@ -643,7 +643,7 @@ Two non-Filing-Rule signals routinely surface in NL reviews:
 
 For Middelgroot and Groot entities subject to art. 2:393 BW, the
 auditor's report is **part of the deposit**, not optional commentary.
-RM 2025 § 2.10: "it's mandatory to include the auditor's report
+RM 2025 § 2.10: "If applicable, it's mandatory to include the auditor's report
 relating to the financial statements as part of the annual report. The
 auditor's report on the financial statements is included as part of the
 Other information."
@@ -664,11 +664,11 @@ them.
 
 | | **iXBRL Report Package** (RTS Ch. 2) | **XBRL / SBR Instance** (RTS Ch. 3) |
 |---|---|---|
-| Controleverklaring travels as | visible narrative **inside** the annual-report XHTML, under Other information | its **own XBRL instance document**, excluded from the annual-report instance (Ch. 3 art. 4 para. 1) |
+| Controleverklaring travels as | visible narrative **inside** the annual-report XHTML, under Other information | its **own XBRL instance document** (Ch. 3 art. 7, footnote 12), excluded from the annual-report instance (Ch. 3 art. 4 para. 1) |
 | Tagged? | **no.** FAQ § 2.6.1: "it is not yet required for the auditor's report in iXBRL format to be marked up using an appropriate digital taxonomy" | yes, against an entry point of the **NBA taxonomy** (Ch. 3 art. 6 para. 2; Annex I Table 2 names version 2.1) |
-| Electronically signed? | **no.** FAQ § 2.6.2: not yet required | yes, XAdES-EPES per ETSI TS 101 903 V1.4.1 (Ch. 3 art. 8, Annex II), as a detached XML file |
-| Presence asserted by | `kvk:AuditorsReportFinancialStatementsPresent` in the filing-information sidecar | the same mandatory element set |
-| Documents filed | 2 (annual report + KvK sidecar) | 3: annual-report instance, auditor's-report instance, signature XML (Ch. 3 art. 7 footnote) |
+| Electronically signed? | **no.** FAQ § 2.6.2: not yet required | yes, XAdES-EPES per ETSI TS 101 903 V1.4.1 (Ch. 3 art. 8 and Chapter 3 Annex II), as a separate XML file per Ch. 3 art. 7 footnote 12 |
+| Presence asserted by | `kvk:AuditorsReportFinancialStatementsPresent` in the filing-information sidecar (Chapter 2 Annex II point 3 Table 2) | the presence of the second instance itself; Chapter 3 has no mandatory-element table, its art. 4 para. 1 requires every component to be marked up in the instance against the fixed-framework entry point |
+| Documents filed | 2 in every reference filing (annual report + KvK sidecar); Chapter 2 Annex IV point 18 requires the separate filing-information document only when the annual report itself does not carry every Table 2 element | 3: annual-report instance, auditor's-report instance, signature XML (Ch. 3 art. 7 footnote) |
 
 RTS 2026 (final 10 July 2026) carries the Chapter 3 auditor's-report
 articles and the Chapter 2 mandatory-element table unchanged, so the
@@ -678,7 +678,7 @@ split holds for FY2025 and FY2026 alike.
 `.xbri` examples KvK publishes for FY2025 were unpacked and every
 inline fact counted: `degrotebv` (Groot), `demiddelgrotebv`
 (Middelgroot), `dekleinebv`, `demicrobv`, the IFRS, foreign-standard,
-2:403 and consolidated-ESEF examples. Across all of them:
+2:403 and direct-ESEF-deposit examples. Across all of them:
 
 - `bw2-titel9:AuditorsReportFinancialStatements` facts: **0**. Not one
   package tags the auditor's report.
@@ -693,12 +693,18 @@ inline fact counted: `degrotebv` (Groot), `demiddelgrotebv`
 - `dekleinebv` and `demicrobv` carry no controleverklaring prose and the
   flag reads `Nee`.
 
-So the folded, untagged, two-document shape is not one filer's choice.
-It is what the regulator's own reference set does in every size class.
+Three further packages (`403_voorbeeld`, the direct-ESEF example and
+the foreign-standard example) assert the flag true while the annual
+report carries no Dutch controleverklaring: the 2:403 example carries a
+German *Bescheinigung* instead, and the other two carry no assurance
+text at all. So the reference set settles two things and leaves one
+open: the controleverklaring is never tagged, and it is never a
+separate document in the iXBRL route; but the flag's value is not
+something the reference set lets a reviewer derive from the prose.
 
 **The presence flag, precisely.** `kvk:AuditorsReportFinancialStatementsPresent`
 is declared in `kvk-cor.xsd` as `xbrli:booleanItemType`,
-`periodType="duration"`, and RTS Annex II point 3 Table 2 lists it among
+`periodType="duration"`, and RTS Chapter 2 Annex II point 3 Table 2 lists it among
 the elements every legal entity must mark up. It is a **boolean**, but
 its visible text is not: the reference filings render `Ja` / `Nee` (or
 `Yes` / `No` in the English examples) and carry
@@ -711,7 +717,7 @@ FY2025 presentation linkbase the concept sits under
 
 That sidecar's filename is itself a rule with an auditing purpose:
 RM 2025 guidance G3-6-3_4 (and G6-1-3_4 for the ESEF-in-KvK case)
-requires `kvk-{date}-{lang}.{extension}`, and the manual states the
+prints the pattern as `kvk-{date}-{lang}.{extension}html` (in effect `kvk-{date}-{lang}.xhtml`; the printed form reads as a typo in the source), and the manual states the
 reason: "This naming convention is implemented to ensure that this
 document is excluded from the auditor's hash calculation." The auditor
 hashes the annual report they consented to; the filing metadata is not
@@ -724,9 +730,9 @@ documentation label "De accountantsverklaring omtrent de getrouwheid van
 de jaarrekening" and an XBRL reference to Burgerlijk Wetboek boek 2
 art. 393 para. 5. But walking the DTS of all three FY2025 KvK iXBRL
 entry points (`kvk-annual-report-nlgaap-ext`, `-ifrs-ext`, `-other`)
-finds it in **no presentation network at all**; in the NL-GAAP entry
-point it has a single definition edge, a domain-member arc under
-`kvk:NonDimensionalLineItems`, and in the other two it has no edges. No
+finds it in **no presentation network at all**; in the NL-GAAP and
+IFRS entry points it has a single definition edge, a domain-member arc
+under `kvk:NonDimensionalLineItems`, and in `-other` it has no edges. No
 RTS, Reporting Manual or FAQ text names it. So the three questions a
 reviewer must keep apart resolve as: the concept **exists**; the
 reference filings **do not use it**; and no filing rule **requires** it.
@@ -738,14 +744,16 @@ of the auditor's report. Where a converter or a validator demands that
 text block for a KvK deposit, treat the demand as unsupported and ask
 for its rule citation. Two forward-looking clauses may change this, and
 neither has a date yet: RM 2025 § 2.10 anticipates that tagging and
-signature "may be implemented in the future", and RTS Annex II point 2
-intends block-tagging of the management report, the notes **and the
-other information** (which is where the controleverklaring sits) for
-financial years beginning on or after a year the RTS still prints as a
-placeholder, pending ESMA's revised block-tagging approach. Nor may a
-filer get there early: RTS Annex II point 2 also states that for
-financial years beginning before 1 January 2026, applying block-tagging
-on a voluntary basis is not permitted.
+signature "may be implemented in the future", and RTS Chapter 2
+Annex II point 2 intends block-tagging of the management report, the
+notes **and the other information** (which is where the
+controleverklaring sits) for financial years beginning on or after a
+year the RTS still prints as a placeholder, pending ESMA's revised
+block-tagging approach. Nor may a filer get there early: the same point
+states that for financial years beginning before that date, applying
+block-tagging in the financial statements on a voluntary basis is not
+permitted (RTS 2026 wording; RTS 2025 printed the date as 1 January
+2026).
 
 **The NBA taxonomy is a different instrument, not a text block.** RTS
 Chapter 3 Annex I Table 2 names NBA taxonomy 2.1
@@ -754,8 +762,9 @@ points, one per declaration type: `nba-rpt-controleverklaring.xsd`,
 `nba-rpt-beoordelingsverklaring.xsd`,
 `nba-rpt-samenstellingsverklaring.xsd`, and
 `nba-rpt-controleverklaringsamengevattefinancieleoverzichten.xsd`. Its
-DTS carries 142 concepts, 19 of them tuples, typed as
-`string1000ItemType` and `formattedExplanationItemType`: the
+DTS carries 142 concepts, 19 of them tuples, the items predominantly
+typed `string1000ItemType` and `formattedExplanationItemType` (83 of
+122): the
 declaration decomposed into structured fields, not one escaped blob.
 That is the shape a tagged auditor's report actually takes in Dutch
 SBR, and it belongs to the XBRL Instance route, not to the iXBRL
@@ -835,9 +844,12 @@ Reviewer checks:
   table structure, headings, signature block, date and auditor
   identification. Check the rendered document, not the fact set: in the
   iXBRL route this content is deliberately untagged, so a fact-level
-  search finds nothing and proves nothing. A flag reading `Ja` over an
-  annual report with no controleverklaring is a real defect; an
-  untagged controleverklaring is not.
+  search finds nothing and proves nothing. An untagged
+  controleverklaring is not a defect. A flag reading `Ja` over an annual
+  report with no controleverklaring is a question for the preparer, not
+  a verdict: three of the regulator's own FY2025 examples do exactly
+  that, so the flag asserts the filer's legal situation (article 2:393
+  BW) and cannot be derived from the prose.
 - Do **not** expect, require or generate a
   `bw2-titel9:AuditorsReportFinancialStatements` text-block fact for a
   KvK iXBRL deposit. None of the official FY2025 reference filings
