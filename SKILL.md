@@ -19,19 +19,17 @@ so that answers come from the artifact rather than from memory.
 ## Start here: what is in front of you
 
 Pick the row that matches the artifacts you have, not the topic you think
-the question is about. Where a row names a path, read that file first: it
-gives the order of work, the one or two references to load at each step,
-and the observable condition that ends the work. Jurisdiction is never a
-row here; it is step 1 of every path, and when the regime is not
-stated, `references/taxonomies.md` maps country, framework and namespace
-prefix to the regime file.
+the question is about; read the references it names in that order.
+Jurisdiction is never a row here; it is the first thing to pin in every
+row, and when the regime is not stated, `references/taxonomies.md` maps
+country, framework and namespace prefix to the regime file.
 
 | What you have | What the question is | Read first |
 |---|---|---|
-| A report package (`.xbri`, `.zip`) or an iXBRL document (`.xhtml`), and a question about whether it is correct or how to fix it | whether this package is fit to file, or what to do about a defect in it | `paths/review-a-package.md` |
-| A source document (PDF, DOCX, accounts export) or a data model, and no package yet | how to get from this source to a package that is fit to file | `paths/compile-a-package.md` |
-| A validator message, a wrong fact or a wrong rendering, **and** the code that produced the package | where in that code the symptom comes from | `paths/diagnose-a-defect.md` |
-| A generator, a corpus of real reports, and rounds to spend on it | how to make the generator's output better, round after round | `paths/improvement-cycle.md` |
+| A report package (`.xbri`, `.zip`) or an iXBRL document (`.xhtml`), and a question about whether it is correct or how to fix it | whether this package is fit to file, or what to do about a defect in it | the regime file's *Start here* and *DTS and vintages* tables, then `references/validation.md` § 8, `references/defect-causes.md` for each finding, `references/viewer.md`, and `references/conversion.md` § 10 for the value-by-value walk |
+| A source document (PDF, DOCX, accounts export) or a data model, and no package yet | how to get from this source to a package that is fit to file | the regime file's tables, then `references/conversion.md`, `references/dts.md` § "From a fact to its concept, its label, its statement", `references/first-principles.md`, the scaffolds in `assets/`, and `references/esef.md` § 6 or the regime file's package section; then review the result as the row above |
+| A validator message, a wrong fact or a wrong rendering, **and** the code that produced the package | where in that code the symptom comes from | `references/defect-causes.md`: find the symptom's row, confirm one candidate with its check before opening the code, then open the generator at the stage the confirmed cause names |
+| A generator, a corpus of real reports, and rounds to spend on it | how to make the generator's output better, round after round | the two rows above, applied per report and then per defect class grouped by pipeline stage (`references/defect-causes.md` § "Pipeline stages"), with the corpus reconverted and compared after each fix |
 | Source code that reads or writes XBRL, with no package under review | what the software must get right | the reference index below, starting at `references/first-principles.md`, `references/spec.md`, `references/types.md` and `references/dts.md`; treat validator and tool behaviour as evidence of an implementation, never as the normative rule |
 | A question, and no artifact | what a rule says, or why | the reference index below; for a bare validator code, meaning first (`references/validation.md`), causes second (`references/defect-causes.md`) |
 
@@ -57,26 +55,9 @@ for missing a rule that did not yet bind is itself the defect. A
 regime-required adoption date (Dutch `bw2-titel9:DocumentAdoptionDate`)
 is a fact to tag, not a rule selector.
 
-## Paths
-
-Each path holds **ordering only**: the steps, the reference to load at
-each step, and the stop condition. Every rule it applies lives in a
-reference, which it names. Authority is by layer: a reference decides a
-domain rule, a path file decides ordering and its stop condition, and the
-*It ends when* column below only summarises the path. If a path and a
-reference disagree about a domain rule, the reference is right and the
-path has a bug.
-
-| Path | Load it when | It ends when |
-|---|---|---|
-| `paths/review-a-package.md` | you must decide whether a package is fit to file, or resolve defects found in it | the deterministic gate is clean in the operative profile, every statement has been walked value by value, and each resolved defect's finding check has been re-run, and the categorised report is written |
-| `paths/compile-a-package.md` | you are producing a package from a source document or data model | the review path's stop condition is met on the package you produced |
-| `paths/diagnose-a-defect.md` | a symptom in a package must be traced to the stage of a generator that caused it | one candidate cause is confirmed by its check, the fix is made at that stage, the check plus the gate pass on a fresh package, and the symptom, the refuted candidates, the confirmed cause and the check are recorded |
-| `paths/improvement-cycle.md` | you are running repeated rounds of convert, review, diagnose and fix against a corpus | the round's pre-registered defect budget is met or the corpus is exhausted, the reconverted corpus shows no defect class made worse, and the round's record lets the next round tell whether this one worked |
-
 ## Reference index
 
-Load one when a path names it, or when answering a question directly.
+Load one when an intake row names it, or when answering a question directly.
 Do not read them all up front; each is a focused dive and the long ones
 open with a contents list.
 
@@ -193,7 +174,6 @@ This file is loaded into agent runtimes with size limits: 1024
 characters for the frontmatter `description`; under 500 lines and
 ideally under 5 000 tokens for the body, which this repository gates at
 32 KiB for the whole file. Put substantive content in `references/`,
-which loads only when a path or the index points the agent at it; put
-ordering in `paths/`, which may hold no domain facts. Full rules and the
-`wc -c` check: `CONTRIBUTING.md` §"Size discipline" and §"Paths and
-references" before merging.
+which loads only when the intake or the index points the agent at it.
+Full rules and the `wc -c` check: `CONTRIBUTING.md` §"Size discipline"
+and §"Intake and references" before merging.
