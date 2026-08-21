@@ -2,7 +2,23 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** a validator has spoken or is about to: installing and invoking Arelle, choosing plugins and a disclosure system, Calculations 1.1 versus 1.0, or resolving a specific `ESEF.*`, `EFM.*`, `NL-KVK.*` / `FR-NL-*` or core XBRL code.
+
+**Do not load this when:** nothing failed but the numbers look wrong. A validator-silent defect belongs to `references/conversion.md` and `references/viewer.md`.
+
 If a code or behaviour is not cited here, treat it as folklore until verified in source.
+
+## Contents
+
+- [1. Arelle: the de facto reference processor](#1-arelle-the-de-facto-reference-processor)
+- [2. Plugins relevant to iXBRL](#2-plugins-relevant-to-ixbrl)
+- [3. Formula linkbase](#3-formula-linkbase)
+- [4. Calculations 1.1 vs 1.0](#4-calculations-11-vs-10)
+- [5. Common error categories with concrete codes](#5-common-error-categories-with-concrete-codes)
+- [6. Anti-patterns and pitfalls](#6-anti-patterns-and-pitfalls)
+- [7. Conformance suites and test material](#7-conformance-suites-and-test-material)
+- [8. Validation workflow recommendation](#8-validation-workflow-recommendation)
+- [Sources](#sources)
 
 ## 1. Arelle: the de facto reference processor
 

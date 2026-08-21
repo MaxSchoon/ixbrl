@@ -2,6 +2,25 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** the question is how a taxonomy is wired: XLink locators, arcs and resources, what each of the five standard linkbases does, role and arcrole types, tuples, the footnote model, the OIM serialisations, nil policy, or the pointers an instance may carry.
+
+**Do not load this when:** you need the discovery closure itself, offline resolution, or which release was operative for a period (`references/dts.md`), or you are designing dimensional structure (`references/dimensions.md`).
+
+## Contents
+
+- [Mental model: linkbases are directed graphs](#mental-model-linkbases-are-directed-graphs)
+- [DTS: Discoverable Taxonomy Set](#dts-discoverable-taxonomy-set)
+- [XLink primitives in XBRL](#xlink-primitives-in-xbrl)
+- [The five standard linkbases](#the-five-standard-linkbases)
+- [Role types and arcrole types](#role-types-and-arcrole-types)
+- [Tuples (legacy)](#tuples-legacy)
+- [Footnotes: XBRL model vs iXBRL `ix:footnote`](#footnotes-xbrl-model-vs-ixbrl-ixfootnote)
+- [Open Information Model (OIM)](#open-information-model-oim)
+- [Versioning](#versioning)
+- [Nil values and per-regulator policy](#nil-values-and-per-regulator-policy)
+- [`link:schemaRef` / `linkbaseRef` / `roleRef` / `arcroleRef` in instances](#linkschemaref--linkbaseref--roleref--arcroleref-in-instances)
+- [Sources](#sources)
+
 ## Mental model: linkbases are directed graphs
 
 Every XBRL linkbase is a **directed graph**.

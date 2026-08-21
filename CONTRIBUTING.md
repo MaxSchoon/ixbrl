@@ -52,8 +52,8 @@ Skills are loaded into agent runtimes that enforce real size limits. A
 bloated `SKILL.md` is silently truncated by some runtimes and crowds
 out other skills from the loadable index. Keep:
 
-- **YAML frontmatter `description`** ≤ **1024 characters** (Anthropic's
-  hard limit for SKILL.md descriptions). The description is what the
+- **YAML frontmatter `description`** ≤ **1024 characters** (the hard
+  limit the skill convention sets for SKILL.md descriptions). The description is what the
   runtime reads to decide whether to load this skill at all, so the
   budget is precious.
 - **`SKILL.md` file** ≤ **32 KiB (32,768 bytes)**, frontmatter
@@ -94,7 +94,42 @@ that grows `SKILL.md`, run:
 wc -c SKILL.md  # must stay under 32768
 ```
 
-and trim or relocate content if you cross the limit.
+and trim or relocate content if you cross the limit. The intake and the paths index are the only sections that may grow; everything else moves to a reference or a path.
+
+## Paths and references
+
+The skill has three layers, and the rule that keeps them apart is the one
+most worth defending in review.
+
+- `SKILL.md` opens with an intake keyed on the artifacts in front of the
+  agent (a package, a source document, a validator log with the code, a
+  generator with a corpus, source code, a bare question) and routes each
+  to one path or to the reference index. Intake rows are artifacts, never
+  topics and never named tasks; the table stays at six rows.
+- `paths/*.md` hold **ordering only**: numbered steps, the reference to
+  load at each step, and an observable stop condition. A path states no
+  domain fact. The moment a path says which `decimals` value is right or
+  what anchoring requires, that rule exists twice and the copies will
+  diverge; put the rule in a reference and have the path name it. A path
+  that grows past 120 lines (40 for a path that only composes others;
+  `tests/check_skill.py` enforces both) is restating references and must be cut back. Paths live at the
+  repository root, not under `references/`, so the jurisdiction structure
+  gate never sees them.
+- `references/*.md` hold the knowledge. Each opens with `Load this when`
+  and `Do not load this when`, one short paragraph each, decidable from the
+  agent's situation; every file over 100 lines carries a contents list
+  after the attribution line (jurisdiction files use a bold `Contents`
+  line rather than a heading, because their landmarks are gated).
+  `references/defect-causes.md` is the one reference shaped as a
+  diagnostic table: symptom, what the package shows, candidate causes by
+  pipeline stage, the check that confirms or refutes each, and where the
+  rule lives; it seeds candidates and never concludes, and a row may say
+  the cause is not known.
+
+Both paths and references are linked directly from `SKILL.md`, so any
+file is one read away from the entry point. `tests/check_skill.py`
+resolves `paths/` links as it does `references/` links and checks that
+every path file carries its load-condition header.
 
 ## Asset integrity
 

@@ -22,13 +22,22 @@ needs it, and scripts it runs when knowing is not enough.
 ### The entry point
 
 `SKILL.md` loads automatically when the skill triggers. It holds the routing
-logic and nothing else: identify the regulator, pin the rules to the reporting
-period, pick the validation profile, then go to the reference that answers the
-question.
+logic and nothing else: match what is in front of the agent to one of four
+paths or to the reference index, pin the profile and the period before any
+judgment, then go to the reference that answers the question.
 
 It stays under 32 KiB because a file the runtime truncates is a file that lies
 to you. Depth lives in `references/`, which load only when the body points at
 them. That is the whole design.
+
+### The paths
+
+`SKILL.md` opens with an intake keyed on what is in front of the agent and
+routes it to one of four short paths under `paths/`: review a package,
+compile a package, diagnose a defect back to its cause in a generator, run
+improvement rounds against a corpus. A path holds the order of work, the
+reference to load at each step and an observable stop condition, and no
+domain facts; the facts live in the references it names.
 
 ### The references
 

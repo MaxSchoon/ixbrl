@@ -17,16 +17,45 @@ profiles:
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
-## Start here: choose a filing profile
+**Load this when:** the filing is a Danish årsrapport to Erhvervsstyrelsen, or the codes carry the Fejl / Advis, TH / TR / TM or FR prefixes.
 
-Load this when the regulator is **Erhvervsstyrelsen** (the Danish
-Business Authority / DCCA), when the filing is a Danish **årsrapport**
-(annual report) deposited through **Regnskab Indberet** (Regnskab Basis,
-Regnskab Special, or the system-til-system API), or when the file binds
-the `gsd:`, `fsa:`, `arr:`, `mrv:`, `sob:`, `cmn:` namespaces or resolves
-a `link:schemaRef` under `http://archprod.service.eogs.dk/taxonomy/`.
-For financial-sector entities (banks, insurers, pension funds, fund
-managers) the sub-regime is **Finanstilsynet's DKFIN** taxonomy; see the *DKFIN* profile.
+**Do not load this when:** the Danish entity is a listed issuer whose question is the ESEF layer itself (`references/esef.md`).
+
+**Contents**
+
+- [Start here: choose a filing profile](#start-here-choose-a-filing-profile)
+- [Vintage and applicability](#vintage-and-applicability)
+  - [DTS and vintages](#dts-and-vintages)
+- [Profile: ÅRL årsrapport deposited with Erhvervsstyrelsen](#profile-arl-arsrapport)
+  - [Who files, to whom, under what law](#who-files-to-whom-under-what-law)
+  - [Deadlines](#deadlines)
+  - [Channels: Regnskab Basis / Regnskab Special / system-til-system](#channels-regnskab-basis--regnskab-special--system-til-system)
+  - [Reporting classes and channel mapping](#reporting-classes-and-channel-mapping)
+  - [ÅRL taxonomy architecture, versions, and entry points](#årl-taxonomy-architecture-versions-and-entry-points)
+  - [iXBRL format rules: one self-contained XHTML](#ixbrl-format-rules-one-self-contained-xhtml)
+  - [Block (clob) tagging vs mandatory detail tagging](#block-clob-tagging-vs-mandatory-detail-tagging)
+  - [No filer extensions under ÅRL: widen and disclose](#no-filer-extensions-under-årl-widen-and-disclose)
+- [Profile: IFRS filers, dual ÅRL + ESEF tagging](#profile-ifrs-esef)
+  - [The stand-alone DK-IFRS taxonomy is phased out](#the-stand-alone-dk-ifrs-taxonomy-is-phased-out)
+  - [The reducible structured set](#the-reducible-structured-set)
+  - [Extensions are available, and they bar system-til-system](#extensions-are-available-and-they-bar-system-til-system)
+  - [Relation to EU / ESEF reporting](#relation-to-eu--esef-reporting)
+- [Profile: DKFIN, the Finanstilsynet financial-sector sub-regime](#profile-dkfin)
+- [Profile: Foreign-company branch (PDF, not iXBRL)](#profile-foreign-branch)
+- [Jurisdiction-specific invariants](#jurisdiction-specific-invariants)
+  - [Mandatory structured fields, CVR contexts, and periods](#mandatory-structured-fields-cvr-contexts-and-periods)
+  - [Broken / floating fiscal years: the RegisteredReportingPeriod dimension](#broken--floating-fiscal-years-the-registeredreportingperiod-dimension)
+  - [Packaging / artifact shape](#packaging--artifact-shape)
+- [Validation](#validation)
+  - [The ERST Kontroller corpus: the filing-rules authority](#the-erst-kontroller-corpus-the-filing-rules-authority)
+  - [How to run it: the Arelle DBA plugin](#how-to-run-it-the-arelle-dba-plugin)
+  - [Rule-code reference: FR business rules](#rule-code-reference-fr-business-rules)
+- [Review workflow](#review-workflow)
+- [Authorities and governance](#authorities-and-governance)
+- [Coverage and known limitations](#coverage-and-known-limitations)
+- [Sources](#sources)
+
+## Start here: choose a filing profile
 
 | Situation | Profile | Section |
 |---|---|---|

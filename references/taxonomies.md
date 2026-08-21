@@ -2,9 +2,29 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** you need to know which taxonomy exists for a framework or country, who issues it, which version is current, who must file it, and where to download it.
+
+**Do not load this when:** the taxonomy is already chosen and you need its discovery closure or the release operative for a period (`references/dts.md`).
+
 The major XBRL/iXBRL taxonomies in active use globally for statutory and supervisory reporting. Each section: issuer, current version, entry points, filing scope, download URLs. Versions verified against issuer websites; re-check before relying on a specific version for a filing.
 
 **Last verified (UTC): 2026-05-04.** Treat all "current version" references as point-in-time.
+
+## Contents
+
+- [1. IFRS Accounting Taxonomy](#1-ifrs-accounting-taxonomy)
+- [2. ESEF Taxonomy (European Single Electronic Format)](#2-esef-taxonomy-european-single-electronic-format)
+- [3. US-GAAP Financial Reporting Taxonomy](#3-us-gaap-financial-reporting-taxonomy)
+- [4. UK FRC Taxonomy Suite](#4-uk-frc-taxonomy-suite)
+- [5. Dutch SBR / Nederlandse Taxonomie (NT)](#5-dutch-sbr--nederlandse-taxonomie-nt)
+- [6. EBA & EIOPA: Data Point Model (DPM) for Banking and Insurance](#6-eba--eiopa-data-point-model-dpm-for-banking-and-insurance)
+- [7. Denmark: ÅRL Taxonomy / DCCA (Erhvervsstyrelsen)](#7-denmark-årl-taxonomy--dcca-erhvervsstyrelsen)
+- [8. Finland: PRH Digital Financial Statements](#8-finland-prh-digital-financial-statements)
+- [9. France: AMF / ESEF (and the non-XBRL regimes)](#9-france-amf--esef-and-the-non-xbrl-regimes)
+- [10. Germany: HGB / E-Bilanz / ESEF (three regimes)](#10-germany-hgb--e-bilanz--esef-three-regimes)
+- [11. Belgium: NBB / FSMA / Biztax (three regimes)](#11-belgium-nbb--fsma--biztax-three-regimes)
+- [12. Other Notable Taxonomies](#12-other-notable-taxonomies)
+- [Sources](#sources)
 
 ## 1. IFRS Accounting Taxonomy
 
@@ -242,7 +262,7 @@ deposits; AFM extends ESEF/IFRS for listed-issuer AFRs.
 
 - `bw2-titel9:` Civil Code Title 9 core concepts.
 - `rj:` RJ extension concepts including cash-flow statement detail.
-- `kvk:` KvK metadata and entity-size dimensions.
+- `kvk:` KvK filing metadata, including the size-class fact `kvk:LegalEntitySize` (a fact, not a dimension: an enumeration item declared in `kvk-cor.xsd`, resolved 2026-08-21 with `scripts/dts_profile.py` against the `2025-12-31` `kvk-annual-report-nlgaap-ext.xsd` entry point).
 - IFRS namespaces where applicable.
 
 A recurring source of "looks tagged, isn't bound" defects is picking

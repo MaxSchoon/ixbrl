@@ -2,6 +2,10 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** a validation run has been made and the remaining question is what the rendered document shows a reader, or a partially tagged draft needs the viewer's review mode to show what is still untagged.
+
+**Do not load this when:** no validation has been attempted yet; run the pipeline and read `references/validation.md` first. A deposit-quality review needs a clean gate; a draft review does not.
+
 Use the Arelle iXBRL Viewer as the **visual review workbench**, not as
 a replacement for validation. The viewer is the tool that makes visible
 the content-level defects no validator catches: sign conventions, scope
@@ -14,6 +18,12 @@ The viewer is published as an Arelle plugin plus a JavaScript bundle:
 - **Source repository:** <https://github.com/Arelle/ixbrl-viewer>
 - **Docs (ReadTheDocs):** <https://arelle-ixbrl-viewer.readthedocs.io/en/latest/>
 - **User guide:** <https://arelle-ixbrl-viewer.readthedocs.io/en/latest/user_guides/user_guide.html>
+
+## Contents
+
+- [Preparing a viewer](#preparing-a-viewer)
+- [Review checklist](#review-checklist)
+- [What the viewer does **not** tell you](#what-the-viewer-does-not-tell-you)
 
 ## Preparing a viewer
 
@@ -64,10 +74,13 @@ Walk these in order. Each step builds on the prior.
   dimensions, and calculation relationships. Useful filters for review:
   - All facts where the concept is abstract (should be zero: abstracts
     are never tagged on a fact).
-  - All facts with `decimals="INF"` (audit each one; see SKILL.md
-    "First principles" §1).
+  - All facts with `decimals="INF"` (audit each one; see
+    `references/first-principles.md` § *The `decimals` ↔ rendering ↔
+    value relationship*).
   - All facts in `ix:hidden` (each must have a visible counterpart or
-    a defensible reason; see SKILL.md "First principles" §8).
+    a defensible reason; see `references/first-principles.md`
+    § *The hidden section is for facts that exist, not for facts you're
+    embarrassed by*).
 - **Duplicate-fact cycle.** When the inspector reports more than one
   occurrence of a fact, cycle through them. Inconsistent duplicate
   values are a filing defect, not a display issue (`ESEF.2.2.4.*`,

@@ -2,6 +2,24 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** you must choose, verify or enumerate a mandatory Annex II text-block element, or split one block tag across `ix:continuation`.
+
+**Do not load this when:** the question is ESEF generally, detailed tagging, or anchoring (`references/esef.md`).
+
+## Contents
+
+- [Legal basis](#legal-basis)
+- [How block tagging works mechanically](#how-block-tagging-works-mechanically)
+- [Selection guidance (Reporting Manual §1.9)](#selection-guidance-reporting-manual-19)
+- [The catalog: every Annex II text-block element](#the-catalog-every-annex-ii-text-block-element)
+  - [Elements only in Table 1 (IAS 1)](#elements-only-in-table-1-ias-1)
+  - [Elements only in Table 2 (IFRS 18)](#elements-only-in-table-2-ifrs-18)
+  - [Elements relabelled between the tables](#elements-relabelled-between-the-tables)
+  - [The 216 elements common to both tables](#the-216-elements-common-to-both-tables)
+- [Common pitfalls](#common-pitfalls)
+- [Recommended workflow for enumerating the full text-block list](#recommended-workflow-for-enumerating-the-full-text-block-list)
+- [Sources](#sources)
+
 ## Legal basis
 
 The mandatory block-tagging regime for European listed-issuer annual

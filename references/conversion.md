@@ -2,6 +2,10 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** a finished document (PDF, Word, or accounts-production output) is being turned into iXBRL, or a converted file passes every validator and still misrepresents the statements.
+
+**Do not load this when:** you need the meaning of a validator code (`references/validation.md`); the defects catalogued here are the ones no validator reports, and a `references/defect-causes.md` row that names a section here is the one exception.
+
 Most iXBRL is not authored from scratch. It is *converted*: a finished
 set of financial statements already exists as a PDF, a Word file, or a
 layout produced by accounts-production software, and that document must
@@ -16,16 +20,17 @@ will notice, even when Arelle is silent.
 
 ## Contents
 
-1. The fidelity contract
-2. Preserve presentation hierarchy: use abstract concepts
-3. Periods, dates, and column headers
-4. Tagging completeness: there is no "half-tagged" statement
-5. The statement of changes in equity (roll-forward matrices)
-6. Calculation completeness and weight derivation
-7. Label discipline: reuse, don't reinvent
-8. The hidden section: what genuinely belongs there
-9. What a representative filing actually contains
-10. The content-level review pass (checklist)
+- [1. The fidelity contract](#1-the-fidelity-contract)
+- [2. Preserve presentation hierarchy: use abstract concepts](#2-preserve-presentation-hierarchy-use-abstract-concepts)
+- [3. Periods, dates, and column headers](#3-periods-dates-and-column-headers)
+- [4. Tagging completeness: there is no "half-tagged" statement](#4-tagging-completeness-there-is-no-half-tagged-statement)
+- [5. The statement of changes in equity (roll-forward matrices)](#5-the-statement-of-changes-in-equity-roll-forward-matrices)
+- [6. Calculation completeness and weight derivation](#6-calculation-completeness-and-weight-derivation)
+- [7. Label discipline: reuse, don't reinvent](#7-label-discipline-reuse-dont-reinvent)
+- [8. The hidden section: what genuinely belongs there](#8-the-hidden-section-what-genuinely-belongs-there)
+- [9. What a representative filing actually contains](#9-what-a-representative-filing-actually-contains)
+- [10. The content-level review pass (checklist)](#10-the-content-level-review-pass-checklist)
+- [Sources](#sources)
 
 ---
 
@@ -100,7 +105,8 @@ each fact lives in, and they are themselves disclosures.
 - Every column header in the source ("31 December 2025", "2024") is a
   context. Map each one before tagging; never let a date silently
   disappear because the converter only kept the numbers.
-- Period type is concept-driven (see SKILL.md §3): balance-sheet
+- Period type is concept-driven (see `references/first-principles.md`
+  § *Period type is concept-driven, not document-driven*): balance-sheet
   concepts are `instant`; flow concepts (income, OCI, cash flow, changes
   in equity movements) are `duration`. The column a number sits under
   tells you *which* instant or duration; the concept tells you which
@@ -154,8 +160,9 @@ statement, because it is not a list; it is a **matrix**:
 Every **cell** is a fact. The columns are modelled with a dimension (an
 equity-components axis); each cell's context carries the relevant
 `xbrldi:explicitMember`. The total-equity column is typically the
-dimension default (no member emitted; see SKILL.md §5). Opening and
-closing balances are `instant`; the movement rows are `duration`.
+dimension default (no member emitted; see `references/first-principles.md`
+§ *Dimensions and axes: XDT is the substrate of every regime*). Opening
+and closing balances are `instant`; the movement rows are `duration`.
 
 Tagging only the total column, or only the closing balances, is the
 "half-tagged roll-forward"; it leaves most of the statement dark.
@@ -239,8 +246,10 @@ Worked example for gross operating result (a `credit`-balance subtotal):
 So `GrossOperatingResult = (+1)·NetRevenue + (-1)·CostOfSales`. If you
 find yourself wanting a weight that contradicts this table, the real
 error is upstream: usually a wrong `balance` on an extension concept,
-or a sign flipped on a fact to fix visible parentheses (see SKILL.md §2).
-Fix the cause, not the weight.
+or a sign flipped on a fact to fix visible parentheses (see
+`references/first-principles.md` § *Sign convention, balance type, and
+`preferredLabel` are three different things*). Fix the cause, not the
+weight.
 
 Every subtotal's children must also reconcile numerically within the
 `decimals` tolerance; mismatched rounding across calc-tree levels fires
@@ -280,8 +289,9 @@ later readers must reason about.
 
 ## 8. The hidden section: what genuinely belongs there
 
-SKILL.md §8 warns what must *not* go in `ix:hidden`. The positive case
-matters just as much, because conversions also *under*-use it.
+`references/first-principles.md` § *The hidden section is for facts that
+exist, not for facts you're embarrassed by* warns what must *not* go in
+`ix:hidden`. The positive case matters just as much, because conversions also *under*-use it.
 
 `ix:hidden` is the correct home for facts that genuinely exist for XBRL
 purposes but have no natural place in the rendered statements:
@@ -328,7 +338,8 @@ contains:
 - At least one **comparative period** column on every statement.
 - **Extension concepts** for line items the base taxonomy does not
   cover, each **anchored** to base concepts where the regime requires it
-  (see SKILL.md §6 and `esef.md` §4–§5).
+  (see `references/first-principles.md` § *Anchoring is mandatory only in
+  some regimes, but always good practice* and `esef.md` §4–§5).
 - **Dimensional data**: at minimum the equity-components axis of the
   changes-in-equity statement, often operating segments as well.
 - **Notes**, detail-tagged or block-tagged according to the regime (see

@@ -389,6 +389,11 @@ class FailureModesTestCase(unittest.TestCase):
         self.assertEqual(len(dts.documents), 1)
         self.assertEqual(len(dts.unresolved), 4)
         self.assertTrue(all("--max-documents" in r for r in dts.unresolved.values()))
+        # The truncated pointer is still recorded as a discovery edge, so a
+        # reader of the JSON can see which pointer the cap cut off rather than
+        # finding a document count that does not match the edge list.
+        truncated_targets = {uri for _origin, _pointer, uri in dts.discovery}
+        self.assertGreater(len(truncated_targets), len(dts.documents))
 
     def test_substitution_group_chain_through_an_intermediate_group(self):
         """An element whose chain reaches xbrli:item through a taxonomy-defined
