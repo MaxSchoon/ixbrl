@@ -92,6 +92,108 @@ def check_encoding(name: str, raw: bytes) -> str | None:
         return None
 
 
+# One content invariant, not a general one. The NL reference describes two
+# filing systems that share a prefix family: the classic XBRL route (RTS
+# Chapter 3), where the entry point is selected by entity size and sector, and
+# the KvK Inline XBRL route (RTS Chapter 2), where it is selected by financial
+# year and accounting basis. Merging their selectors is not a formatting slip:
+# it tells a preparer to pick a schema that the taxonomy package the filing
+# actually resolves against does not contain, and the deposit is rejected. It
+# had merged once (upstream #28), so the two selectors are gated here.
+#
+# The rules are deliberately narrow, because the CONTRAST between the families
+# is exactly what the prose must keep drawing. Only tables are checked, and a
+# table row is a selection statement: this release or this situation takes this
+# entry point. Prose may name both families in one sentence, and should.
+NL_CLASSIC_ENTRY_POINT = "kvk-rpt-"
+NL_INLINE_ENTRY_POINT = "kvk-annual-report-"
+NL_ENTRY_POINT_TOKEN = re.compile(r"kvk-rpt-|kvk-annual-report-|\.xsd\b")
+# Capitalised on purpose: these are the size CLASSES as the reference writes
+# them, not the lowercase `-micro` / `-groot` suffixes inside a classic
+# entry-point filename, which a row in the classic tree table legitimately
+# carries.
+NL_SIZE_CLASS = re.compile(
+    r"\bMicro\b|\bKlein\b|\bMiddelgroot\b|\bGroot\b|LegalEntitySize"
+)
+
+
+def table_rows(text: str) -> list[tuple[int, str]]:
+    """Return (line, joined cell text) per table row -- CommonMark, not regex.
+
+    Shell fences in these files are full of `|` pipes, so a line-oriented row
+    matcher reads `unzip -p x | grep y` as a table row.
+    """
+    md = MarkdownIt("commonmark").enable("table")
+    tokens = md.parse(text)
+    rows: list[tuple[int, str]] = []
+    line = 0
+    cells: list[str] = []
+    inside = False
+    for tok in tokens:
+        if tok.map:
+            line = tok.map[0]
+        if tok.type == "tr_open":
+            inside, cells = True, []
+        elif tok.type == "tr_close":
+            rows.append((line + 1, " ".join(cells)))
+            inside = False
+        elif inside and tok.type == "inline":
+            cells.append(tok.content)
+    return rows
+
+
+def profile_span(text: str, anchor_id: str) -> tuple[int, int] | None:
+    """Line span of the section introduced by `anchor_id`, up to the next H2.
+
+    Keyed on the front-matter-declared anchor rather than on heading text, so
+    rewording a heading does not silently switch the gate off.
+    """
+    match = re.search(rf'<a\s+id="{re.escape(anchor_id)}"', text)
+    if match is None:
+        return None
+    start = text[: match.start()].count("\n") + 1
+    md = MarkdownIt("commonmark").enable("table")
+    h2_lines = [
+        tok.map[0] + 1
+        for tok in md.parse(text)
+        if tok.type == "heading_open" and tok.tag == "h2" and tok.map
+    ]
+    # The first H2 at or after the anchor is the section's OWN heading; the
+    # section ends at the one after that. Taking the first (an earlier bug)
+    # collapsed the span to two lines and the gate checked nothing.
+    after = [line for line in h2_lines if line >= start]
+    if len(after) >= 2:
+        return (start, after[1])
+    return (start, text.count("\n") + 2)
+
+
+def check_nl_entry_point_families(name: str, text: str) -> None:
+    rows = table_rows(text)
+    for line, row in rows:
+        if NL_CLASSIC_ENTRY_POINT in row and NL_INLINE_ENTRY_POINT in row:
+            fail(
+                f"{name}:{line}: one table row names both the classic "
+                f"(`{NL_CLASSIC_ENTRY_POINT}`) and the Inline "
+                f"(`{NL_INLINE_ENTRY_POINT}`) entry-point family -- they are "
+                "selected differently; give them separate rows or separate tables"
+            )
+    span = profile_span(text, "profile-kvk-ixbrl-annual-accounts")
+    if span is None:
+        return
+    start, end = span
+    for line, row in rows:
+        if not start <= line < end:
+            continue
+        if NL_SIZE_CLASS.search(row) and NL_ENTRY_POINT_TOKEN.search(row):
+            fail(
+                f"{name}:{line}: a table row in the KvK Inline XBRL profile "
+                "pairs an entity-size class with an entry-point schema. Size "
+                "selects an entry point in the classic XBRL tree only (RM 2026 "
+                "Guidance 4.1.2 selects the Inline entry point by financial "
+                "year and accounting basis)"
+            )
+
+
 def check_file(path: Path) -> None:
     name = path.name
     text = check_encoding(name, path.read_bytes())
@@ -138,6 +240,9 @@ def check_file(path: Path) -> None:
     for sect in re.findall(r"^\s+section:\s*([A-Za-z0-9_-]+)", text, re.M):
         if sect not in anchors:
             fail(f"{name}: front matter declares section `{sect}` with no anchor")
+
+    if fm is not None and fm.get("reference_id") == "nl-sbr":
+        check_nl_entry_point_families(name, text)
 
     for lvl, t in heads:
         if lvl == 2 and re.match(r"^\d+\.\s", t):

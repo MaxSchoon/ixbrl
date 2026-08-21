@@ -242,18 +242,26 @@ deposits; AFM extends ESEF/IFRS for listed-issuer AFRs.
 
 **Common entry points:**
 
-- **Classic XBRL tree**: KvK Dutch GAAP entry points by company-size
-  class: micro, small, medium, large (different disclosure depths under
-  Title 9 Book 2 BW), 27 per NT generation. The entry point choice is
+- **Classic XBRL tree** (the XBRL instance route, RTS Chapter 3): 27
+  `kvk-rpt-jaarverantwoording-` entry points per NT generation, selected
+  by company-size class (micro, klein, middelgroot, groot, at different
+  disclosure depths under Title 9 Book 2 BW) and by sector, with
+  `-publicatiestukken` and `-verticaal` variants. A predefined fixed
+  framework, no extension taxonomy. The entry point choice is
   concept-bearing and changes which concepts are in-DTS.
-- **KvK Inline XBRL tree**: three annual-report entry points per release,
-  selected by financial year and accounting basis
-  (`kvk-annual-report-{nlgaap-ext,ifrs-ext,other}.xsd`), never by size.
-  The size class travels as the fact `kvk:LegalEntitySize`. Both trees,
-  with links and acceptance windows, are tabulated in
-  `references/jurisdictions/nl-sbr.md` *DTS and vintages*.
-- KvK IFRS entry points where the entity reports under IFRS but files at
-  the trade register.
+- **KvK Inline XBRL tree** (the iXBRL route, RTS Chapter 2): three
+  annual-report entry points per release, selected by financial year and
+  accounting basis (`kvk-annual-report-{nlgaap-ext,ifrs-ext,other}.xsd`),
+  never by size and never by sector. IFRS preparers filing at the trade
+  register take `-ifrs-ext.xsd` from this same set; the "other" entry
+  point serves other-country standards, the art. 2:403 / 2:408
+  foreign-group-head report, and the mandatory-elements document of a
+  directly deposited ESEF report. The size class travels as the fact
+  `kvk:LegalEntitySize`, which selects no schema. Both trees, with links
+  and acceptance windows, are tabulated in
+  `references/jurisdictions/nl-sbr.md` *DTS and vintages*; the Inline
+  selector and its sources are in that file's *Entry point: financial
+  year and accounting basis*.
 - AFM ESEF / IFRS for Dutch listed-issuer AFRs (extends ESEF core).
 - Belastingdienst entry points for corporate income tax (VPB), VAT (OB),
   payroll, and ICP returns.

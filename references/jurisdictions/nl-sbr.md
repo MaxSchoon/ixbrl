@@ -29,7 +29,8 @@ profiles:
   - [Bi-temporal cheatsheet (which rule applied when)](#bi-temporal-cheatsheet-which-rule-applied-when)
   - [RTS essentials for SBR-domein Handelsregister (2025 / 2026)](#rts-essentials-for-sbr-domein-handelsregister-2025--2026)
 - [Profile: KvK Handelsregister iXBRL annual accounts](#profile-kvk-ixbrl-annual-accounts)
-  - [Entry point by entity-size class (Title 9 Book 2 BW)](#entry-point-by-entity-size-class-title-9-book-2-bw)
+  - [Entry point: financial year and accounting basis](#entry-point-financial-year-and-accounting-basis)
+  - [Size class: what it decides, and what it does not (Title 9 Book 2 BW)](#size-class-what-it-decides-and-what-it-does-not-title-9-book-2-bw)
   - [The dual-scope pattern (consolidated + separate)](#the-dual-scope-pattern-consolidated--separate)
   - [What the RTS requires when both scopes are present](#what-the-rts-requires-when-both-scopes-are-present)
   - [Placeholder membership across both scopes](#placeholder-membership-across-both-scopes)
@@ -87,8 +88,9 @@ against. So before reviewing or validating, pin:
    Microbedrijf entry point makes most of the bw2-titel9 disclosure
    concepts unbound and a Groot entry point makes them available; in the
    **KvK Inline XBRL tree** the entry point is selected by financial year
-   and accounting basis only, never by size (see *DTS and vintages*
-   below and `references/dts.md`).
+   and accounting basis only, never by size (see *Entry point: financial
+   year and accounting basis*, *DTS and vintages* below, and
+   `references/dts.md`).
 
 ### DTS and vintages
 
@@ -120,9 +122,13 @@ untagged: see *The auditor's report (controleverklaring) in the package*.
 
 **Classic XBRL tree** (`http://www.nltaxonomie.nl/nt<NN>/kvk/<YYYYMMDD>/`,
 plain http). 27 entry points per generation under `entrypoints/`, selected
-by **entity size and sector**, fixed framework, no extensions. The
-unsuffixed release directory is the test of publication; `.a` (alfa) and
-`.b` (bèta) directories persist for every generation.
+by **entity size and sector**, fixed framework, no extensions. FAQ 2.3.1
+(2026-02-12) defines this format as an XBRL 2.1 instance against a
+"predefined" entry point, a fixed framework that makes preparing the
+accounts "comparable to completing a form"; iXBRL is the other permitted
+format, XHTML with XBRL markup. The unsuffixed release directory is the
+test of publication; `.a` (alfa) and `.b` (bèta) directories persist for
+every generation.
 
 | Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
 |---|---|---|---|---|---|---|
@@ -130,6 +136,15 @@ unsuffixed release directory is the test of publication; `.a` (alfa) and
 | **NT19** `20241211` | `http://www.nltaxonomie.nl/nt19/kvk/20241211/entrypoints/kvk-rpt-jaarverantwoording-2024-…` (200) | same page | FY beginning on or after 2024-01-01 | listed in RTS 2025 and RTS 2026 | accepted | same |
 | **NT18** `20231213` | `http://www.nltaxonomie.nl/nt18/kvk/20231213/entrypoints/kvk-rpt-jaarverantwoording-2023-…` (200) | same page | FY beginning on or after 2023-01-01 | listed in RTS 2025 only; **dropped from RTS 2026 Chapter 3 Annex I** | superseded once RTS 2026 governs the deposit | same |
 | NT21 `20261209` | `…/nt21/kvk/20261209.a/` (April 2026) and `…/20261209.b/` (August 2026) exist; `…/20261209/entrypoints/…` **404** | not published | FY beginning on or after 2026-01-01 (RTS 2026 Chapter 3 Annex I) | listed in RTS 2026 as supported; not yet filable | pre-release; calendar: definitive 2026-10-29, production 2026-12-09 | release calendar (page dated 2026-07-30); live directory |
+
+Within a generation the selector is the entity's size class,
+`kvk-rpt-jaarverantwoording-<year>-nlgaap-{micro,klein,middelgroot,groot}`,
+alongside specialised entry points for banks, insurers, pension funds,
+healthcare, housing, non-profit and fundraising organisations,
+cooperatives, cv/vof and foundations. The suffix `-publicatiestukken`
+selects publication-only accounts and `-verticaal` the vertical
+balance-sheet layout. None of these selectors exists in the Inline XBRL
+tree: see *Entry point: financial year and accounting basis*.
 
 Two citation traps in the RTS itself: "Annex I" exists in **both** chapters
 (Chapter 2 iXBRL: a legend; Chapter 3 XBRL: the supported-version table),
@@ -299,9 +314,9 @@ governs the 403/408 package shape (see the *art. 2:403 foreign group
 head report in iXBRL* profile), has not been read into this file.
 NT21 entry-point names are **not** recorded here: the taxonomy is
 still pre-release and the directory listing is truncated, so the
-*Entry point by entity-size class (Title 9 Book 2 BW)* table's
-`-2025-` entry-point suffixes have deliberately **not** been rolled to
-`-2026-`. Verify against the published release before doing so.
+`-2025-` suffixes in the classic-tree entry-point names under *DTS and
+vintages* have deliberately **not** been rolled to `-2026-`. Verify
+against the published release before doing so.
 
 Do not cite an RTS rule from memory. The SBR project page also publishes
 the current FAQ, practice guidance, conformance suite, taxonomy
@@ -312,7 +327,64 @@ when diagnosing a deposit failure.
 
 ## Profile: KvK Handelsregister iXBRL annual accounts
 
-### Entry point by entity-size class (Title 9 Book 2 BW)
+### Entry point: financial year and accounting basis
+
+In the KvK Inline XBRL tree the `link:schemaRef` target is selected on
+two axes and two only: the **financial year** and the **accounting
+basis** of the deposited accounts. Entity size is not one of them. RM
+2026 Guidance 4.1.2 (last updated July 2026) prints the selection table
+for a legal entity depositing its own annual accounts, and its columns
+are *Financial year*, *GAAP*, *Entry point*. There is no size column,
+and no rule anywhere in RM 2026 conditions an entry point on size.
+
+| Accounting basis of the deposited accounts | Entry point schema (per-year URLs in *DTS and vintages*) | Normative source |
+|---|---|---|
+| NL-GAAP | `kvk-annual-report-nlgaap-ext.xsd` | RM 2026 Guidance 4.1.2 table, rows 2024, 2025 and 2026 under NL-GAAP; rule G4-1-2_1 |
+| IFRS | `kvk-annual-report-ifrs-ext.xsd` | RM 2026 Guidance 4.1.2 table, the same three years under IFRS; rule G4-1-2_1 |
+| Standards of another country, and the art. 2:403 / 2:408 foreign-group-head report | `kvk-annual-report-other.xsd` (FY2024 vintage: `kvk-annual-report-other-gaap.xsd`) | RM 2026 Guidance 5.1.3, rule G5-1-3_1 |
+| ESEF report deposited directly at the Handelsregister: its separate mandatory-elements iXBRL document | `kvk-annual-report-other.xsd` | RM 2026 Guidance 6.1.3, rule G6-1-3_1 |
+
+The "Other" entry point is the one case where the choice turns on more
+than the basis: RM 2026 Guidance 5.1.3 permits it **instead of** an
+extension taxonomy and forbids using it as the starting point for one,
+so an entity that does build an extension returns to the Guidance 4.1
+entry points.
+
+**What the FY2025 package declares.** `kvk-2025_taxonomie.zip`
+(`tp:publicationDate` 2025-12-31) declares exactly five entry points in
+`META-INF/taxonomyPackage.xml`: the three filing entry points above,
+plus `kvk-cor.xsd` ("KVK - core") and `kvk-all.xsd` ("KVK - all"), which
+are element inventories and not filing start points. No `kvk-rpt-`
+schema of any kind is in this package. That family belongs to the
+classic XBRL tree alone (*DTS and vintages*).
+
+**Verified against the official FY2025 reference filings** (unzipped
+2026-08-21). `demicrobv`, `dekleinebv`, `demiddelgrotebv` and
+`degrotebv` each import `kvk-annual-report-nlgaap-ext.xsd` in their
+extension schema, one entry point across all four size classes;
+`ifrsexamplenv` imports `-ifrs-ext.xsd`; `403_voorbeeld` and
+`beispielgmbh` (German GAAP) each carry a `link:schemaRef` to
+`kvk-annual-report-other.xsd`; and `esef_example` carries that same
+reference beside a second `schemaRef` to the issuer's own ESEF
+extension, which is the two-document shape RM 2026 Guidance 6.1.3
+prescribes.
+
+**The accepted set is closed at three, and the channel enforces it.**
+RM 2026 Guidance 8.2.2 defines one Digipoort message type for this
+route, `jaarrekening_ixbrl_esd`, and tabulates the entry points it may
+be used with: `kvk-annual-report-nlgaap-ext.xsd`, `-ifrs-ext.xsd` and
+`-other.xsd`, each marked Mandatory. No fourth entry point is accepted
+and no row of that table is conditioned on size. Guidance 8.3 makes the
+same point about the manual route in plain words, telling a filer to
+"use the upload portal for large companies to file the .xbri file (even
+if you're a small or medium-sized company)".
+
+A `kvk-rpt-` name and a `kvk-annual-report-` name never belong in one
+selection statement. They are the entry-point families of two different
+filing systems with two different selectors, and merging them is the
+defect this section was rewritten to remove.
+
+### Size class: what it decides, and what it does not (Title 9 Book 2 BW)
 
 The size class is a property of the entity, derived from balance-sheet
 total, net turnover, and average headcount over the prior two
@@ -323,30 +395,30 @@ extensible-enumeration fact. Its value is one of the KvK size members
 URI value such as
 `https://www.nltaxonomie.nl/kvk/2025-12-31/kvk-cor#LegalEntitySizeLargeMember`.
 It is **not** an XDT context axis and should not appear as an
-`xbrldi:explicitMember`. The size class dictates:
+`xbrldi:explicitMember`.
+
+| Size class | `kvk:LegalEntitySize` fact value | Auditor's report required (art. 2:393 BW) |
+|---|---|---|
+| Micro | `kvk:LegalEntitySizeMicroMember` | No |
+| Klein | `kvk:LegalEntitySizeSmallMember` | No |
+| Middelgroot | `kvk:LegalEntitySizeMediumMember` | Yes |
+| Groot | `kvk:LegalEntitySizeLargeMember` | Yes |
+
+The size class dictates:
 
 - Which disclosures are mandatory (Klein omits many notes; Groot must
   include everything Title 9 requires plus the auditor's report).
 - Whether the auditor's report (controleverklaring) is required at all.
+- From which financial year digital deposit is compulsory
+  (*Bi-temporal cheatsheet (which rule applied when)*).
 
-It does **not** select the iXBRL entry point. All four official FY2025
-size-class example packages (`demicrobv`, `dekleinebv`,
-`demiddelgrotebv`, `degrotebv`) import the same
-`kvk-annual-report-nlgaap-ext.xsd`; size-specific entry points exist only
-in the classic XBRL tree (see *DTS and vintages*).
-
-| Size class | `kvk:LegalEntitySize` fact value | Auditor's report required | Classic **XBRL**-tree entry point family (NT20, FY2025 NL-GAAP); not used by iXBRL |
-|---|---|---|---|
-| Micro | `kvk:LegalEntitySizeMicroMember` | No | `kvk-rpt-jaarverantwoording-2025-nlgaap-micro` |
-| Klein | `kvk:LegalEntitySizeSmallMember` | No | `kvk-rpt-jaarverantwoording-2025-nlgaap-klein` |
-| Middelgroot | `kvk:LegalEntitySizeMediumMember` | Yes | `kvk-rpt-jaarverantwoording-2025-nlgaap-middelgroot` |
-| Groot | `kvk:LegalEntitySizeLargeMember` | Yes | `kvk-rpt-jaarverantwoording-2025-nlgaap-groot` |
-
-(In the classic tree, specialised entry points exist for banks, insurers,
-pension funds, healthcare, housing, non-profit / fundraising
-organisations, cooperatives, cv/vof, foundations, etc.; the suffix
-`-publicatiestukken` selects publication-only accounts and `-verticaal`
-selects the vertical balance-sheet layout.)
+It decides neither the iXBRL entry point (*Entry point: financial year
+and accounting basis* above) nor even the filing format: FAQ 2.4.3
+(2026-02-12) walks through a "large legal entity" that opts for the
+classic XBRL format, and FAQ 2.4.2 a "small or medium-sized legal
+entity" that opts for iXBRL. Size selects a schema only in the classic
+XBRL tree, whose `kvk-rpt-jaarverantwoording-` families are tabulated
+under *DTS and vintages*.
 
 A common reviewer slip: applying Middelgroot disclosure expectations
 to a Klein filing, or vice versa. Pin the size class first; it changes
@@ -1101,8 +1173,8 @@ walk this in order. Each step depends on the prior being clean.
    *First: which Nederlandse Taxonomie applies?* and *Bi-temporal
    cheatsheet (which rule applied when)*. State them back to the user before opening the file. If any
    are ambiguous, ask.
-2. **Pin the entity-size class.** *Entry point by entity-size class
-   (Title 9 Book 2 BW)*. The size class changes which
+2. **Pin the entity-size class.** *Size class: what it decides, and
+   what it does not (Title 9 Book 2 BW)*. The size class changes which
    absences count as defects (auditor's report, certain disclosures).
 3. **Pin the RTS Article 4 statement scope.**
    *What the RTS requires when both scopes are present*. If both
