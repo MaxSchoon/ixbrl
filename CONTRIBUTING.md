@@ -113,8 +113,8 @@ most worth defending in review.
   diverge; put the rule in a reference and have the path name it. A path
   that grows past 120 lines (40 for a path that only composes others;
   `tests/check_skill.py` enforces both) is restating references and must be cut back. Paths live at the
-  repository root, not under `references/`, so the jurisdiction structure
-  gate never sees them.
+  skill root beside `SKILL.md`, not under `references/`, so the
+  jurisdiction structure gate never sees them.
 - `references/*.md` hold the knowledge. Each opens with `Load this when`
   and `Do not load this when`, one short paragraph each, decidable from the
   agent's situation; every file over 100 lines carries a contents list

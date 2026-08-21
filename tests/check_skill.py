@@ -423,13 +423,19 @@ def check_anchors() -> None:
         # of its slug, and masking would blank it.
         targets = {slugify(h) for h in HEADING.findall(text)}
         targets |= set(EXPLICIT_ID.findall(text))
-        seen: dict[str, int] = {}
+        # Duplicate headings get `-1`, `-2`, ... on the first free suffix,
+        # reserving every slug already taken by any heading, the way the
+        # rendered page allocates them.
+        taken: set[str] = set()
         for h in HEADING.findall(text):
             base = slugify(h)
-            n = seen.get(base, 0)
-            seen[base] = n + 1
-            if n:
-                targets.add(f"{base}-{n}")
+            slug = base
+            n = 1
+            while slug in taken:
+                slug = f"{base}-{n}"
+                n += 1
+            taken.add(slug)
+            targets.add(slug)
         label = path.relative_to(ROOT).as_posix()
         for anchor in SAME_DOC_LINK.findall(masked):
             checked += 1

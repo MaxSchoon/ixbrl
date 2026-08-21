@@ -4,7 +4,7 @@
 
 **Load this when:** you are implementing or reading Generic Links (`gen:*`), the XBRL Functions Registry (`xfi:` / `xff:`), or a Versioning report: the plumbing beneath Formula, Table Linkbase and taxonomy migrations.
 
-**Do not load this when:** you are reviewing or building a filing. None of these specifications appears in a financial-reporting package; start at `references/structure.md` or `references/validation.md`.
+**Do not load this when:** the package under review or construction uses none of them, which is the usual case for a financial-reporting package; start at `references/structure.md` or `references/validation.md`, and return here after the path if the taxonomy carries `gen:*` links, `xfi:` / `xff:` functions or a Versioning report.
 
 Every namespace URI, element name, and arcrole below was verified against the specifications listed under **Sources**.
 

@@ -4,7 +4,7 @@
 
 **Load this when:** you must choose, verify or enumerate a mandatory Annex II text-block element, or split one block tag across `ix:continuation`.
 
-**Do not load this when:** the question is ESEF generally, detailed tagging, or anchoring (`references/esef.md`).
+**Do not load this when:** the question is ESEF generally, numeric detail tagging, or anchoring (`references/esef.md`); any question about a text block comes here, whatever else it touches.
 
 ## Contents
 
