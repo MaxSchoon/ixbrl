@@ -341,7 +341,7 @@ and no rule anywhere in RM 2026 conditions an entry point on size.
 |---|---|---|
 | NL-GAAP | `kvk-annual-report-nlgaap-ext.xsd` | RM 2026 Guidance 4.1.2 table, rows 2024, 2025 and 2026 under NL-GAAP; rule G4-1-2_1 |
 | IFRS | `kvk-annual-report-ifrs-ext.xsd` | RM 2026 Guidance 4.1.2 table, the same three years under IFRS; rule G4-1-2_1 |
-| Standards of another country, and the art. 2:403 / 2:408 foreign-group-head report | `kvk-annual-report-other.xsd` (FY2024 vintage: `kvk-annual-report-other-gaap.xsd`) | RM 2026 Guidance 5.1.3, rule G5-1-3_1 |
+| Standards of another country, and the art. 2:403 / 2:408 foreign-group-head report (the 2:408 report only for financial years starting on or after 1 January 2028; earlier years file it by email as PDF) | `kvk-annual-report-other.xsd` (FY2024 vintage: `kvk-annual-report-other-gaap.xsd`) | RM 2026 Guidance 5.1.3, rule G5-1-3_1; the 2028 threshold is RM 2026 Guidance 7.2.1 |
 | ESEF report deposited directly at the Handelsregister: its separate mandatory-elements iXBRL document | `kvk-annual-report-other.xsd` | RM 2026 Guidance 6.1.3, rule G6-1-3_1 |
 
 The "Other" entry point is the one case where the choice turns on more

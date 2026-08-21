@@ -105,15 +105,21 @@ def check_encoding(name: str, raw: bytes) -> str | None:
 # is exactly what the prose must keep drawing. Only tables are checked, and a
 # table row is a selection statement: this release or this situation takes this
 # entry point. Prose may name both families in one sentence, and should.
-NL_CLASSIC_ENTRY_POINT = "kvk-rpt-"
-NL_INLINE_ENTRY_POINT = "kvk-annual-report-"
-NL_ENTRY_POINT_TOKEN = re.compile(r"kvk-rpt-|kvk-annual-report-|\.xsd\b")
-# Capitalised on purpose: these are the size CLASSES as the reference writes
-# them, not the lowercase `-micro` / `-groot` suffixes inside a classic
-# entry-point filename, which a row in the classic tree table legitimately
-# carries.
+# The classic family is recognised by either its `kvk-rpt-` prefix or the
+# `jaarverantwoording-` stem (a row may quote the stem without the prefix);
+# the Inline family by `kvk-annual-report-`. `kvk-cor.xsd` and `kvk-all.xsd`
+# are element inventories, not entry points, so a bare `.xsd` is NOT a token:
+# a row that names them beside a size class is a correct row.
+NL_CLASSIC_ENTRY_POINT = re.compile(r"kvk-rpt-|jaarverantwoording-")
+NL_INLINE_ENTRY_POINT = re.compile(r"kvk-annual-report-")
+NL_ENTRY_POINT_TOKEN = re.compile(r"kvk-rpt-|jaarverantwoording-|kvk-annual-report-")
+# Size classes as words in either case (Dutch writes them lowercase in
+# running text), and the size-member QNames. The `-micro` / `-groot`
+# suffixes inside a classic filename are not matched because they are not
+# word-bounded by a space or pipe on both sides there.
 NL_SIZE_CLASS = re.compile(
-    r"\bMicro\b|\bKlein\b|\bMiddelgroot\b|\bGroot\b|LegalEntitySize"
+    r"(?<![\w-])(micro|klein|middelgroot|groot)(?![\w-])|LegalEntitySize",
+    re.IGNORECASE,
 )
 
 
@@ -170,11 +176,11 @@ def profile_span(text: str, anchor_id: str) -> tuple[int, int] | None:
 def check_nl_entry_point_families(name: str, text: str) -> None:
     rows = table_rows(text)
     for line, row in rows:
-        if NL_CLASSIC_ENTRY_POINT in row and NL_INLINE_ENTRY_POINT in row:
+        if NL_CLASSIC_ENTRY_POINT.search(row) and NL_INLINE_ENTRY_POINT.search(row):
             fail(
                 f"{name}:{line}: one table row names both the classic "
-                f"(`{NL_CLASSIC_ENTRY_POINT}`) and the Inline "
-                f"(`{NL_INLINE_ENTRY_POINT}`) entry-point family -- they are "
+                "(`kvk-rpt-` / `jaarverantwoording-`) and the Inline "
+                "(`kvk-annual-report-`) entry-point family -- they are "
                 "selected differently; give them separate rows or separate tables"
             )
     span = profile_span(text, "profile-kvk-ixbrl-annual-accounts")
