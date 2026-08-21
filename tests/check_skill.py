@@ -118,7 +118,9 @@ def check_skill() -> None:
 # covers less is worse than one that fails.
 ROOT_LINK = re.compile(r"references/((?:[A-Za-z0-9._-]+/)*[A-Za-z0-9._-]+\.md)")
 # Path files are linked as `paths/<name>.md` from SKILL.md and from each other.
-PATH_LINK = re.compile(r"paths/([A-Za-z0-9._-]+\.md)")
+PATH_LINK = re.compile(
+    r"paths/([A-Za-z0-9._-]+\.md)"
+)  # resolved only when paths/ exists
 PATHS = ROOT / "paths"
 PATH_HEADER_MARKS = ("**Load this when:**", "**Do not load this when:**")
 # A path that grows past this is restating references (CONTRIBUTING.md
@@ -155,10 +157,13 @@ def check_reference_links() -> None:
             if rel not in known:
                 fail(f"{label}: link to references/{rel} does not resolve")
 
-        for rel in sorted(set(PATH_LINK.findall(text))):
-            checked += 1
-            if not (PATHS / rel).is_file():
-                fail(f"{label}: link to paths/{rel} does not resolve")
+        # paths/ is local-only and gitignored; its links are checked only
+        # where the directory is present.
+        if PATHS.is_dir():
+            for rel in sorted(set(PATH_LINK.findall(text))):
+                checked += 1
+                if not (PATHS / rel).is_file():
+                    fail(f"{label}: link to paths/{rel} does not resolve")
 
         # Sibling form only makes sense from inside references/.
         if src.is_relative_to(references):
@@ -456,7 +461,7 @@ def check_paths() -> None:
     """
     mark = len(errors)
     if not PATHS.is_dir():
-        fail("paths/ directory is missing")
+        print("Paths: none present (local-only working files), skipped")
         return
     files = sorted(PATHS.glob("*.md"))
     if not files:
