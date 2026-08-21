@@ -17,3 +17,4 @@ session-ledger/
 
 # Local-only working files; never published
 paths/
+.venv
