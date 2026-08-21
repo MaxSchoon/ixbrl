@@ -23,8 +23,8 @@ needs it, and scripts it runs when knowing is not enough.
 
 `SKILL.md` loads automatically when the skill triggers. It holds the routing
 logic, the rules every row shares, and the skill's own attribution and
-editing notes, and no domain reference material: match what is in front of the agent to one of four
-paths or to the reference index, pin the profile and the period before any
+editing notes, and no domain reference material: match what is in front of the agent to an intake
+row or to the reference index, pin the profile and the period before any
 judgment, then go to the reference that answers the question.
 
 It stays under 32 KiB because a file the runtime truncates is a file that lies

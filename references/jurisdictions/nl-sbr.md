@@ -668,7 +668,7 @@ them.
 | Tagged? | **no.** FAQ § 2.6.1: "it is not yet required for the auditor's report in iXBRL format to be marked up using an appropriate digital taxonomy" | yes, against an entry point of the **NBA taxonomy** (Ch. 3 art. 6 para. 2; Annex I Table 2 names version 2.1) |
 | Electronically signed? | **no.** FAQ § 2.6.2: not yet required | yes, XAdES-EPES per ETSI TS 101 903 V1.4.1 (Ch. 3 art. 8 and Chapter 3 Annex II), as a separate XML file per Ch. 3 art. 7 footnote 12 |
 | Presence asserted by | `kvk:AuditorsReportFinancialStatementsPresent` in the filing-information sidecar (Chapter 2 Annex II point 3 Table 2) | the presence of the second instance itself; Chapter 3 has no mandatory-element table, its art. 4 para. 1 requires every component to be marked up in the instance against the fixed-framework entry point |
-| Documents filed | 2 in every reference filing (annual report + KvK sidecar); Chapter 2 Annex IV point 18 requires the separate filing-information document only when the annual report itself does not carry every Table 2 element | 3: annual-report instance, auditor's-report instance, signature XML (Ch. 3 art. 7 footnote) |
+| Documents filed | measured: 2 in every FY2025 reference filing (annual report + KvK sidecar); required: the sidecar only when the annual report itself does not carry every Table 2 element (Chapter 2 Annex IV point 18) | 3: annual-report instance, auditor's-report instance, signature XML (Ch. 3 art. 7 footnote) |
 
 RTS 2026 (final 10 July 2026) carries the Chapter 3 auditor's-report
 articles and the Chapter 2 mandatory-element table unchanged, so the
@@ -839,17 +839,17 @@ Reviewer checks:
   filer's actual situation (`Ja` when the controleverklaring is in the
   deposit; `Nee` when it is legitimately absent, e.g. art. 2:403 BW
   group-subsidiary exemption, or a Klein/Micro entity).
-- When the flag is `Ja`, the controleverklaring is **visibly present**
-  in the annual-report XHTML, under Other information, complete with
-  table structure, headings, signature block, date and auditor
-  identification. Check the rendered document, not the fact set: in the
-  iXBRL route this content is deliberately untagged, so a fact-level
-  search finds nothing and proves nothing. An untagged
-  controleverklaring is not a defect. A flag reading `Ja` over an annual
-  report with no controleverklaring is a question for the preparer, not
-  a verdict: three of the regulator's own FY2025 examples do exactly
-  that, so the flag asserts the filer's legal situation (article 2:393
-  BW) and cannot be derived from the prose.
+- When the flag is `Ja` and the filer is audited, expect the
+  controleverklaring as **visible prose** in the annual-report XHTML,
+  under Other information, with its headings, signature block, date and
+  auditor identification, and check the rendered document rather than
+  the fact set: in the iXBRL route this content is deliberately
+  untagged, so a fact-level search finds nothing and proves nothing. An
+  untagged controleverklaring is not a defect, and neither is a `Ja`
+  without matching prose on its own: three of the regulator's own FY2025
+  examples do exactly that. The flag asserts the filer's legal situation
+  (article 2:393 BW); prose that disagrees with it is a question for the
+  preparer, never a verdict a reviewer reaches from the text.
 - Do **not** expect, require or generate a
   `bw2-titel9:AuditorsReportFinancialStatements` text-block fact for a
   KvK iXBRL deposit. None of the official FY2025 reference filings

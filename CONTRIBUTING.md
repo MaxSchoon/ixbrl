@@ -94,7 +94,7 @@ that grows `SKILL.md`, run:
 wc -c SKILL.md  # must stay under 32768
 ```
 
-and trim or relocate content if you cross the limit. The intake and the reference index are the only sections that may grow; everything else moves to a reference or a path.
+and trim or relocate content if you cross the limit. The intake and the reference index are the only sections that may grow; everything else moves to a reference file.
 
 ## Intake and references
 
