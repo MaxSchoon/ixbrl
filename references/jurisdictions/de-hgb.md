@@ -17,19 +17,34 @@ profiles:
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
-## Start here: choose a filing profile
+**Load this when:** the entity is German and the regime is E-Bilanz, Offenlegung / Hinterlegung, or ESEF via BaFin.
 
-Load this when the entity is German and the filing is one of three
-structured-reporting regimes: **E-Bilanz** (tax XBRL under § 5b EStG),
-**Offenlegung / Hinterlegung** (statutory publication of annual accounts
-under §§ 325 ff. HGB to the Unternehmensregister), or **ESEF** (listed
-Inlandsemittent under § 114 WpHG / § 328 Abs. 1 HGB, BaFin as NCA). The
-most important fact for an iXBRL practitioner is in *Which regime? The
-three-way split*: **only the ESEF regime is Inline XBRL**; the other two
-are plain XBRL 2.1 instances. For generic ESEF mechanics (anchoring,
-block tagging, Reporting Manual, report-package layout, `ESEF.*` codes) stay in `references/esef.md`; for bank/insurer
-prudential DPM reporting use `references/dpm.md`. This file carries **only the German
-jurisdiction layer**.
+**Do not load this when:** the question is generic ESEF mechanics (`references/esef.md`); of the three German regimes only ESEF is Inline XBRL.
+
+**Contents**
+
+- [Start here: choose a filing profile](#start-here-choose-a-filing-profile)
+  - [Section index (legacy numbering, superseded by the profiles above)](#section-index-legacy-numbering-superseded-by-the-profiles-above)
+- [Vintage and applicability](#vintage-and-applicability)
+  - [DTS and vintages](#dts-and-vintages)
+- [Profile: E-Bilanz (§ 5b EStG)](#profile-e-bilanz)
+  - [Scope, exemptions, transmission](#scope-exemptions-transmission)
+  - [The HGB taxonomy family and its yearly cadence](#the-hgb-taxonomy-family-and-its-yearly-cadence)
+- [Profile: Offenlegung / Hinterlegung (§§ 325 ff. HGB)](#profile-offenlegung)
+  - [Legal basis, filing point, and the Hinterlegung option](#legal-basis-filing-point-and-the-hinterlegung-option)
+  - [Accepted formats, size classes, and enforcement](#accepted-formats-size-classes-and-enforcement)
+- [Profile: ESEF, the German listed-issuer layer (§ 114 WpHG / § 328 HGB, BaFin)](#profile-esef)
+- [Profile: CSRD / ESRS, the German transposition state and the Omnibus effect](#profile-esrs)
+- [Jurisdiction-specific invariants](#jurisdiction-specific-invariants)
+  - [Which regime? The three-way split](#which-regime-the-three-way-split)
+  - [Relation to EU reporting (how the national formats coexist with ESEF)](#relation-to-eu-reporting-how-the-national-formats-coexist-with-esef)
+- [Validation, and the honest Arelle gap](#validation-and-the-honest-arelle-gap)
+- [Review workflow: a pragmatic German review pass, in order](#review-workflow-a-pragmatic-german-review-pass-in-order)
+- [Authorities and governance (who does what)](#authorities-and-governance-who-does-what)
+- [Coverage and known limitations](#coverage-and-known-limitations)
+- [Sources](#sources)
+
+## Start here: choose a filing profile
 
 | Situation | Profile | Section |
 |---|---|---|

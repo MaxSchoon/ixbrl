@@ -2,11 +2,26 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** you are about to review a filing in a regime you have not worked in before, or a validator passes and the numbers still look wrong.
+
+**Do not load this when:** you need a regime's own rules or a named code's meaning (the file under `references/jurisdictions/`, `references/esef.md`, or `references/validation.md`); nothing here is jurisdiction-specific. A `references/defect-causes.md` row that names a section here is routing you to the principle behind a code, which is what this file is for.
+
 Eight things that decide whether tagged output is right, independent of
 jurisdiction. `SKILL.md` points here; read it before a first review in an
 unfamiliar regime, and when a validator passes but the numbers look wrong.
 
 Truths that, when violated, produce silent failures no validator catches early.
+
+## Contents
+
+- [1. The `decimals` ↔ rendering ↔ value relationship](#1-the-decimals--rendering--value-relationship)
+- [2. Sign convention, balance type, and `preferredLabel` are three different things](#2-sign-convention-balance-type-and-preferredlabel-are-three-different-things)
+- [3. Period type is concept-driven, not document-driven](#3-period-type-is-concept-driven-not-document-driven)
+- [4. Identifier scheme constancy](#4-identifier-scheme-constancy)
+- [5. Dimensions and axes: XDT is the substrate of every regime](#5-dimensions-and-axes-xdt-is-the-substrate-of-every-regime)
+- [6. Anchoring is mandatory only in some regimes, but always good practice](#6-anchoring-is-mandatory-only-in-some-regimes-but-always-good-practice)
+- [7. Block tagging is structured narrative, not a screenshot](#7-block-tagging-is-structured-narrative-not-a-screenshot)
+- [8. The hidden section is for facts that exist, not for facts you're embarrassed by](#8-the-hidden-section-is-for-facts-that-exist-not-for-facts-youre-embarrassed-by)
 
 ## 1. The `decimals` ↔ rendering ↔ value relationship
 

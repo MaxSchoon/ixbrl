@@ -2,6 +2,10 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** the question is which concept a fact binds to, which label in which role and language, which network a concept is in, whether a QName is declared at all, which taxonomy release was operative for a report, or how to resolve a `schemaRef` offline.
+
+**Do not load this when:** the question is how the linkbases are wired in general (`references/structure.md`), or is dimensional design (`references/dimensions.md`), or is a regime's filing rule (the jurisdiction file).
+
 Load this when the question is "which concept does this fact bind to", "which
 label, in which role and language", "which network is this concept in", "is this
 QName even declared", "which taxonomy version was operative for this report",
@@ -300,9 +304,12 @@ guesses.
      label roles shaped like them, so the same concept reads differently in
      the credit-institution and insurance balance sheets.
 5. **Concept to arithmetic and dimensions.** Calculation parents and weights
-   come from `summation-item` arcs in the ELR you are rendering; dimensional
-   validity from the hypercube reachable through `all` / `notAll` from the
-   primary item, followed across `targetRole`. Where a regime has no
+   come from the `summation-item` arcs of the DTS's calculation base sets,
+   which are separate from the presentation base sets and need not share a
+   role URI with the network being rendered; the presentation ELR is
+   rendering context only. Dimensional validity comes from the hypercube
+   reachable through `all` / `notAll` from the primary item, followed
+   across `targetRole`. Where a regime has no
    calculation linkbase, the arithmetic is in formula assertions or nowhere.
 
 ## Six DTSs compared, measured
@@ -423,8 +430,11 @@ one vocabulary (next section but one): `jurisdictions/nl-sbr.md`,
 
 ## Working with `scripts/dts_profile.py`
 
-The script walks the closure with lxml only, so it runs identically offline
-and online, and it never validates: Arelle validates, this describes. Three
+The script walks the closure with lxml only and the same parsing logic
+offline and online; what differs between runs is the inputs (packages,
+cache, network), which decide the closure and the unresolved list, so pin
+them for a reproducible profile. It never validates: Arelle validates,
+this describes. Three
 commands cover most questions.
 
 **Profile an entry point from the regulator's packages (offline, reproducible):**

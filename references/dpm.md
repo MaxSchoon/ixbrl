@@ -2,7 +2,28 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** the filing is supervisory: EBA COREP or FINREP, EIOPA Solvency II or IORP, or the question is Table Linkbase, filing indicators, or the xBRL-CSV migration.
+
+**Do not load this when:** the report is a financial statement in Inline XBRL. DPM filings are not inline (see *DPM and Inline XBRL: what's connected, what's not*); use `references/esef.md` or the jurisdiction file.
+
 The XBRL world has two architectures. Inline XBRL regimes (ESEF, EDGAR, KvK, FRC) start with a presentation tree of human-named concepts and embed facts in an HTML carrier. The **Data Point Model** (DPM) world starts with a relational metamodel of metrics × dimensions, rendering the same data as supervisory templates and an XBRL taxonomy. Banks file COREP/FINREP under DPM; insurers file Solvency II under DPM; pension funds file IORP under DPM. Different mental model, different tooling, same XBRL substrate.
+
+## Contents
+
+- [What DPM is and why it differs from financial-reporting taxonomies](#what-dpm-is-and-why-it-differs-from-financial-reporting-taxonomies)
+- [DPM 2.0 architecture and the xBRL-CSV migration](#dpm-20-architecture-and-the-xbrl-csv-migration)
+- [EBA Reporting Frameworks (COREP / FINREP / etc.)](#eba-reporting-frameworks-corep--finrep--etc)
+- [EIOPA Solvency II and IORP DPM](#eiopa-solvency-ii-and-iorp-dpm)
+- [DTS and vintages: EBA and EIOPA](#dts-and-vintages-eba-and-eiopa)
+- [XBRL Table Linkbase 1.0](#xbrl-table-linkbase-10)
+- [Filing indicators (find namespace)](#filing-indicators-find-namespace)
+- [Open vs closed tables](#open-vs-closed-tables)
+- [Metrics vs primary items](#metrics-vs-primary-items)
+- [xBRL-CSV report packages](#xbrl-csv-report-packages)
+- [Filing flow (filer → NCA → EBA/EIOPA)](#filing-flow-filer--nca--ebaeiopa)
+- [Validation rules (V-rules)](#validation-rules-v-rules)
+- [DPM and Inline XBRL: what's connected, what's not](#dpm-and-inline-xbrl-whats-connected-whats-not)
+- [Sources](#sources)
 
 ## What DPM is and why it differs from financial-reporting taxonomies
 

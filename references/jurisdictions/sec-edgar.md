@@ -13,6 +13,22 @@ profiles:
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** the receiver is the SEC: an EDGAR Inline XBRL submission, an EDGAR Filer Manual chapter, a DEI / SRT / US-GAAP question, or an `EFM.6.05.*` code.
+
+**Do not load this when:** the filing is European (`references/esef.md` or the file under `references/jurisdictions/`); EDGAR neither anchors nor uses the ESEF package shape.
+
+**Contents**
+
+- [Start here: choose a filing profile](#start-here-choose-a-filing-profile)
+- [Vintage and applicability](#vintage-and-applicability)
+- [Profile: Operating companies (periodic and registration filings)](#profile-operating-company)
+- [Profile: Registered investment companies (funds)](#profile-investment-company)
+- [Jurisdiction-specific invariants](#jurisdiction-specific-invariants)
+- [Validation](#validation)
+- [Review workflow](#review-workflow)
+- [Authorities and governance](#authorities-and-governance)
+- [Sources](#sources)
+
 Reference for Inline XBRL submissions to the U.S. Securities and Exchange Commission. Verify the operative version of every cited rule against the EDGAR Filer Manual at filing date.
 
 ## Start here: choose a filing profile
@@ -79,7 +95,7 @@ longer carry a table.
 - **Pay-Versus-Performance**: Release **34-95607**, adopted 25 August 2022, effective 11 October 2022. Compliance for proxy / information statements with fiscal years ending on or after **16 December 2022**. Each value in the PVP table is separately tagged; footnote, relationship, and Tabular List disclosures are block-text tagged. Smaller reporting companies provide Inline XBRL beginning the third PVP filing. Tagging uses the 2022Q4 ECD taxonomy.
 - **Cybersecurity Risk Management, Strategy, Governance, and Incident Disclosure**: Release **33-11216 / 34-97989**, adopted 26 July 2023. New Form 8-K Item 1.05 (and 6-K equivalent) for material cybersecurity incidents, due four business days after materiality determination. Annual-report disclosures sit at **Reg S-K Item 106 on Form 10-K** and at **Item 16K on Form 20-F**, not Item 106 on both. The Inline XBRL tagging obligation runs **one year after** each disclosure's own compliance date, so the two dates differ and must not be conflated: **Form 10-K Item 106 / Form 20-F Item 16K** are tagged for **fiscal years ending on or after 15 December 2024**, while **Form 8-K Item 1.05 / 6-K** (material-incident disclosures) are tagged from **18 December 2024**. Both apply to **all registrants subject to these rules, including SRCs**. The SRC extension applied to the incident *disclosure*, not to tagging. The rules do **not** reach every filer: eligible Form 40-F filers, asset-backed issuers, and registered investment companies are outside them.
 - **Tailored Shareholder Reports**: Release **33-11125**, adopted 26 October 2022. Open-end funds (Form N-1A) must transmit streamlined annual / semi-annual shareholder reports in Form N-CSR using Inline XBRL for transmittals on or after **24 July 2024**.
-- **EDGAR 25.2 / 2026 Taxonomies Updates**: annual taxonomy refreshes (US-GAAP 2025, SRT 2025, DEI 2026) became loadable in EDGAR through 2025–2026. Filers transitioning concept usage should re-map extensions onto the new base elements where one is available and appropriate; anchoring arcs remain optional (see *Custom (extension) elements*).
+- **EDGAR 25.2 / 2026 Taxonomies Updates**: annual taxonomy refreshes became loadable in EDGAR through 2025 and 2026 (US-GAAP and SRT 2025 at Release 25.1; US-GAAP, SRT and DEI 2026 at Release 26.1; a submission uses one year's set throughout for these synchronised families, while IFRS remains the standing exception noted above). Filers transitioning concept usage should re-map extensions onto the new base elements where one is available and appropriate; anchoring arcs remain optional (see *Custom (extension) elements*).
 
 Note: Release **33-11038** is the *proposed* cybersecurity rule
 (March 2022). The final cybersecurity rule is **33-11216**. The

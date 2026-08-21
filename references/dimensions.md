@@ -2,7 +2,25 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** a fact carries or needs dimensional context: hypercubes, axes, explicit versus typed dimensions, default members, segment versus scenario placement, or an `xbrldie:*` / `xbrldte:*` error.
+
+**Do not load this when:** the error is not dimensional (`references/validation.md`), or you need the generic arc and linkbase mechanics underneath XDT rather than its filing consequences (`references/structure.md`).
+
 A bare XBRL fact is one-dimensional (concept × context × unit). Real reporting is multi-dimensional: by segment, share class, maturity bucket, counterparty. **XBRL Dimensions 1.0** ("XDT") adds orthogonal slicing via hypercubes attached to primary items, with dimension values carried in the `xbrli:segment` or `xbrli:scenario` container. Every regulator (ESMA, SEC, EBA, EIOPA, KvK/SBR) builds on the same XDT model; only the placement policy and axis choices vary.
+
+## Contents
+
+- [The XDT model](#the-xdt-model)
+- ["Axis" naming convention](#axis-naming-convention)
+- [Explicit vs typed dimensions](#explicit-vs-typed-dimensions)
+- [Default members](#default-members)
+- [Segment vs scenario placement](#segment-vs-scenario-placement)
+- [Open vs closed hypercubes](#open-vs-closed-hypercubes)
+- [Dimensional validity errors](#dimensional-validity-errors)
+- [How dimensions show up in each regime](#how-dimensions-show-up-in-each-regime)
+- [Authoring an extension hypercube: checklist](#authoring-an-extension-hypercube-checklist)
+- [Pitfalls and review checklist](#pitfalls-and-review-checklist)
+- [Sources](#sources)
 
 ## The XDT model
 

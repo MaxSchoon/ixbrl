@@ -12,8 +12,9 @@ dimension a concept carries is an edge in one of its linkbases. Reading the
 DTS is therefore how you answer "which concept, which label, which network"
 from evidence rather than from recall.
 
-This script performs that walk with nothing but lxml, so it runs the same
-offline as online, and reports two things:
+This script performs that walk with nothing but lxml, with the same parsing
+logic offline and online (the inputs decide the closure: pin packages and
+cache for a reproducible profile), and reports two things:
 
   1. A structural PROFILE: documents by kind and host, concepts by
      substitution group / type / period / balance / abstractness, role types,
@@ -491,6 +492,7 @@ class Walker:
                 dts.unresolved[uri] = (
                     f"not fetched: --max-documents {self.max_documents}"
                 )
+                dts.discovery.append((origin, pointer, uri))
                 continue
             physical = self.catalog.rewrite(uri)
             data, source = self.fetcher.read(physical)

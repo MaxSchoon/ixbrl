@@ -15,17 +15,43 @@ profiles:
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
-## Start here: choose a filing profile
+**Load this when:** the filing goes to the Finnish PRH as digital financial statements, whether national FAS/SBR, IFRS, or an ESEF ZIP.
 
-Load this when the regulator is **PRH** (Patentti- ja rekisterihallitus /
-Finnish Patent and Registration Office) and the filing is a **digital
-financial statement** ("digitaalinen tilinpäätös", colloquially
-*digitilinpäätös*) deposited with the **Finnish Trade Register**
-(kaupparekisteri). Trigger conditions: a Finnish `osakeyhtiö` (limited
-company) or `osuuskunta` (co-operative), the words *digitilinpäätös* /
-*SBR-taksonomia* / *PRH-tunnisteet*, an `avoindata.fi` SBR taxonomy, the
-PRH iXBRL REST interface, or an ESEF ZIP being re-filed to the Trade
-Register.
+**Do not load this when:** the question is generic ESEF mechanics (`references/esef.md`); note that PRH's carrier is XHTML-in-ZIP, not a `.xbri` report package.
+
+**Contents**
+
+- [Start here: choose a filing profile](#start-here-choose-a-filing-profile)
+- [Vintage and applicability](#vintage-and-applicability)
+  - [The legal instruments: Accounting Act plus two named PRH decisions](#the-legal-instruments-accounting-act-plus-two-named-prh-decisions)
+  - [The two-stage mandate: keep these distinct](#the-two-stage-mandate-keep-these-distinct)
+  - [DTS and vintages](#dts-and-vintages)
+  - [Bi-temporal cheatsheet: which vintage applies to which period](#bi-temporal-cheatsheet-which-vintage-applies-to-which-period)
+- [Profile: Trade Register digital financial statement: Finnish FAS (national SBR taxonomy)](#profile-fas-sbr)
+  - [Who files, to whom, under what law](#who-files-to-whom-under-what-law)
+  - [The national SBR taxonomy: modules, distribution, cadence](#the-national-sbr-taxonomy-modules-distribution-cadence)
+- [Profile: IFRS statements and listed-issuer ESEF re-use](#profile-ifrs-esef)
+  - [Which taxonomy applies](#which-taxonomy-applies)
+  - [Packaging: the ESEF ZIP re-used for the Trade Register](#packaging-the-esef-zip-re-used-for-the-trade-register)
+  - [Relation to EU reporting: ESEF coexistence and the CSRD/ESRS trajectory](#relation-to-eu-reporting-esef-coexistence-and-the-csrdesrs-trajectory)
+- [Profile: CSRD sustainability report: assured, filed with the digital statements, not XBRL-tagged](#profile-sustainability-report)
+  - [The 2026 scope change: law 555/2026 (supersedes older ≥500-employee framing)](#the-2026-scope-change-law-5552026-supersedes-older-500-employee-framing)
+- [Jurisdiction-specific invariants](#jurisdiction-specific-invariants)
+  - [Packaging and artifact shape: XHTML-in-ZIP, NOT `.xbri`](#packaging-and-artifact-shape-xhtml-in-zip-not-xbri)
+  - [Choosing the taxonomy family by accounting framework](#choosing-the-taxonomy-family-by-accounting-framework)
+  - [Filing channels, signatures, deadline, tax forwarding, language](#filing-channels-signatures-deadline-tax-forwarding-language)
+- [Validation](#validation)
+  - [No Arelle FI/PRH plugin exists (honest gap) + what PRH's interface checks](#no-arelle-fiprh-plugin-exists-honest-gap--what-prhs-interface-checks)
+- [Review workflow](#review-workflow)
+  - [A pragmatic PRH review pass, in order](#a-pragmatic-prh-review-pass-in-order)
+- [Authorities and governance](#authorities-and-governance)
+  - [Stakeholders: the institutional map](#stakeholders-the-institutional-map)
+- [Coverage and known limitations](#coverage-and-known-limitations)
+  - [When to escalate to primary sources](#when-to-escalate-to-primary-sources)
+- [Sources](#sources)
+  - [Primary sources: what each establishes](#primary-sources-what-each-establishes)
+
+## Start here: choose a filing profile
 
 Finland is **not** a report-package (`.xbri`) regime: a deposit is **XHTML
 alone or a plain ZIP of XHTML** (PRH/1087 s. 2 permits either), and for a
