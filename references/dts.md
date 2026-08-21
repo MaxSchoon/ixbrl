@@ -316,14 +316,14 @@ read from the regulators' packages.
 | Typed dimensions | 3 | 3 | 10 | 27 | 0 | 56 |
 | Presentation networks / arcs / max depth | 68 / 6 605 / 11 | 0 (relationships live in `esef_all`) | 111 / 33 585 / 17 | 15 / 7 295 / 11 | 1 / 11 / 1 | 23 / 2 807 / 9 |
 | Calculation arcs (arcrole) | 1 312 (Calc 1.1) | 0 | 6 526 (Calc 1.1) | **0 (none shipped)** | 0 (filer builds them) | **0 (formula instead)** |
-| Definition arcs / with `targetRole` | 4 245 / 0 | 7 683 / 0 | 31 960 / 0 | 12 545 / 2 356 | 5 803 / 0 | 3 015 / 353 |
+| Definition arcs (prohibited excluded) / with `targetRole` | 4 245 / 0 | 7 683 / 0 | 31 960 / 0 | 12 506 / 2 356 (+39 prohibited) | 5 803 / 0 | 3 015 / 353 |
 | Non-XDT definition arcroles | none | none | six deprecation arcroles (`dep-concept-deprecatedConcept` 134, `dep-dimensionallyQualifiedConcept-deprecatedConcept` 397, …), `essence-alias` 9 | `inflow` 168, `outflow` 102, `crossref` 100 | none | none |
 | Label resources / roles / languages | 11 293 / 9 / en | 11 171 / 9 / en (24 languages via the package entry points) | 19 575 / 6 / en-US (no `documentation`: that and the references ship only in the `-all` entry point) | 17 108 / 6 / en, cy | 44 122 / 6 / nl, en, fr, de | 9 155 / 5 standard + ELR-shaped / da, en |
 | Reference resources | 7 527 | 5 892 | 0 in `std` (in `-all` only) | 7 513 | 12 020 | 2 452 |
 | Formula / generic resources | generic labels on 80 ELRs | 9 generic links | none in `std` | none | 29 generic links | 45 value + 11 existence assertions, 143 fact variables |
 | Role types declared | 80 | 9 | 665 | 418 | 53 | 384 |
 | Extension policy | open (Foundation's "Essential" entry points exist to be extended) | open, anchoring required | open, anchoring not required | **closed**: widen and disclose, analysis dimensions | open, anchoring required | **closed** for ÅRL; extensions only on the IFRS/ESEF companion |
-| Release cadence, version token | annual, namespace date `YYYY-MM-DD` (2025-03-27); **no 2026 release** | per RTS amendment, namespace date; ESEF 2024 mandated for FY2025+, ESEF 2025 published but not mandated | annual GRT, `YYYY` in namespace | annual suite, `YYYY-01-01` | annual KvK set, `YYYY-12-31`; classic NT `ntNN/YYYYMMDD` | annual, `YYYY1001`; package on `erhvervsstyrelsen.dk` |
+| Release cadence, version token | annual, namespace date `YYYY-MM-DD` (2025-03-27); **no 2026 release** | per RTS amendment, namespace date; ESEF 2024 (Reg (EU) 2025/19) for FY2025, ESEF 2025 (Reg (EU) 2026/283) from FY2026, early application for FY2025 allowed | annual GRT, `YYYY` in namespace | annual suite, `YYYY-01-01` | annual KvK set, `YYYY-12-31`; classic NT `ntNN/YYYYMMDD` | annual, `YYYY1001`; package on `erhvervsstyrelsen.dk` |
 
 Note on US-GAAP: the `std` entry point (`us-gaap-entryPoint-std-2025.xsd`)
 was fetched live from `xbrl.fasb.org` and `xbrl.sec.gov` (403 + 3 documents)
@@ -369,9 +369,10 @@ defective.
 - **Valid time** is the set of financial years a release is *for*. It is set
   by the instrument that binds the release: an EU delegated regulation for
   ESEF ("financial years beginning on or after 1 January 2025" for ESEF 2024,
-  Reg (EU) 2025/19 article 2), the RTS for KvK, the suite's accounting-standard
-  versions for the FRC, the yearly release for ÅRL, the FASB release for
-  US-GAAP.
+  Reg (EU) 2025/19 article 2; on or after 1 January 2026 for ESEF 2025, Reg
+  (EU) 2026/283, with early application for FY2025), the RTS for KvK, the
+  suite's accounting-standard versions for the FRC, the yearly release for
+  ÅRL, the FASB release for US-GAAP.
 - **Acceptance window** (transaction time) is the deposit-date interval in
   which the receiver takes a report built on that release. It is set by the
   receiver and is usually wider than valid time: KvK accepts "any of the three
@@ -495,11 +496,16 @@ Reading the output:
   `bw2-titel9:OtherInformationTitle` are named in RTS Annex IV (2025 and 2026)
   and declared in no published schema. Resolve every QName against the DTS
   before emitting it.
-- **"Version 2026" may be documented before it is published.** RTS 2026 and
-  RM 2026 name `kvk/2026-12-31/` URLs that returned 404 on 2026-08-21; NT21 had
-  alfa and bèta directories but no final one; ESMA said it will not amend the
-  RTS in 2026; the IFRS Foundation issued no 2026 taxonomy. A documented
-  namespace is a promise; a 200 on the entry point is the fact.
+- **"Version 2026" may be documented before it is published, and a
+  regulation may be in force before the publisher's page says so.** RTS 2026
+  and RM 2026 name `kvk/2026-12-31/` URLs that returned 404 on 2026-08-21;
+  NT21 had alfa and bèta directories but no final one; the IFRS Foundation
+  issued no 2026 taxonomy. In the other direction, ESMA's April 2026 notice
+  that it "does not plan to amend the ESEF RTS or taxonomy in 2026" reads as
+  if ESEF 2025 were unmandated, while Reg (EU) 2026/283 (adopted 12 December
+  2025, OJ 18 March 2026) already binds it from FY2026. A documented
+  namespace is a promise; a 200 on the entry point, and the OJ, are the
+  facts.
 - **Calc 1.0 and Calc 1.1 are different arcroles.** A processor checking
   only the other arcrole reports no inconsistencies, which reads as a pass
   and is nothing of the kind. The arcrole URI in the profile tells you which

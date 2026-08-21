@@ -44,9 +44,9 @@ would otherwise dominate every profile.
 
 Usage:
   python dts_profile.py START [START ...] [--package PKG.zip ...]
-                        [--cache-dir DIR] [--offline] [--json]
-                        [--concept QNAME] [--follow-infrastructure]
-                        [--max-documents N]
+                        [--cache-dir DIR] [--no-cache] [--offline] [--json]
+                        [--concept QNAME] [--entry-point SUBSTR]
+                        [--follow-infrastructure] [--max-documents N]
 
 Exit codes: 0 = every discovered document resolved; 1 = profile produced but
 at least one document or locator did not resolve (the report lists them, so
@@ -436,6 +436,9 @@ class DTS:
     resources_by_kind: Counter[str] = field(default_factory=Counter)
     unresolved_locators: int = 0
     embedded_linkbases: int = 0
+    # Global element declarations whose substitution-group chain reaches no
+    # XBRL root: kept as a count so the drop is visible in the profile.
+    non_concept_declarations: int = 0
     # Locators whose href names no concept in the closure, by what they point
     # at: a role/arcrole type or another non-concept id (legitimate: generic
     # labels on ELRs), a document outside the closure (a boundary or
@@ -674,6 +677,7 @@ class Walker:
         for qname, root in resolved.items():
             if root is None:
                 del dts.concepts[qname]
+                dts.non_concept_declarations += 1
             else:
                 dts.concepts[qname].root = root
 
@@ -797,17 +801,20 @@ class Walker:
 
 def unpack_package(path: Path, workdir: Path) -> Path:
     """Extract a .zip / .xbri into workdir and return the extraction root."""
-    target = workdir / path.stem
+    target = (workdir / path.stem).resolve()
     target.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(path) as zf:
-        for member in zf.infolist():
-            # Refuse members that would escape the extraction root.
+        members = zf.infolist()
+        for member in members:
+            # Refuse members that would land outside the extraction root. A
+            # string-prefix test is not enough: `../out-evil/x` shares the
+            # prefix of `/out` and is still outside it.
             dest = (target / member.filename).resolve()
-            if not str(dest).startswith(str(target.resolve())):
+            if dest != target and not dest.is_relative_to(target):
                 raise ValueError(
                     f"{path}: member escapes archive root: {member.filename}"
                 )
-        zf.extractall(target)
+        zf.extractall(target, members=members)
     return target
 
 
@@ -860,7 +867,24 @@ def package_starts(extracted: Path, entry_point: str | None) -> list[str]:
     and the taxonomy package supplies the catalog.
     """
     starts: list[str] = []
+    reports = [
+        f.resolve().as_uri()
+        for d in sorted(extracted.rglob("reports"))
+        if d.is_dir()
+        for f in sorted(d.rglob("*"))
+        if f.suffix.lower() in (".xhtml", ".html", ".xml", ".xbrl")
+    ]
+    if reports:
+        # A report package that is also a taxonomy package: the reports are
+        # what gets profiled and the taxonomy package supplies the catalog;
+        # its entry points are not merged into the same walk.
+        return reports
     entry_points = package_entry_points(extracted)
+    if not entry_points:
+        raise ValueError(
+            f"{extracted.name}: no tp:entryPoint in META-INF/taxonomyPackage.xml "
+            "and no reports/ directory; nothing to walk"
+        )
     if entry_points:
         if entry_point:
             chosen = [
@@ -882,11 +906,6 @@ def package_starts(extracted: Path, entry_point: str | None) -> list[str]:
             )
         for _, docs in chosen:
             starts.extend(docs)
-    for reports in sorted(extracted.rglob("reports")):
-        if reports.is_dir():
-            for f in sorted(reports.rglob("*")):
-                if f.suffix.lower() in (".xhtml", ".html", ".xml", ".xbrl"):
-                    starts.append(f.resolve().as_uri())
     return starts
 
 
@@ -940,8 +959,25 @@ def profile(dts: DTS) -> dict[str, Any]:
     concepts = list(dts.concepts.values())
     items = [c for c in concepts if c.root == "item"]
     pres = presentation_networks(dts)
-    calc_arcs = [a for a in dts.arcs if a.linkbase == "calculation"]
-    def_arcs = [a for a in dts.arcs if a.linkbase == "definition"]
+
+    def effective(linkbase: str) -> list[Arc]:
+        # A prohibited arc removes a relationship; counting it would inflate
+        # every network the way presentation_networks already avoids.
+        return [
+            a
+            for a in dts.arcs
+            if a.linkbase == linkbase and a.attrs.get("use") != "prohibited"
+        ]
+
+    def prohibited(linkbase: str) -> int:
+        return sum(
+            1
+            for a in dts.arcs
+            if a.linkbase == linkbase and a.attrs.get("use") == "prohibited"
+        )
+
+    calc_arcs = effective("calculation")
+    def_arcs = effective("definition")
     label_roles: Counter[str] = Counter()
     label_langs: Counter[str] = Counter()
     for rows in dts.labels.values():
@@ -1001,6 +1037,7 @@ def profile(dts: DTS) -> dict[str, Any]:
                 Counter(split_clark(c.qname)[0] for c in concepts).most_common(12)
             ),
             "nillable_false": sum(1 for c in items if not c.nillable),
+            "non_concept_declarations_dropped": dts.non_concept_declarations,
         },
         "role_types": {
             "total": len(dts.role_types),
@@ -1033,12 +1070,14 @@ def profile(dts: DTS) -> dict[str, Any]:
         "calculation": {
             "networks": len({a.elr for a in calc_arcs}),
             "arcs": len(calc_arcs),
+            "prohibited_arcs": prohibited("calculation"),
             "arcroles": dict(Counter(a.arcrole for a in calc_arcs)),
             "weights": dict(Counter(a.attrs.get("weight", "?") for a in calc_arcs)),
         },
         "definition": {
             "networks": len({a.elr for a in def_arcs}),
             "arcs": len(def_arcs),
+            "prohibited_arcs": prohibited("definition"),
             "xdt_arcroles": dict(xdt_arcroles.most_common()),
             "other_arcroles": dict(other_def_arcroles.most_common()),
             "hypercubes": len(hypercubes),
@@ -1231,7 +1270,8 @@ def render_markdown(p: dict[str, Any]) -> str:
         "",
         "## Calculation",
         "",
-        f"Networks {ca['networks']}; arcs {ca['arcs']}; arcroles {ca['arcroles']}; "
+        f"Networks {ca['networks']}; arcs {ca['arcs']} "
+        f"(+{ca['prohibited_arcs']} prohibited); arcroles {ca['arcroles']}; "
         f"weights {ca['weights']}.",
     ]
     de = p["definition"]
@@ -1239,7 +1279,8 @@ def render_markdown(p: dict[str, Any]) -> str:
         "",
         "## Definition and dimensions",
         "",
-        f"Networks {de['networks']}; arcs {de['arcs']}; hypercubes {de['hypercubes']}; "
+        f"Networks {de['networks']}; arcs {de['arcs']} "
+        f"(+{de['prohibited_arcs']} prohibited); hypercubes {de['hypercubes']}; "
         f"dimensions explicit {de['dimensions_explicit']}, "
         f"typed {de['dimensions_typed']}; "
         f"distinct domain members {de['domain_members_distinct']}; "

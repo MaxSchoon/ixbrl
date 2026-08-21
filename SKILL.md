@@ -432,7 +432,8 @@ accompanying report instead. Never risk a filing for a credit.
 This file is loaded into agent runtimes with size limits: 1024
 characters for the frontmatter `description`; under 500 lines and
 ideally under 5 000 tokens for the body (the Agent Skills specification
-and Anthropic's guidance), which this repository gates at 32 KiB. Put
+and its implementers' guidance), which this repository gates at 32 KiB
+for the whole file. Put
 substantive content in `references/`, which loads only when this body
 points the agent at it. Full rules and the `wc -c` check:
 `CONTRIBUTING.md` §"Size discipline" before merging.

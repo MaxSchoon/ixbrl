@@ -284,6 +284,59 @@ class CatalogAndPackageTestCase(unittest.TestCase):
             with self.assertRaises(ValueError):
                 dts_profile.unpack_package(bad, Path(d) / "out")
 
+    def test_zip_member_escaping_into_a_sibling_directory_is_refused(self):
+        """A sibling path shares the root's string prefix and is outside it.
+
+        `out/bad/../../bad-evil/x` resolves to `<workdir>/bad-evil/x`, whose
+        string starts with `<workdir>/bad`; a prefix test accepted it.
+        """
+        with tempfile.TemporaryDirectory() as d:
+            bad = Path(d) / "bad.zip"
+            with zipfile.ZipFile(bad, "w") as zf:
+                zf.writestr("../../bad-evil/escape.xsd", "<x/>")
+            with self.assertRaises(ValueError):
+                dts_profile.unpack_package(bad, Path(d) / "out")
+            self.assertFalse((Path(d) / "bad-evil").exists())
+            self.assertFalse((Path(d) / "out" / "bad-evil").exists())
+
+    def test_package_with_neither_entry_points_nor_reports_is_refused(self):
+        with tempfile.TemporaryDirectory() as d:
+            empty = Path(d) / "empty.zip"
+            with zipfile.ZipFile(empty, "w") as zf:
+                zf.writestr("empty/META-INF/taxonomyPackage.xml", "<x/>")
+            code, _, err = run_main(str(empty), "--offline", "--no-cache")
+            self.assertEqual(code, 2)
+            self.assertIn("nothing to walk", err)
+
+    def test_prohibited_calculation_arcs_are_not_counted(self):
+        schema = (
+            '<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" '
+            'xmlns:xbrli="http://www.xbrl.org/2003/instance" '
+            'xmlns:link="http://www.xbrl.org/2003/linkbase" '
+            'xmlns:xlink="http://www.w3.org/1999/xlink" '
+            'targetNamespace="http://t.example/c">'
+            "<xs:annotation><xs:appinfo><link:linkbase>"
+            '<link:calculationLink xlink:type="extended" '
+            'xlink:role="http://www.xbrl.org/2003/role/link">'
+            '<link:loc xlink:type="locator" xlink:href="#c_A" xlink:label="a"/>'
+            '<link:loc xlink:type="locator" xlink:href="#c_B" xlink:label="b"/>'
+            '<link:calculationArc xlink:type="arc" xlink:from="a" xlink:to="b" '
+            'xlink:arcrole="http://www.xbrl.org/2003/arcrole/summation-item" '
+            'weight="1" use="prohibited" priority="1"/>'
+            "</link:calculationLink></link:linkbase></xs:appinfo></xs:annotation>"
+            '<xs:element name="A" id="c_A" substitutionGroup="xbrli:item" '
+            'type="xbrli:monetaryItemType" xbrli:periodType="instant"/>'
+            '<xs:element name="B" id="c_B" substitutionGroup="xbrli:item" '
+            'type="xbrli:monetaryItemType" xbrli:periodType="instant"/>'
+            "</xs:schema>"
+        )
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "c.xsd"
+            path.write_text(schema)
+            p = dts_profile.profile(walk(str(path)))
+            self.assertEqual(p["calculation"]["arcs"], 0)
+            self.assertEqual(p["calculation"]["prohibited_arcs"], 1)
+
 
 class FailureModesTestCase(unittest.TestCase):
     def test_offline_remote_start_fails_closed_with_a_reason(self):
