@@ -303,7 +303,7 @@ purposes but have no natural place in the rendered statements:
 - **Non-numeric classification or selection facts** that drive how the
   filing is interpreted but are not a line in any statement: for
   example an entity-size class (in the Dutch taxonomy, members such as
-  `kvk-cor:LegalEntitySizeLargeMember`), a reporting-framework choice, or
+  `kvk:LegalEntitySizeLargeMember`), a reporting-framework choice, or
   a consolidated-versus-company-only indicator. These are real, required
   facts; they simply have no row to sit on, so they belong in
   `ix:hidden` rather than being omitted.
