@@ -242,7 +242,7 @@ deposits; AFM extends ESEF/IFRS for listed-issuer AFRs.
 
 - `bw2-titel9:` Civil Code Title 9 core concepts.
 - `rj:` RJ extension concepts including cash-flow statement detail.
-- `kvk:` KvK metadata and entity-size dimensions.
+- `kvk:` KvK filing metadata, including the size-class fact `kvk:LegalEntitySize` (a fact, not a dimension).
 - IFRS namespaces where applicable.
 
 A recurring source of "looks tagged, isn't bound" defects is picking

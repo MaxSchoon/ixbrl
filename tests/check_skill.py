@@ -117,6 +117,14 @@ def check_skill() -> None:
 # matching and its links silently went unchecked -- a guardrail that quietly
 # covers less is worse than one that fails.
 ROOT_LINK = re.compile(r"references/((?:[A-Za-z0-9._-]+/)*[A-Za-z0-9._-]+\.md)")
+# Path files are linked as `paths/<name>.md` from SKILL.md and from each other.
+PATH_LINK = re.compile(r"paths/([A-Za-z0-9._-]+\.md)")
+PATHS = ROOT / "paths"
+PATH_HEADER_MARKS = ("**Load this when:**", "**Do not load this when:**")
+# A path that grows past this is restating references (CONTRIBUTING.md
+# section Paths and references); the composing path is held shorter still.
+PATH_MAX_LINES = 130
+COMPOSING_PATHS = {"improvement-cycle.md": 60}
 SIBLING_LINK = re.compile(r"(?<![\w/.])([A-Za-z0-9._-]+\.md)")
 
 
@@ -146,6 +154,11 @@ def check_reference_links() -> None:
             checked += 1
             if rel not in known:
                 fail(f"{label}: link to references/{rel} does not resolve")
+
+        for rel in sorted(set(PATH_LINK.findall(text))):
+            checked += 1
+            if not (PATHS / rel).is_file():
+                fail(f"{label}: link to paths/{rel} does not resolve")
 
         # Sibling form only makes sense from inside references/.
         if src.is_relative_to(references):
@@ -370,9 +383,40 @@ def check_citation_markers() -> None:
         print(f"Citation markers OK ({checked} file(s) using the convention)")
 
 
+def check_paths() -> None:
+    """Every path file carries its load-condition header and stays short.
+
+    A path holds ordering only; the header is what tells an agent whether
+    to read it at all, and the line cap is the tripwire for a path that has
+    started restating the references it should only name.
+    """
+    mark = len(errors)
+    if not PATHS.is_dir():
+        fail("paths/ directory is missing")
+        return
+    files = sorted(PATHS.glob("*.md"))
+    if not files:
+        fail("paths/ holds no path files")
+    for path in files:
+        text = path.read_text(encoding="utf-8")
+        label = path.relative_to(ROOT).as_posix()
+        for mark_text in PATH_HEADER_MARKS:
+            if mark_text not in text:
+                fail(f"{label}: missing the `{mark_text}` header line")
+        if not all(part in text for part in ATTRIBUTION_PARTS):
+            fail(f"{label}: attribution line missing")
+        cap = COMPOSING_PATHS.get(path.name, PATH_MAX_LINES)
+        lines = text.count("\n") + 1
+        if lines > cap:
+            fail(f"{label}: {lines} lines exceeds the {cap}-line cap for a path")
+    if not failures_since(mark):
+        print(f"Paths OK ({len(files)} path file(s), headers present, within caps)")
+
+
 def main() -> int:
     check_skill()
     check_reference_links()
+    check_paths()
     check_asset_crossrefs()
     check_attribution()
     check_citation_markers()

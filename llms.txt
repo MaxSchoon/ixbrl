@@ -5,7 +5,8 @@
 > Dutch SBR/KvK, Danish ÅRL, Finnish PRH, French AMF, German HGB, and Belgian
 > NBB regimes, with a reference on the Discoverable Taxonomy Set (how a fact
 > resolves to its concept, label and statement; which taxonomy release was
-> operative when) and a script that walks any DTS.
+> operative when), four short paths that order the work by the artifacts in
+> front of the agent, and a script that walks any DTS.
 
 Made by Max Schoon, Founder, Doc2iXBRL — https://doc2ixbrl.com
 

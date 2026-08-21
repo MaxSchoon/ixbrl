@@ -30,6 +30,15 @@ It stays under 32 KiB because a file the runtime truncates is a file that lies
 to you. Depth lives in `references/`, which load only when the body points at
 them. That is the whole design.
 
+### The paths
+
+`SKILL.md` opens with an intake keyed on what is in front of the agent and
+routes it to one of four short paths under `paths/`: review a package,
+compile a package, diagnose a defect back to its cause in a generator, run
+improvement rounds against a corpus. A path holds the order of work, the
+reference to load at each step and an observable stop condition, and no
+domain facts; the facts live in the references it names.
+
 ### The references
 
 Load one. Do not load them all.
