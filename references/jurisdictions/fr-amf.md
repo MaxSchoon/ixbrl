@@ -19,6 +19,32 @@ profiles:
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** the filing is French: an AMF/ONDE ESEF deposit, or you must establish whether a French statutory, tax or prudential filing is XBRL at all.
+
+**Do not load this when:** the question is generic ESEF mechanics (`references/esef.md`); this file carries only the French layer and the honest negatives.
+
+**Contents**
+
+- [Start here: choose a filing profile](#start-here-choose-a-filing-profile)
+  - [Regime map](#regime-map)
+- [Vintage and applicability](#vintage-and-applicability)
+- [Profile: Listed issuers: ESEF filed via the AMF](#profile-amf-esef)
+- [Profile: Statutory annual accounts: PDF via INPI, no XBRL (honest negative)](#profile-inpi-comptes-annuels)
+- [Profile: Tax: the *liasse fiscale* is EDIFACT via EDI-TDFC, not XBRL](#profile-dgfip-edi-tdfc)
+- [Profile: Banking and insurance: ACPR DPM/xBRL via OneGate (not inline)](#profile-acpr-dpm)
+- [Profile: CSRD / ESRS digital tagging: taxonomy exists, mandate not in force](#profile-csrd-esrs)
+- [Jurisdiction-specific invariants](#jurisdiction-specific-invariants)
+  - [Relation to EU reporting (ESEF and CSRD context)](#relation-to-eu-reporting-esef-and-csrd-context)
+- [Validation](#validation)
+  - [Arelle / validation notes (France layer)](#arelle--validation-notes-france-layer)
+- [Authorities and governance](#authorities-and-governance)
+  - [Stakeholders and governance (the French institutional map)](#stakeholders-and-governance-the-french-institutional-map)
+  - [France-specific XBRL history (context, mostly legacy)](#france-specific-xbrl-history-context-mostly-legacy)
+- [Coverage and known limitations](#coverage-and-known-limitations)
+  - [What an iXBRL product can serve today (synthesis)](#what-an-ixbrl-product-can-serve-today-synthesis)
+  - [Honest gaps (do not assert beyond these)](#honest-gaps-do-not-assert-beyond-these)
+- [Sources](#sources)
+
 ## Start here: choose a filing profile
 
 Load this when the jurisdiction is **France**: a listed-issuer annual

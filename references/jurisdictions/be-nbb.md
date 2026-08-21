@@ -15,6 +15,35 @@ profiles:
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** the filing is Belgian: NBB Central Balance Sheet Office annual accounts, an FSMA/ESEF listed-issuer filing, or a Biztax return.
+
+**Do not load this when:** the question is generic ESEF mechanics (`references/esef.md`); the NBB and Biztax filings are classic XBRL 2.1, not inline.
+
+**Contents**
+
+- [Start here: choose a filing profile](#start-here-choose-a-filing-profile)
+  - [Legacy section index](#legacy-section-index)
+- [Vintage and applicability](#vintage-and-applicability)
+  - [DTS and vintages](#dts-and-vintages)
+- [Profile: NBB Central Balance Sheet Office, statutory annual accounts](#profile-nbb-cbso)
+  - [Mandate and the Filing 2.0 application](#mandate-and-the-filing-20-application)
+  - [The `be-gaap` taxonomy: versions, architecture, model / entry-point matrix](#the-be-gaap-taxonomy-versions-architecture-model--entry-point-matrix)
+  - [Accepted formats, controls, decimals, language, fees](#accepted-formats-controls-decimals-language-fees)
+  - [Sustainability information in the CBSO filing](#sustainability-information-in-the-cbso-filing)
+- [Profile: FSMA / ESEF, the listed-issuer layer (`corp.doc.`, STORI)](#profile-fsma-esef)
+  - [Filing channel and mechanics](#filing-channel-and-mechanics)
+  - [CSRD / ESRS in Belgium and the Omnibus I effect on digital tagging](#csrd--esrs-in-belgium-and-the-omnibus-i-effect-on-digital-tagging)
+- [Profile: Biztax, the corporate income-tax return (`be-tax`, FPS Finance)](#profile-biztax)
+  - [Honest gap](#honest-gap)
+- [Jurisdiction-specific invariants](#jurisdiction-specific-invariants)
+  - [The critical split: iXBRL vs classic XBRL 2.1](#the-critical-split-ixbrl-vs-classic-xbrl-21)
+  - [Relation to EU reporting](#relation-to-eu-reporting)
+- [Validation](#validation)
+- [Review workflow](#review-workflow)
+- [Authorities and governance](#authorities-and-governance)
+- [Coverage and known limitations](#coverage-and-known-limitations)
+- [Sources](#sources)
+
 Load this when the filer is a **Belgian** entity and the regulator is the
 **National Bank of Belgium (NBB)** Central Balance Sheet Office (statutory annual
 accounts, `be-gaap` / `nbb-cbso`), the **FSMA** (listed-issuer AFR under ESEF), or

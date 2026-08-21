@@ -2,9 +2,20 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** you need a registered URI or type verbatim: a negated or other LRR label role, a DTR item type, or how a taxonomy URI resolves offline through `xsi` attributes, `xml:base`, an XML Catalog or a taxonomy package.
+
+**Do not load this when:** you are deciding which item type a fact should conceptually carry (`references/types.md`), or diagnosing a resolution failure against one concrete DTS (`references/dts.md`).
+
 XBRL 2.1 (2003) is deliberately minimal: seven label roles, a small set of item types, a linkbase mechanism. Real-world filings (ESEF, US-GAAP, IFRS, SBR) need more. XBRL International publishes those extensions through **registries**: versioned, community-maintained lists of URIs and types that act as de facto standards. This file covers the two most consequential, **Label Role Registry (LRR)** and **Data Types Registry (DTR)**, plus URI resolution (xsi, xml:base, XML Catalogs).
 
 XBRL International registries index: https://specifications.xbrl.org/spec-group-index-registries.html. It lists LRR, DTR, Units Registry, Functions Registry, and the separately versioned Inline XBRL Transformation Registry.
+
+## Contents
+
+- [Label Role Registry (LRR)](#label-role-registry-lrr)
+- [Data Types Registry (DTR)](#data-types-registry-dtr)
+- [URI resolution conventions in XBRL](#uri-resolution-conventions-in-xbrl)
+- [Sources](#sources)
 
 ## Label Role Registry (LRR)
 

@@ -2,7 +2,23 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Load this when:** the filing is an ESEF Annual Financial Report and the question is legal basis, which RTS edition binds, anchoring, extension taxonomies, report-package shape, an NCA specific, or an `ESEF.*` code.
+
+**Do not load this when:** you need the Annex II text-block catalogue itself (`references/esef-block-tags.md`), or a national overlay for one country (the file under `references/jurisdictions/`).
+
 Working reference for iXBRL annual financial reports under the EU ESEF mandate. Verify the operative version of every cited rule against the live source at filing date.
+
+## Contents
+
+- [1. Legal basis](#1-legal-basis)
+- [2. The ESEF Reporting Manual](#2-the-esef-reporting-manual)
+- [3. Block tagging vs detailed tagging](#3-block-tagging-vs-detailed-tagging)
+- [4. Anchoring](#4-anchoring)
+- [5. Extension taxonomies](#5-extension-taxonomies)
+- [6. Report package](#6-report-package)
+- [7. National competent authority specifics](#7-national-competent-authority-specifics)
+- [8. Common ESEF validation errors](#8-common-esef-validation-errors)
+- [Sources](#sources)
 
 ## 1. Legal basis
 
