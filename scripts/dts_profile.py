@@ -548,6 +548,15 @@ class Walker:
                 ref = el.get(XBRLDT_TYPED_DOMAIN_REF)
                 if ref:
                     found.append(("typedDomainRef", ref))
+            # Linkbases embedded in the schema's appinfo carry locators, and
+            # a locator discovers the schema it points into (section 3.2).
+            # The US-GAAP core schema reaches the SEC state/province schema
+            # only this way.
+            for el in root.iter():
+                if el.get(XLINK_TYPE) == "locator":
+                    href = el.get(XLINK_HREF)
+                    if href:
+                        found.append(("loc", href))
             return found
         for el in root.iter():
             if el.get(XLINK_TYPE) == "locator" or el.tag in (

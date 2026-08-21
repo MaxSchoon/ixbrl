@@ -303,16 +303,16 @@ Measured 2026-08-21 with `scripts/dts_profile.py`, infrastructure boundary not
 followed, and cross-checked against Arelle 2.41.7 loading the same entry point
 with the same packages: concepts by substitution root, abstracts, presentation
 arcs and networks, calculation arcs, every XDT arcrole, labels and references
-agreed exactly on IFRS, FRC and ÅRL, and on NL and ESEF differed by one concept
-(the LEI element hosted on `xbrl.org`, behind the boundary). The US-GAAP row is
-the standard entry point and was fetched live; the others were read from the
-regulators' packages.
+agreed exactly on IFRS, US-GAAP, FRC and ÅRL, and on NL and ESEF differed by
+one concept (the LEI element hosted on `xbrl.org`, behind the boundary). The
+US-GAAP row is the standard entry point and was fetched live; the others were
+read from the regulators' packages.
 
 | Measure | IFRS 2025 full | ESEF 2024 `esef_cor` | US-GAAP 2025 std | FRC 2026 FRS 102 | KvK 2025 NL-GAAP ext | ÅRL 20251001 account form by nature |
 |---|---|---|---|---|---|---|
-| Documents in closure | 332 (51 schemas, 281 linkbases) | 50 (4 + 46) | 406 (125 + 281) | 56 (15 + 41) | 68 (7 + 61) | 119 (12 + 107) |
-| Concepts (items / dimensions / hypercubes) | 5 512 (5 217 / 144 / 151) | 5 338 (5 053 / 139 / 146) | 18 582 (17 912 / 293 / 377) | 7 995 (7 651 / 158 / 186) | 6 735 (6 459 / 271 / 5) | 4 087 (3 907 / 84 / 96) |
-| Abstract concepts | 1 654 | 1 585 | 6 262 | 3 744 | 951 | 764 |
+| Documents in closure | 332 (51 schemas, 281 linkbases) | 50 (4 + 46) | 407 (126 + 281) | 56 (15 + 41) | 68 (7 + 61) | 119 (12 + 107) |
+| Concepts (items / dimensions / hypercubes) | 5 512 (5 217 / 144 / 151) | 5 338 (5 053 / 139 / 146) | 18 647 (17 977 / 293 / 377) | 7 995 (7 651 / 158 / 186) | 6 735 (6 459 / 271 / 5) | 4 087 (3 907 / 84 / 96) |
+| Abstract concepts | 1 654 | 1 585 | 6 327 | 3 744 | 951 | 764 |
 | Typed dimensions | 3 | 3 | 10 | 27 | 0 | 56 |
 | Presentation networks / arcs / max depth | 68 / 6 605 / 11 | 0 (relationships live in `esef_all`) | 111 / 33 585 / 17 | 15 / 7 295 / 11 | 1 / 11 / 1 | 23 / 2 807 / 9 |
 | Calculation arcs (arcrole) | 1 312 (Calc 1.1) | 0 | 6 526 (Calc 1.1) | **0 (none shipped)** | 0 (filer builds them) | **0 (formula instead)** |
@@ -321,7 +321,7 @@ regulators' packages.
 | Label resources / roles / languages | 11 293 / 9 / en | 11 171 / 9 / en (24 languages via the package entry points) | 19 575 / 6 / en-US (no `documentation`: that and the references ship only in the `-all` entry point) | 17 108 / 6 / en, cy | 44 122 / 6 / nl, en, fr, de | 9 155 / 5 standard + ELR-shaped / da, en |
 | Reference resources | 7 527 | 5 892 | 0 in `std` (in `-all` only) | 7 513 | 12 020 | 2 452 |
 | Formula / generic resources | generic labels on 80 ELRs | 9 generic links | none in `std` | none | 29 generic links | 45 value + 11 existence assertions, 143 fact variables |
-| Role types declared | 80 | 9 | 664 | 418 | 53 | 384 |
+| Role types declared | 80 | 9 | 665 | 418 | 53 | 384 |
 | Extension policy | open (Foundation's "Essential" entry points exist to be extended) | open, anchoring required | open, anchoring not required | **closed**: widen and disclose, analysis dimensions | open, anchoring required | **closed** for ÅRL; extensions only on the IFRS/ESEF companion |
 | Release cadence, version token | annual, namespace date `YYYY-MM-DD` (2025-03-27); **no 2026 release** | per RTS amendment, namespace date; ESEF 2024 mandated for FY2025+, ESEF 2025 published but not mandated | annual GRT, `YYYY` in namespace | annual suite, `YYYY-01-01` | annual KvK set, `YYYY-12-31`; classic NT `ntNN/YYYYMMDD` | annual, `YYYY1001`; package on `erhvervsstyrelsen.dk` |
 
@@ -329,10 +329,11 @@ Note on US-GAAP: the `std` entry point (`us-gaap-entryPoint-std-2025.xsd`)
 was fetched live from `xbrl.fasb.org` and `xbrl.sec.gov` (403 + 3 documents)
 and deliberately omits documentation labels, references and the deprecated
 elements; `us-gaap-entryPoint-all-2025.xsd` carries them. Profile the one you
-actually load, and say which. Arelle counts 65 more concepts here: the
-`stpr:2025` state and province members, declared in a schema the closure
-reaches only through a namespace Arelle knows how to locate, not through
-a `schemaLocation` the walker can follow. Every relationship count agreed.
+actually load, and say which. The SEC state/province schema (`stpr`, 65
+concepts) enters this closure only through locators in a linkbase
+**embedded** in `us-gaap-2025.xsd`; a walk that reads embedded linkbases but
+does not follow their locators misses it, which is how this table's first
+draft read 65 short of Arelle.
 
 What the numbers mean for tagging:
 

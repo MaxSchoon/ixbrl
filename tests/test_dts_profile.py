@@ -26,6 +26,7 @@ import sys
 import tempfile
 import unittest
 import zipfile
+from collections import Counter
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
@@ -364,6 +365,50 @@ class FailureModesTestCase(unittest.TestCase):
             names = sorted(dts_profile.split_clark(q)[1] for q in dts.concepts)
             self.assertEqual(names, ["Revenue", "presentationItem"])
             self.assertEqual(dts.concepts["{http://t.example/t}Revenue"].root, "item")
+
+    def test_embedded_linkbase_locators_discover_other_schemas(self):
+        """A locator inside a schema-embedded linkbase is a discovery pointer.
+
+        XBRL 2.1 section 3.2 counts linkbases at
+        //xsd:schema/xsd:annotation/xsd:appinfo/* as discovered, and every
+        locator in a discovered linkbase discovers the schema it points
+        into. The US-GAAP 2025 core schema reaches the SEC state/province
+        schema (65 concepts) only through such an embedded locator; a walk
+        that read embedded linkbases but did not follow their locators
+        missed them, and Arelle did not.
+        """
+        other = (
+            '<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" '
+            'xmlns:xbrli="http://www.xbrl.org/2003/instance" '
+            'targetNamespace="http://t.example/other">'
+            '<xs:element name="TX" id="other_TX" substitutionGroup="xbrli:item" '
+            'type="xbrli:stringItemType" xbrli:periodType="duration"/>'
+            "</xs:schema>"
+        )
+        main = (
+            '<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" '
+            'xmlns:xbrli="http://www.xbrl.org/2003/instance" '
+            'xmlns:link="http://www.xbrl.org/2003/linkbase" '
+            'xmlns:xlink="http://www.w3.org/1999/xlink" '
+            'targetNamespace="http://t.example/main">'
+            "<xs:annotation><xs:appinfo><link:linkbase>"
+            '<link:definitionLink xlink:type="extended" '
+            'xlink:role="http://www.xbrl.org/2003/role/link">'
+            '<link:loc xlink:type="locator" xlink:href="other.xsd#other_TX" '
+            'xlink:label="tx"/>'
+            "</link:definitionLink></link:linkbase></xs:appinfo></xs:annotation>"
+            '<xs:element name="A" id="main_A" substitutionGroup="xbrli:item" '
+            'type="xbrli:stringItemType" xbrli:periodType="duration"/>'
+            "</xs:schema>"
+        )
+        with tempfile.TemporaryDirectory() as d:
+            (Path(d) / "other.xsd").write_text(other)
+            (Path(d) / "main.xsd").write_text(main)
+            dts = walk(str(Path(d) / "main.xsd"))
+            self.assertEqual(len(dts.documents), 2)
+            self.assertIn("{http://t.example/other}TX", dts.concepts)
+            self.assertEqual(dts.embedded_linkbases, 1)
+            self.assertIn("loc", dict(Counter(k for _, k, _ in dts.discovery)))
 
     def test_json_output_round_trips(self):
         code, out, _ = run_main(str(SCHEMA), "--offline", "--no-cache", "--json")
