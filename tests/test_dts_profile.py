@@ -463,6 +463,170 @@ class FailureModesTestCase(unittest.TestCase):
             self.assertEqual(dts.embedded_linkbases, 1)
             self.assertIn("loc", dict(Counter(k for _, k, _ in dts.discovery)))
 
+    def test_import_without_schemalocation_is_reported_not_dropped(self):
+        """An xs:import naming only a namespace cannot be followed; saying
+        nothing would report a complete closure (XBRL 2.1 section 3.2 wants
+        every reference resolved) and exit 0.
+        """
+        schema = (
+            '<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" '
+            'targetNamespace="http://t.example/i">'
+            '<xs:import namespace="http://t.example/missing"/>'
+            "</xs:schema>"
+        )
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "i.xsd"
+            path.write_text(schema)
+            dts = walk(str(path))
+            self.assertIn("http://t.example/missing", dts.unresolved)
+            self.assertIn(
+                "no schemaLocation", dts.unresolved["http://t.example/missing"]
+            )
+            code, _, _ = run_main(str(path), "--offline", "--no-cache")
+            self.assertEqual(code, 1)
+
+    def test_redefine_is_not_a_discovery_pointer(self):
+        schema = (
+            '<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" '
+            'targetNamespace="http://t.example/r">'
+            '<xs:redefine schemaLocation="other.xsd"/>'
+            "</xs:schema>"
+        )
+        with tempfile.TemporaryDirectory() as d:
+            (Path(d) / "r.xsd").write_text(schema)
+            (Path(d) / "other.xsd").write_text(
+                '<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"/>'
+            )
+            dts = walk(str(Path(d) / "r.xsd"))
+            self.assertEqual(len(dts.documents), 1)
+            self.assertEqual(dts.unresolved, {})
+
+    def test_xpointer_child_sequence_is_labelled_as_a_tool_limit(self):
+        schema = (
+            '<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" '
+            'xmlns:xbrli="http://www.xbrl.org/2003/instance" '
+            'xmlns:link="http://www.xbrl.org/2003/linkbase" '
+            'xmlns:xlink="http://www.w3.org/1999/xlink" '
+            'targetNamespace="http://t.example/x">'
+            "<xs:annotation><xs:appinfo><link:linkbase>"
+            '<link:labelLink xlink:type="extended" '
+            'xlink:role="http://www.xbrl.org/2003/role/link">'
+            '<link:loc xlink:type="locator" xlink:href="#element(/1/2)" '
+            'xlink:label="a"/>'
+            "</link:labelLink></link:linkbase></xs:appinfo></xs:annotation>"
+            '<xs:element name="A" id="x_A" substitutionGroup="xbrli:item" '
+            'type="xbrli:stringItemType" xbrli:periodType="duration"/>'
+            "</xs:schema>"
+        )
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "x.xsd"
+            path.write_text(schema)
+            dts = walk(str(path))
+            self.assertEqual(
+                dict(dts.unresolved_locator_kinds),
+                {"XPointer child-sequence form, not resolved by this tool": 1},
+            )
+
+    def test_catalog_without_manifest_is_ignored(self):
+        """Report Packages 1.0 section 6: no taxonomyPackage.xml, no remapping."""
+        with tempfile.TemporaryDirectory() as d:
+            tmp = Path(d)
+            root = tmp / "pkg" / "bare"
+            (root / "META-INF").mkdir(parents=True)
+            (root / "META-INF" / "catalog.xml").write_text(
+                '<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">'
+                '<rewriteURI uriStartString="https://example.com/t/" '
+                'rewritePrefix="../files/"/></catalog>'
+            )
+            (root / "files").mkdir()
+            (root / "files" / "extension-schema.xsd").write_bytes(SCHEMA.read_bytes())
+            zip_path = tmp / "bare.zip"
+            with zipfile.ZipFile(zip_path, "w") as zf:
+                for f in sorted(root.rglob("*")):
+                    if f.is_file():
+                        zf.write(f, f.relative_to(tmp / "pkg"))
+            dts = walk(
+                "https://example.com/t/extension-schema.xsd", packages=[str(zip_path)]
+            )
+            self.assertEqual(
+                list(dts.unresolved), ["https://example.com/t/extension-schema.xsd"]
+            )
+
+    def test_several_entry_points_require_a_choice_and_substring_selects_one(self):
+        with tempfile.TemporaryDirectory() as d:
+            tmp = Path(d)
+            root = tmp / "pkg" / "multi"
+            (root / "META-INF").mkdir(parents=True)
+            (root / "files").mkdir()
+            (root / "files" / "a.xsd").write_text(
+                '<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" '
+                'targetNamespace="http://t.example/a"/>'
+            )
+            (root / "files" / "b.xsd").write_text(
+                '<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" '
+                'targetNamespace="http://t.example/b"/>'
+            )
+            (root / "META-INF" / "taxonomyPackage.xml").write_text(
+                '<tp:taxonomyPackage xmlns:tp="http://xbrl.org/2016/taxonomy-package">'
+                "<tp:identifier>http://example.com/multi</tp:identifier>"
+                "<tp:entryPoints>"
+                "<tp:entryPoint><tp:name>Alpha</tp:name>"
+                '<tp:entryPointDocument href="../files/a.xsd"/></tp:entryPoint>'
+                "<tp:entryPoint><tp:name>Beta</tp:name>"
+                '<tp:entryPointDocument href="../files/b.xsd"/></tp:entryPoint>'
+                "</tp:entryPoints></tp:taxonomyPackage>"
+            )
+            zip_path = tmp / "multi.zip"
+            with zipfile.ZipFile(zip_path, "w") as zf:
+                for f in sorted(root.rglob("*")):
+                    if f.is_file():
+                        zf.write(f, f.relative_to(tmp / "pkg"))
+            code, _, err = run_main(str(zip_path), "--offline", "--no-cache")
+            self.assertEqual(code, 2)
+            self.assertIn("2 entry points", err)
+            self.assertIn("Alpha", err)
+            self.assertIn("Beta", err)
+            dts = dts_profile.build(
+                [str(zip_path)], [], None, True, False, 50, entry_point="Beta"
+            )
+            self.assertEqual(len(dts.documents), 1)
+            self.assertTrue(next(iter(dts.documents)).endswith("b.xsd"))
+
+    def test_target_role_and_custom_definition_arcroles_are_counted(self):
+        schema = (
+            '<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" '
+            'xmlns:xbrli="http://www.xbrl.org/2003/instance" '
+            'xmlns:xbrldt="http://xbrl.org/2005/xbrldt" '
+            'xmlns:link="http://www.xbrl.org/2003/linkbase" '
+            'xmlns:xlink="http://www.w3.org/1999/xlink" '
+            'targetNamespace="http://t.example/d">'
+            "<xs:annotation><xs:appinfo><link:linkbase>"
+            '<link:definitionLink xlink:type="extended" '
+            'xlink:role="http://www.xbrl.org/2003/role/link">'
+            '<link:loc xlink:type="locator" xlink:href="#d_A" xlink:label="a"/>'
+            '<link:loc xlink:type="locator" xlink:href="#d_B" xlink:label="b"/>'
+            '<link:definitionArc xlink:type="arc" xlink:from="a" xlink:to="b" '
+            'xlink:arcrole="http://xbrl.org/int/dim/arcrole/domain-member" '
+            'xbrldt:targetRole="http://t.example/role/other"/>'
+            '<link:definitionArc xlink:type="arc" xlink:from="a" xlink:to="b" '
+            'xlink:arcrole="http://t.example/arcrole/inflow"/>'
+            "</link:definitionLink></link:linkbase></xs:appinfo></xs:annotation>"
+            '<xs:element name="A" id="d_A" substitutionGroup="xbrli:item" '
+            'type="xbrli:monetaryItemType" xbrli:periodType="instant"/>'
+            '<xs:element name="B" id="d_B" substitutionGroup="xbrli:item" '
+            'type="xbrli:monetaryItemType" xbrli:periodType="instant"/>'
+            "</xs:schema>"
+        )
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "d.xsd"
+            path.write_text(schema)
+            p = dts_profile.profile(walk(str(path)))
+            self.assertEqual(p["definition"]["arcs_with_targetRole"], 1)
+            self.assertEqual(
+                p["definition"]["other_arcroles"],
+                {"http://t.example/arcrole/inflow": 1},
+            )
+
     def test_json_output_round_trips(self):
         code, out, _ = run_main(str(SCHEMA), "--offline", "--no-cache", "--json")
         self.assertEqual(code, 0)

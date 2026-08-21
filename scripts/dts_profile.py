@@ -112,7 +112,6 @@ XS_SCHEMA = f"{{{NS['xs']}}}schema"
 XS_ELEMENT = f"{{{NS['xs']}}}element"
 XS_IMPORT = f"{{{NS['xs']}}}import"
 XS_INCLUDE = f"{{{NS['xs']}}}include"
-XS_REDEFINE = f"{{{NS['xs']}}}redefine"
 LINK_LINKBASE = f"{{{NS['link']}}}linkbase"
 LINK_LINKBASE_REF = f"{{{NS['link']}}}linkbaseRef"
 LINK_SCHEMA_REF = f"{{{NS['link']}}}schemaRef"
@@ -145,11 +144,10 @@ CONCEPT_ROOTS = {
 STANDARD_LABEL_ROLE = "http://www.xbrl.org/2003/role/label"
 CONCEPT_LABEL_ARCROLE = "http://www.xbrl.org/2003/arcrole/concept-label"
 CONCEPT_REFERENCE_ARCROLE = "http://www.xbrl.org/2003/arcrole/concept-reference"
-PARENT_CHILD_ARCROLE = "http://www.xbrl.org/2003/arcrole/parent-child"
-SUMMATION_ITEM_ARCROLES = {
-    "http://www.xbrl.org/2003/arcrole/summation-item",
-    "https://xbrl.org/2023/arcrole/summation-item",
-}
+# Presentation and calculation arcs are classified by their enclosing extended
+# link element (link:presentationLink, link:calculationLink), never by arcrole,
+# so a parent-child or summation-item arc carried in a custom extended link is
+# reported under "other" rather than counted as presentation or calculation.
 XDT_ARCROLE_PREFIX = "http://xbrl.org/int/dim/arcrole/"
 
 # Hosts whose documents are XBRL / W3C infrastructure (instance and linkbase
@@ -212,10 +210,6 @@ def secure_parser() -> etree.XMLParser:
         load_dtd=False,
         huge_tree=True,
     )
-
-
-def clark(qname: etree.QName | str) -> str:
-    return str(qname)
 
 
 def resolve_qname(el: etree._Element, value: str) -> str:
@@ -469,6 +463,18 @@ class Walker:
         queue: list[tuple[str, str, str]] = [("(start)", "start", s) for s in starts]
         while queue:
             origin, pointer, uri = queue.pop(0)
+            if pointer == "import-without-schemaLocation":
+                # Nothing to fetch: the schema names a namespace and leaves its
+                # location to a catalog or a cache this walker does not have.
+                # Recorded so the closure is not reported complete (XBRL 2.1
+                # section 3.2 requires every reference to be resolved).
+                if uri not in dts.documents and uri not in dts.unresolved:
+                    dts.unresolved[uri] = (
+                        f"xs:import in {origin} names this namespace with no "
+                        "schemaLocation; resolvable only through a catalog or cache"
+                    )
+                    dts.discovery.append((origin, pointer, uri))
+                continue
             # Documents are keyed by their CANONICAL URI (the one the href
             # names). A package catalog only changes where the bytes are read
             # from; it must not change a document's identity, or the same
@@ -528,21 +534,30 @@ class Walker:
     def pointers(root: etree._Element, kind: str) -> list[tuple[str, str]]:
         """The discovery pointers of one document, in document order.
 
-        Schema: xs:import / xs:include / xs:redefine @schemaLocation, and the
+        Schema: xs:import / xs:include @schemaLocation (xs:redefine is
+        prohibited in taxonomy schemas and "cannot play a role in DTS
+        discovery", section 3.2, so it is not followed), and the
         link:linkbaseRef, link:roleRef, link:arcroleRef inside xs:appinfo
         (XBRL 2.1 sections 3.2, 5.1.2). A typed dimension's
         xbrldt:typedDomainRef points at an element declaration that must be in
-        the DTS (XDT section 2.5.2), so it is followed too.
+        the DTS (XDT section 2.5.2), so it is followed too. An import that
+        names a namespace but no schemaLocation is returned under the pointer
+        kind "import-without-schemaLocation" with the namespace as its target,
+        so the walk records it as unresolved instead of dropping it.
         Linkbase: every locator href, plus roleRef / arcroleRef (3.2, 3.5.2.4).
         Instance and Inline XBRL: schemaRef / linkbaseRef / roleRef /
         arcroleRef, plus footnote locators (4.2, 4.3).
         """
         found: list[tuple[str, str]] = []
         if kind == "schema":
-            for el in root.iter(XS_IMPORT, XS_INCLUDE, XS_REDEFINE):
+            for el in root.iter(XS_IMPORT, XS_INCLUDE):
                 loc = el.get("schemaLocation")
                 if loc:
                     found.append((etree.QName(el).localname, loc))
+                elif el.tag == XS_IMPORT and el.get("namespace"):
+                    found.append(
+                        ("import-without-schemaLocation", el.get("namespace", ""))
+                    )
             for el in root.iter(LINK_LINKBASE_REF, LINK_ROLE_REF, LINK_ARCROLE_REF):
                 href = el.get(XLINK_HREF)
                 if href:
@@ -689,7 +704,9 @@ class Walker:
         qname = dts.ids.get((doc_uri, fragment))
         if qname:
             return qname
-        if (doc_uri, fragment) in dts.ids:
+        if re.fullmatch(r"element\(/\d+(?:/\d+)*\)", fragment):
+            kind = "XPointer child-sequence form, not resolved by this tool"
+        elif (doc_uri, fragment) in dts.ids:
             kind = "non-concept id (roleType, arcroleType, type, ...)"
         elif doc_uri in dts.boundary:
             kind = "document on the infrastructure boundary (not followed)"
@@ -821,7 +838,7 @@ def unpack_package(path: Path, workdir: Path) -> Path:
 def package_catalogs(extracted: Path) -> list[Path]:
     """The catalogs a processor may apply: only those beside a manifest.
 
-    Report Packages 1.0 section 5.3: remappings apply only if the package is
+    Report Packages 1.0 section 6: remappings apply only if the package is
     also a taxonomy package; without `META-INF/taxonomyPackage.xml` the
     `catalog.xml` is ignored. Honouring a bare catalog would resolve
     documents a conformant processor would not, and make the profile lie.
@@ -1086,7 +1103,7 @@ def profile(dts: DTS) -> dict[str, Any]:
             "domain_members_distinct": len(domain_members),
             "primary_items_with_hypercube": len(primary_items),
             # A dimensional relationship set may continue in ANOTHER extended
-            # link role through xbrldt:targetRole (XDT section 2.4.3), so
+            # link role through xbrldt:targetRole (XDT section 2.4), so
             # per-ELR bucketing under-reports a hypercube's reach. The count
             # says how often this DTS relies on that.
             "arcs_with_targetRole": sum(1 for a in def_arcs if "targetRole" in a.attrs),

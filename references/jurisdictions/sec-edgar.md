@@ -56,7 +56,7 @@ omits documentation labels, references and deprecated elements, which
 
 | Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
 |---|---|---|---|---|---|---|
-| **2026** GRT + SRT (FASB 15 Dec 2025) | `https://xbrl.fasb.org/us-gaap/2026/elts/us-gaap-2026.xsd`; `https://xbrl.fasb.org/srt/2026/elts/srt-2026.xsd`; entry points under `https://xbrl.fasb.org/us-gaap/2026/entire/` | `us-gaap-2026.zip`, `srt-2026.zip` in the same directories | SEC: "for the earliest reporting period that ends on or after **March 16, 2026**, but not for reporting periods that end before" | EDGAR Release 26.1, **16 Mar 2026**, onward; removal not announced | current | SEC 2026 taxonomies announcement; `https://www.sec.gov/info/edgar/edgartaxonomies.xml` (v77) |
+| **2026** GRT + SRT (FASB 15 Dec 2025) | `https://xbrl.fasb.org/us-gaap/2026/elts/us-gaap-2026.xsd`; `https://xbrl.fasb.org/srt/2026/elts/srt-2026.xsd`; entry points under `https://xbrl.fasb.org/us-gaap/2026/entire/` | `us-gaap-2026.zip`, `srt-2026.zip` in the same directories | SEC: "for the earliest reporting period that ends on or after **March 16, 2026**, but not for reporting periods that end before" | EDGAR Release 26.1, **16 Mar 2026**, onward; removal not announced | current | SEC 2026 taxonomies announcement; `https://www.sec.gov/files/edgartaxonomies.xml` (v77; the `/info/edgar/` path redirects here) |
 | **2025** GRT + SRT (FASB 16 Dec 2024) | `…/us-gaap/2025/elts/us-gaap-2025.xsd`; `…/srt/2025/elts/srt-2025.xsd` (200) | `us-gaap-2025.zip`, `srt-2025.zip` | periods ending on or after **17 Mar 2025** | EDGAR Release 25.1, **17 Mar 2025**, onward; removal not announced | accepted | SEC 2025 announcement |
 | **2024** GRT + SRT (FASB 14 Dec 2023) | `…/us-gaap/2024/elts/us-gaap-2024.xsd`; `…/srt/2024/elts/srt-2024.xsd` (200) | `us-gaap-2024.zip`, `srt-2024.zip` | periods ending on or after **18 Mar 2024** | EDGAR Release 24.1, **18 Mar 2024**; removal was due at Release 26.2 (June 2026), which the SEC **cancelled on 1 Jun 2026**; now planned for Release 26.3, **14 Sep 2026**, "may approve or disapprove" | **still accepted** on 2026-08-21; three vintages live at once | SEC Release 26.3 preview (14 Aug 2026); cancellation notice |
 | 2023 GRT + SRT (FASB 16 Dec 2022) | `…/us-gaap/2023/elts/us-gaap-2023.xsd` (200, still fetchable) | | periods ending on or after 20 Mar 2023 | EDGAR 23.1 (20 Mar 2023) to Release 25.2, **16 Jun 2025** | removed | SEC 25.2 announcement |
@@ -71,7 +71,7 @@ the `NN.2` release in June or July two years later, a window of about two
 years and three months, stretched this year by the cancelled 26.2. **A
 fetchable URL is not an accepted vintage**: 2022 and 2023 still resolve
 and are refused. The machine-readable authority is
-`https://www.sec.gov/info/edgar/edgartaxonomies.xml`; the human pages no
+`https://www.sec.gov/files/edgartaxonomies.xml`; the human pages no
 longer carry a table.
 
 ### Recent rule updates (last ~24 months)

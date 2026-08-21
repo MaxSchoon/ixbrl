@@ -10,8 +10,11 @@ jurisdiction file: they tell you *which* DTS; this file tells you what a DTS is
 and how to interrogate it. Run `scripts/dts_profile.py` to do the interrogating.
 
 **Last verified (UTC): 2026-08-21.** Every count in the comparison table was
-measured on that date with `scripts/dts_profile.py` and cross-checked against
-Arelle 2.41.7 on the same entry points; the specification citations were read
+produced on that date by `scripts/dts_profile.py` from the JSON it emits; the
+concept, abstract, presentation, calculation, XDT-arcrole, label and reference
+counts were cross-checked against Arelle 2.41.7 on the same entry points (the
+typed-dimension, role-type, distinct-label-role and generic-link rows were
+not, and are the tool's own reading); the specification citations were read
 from the live documents the same day (Sources).
 
 ## Contents
@@ -34,7 +37,9 @@ from the live documents the same day (Sources).
 XBRL 2.1 defines it in the glossary (section 1.4): "A DTS is a collection of
 taxonomy schemas and linkbases. The bounds of a DTS are such that the DTS
 includes all taxonomy schemas and linkbases that can be discovered by following
-links or references". Section 3.2 gives the procedure: "The bounds of a DTS are
+links or references in the taxonomy schemas and linkbases included in the
+DTS". The self-reference is the point: it is a closure, not one-hop
+reachability. Section 3.2 gives the procedure: "The bounds of a DTS are
 determined by starting from some set of documents (instance, taxonomy schema,
 or linkbase) and following DTS discovery rules." Two consequences are easy to
 get wrong:
@@ -70,7 +75,7 @@ what you will be diagnosing.
 |---|---|---|---|
 | `link:schemaRef/@xlink:href` | an instance; in Inline XBRL inside `ix:references` in the `<head>` | the entry-point schema (XBRL 2.1 section 4.2: at least one is required) | href points at a file that is not where the filer's package put it (the bundled scaffold deliberately does this: `assets/ixbrl-skeleton.xhtml` names `example-extension.xsd`, which does not ship) |
 | `link:linkbaseRef/@xlink:href` | an instance (section 4.3), or a schema's `xs:annotation/xs:appinfo` | one linkbase; the `xlink:role` says which kind (`…/presentationLinkbaseRef` and so on) | an extension schema that forgets the role, or a linkbase reachable only from an instance so that the taxonomy alone never sees it |
-| `xs:import/@schemaLocation`, `xs:include/@schemaLocation` | a schema | another schema; import crosses namespaces, include does not | `xs:import` with a namespace but no `schemaLocation` resolves only through a catalog or cache; the FRC core, for one, imports ten modules this way and relies on relative paths |
+| `xs:import/@schemaLocation`, `xs:include/@schemaLocation` | a schema | another schema; import crosses namespaces, include does not | two distinct hazards: an `xs:import` that names a namespace and no `schemaLocation` resolves only through a catalog or cache (the profiler reports it as unresolved); and a *relative* `schemaLocation` resolves only while the package layout is intact (the FRC core imports its ten modules by paths such as `../../../cd/2026-01-01/business/bus-2026-01-01.xsd`, so a single copied file walks nowhere) |
 | `link:roleRef/@xlink:href`, `link:arcroleRef/@xlink:href` | a linkbase, or an instance (for footnote links only, sections 4.4 and 4.5) | the schema that declares a custom role or arcrole | a calculation linkbase using the Calc 1.1 arcrole without an `arcroleRef` to `https://www.xbrl.org/2023/calculation-1.1.xsd` |
 | `link:loc/@xlink:href` | any extended link | the schema the locator points into | a locator whose fragment names an id nothing declares; the profiler reports these as "id not declared in that document" |
 | embedded linkbases | `//xsd:schema/xsd:annotation/xsd:appinfo/*` | linkbases written inside the schema | a walker that only follows `linkbaseRef` never sees them; the NT/KvK 2025 NL-GAAP entry point carries four |
@@ -127,7 +132,7 @@ applies:
    location**, which is inside `META-INF`, so they "will typically need to
    start with `../`" (Taxonomy Packages section 3.3.1 note).
 3. **In a report package, remappings apply only if the package is also a
-   taxonomy package.** Report Packages 1.0 section 5.3: "If there is no
+   taxonomy package.** Report Packages 1.0 section 6 (Remappings): "If there is no
    `META-INF/taxonomyPackage.xml` file then `META-INF/catalog.xml` is
    ignored." An `.xbri` that carries a catalog and no manifest resolves
    nothing locally, and that is specified behaviour.
@@ -169,8 +174,9 @@ nowhere is a schema helper, not a concept. The attributes that decide tagging:
 **Role types and arcrole types** (sections 5.1.3 and 5.1.4) declare the
 extended link roles (ELRs) and custom arcroles a DTS may use, each with
 `link:usedOn` naming the elements they may appear on and, for arcroles, the
-required `cyclesAllowed`. The ELR is how a taxonomy partitions its networks
-"based on which part of a financial statement they relate to" (section 5.2.3).
+required `cyclesAllowed`. The ELR is how a taxonomy partitions its networks by
+the part of a financial statement they relate to (the idiom XBRL 2.1
+illustrates in section 5.2.3, Example 47).
 
 **Resources** carry content rather than point at it: `link:label` (with
 `xml:lang` and a role), `link:reference` (with parts such as `ref:Name`,
@@ -193,7 +199,7 @@ as "Cash at beginning of period" under `periodStartLabel` in one row and
 arc removes an inherited relationship; `@priority` decides between competing
 arcs. A presentation locator "MUST only point to Concepts" (section 5.2.4.1),
 which is why the tree is pure concept structure. Depth varies by regime:
-eleven levels in IFRS 2025 and FRC 2026, nine in ÅRL, and one in the KvK
+eleven levels in IFRS 2025 and FRC 2026, nine in ÅRL, and two in the KvK
 NL-GAAP entry point, whose statement trees are built by the filer's extension.
 
 **Calculation** (`summation-item`). Parent to child with `@weight` of `1` or
@@ -217,7 +223,8 @@ mis-modelled:
 
 - **A dimensional relationship set is not confined to one ELR.**
   `@xbrldt:targetRole` on an arc continues the set in another extended link
-  role (XDT section 2.4.3). The ÅRL 20251001 entry point has 353 such arcs and
+  role (XDT section 2.4, partitioning of a dimensional relationship set
+  across base sets). The ÅRL 20251001 entry point has 353 such arcs and
   the FRC 2026 FRS 102 entry point 2 356; bucketing hypercubes per ELR
   under-reports their reach in both.
 - **Regimes add arcroles of their own.** ESEF anchoring is a definition arc
@@ -259,10 +266,11 @@ guesses.
    command.
 2. **Concept to label.** Follow `concept-label` arcs to `link:label` resources
    and filter by (role, language). Fall back deliberately, and differently per
-   regime, because role coverage is sparse: IFRS 2025 has 5 057 standard labels
-   but 213 `totalLabel`, 43 `periodStartLabel` and no `verboseLabel` at all;
-   the FRC has standard, documentation and verbose only, with Welsh at
-   near-parity to English; ÅRL has five roles, Danish authoritative and 374
+   regime, because role coverage is sparse: IFRS 2025 has 5 403 standard labels
+   but 242 `totalLabel`, 43 `periodStartLabel` and no `verboseLabel` at all;
+   the FRC has standard, documentation, verbose and terse plus two deprecation
+   roles, no negated, total or period roles, with Welsh at near-parity to
+   English; ÅRL has five roles, Danish authoritative and 374
    concepts with no English label; the NT ships nl, en, de, fr but
    `documentation` only in nl and en. Fall back to the standard role, then to
    the regime's authoritative language, and never to a role the DTS does not
@@ -313,20 +321,20 @@ read from the regulators' packages.
 | Documents in closure | 332 (51 schemas, 281 linkbases) | 50 (4 + 46) | 407 (126 + 281) | 56 (15 + 41) | 68 (7 + 61) | 119 (12 + 107) |
 | Concepts (items / dimensions / hypercubes) | 5 512 (5 217 / 144 / 151) | 5 338 (5 053 / 139 / 146) | 18 647 (17 977 / 293 / 377) | 7 995 (7 651 / 158 / 186) | 6 735 (6 459 / 271 / 5) | 4 087 (3 907 / 84 / 96) |
 | Abstract concepts | 1 654 | 1 585 | 6 327 | 3 744 | 951 | 764 |
-| Typed dimensions | 3 | 3 | 10 | 27 | 0 | 56 |
-| Presentation networks / arcs / max depth | 68 / 6 605 / 11 | 0 (relationships live in `esef_all`) | 111 / 33 585 / 17 | 15 / 7 295 / 11 | 1 / 11 / 1 | 23 / 2 807 / 9 |
+| Typed dimensions | 0 | 0 | 10 | 27 | 175 | 56 |
+| Presentation networks / arcs / max depth | 68 / 6 605 / 11 | 0 (relationships live in `esef_all`) | 111 / 33 585 / 17 | 15 / 7 295 / 11 | 1 / 11 / 2 | 23 / 2 807 / 9 |
 | Calculation arcs (arcrole) | 1 312 (Calc 1.1) | 0 | 6 526 (Calc 1.1) | **0 (none shipped)** | 0 (filer builds them) | **0 (formula instead)** |
 | Definition arcs (prohibited excluded) / with `targetRole` | 4 245 / 0 | 7 683 / 0 | 31 960 / 0 | 12 506 / 2 356 (+39 prohibited) | 5 803 / 0 | 3 015 / 353 |
 | Non-XDT definition arcroles | none | none | six deprecation arcroles (`dep-concept-deprecatedConcept` 134, `dep-dimensionallyQualifiedConcept-deprecatedConcept` 397, …), `essence-alias` 9 | `inflow` 168, `outflow` 102, `crossref` 100 | none | none |
-| Label resources / roles / languages | 11 293 / 9 / en | 11 171 / 9 / en (24 languages via the package entry points) | 19 575 / 6 / en-US (no `documentation`: that and the references ship only in the `-all` entry point) | 17 108 / 6 / en, cy | 44 122 / 6 / nl, en, fr, de | 9 155 / 5 standard + ELR-shaped / da, en |
+| Label resources / distinct roles / languages | 11 293 / 11 / en | 11 171 / 11 / en (24 languages via the package entry points) | 19 575 / 6 / en-US (no `documentation`: that and the references ship only in the `-all` entry point) | 17 108 / 6 / en, cy | 44 122 / 11 / nl, en, fr, de | 9 155 / 43 (5 standard plus 38 ELR-shaped) / da, en |
 | Reference resources | 7 527 | 5 892 | 0 in `std` (in `-all` only) | 7 513 | 12 020 | 2 452 |
-| Formula / generic resources | generic labels on 80 ELRs | 9 generic links | none in `std` | none | 29 generic links | 45 value + 11 existence assertions, 143 fact variables |
-| Role types declared | 80 | 9 | 665 | 418 | 53 | 384 |
+| Generic extended links / formula resources | 80 / 0 | 9 / 442 | 0 / 0 | 0 / 0 | 29 / 47 | 53 / 268 (45 value + 11 existence assertions, 143 fact variables) |
+| Role types declared | 204 | 23 | 665 | 418 | 9 | 384 |
 | Extension policy | open (Foundation's "Essential" entry points exist to be extended) | open, anchoring required | open, anchoring not required | **closed**: widen and disclose, analysis dimensions | open, anchoring required | **closed** for ÅRL; extensions only on the IFRS/ESEF companion |
 | Release cadence, version token | annual, namespace date `YYYY-MM-DD` (2025-03-27); **no 2026 release** | per RTS amendment, namespace date; ESEF 2024 (Reg (EU) 2025/19) for FY2025, ESEF 2025 (Reg (EU) 2026/283) from FY2026, early application for FY2025 allowed | annual GRT, `YYYY` in namespace | annual suite, `YYYY-01-01` | annual KvK set, `YYYY-12-31`; classic NT `ntNN/YYYYMMDD` | annual, `YYYY1001`; package on `erhvervsstyrelsen.dk` |
 
 Note on US-GAAP: the `std` entry point (`us-gaap-entryPoint-std-2025.xsd`)
-was fetched live from `xbrl.fasb.org` and `xbrl.sec.gov` (403 + 3 documents)
+was fetched live from `xbrl.fasb.org` and `xbrl.sec.gov` (403 + 4 documents)
 and deliberately omits documentation labels, references and the deprecated
 elements; `us-gaap-entryPoint-all-2025.xsd` carries them. Profile the one you
 actually load, and say which. The SEC state/province schema (`stpr`, 65
@@ -339,8 +347,10 @@ What the numbers mean for tagging:
 
 - **Depth and presentation ownership differ by an order of magnitude.** IFRS,
   FRC and ÅRL ship the statement trees; the KvK NL-GAAP entry point ships one
-  eleven-arc network and expects the filer's extension to build every
-  statement under the RTS root elements. A conversion pipeline that "reuses the
+  eleven-arc, two-level network and expects the filer's extension to build
+  every statement under the RTS root elements. The NT also carries 175 typed
+  dimensions against none in IFRS or ESEF, so its dimensional contexts are
+  built from typed members far more often. A conversion pipeline that "reuses the
   taxonomy's presentation" has nothing to reuse in the Dutch iXBRL tree.
 - **Where arithmetic lives is regime-specific.** IFRS and ESEF 2024+ use Calc
   1.1; the FRC has no calculation linkbase and decides sign by label; ÅRL
@@ -469,8 +479,10 @@ Reading the output:
   one reporting concept that lives there is the LEI taxonomy's element, which
   is why an ESEF or NL profile reads one concept short of Arelle.
 - `Unresolved locators` is broken down by cause. "non-concept id" is normal:
-  generic labels point at role types. "document not in the closure" and "id
-  not declared" are findings about the taxonomy.
+  generic labels point at role types. "XPointer child-sequence form" is a
+  limit of this tool (it resolves shorthand and `element(id)` pointers only,
+  not `element(/1/14)`). "document not in the closure" and "id not declared"
+  are findings about the taxonomy.
 - `by_source` tells you whether bytes came from a package, the disk cache or
   the network. Record it beside any number you cite; the cache is an input.
 
@@ -511,7 +523,7 @@ Reading the output:
   and is nothing of the kind. The arcrole URI in the profile tells you which
   you have; IFRS 2025, ESEF 2024+ and US-GAAP 2025 are 1.1.
 - **A `.xbri` catalog without a manifest is inert** (Report Packages section
-  5.3). If offline resolution "does not work", check for
+  6). If offline resolution "does not work", check for
   `META-INF/taxonomyPackage.xml` before anything else.
 - **TLS on a bare Python.** python.org macOS builds ship no CA bundle; the
   profiler says so and names the fix (`certifi`, `SSL_CERT_FILE`, or
@@ -539,10 +551,10 @@ primary source in the last column is a gap to fill, not a row to keep.
 All fetched 2026-08-21.
 
 - XBRL 2.1 REC 2003-12-31 with corrected errata 2013-02-20: https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html (DTS definition section 1.4; discovery rules section 3.2; schemaRef and linkbaseRef sections 4.2 and 4.3; roleRef / arcroleRef in instances 4.4 and 4.5; concept definitions 5.1.1; roleType 5.1.3; arcroleType 5.1.4; redefine 5.1.5; linkbases 5.2; presentation locators 5.2.4.1; calculation 5.2.5)
-- XBRL Dimensions 1.0 REC 2006-09-18 with corrected errata 2012-01-25: https://www.xbrl.org/specification/dimensions/rec-2012-01-25/dimensions-rec-2006-09-18+corrected-errata-2012-01-25.html (terminology section 1.3; targetRole 2.4.3; typedDomainRef 2.5.2)
+- XBRL Dimensions 1.0 REC 2006-09-18 with corrected errata 2012-01-25: https://www.xbrl.org/specification/dimensions/rec-2012-01-25/dimensions-rec-2006-09-18+corrected-errata-2012-01-25.html (terminology section 1.3; targetRole section 2.4; typedDomainRef 2.5.2)
 - Taxonomy Packages 1.0 REC 2016-04-19: https://www.xbrl.org/Specification/taxonomy-package/REC-2016-04-19/taxonomy-package-REC-2016-04-19.html (layout 3.1; entry points 3.2.2; versioning report 3.2.4.1; catalog 3.3)
-- Report Packages 1.0 REC 2023-09-22 with corrected errata 2025-03-11: https://www.xbrl.org/Specification/report-package/REC-2023-09-22+corrected-errata-2025-03-11/report-package-REC-2023-09-22+corrected-errata-2025-03-11.html (remappings section 5.3)
-- XBRL Versioning 1.0 Base REC 2013-02-27: https://www.xbrl.org/specification/versioning-base/rec-2013-02-27/versioning-base-rec-2013-02-27.html
+- Report Packages 1.0 REC 2023-09-22 with corrected errata 2025-03-11: https://www.xbrl.org/Specification/report-package/REC-2023-09-22+corrected-errata-2025-03-11/report-package-REC-2023-09-22+corrected-errata-2025-03-11.html (remappings section 6)
+- XBRL Versioning 1.0 Base REC 2013-02-27: https://www.xbrl.org/specification/versioning-base/rec-2013-02-27/versioning-base-rec-2013-02-27.html ; Versioning Primer 1.0 PWD 2011-10-19 (the "not possible in general to reliably reproduce the To DTS" limit): https://www.xbrl.org/WGN/versioning-primer/PWD-2011-10-19/versioning-primer-WGN-PWD-2011-10-19.html
 - Calculations 1.1 arcrole schema: https://www.xbrl.org/2023/calculation-1.1.xsd
 - XML Catalogs 1.1 (OASIS, 2005), rewrite entries section 7.2.2: https://www.oasis-open.org/committees/download.php/14809/xml-catalogs.html
 - XBRL International guidance: taxonomy publication and packages https://www.xbrl.org/guidance/taxonomy-publication/ ; https://www.xbrl.org/guidance/taxonomy-packages/ ; taxonomy reuse https://www.xbrl.org/guidance/taxonomy-reuse/ ; XBRL Taxonomy Guidance Document v1.2 https://www.xbrl.org/guidance-files/XBRLTaxonomyGuidanceDocument-v1.2.pdf

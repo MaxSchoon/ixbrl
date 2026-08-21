@@ -122,9 +122,9 @@ collectors".
 Three measured facts about the DTS itself that change how binding works
 here (`references/dts.md` § Six DTSs compared): the suite ships **no
 calculation linkbase** and states that the label, not the `balance`
-attribute, decides sign; the label roles are standard, documentation and
-verbose only (no negated, total or period roles), in English and **Welsh
-at near-parity**; and three proprietary definition arcroles (`inflow`,
+attribute, decides sign; the label roles are standard, documentation,
+verbose and terse plus the two deprecation roles (no negated, total or
+period roles), in English and **Welsh at near-parity**; and three proprietary definition arcroles (`inflow`,
 `outflow`, `crossref`) plus 2 356 `targetRole` arcs carry structure a
 standard processor ignores.
 
