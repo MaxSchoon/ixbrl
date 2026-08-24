@@ -9,7 +9,7 @@
 ruff==0.16.3
 
 # Runtime dependency of scripts/check_facts.py only.
-lxml==6.1.1
+lxml==6.1.2
 
 # Type gate. pyrightconfig.json declared a type standard from the start but
 # nothing ran it; CI now does. lxml ships no inline types, so the stubs are
@@ -24,4 +24,4 @@ markdown-it-py==4.2.0
 
 # CA bundle for scripts/dts_profile.py's online walks. python.org macOS builds
 # ship no system CA bundle, and the script uses certifi's when it is importable.
-certifi==2026.6.17
+certifi==2026.7.22
