@@ -224,12 +224,12 @@ defect.
 | KvK Groot-class **must** deposit digitally (SBR Report Package) | FY2025 | Earlier years allowed paper for Groot. Don't insist on iXBRL for a FY2023 Groot deposit. |
 | KvK Middelgroot must deposit digitally | FY2017 onward | Stable for years. |
 | KvK Klein / Microbedrijf must deposit digitally | FY2016 / FY2017 | Stable for years. |
-| Block-tagging of narrative for KvK iXBRL (intended mandate: management report, notes, other information; prohibition on voluntary use: the jaarrekening only) | Mandate not yet dated: RTS 2026 Annex II pt 2 prints `1 januari 20XX`, "niet eerder voorzien dan twee jaar na invoering van de definitieve ESMA-vereisten"; FAQ 2.4.1 (10 July 2026): "op dit moment nog niet bekend". The prohibition runs "vóór deze datum", the same placeholder | Two rules with different scopes, and RTS 2026 changed the second (checked 2026-09-03). The intended *mandate* names "het bestuursverslag, de toelichting op de jaarrekening en de overige gegevens" in both RTS 2025 and RTS 2026; RTS 2026 widened the lag from one year after ESMA's amended approach to two years after ESMA's definitive requirements, and now describes the intended date as aligned ("afgestemd op") with both ESMA's expected developments and the best practices XBRL International is working on, timing subject to change; FAQ 2.4.1 puts it more strongly, the date "hangt af van" both (checked 2026-09-03). The *prohibition* is narrower than the mandate: RTS 2026 reads "vrijwillige toepassing van block-tagging **in de jaarrekening** niet toegestaan" (EN: "to the financial statements"); RTS 2025 had no scope qualifier ("niet toegestaan om op vrijwillige basis block-tagging toe te passen") and bounded the prohibition at financial years beginning before 1 januari 2026. RTS art. 2 sub 3 lists the jaarrekening, the bestuursverslag and the overige gegevens as sibling parts of the jaarrapportage, so under RTS 2026 a voluntary text-block tag on a note is prohibited by rule, while one on the management report or the other information is neither prohibited nor required by any RTS, RM or FAQ text read. Strength: prohibited by the RTS text; no RTS or FAQ text names a Digipoort or filing-rule rejection, and the NT Filing Rules were not checked for one. Operative version rule: RTS 2026 for financial years beginning on or after 1 januari 2026 (art. 9; early application to earlier years allowed), RTS 2025 for FY2025 and, where it permits, earlier years. RTS 2025's fixed 1 januari 2026 bound is that text's own end date, not a rule an FY2026 filing can rely on. Neither art. 9 carries a supersession clause; that is a drafting gap to note, not an applicability rule (checked 2026-09-03). Same reading in *The auditor's report (controleverklaring) in the package*. |
+| Block-tagging of narrative for KvK iXBRL (intended mandate: management report, notes, other information; prohibition on voluntary use: the jaarrekening only) | Mandate not yet dated: RTS 2026 Annex II pt 2 prints `1 januari 20XX`, "niet eerder voorzien dan twee jaar na invoering van de definitieve ESMA-vereisten"; FAQ 2.4.1 (10 July 2026): "op dit moment nog niet bekend". The prohibition runs "vóór deze datum", the same placeholder | Two rules with different scopes, and RTS 2026 changed the second (checked 2026-09-03). The intended *mandate* names "het bestuursverslag, de toelichting op de jaarrekening en de overige gegevens" in both RTS 2025 and RTS 2026; RTS 2026 widened the lag from one year after ESMA's amended approach to two years after ESMA's definitive requirements, and now describes the intended date as aligned ("afgestemd op") with both ESMA's expected developments and the best practices XBRL International is working on, timing subject to change; FAQ 2.4.1 puts it more strongly, the date "hangt af van" both (checked 2026-09-03). The *prohibition* is narrower than the mandate: RTS 2026 reads "vrijwillige toepassing van block-tagging **in de jaarrekening** niet toegestaan" (EN: "to the financial statements"); RTS 2025 had no scope qualifier ("niet toegestaan om op vrijwillige basis block-tagging toe te passen") and bounded the prohibition at financial years beginning before 1 januari 2026. RTS art. 2 sub 3 lists the jaarrekening, the bestuursverslag and the overige gegevens as sibling parts of the jaarrapportage, so under RTS 2026 a voluntary text-block tag on a note is prohibited by rule, while one on the management report or the other information is neither prohibited nor required by any RTS, RM or FAQ text read. Strength: prohibited by the RTS text; no RTS, RM or FAQ text names a Digipoort or filing-rule rejection, and the NT20 rule sets searched on 2026-09-03 (SBR Filing Rules v1.0 of 2 June 2025 and v1.1 of 19 November 2025, whose only listed change is the withdrawal of tuple rule FR-NL-5.04; KvK Filing Rules NT20 v1.0 and KvK Business Rules NT20 v1.0, both 2 June 2025) contain no rule targeting or rejecting Inline XBRL text-block facts: none of the terms text block, textBlockItemType, block-tagging or ix:continuation occurs, and the nearest rules, FR-NL-5.11 (ingangsdatum 15-05-2017) and its revision FR-NL-5.13 (printed "nog niet definitief vastgesteld"), confine escaped-XHTML formatting to classic-XBRL facts of type formattedExplanationItemType, a rule about markup inside a string fact, not about narrative tagging. All four govern "XBRL instance documenten", the route RTS Chapter 3 art. 5 binds to them ("Een jaarrapportage moet voldoen aan de van toepassing zijnde algemene SBR Filing Rules", identical in RTS 2025 and RTS 2026); the Chapter 2 iXBRL articles name none of them. RM 2026 § 2.9 (10 July 2026) withdrew RM 2025's voluntary block-tagging guidance (2.9.1-2.9.3 removed, § 2.9 now unnumbered prose; 3.2.6 and 3.2.7 headed "Reserved", rule G3-2-7_1 gone with 3.2.7), the RM-side counterpart of the prohibition (checked 2026-09-03). Operative version rule: RTS 2026 for financial years beginning on or after 1 januari 2026 (art. 9; early application to earlier years allowed), RTS 2025 for FY2025 and, where it permits, earlier years. RTS 2025's fixed 1 januari 2026 bound is that text's own end date, not a rule an FY2026 filing can rely on. Neither art. 9 carries a supersession clause; that is a drafting gap to note, not an applicability rule (checked 2026-09-03). Same reading in *The auditor's report (controleverklaring) in the package*. |
 | ESEF report deposited **directly** at the Handelsregister | Not a FY2026 change; the route already stood under RTS 2025 | Article 4 is textually identical in RTS 2025 and RTS 2026, so art. 4(5), an in-scope issuer "kan hun ESEF-rapportage rechtstreeks deponeren bij het handelsregister", is a standing rule, not a new one. Do not tell a filer this route opens with FY2026. Two review-visible consequences: the entity identifier becomes the **LEI** with scheme `http://standards.iso.org/iso/17442` instead of the KvK number with `http://www.kvk.nl/kvk-id` (Annex IV pt 2), and `esef_cor:NotesAccountingPoliciesAndMandatoryTags` joins the start points (Annex IV Table 7). Filing with the AFM still discharges the KvK obligation (art. 2:394 lid 8 BW). |
-| art. 2:403 BW foreign-group-head report in iXBRL | FY2025 | Operative. Untagged group report + separate filing-data iXBRL document in one Report Package (see the *art. 2:403 foreign group head report in iXBRL* profile). |
-| art. 2:408 BW foreign-group-head report in iXBRL | **Not before FY2028** | FAQ 2.2.4 (10 July 2026): for financial years beginning **before 2028-01-01** the 2:408 group report is deposited **by PDF e-mail**; the iXBRL obligation is only *expected* from FY2028. An FY2026 PDF-by-email 2:408 deposit is correct; do not flag it (see the *art. 2:408 foreign group head report by PDF e-mail (before FY2028)* profile). |
+| art. 2:403 BW foreign-group-head report in iXBRL | FY2025 | Operative. Untagged group report + separate filing-data iXBRL document in one Report Package (see the *Profile: art. 2:403 foreign group head report in iXBRL, a DIFFERENT package shape* profile). |
+| art. 2:408 BW foreign-group-head report in iXBRL | **Not before FY2028** | FAQ 2.2.4 (10 July 2026): for financial years beginning **before 2028-01-01** the 2:408 group report is deposited **by PDF e-mail**; the iXBRL obligation is only *expected* from FY2028. An FY2026 PDF-by-email 2:408 deposit is correct; do not flag it (see the *Profile: art. 2:408 foreign group head report by PDF e-mail (before FY2028)* profile). |
 | ESEF block-tagging for AFM (listed) IFRS notes | FY2022 | Distinct from KvK above. AFM-listed AFRs follow the ESEF Annex II text-block elements, not KvK. Annex II lost its Table 1 and Table 2 division for financial years beginning on or after 2023-01-01. |
-| Auditor's report (controleverklaring) required in package | Middelgroot + Groot, always (article 2:393 BW) | Klein/Micro: not required. art. 2:403 BW: group subsidiaries may be exempt; its absence on a Groot subsidiary is not automatically wrong. |
+| Auditor's report (controleverklaring) required in package | Middelgroot + Groot by default (art. 2:393 lid 1 BW, geldend 2026-09-03, checked 2026-09-03), subject to statutory exemptions such as art. 2:403 BW (next column) | Klein/Micro: not required (Klein: art. 2:396 lid 7 BW, "De artikelen ... 391, 392 en 393 lid 1 zijn niet van toepassing"; Micro: art. 2:395a lid 6 BW disapplies "de afdelingen 7, 8 en 9", and art. 2:393 sits in afdeling 9, Deskundigenonderzoek; geldend 2026-09-03, checked 2026-09-03). art. 2:403 BW: group subsidiaries may be exempt; its absence on a Groot subsidiary is not automatically wrong. |
 | Calculation basis for KvK iXBRL Report Packages | FY2025 **and** FY2026: **Calc 1.1**, listed in Annex III of both RTS 2025 and RTS 2026 (the specification set is unchanged between them) | Calc 1.1 uses OIM rounding semantics; it handles iXBRL's routinely-duplicate facts correctly and surfaces the dual-statement cross-scope inconsistencies that Calc 1.0 silently hides. Two verdicts are needed: use Calc 1.1 for **substantive review**, and run Calc 1.0 (`--calc c10`) as well for the **formal deposit-acceptance** verdict: the NT20 Filing Rules list XBRL 2.1 as the normative calculation basis, so the KvK acceptance test runs on Calc 1.0 semantics (`references/validation.md` §4). Running both is cheap. Not re-verified against the NT21 Filing Rules. |
 | Base (filer-facing) taxonomy release to tag against | Per financial year, three-year window | RTS 2026 Annex VI names the `2026-12-31` set for FY2026. FAQ 2.2.5 allows any of the **three most recent** KVK taxonomy versions, so an FY2026 report may be filed on the 2026, 2025 or 2024 set; older versions are rejected. **Checked 2026-08-15: `nltaxonomie.nl/kvk/2026-12-31/` returns 404.** The newest published filer-facing release is still `2025-12-31`. Resolve the live directory before assuming a 2026 schemaRef works. |
 | KVK taxonomy generation for the legacy **XBRL** channel | Per NT release | RTS 2026 ch. 3 Annex I supports NT21 (FY2026), NT20 (FY2025), NT19 (FY2024). **NT21 is pre-release as of 2026-08-15**: `nltaxonomie.nl/nt21/kvk/` holds only `20261209.a` (alfa) and `20261209.b` (bèta); the SBR release calendar puts final publication at 29-10-2026 and production at 09-12-2026. |
@@ -349,9 +349,36 @@ drawn from a comparison of the two final texts; on 2026-09-03 the
 Annex II point 1 and point 2 deltas were confirmed against the
 publisher's English track-changes edition, but the rest of the list
 was not, so small Annex IV wording changes may be missing. The
-Reporting Manual 2026, whose chapter 7
-governs the 403/408 package shape (see the *art. 2:403 foreign group
-head report in iXBRL* profile), has not been read into this file.
+Reporting Manual 2026 (10 July 2026, for financial years beginning on
+or after 1 January 2026 per its cover; its § 1.2 still asks
+stakeholders to follow it "no later than for financial reporting
+periods starting on or after 1 January 2025", a sentence the
+track-changes edition shows carried over unchanged from RM 2025, so
+read the cover as the intended date and § 1.2 as a publisher
+inconsistency, checked 2026-09-03) was read on 2026-09-03 together
+with the publisher's track-changes edition against RM 2025. Its
+chapter 7 leaves the 2:403 route unchanged (Guidance 7.1.4, last
+updated October 2025) and moves the 2:408 iXBRL route from financial years
+starting on or after 1 January 2026 to 1 January 2028 (Guidance
+7.2.1, July 2026; see *Profile: art. 2:403 foreign group head report
+in iXBRL, a DIFFERENT package shape* and *Profile: art. 2:408 foreign
+group head report by PDF e-mail (before FY2028)*). The other items
+dated July 2026 are 3.2.6 and 3.2.7 (RM 2025's voluntary block-tagging
+items, now "Reserved"), 3.6.4 (new: the file types a report package
+may contain, rule G3-6-4_1), 4.1.2, 4.4.2 (the placeholder
+paragraphs and the placeholder rule RM 2025 printed as G4-4-2_5,
+error `extensionTaxonomyLineItemNotLinkedToDesignatedPlaceholder`,
+moved out to 4.4.9, so G4-4-2_5 now denotes the hypercube rule,
+error `extensionTaxonomyItemNotLinkedToAnyHypercube`), 4.4.4, 4.4.9
+(new: the four definition-linkbase placeholders [990010], [990015],
+[990020] and [990025], rules G4-4-9_1 and G4-4-9_2; its
+number-to-scope mapping conflicts with the 2025 taxonomy
+documentation, see *The dual-scope pattern (consolidated +
+separate)*), 5.1.3 (adds the FY2026 "Other" entry point), 6.1.2 and
+6.1.3; RM 2026 § 2.9 has lost Guidance 2.9.1-2.9.3, and RM 2026
+§ 2.10 on the auditor's report is unchanged. The manual's own index
+omits 3.6.4 although the item exists in the body, and dates 4.4.2
+October 2025 where the body header says July 2026.
 NT21 entry-point names are **not** recorded here: the taxonomy is
 still pre-release and the directory listing is truncated, so the
 `-2025-` suffixes in the classic-tree entry-point names under *DTS and
@@ -472,10 +499,30 @@ model C of model D kiezen en voor de winst- en verliesrekening model
 I of model J", the condensed layouts. Model C's balance sheet stops
 at the roman-numeral level ("II. vorderingen en overlopende activa",
 "C. Kortlopende schulden (ten hoogste 1 jaar) en overlopende
-passiva"); model D is published as an image and was not read
-for this entry (*Sources: when to escalate to primary sources*). It
-is an option ("kan ... kiezen"), so a Klein filing on model A is
-conformant. Micro: art. 1 lid 3, "Dit besluit
+passiva"); model D carries the same component posts (A. I-III, B.
+I-IV) in the two-sided ACTIEF / PASSIEF layout of model B, but not
+model C's numbered totals IV. "som der vaste activa" and V. "som der
+vlottende activa", nor its "Uitkomst ... min kortlopende schulden"
+lines, each side closing in "Totaal", and the passief side
+lettered afresh as A. Eigen vermogen (I-VI), B. Voorzieningen, C.
+Langlopende schulden (nog voor meer dan een jaar) and D. "Kortlopende
+schulden (ten hoogste 1 jaar) en overlopende passiva". Models I and J
+both open with "Bruto-marge" and close with "som der kosten",
+"Resultaat voor belastingen" and "Resultaat na belastingen"; between
+the first two, model I lists model E's six nature-based cost lines
+from "lonen en salarissen" to "overige bedrijfskosten", model J model
+F's two function-based lines, "verkoopkosten" and "algemene
+beheerkosten" (the decree never prints "naar aard" or "naar
+bestemming"; the pairing is read from the line items). Neither prints
+"Netto-omzet", "Som der bedrijfsopbrengsten", "Som der
+bedrijfslasten", "Bruto-omzetresultaat" or "Netto-omzetresultaat":
+the opening line is the "bruto-bedrijfsresultaat" of art. 2:396 lid 4
+BW, the posts of art. 2:377 lid 3 sub a-d and g, or lid 4 sub a-c and
+f, "samengetrokken tot een post" (geldend 2026-09-03), under the
+decree's caption "Bruto-marge". Models B, D, I and J were read from
+the annex images (checked 2026-09-03; *Sources: when to escalate to
+primary sources*). It is an option ("kan ... kiezen"), so a Klein
+filing on model A is conformant. Micro: art. 1 lid 3, "Dit besluit
 is niet van toepassing op een rechtspersoon als bedoeld in artikel
 395a van Boek 2", so no caption, ordering or sub-total finding may
 rest on the decree for a `kvk:LegalEntitySizeMicroMember` filing.
@@ -548,6 +595,18 @@ placeholder roles for this purpose:
 | `https://www.nltaxonomie.nl/kvk/role/lineitems-consolidated-financial-statements-ifrs` (`[990015]`) | Consolidated + IFRS |
 | `https://www.nltaxonomie.nl/kvk/role/lineitems-separate-financial-statements-nlgaap` (`[990020]`) | Separate + NL-GAAP |
 | `https://www.nltaxonomie.nl/kvk/role/lineitems-separate-financial-statements-ifrs` (`[990025]`) | Separate + IFRS |
+
+RM 2026 Guidance 4.4.9 (July 2026) lists the same four numbers but
+puts [990015] at separate NL-GAAP and [990020] at consolidated IFRS,
+the reverse of this table; the 2025 taxonomy documentation (Table 2,
+12 December 2025), the role URIs themselves and the RM 2025 text of
+Guidance 4.4.2 that 4.4.9 replaces all read as the table does
+(checked 2026-09-03). Whether that is an RM drafting slip or a 2026
+remapping is not settled by any text read; until the final 2026 DTS
+is published and read, follow the role URI the operative taxonomy
+declares, not the number in the RM prose, and do not call a filer's
+[990015] / [990020] choice wrong on the strength of Guidance 4.4.9
+alone.
 
 Use the entry point that matches the accounting-basis mix:
 
@@ -785,10 +844,11 @@ Two non-Filing-Rule signals routinely surface in NL reviews:
 
 For Middelgroot and Groot entities subject to art. 2:393 BW, the
 auditor's report is **part of the deposit**, not optional commentary.
-RM 2025 § 2.10: "If applicable, it's mandatory to include the auditor's report
-relating to the financial statements as part of the annual report. The
-auditor's report on the financial statements is included as part of the
-Other information."
+RM 2025 § 2.10, repeated word for word in RM 2026 § 2.10 (10 July
+2026; checked 2026-09-03): "If applicable, it's mandatory to include
+the auditor's report relating to the financial statements as part of
+the annual report. The auditor's report on the financial statements is
+included as part of the Other information."
 
 What the deposit needs is that the controleverklaring is **there and
 readable**, plus one boolean saying so. It is **not** a tagged text
@@ -858,8 +918,10 @@ FY2025 presentation linkbase the concept sits under
 `annual-report-filing-information`, which is the sidecar's own network.
 
 That sidecar's filename is itself a rule with an auditing purpose:
-RM 2025 guidance G3-6-3_4 (and G6-1-3_4 for the ESEF-in-KvK case)
-prints the pattern as `kvk-{date}-{lang}.{extension}html` (in effect `kvk-{date}-{lang}.xhtml`; the printed form reads as a typo in the source), and the manual states the
+RM 2025 guidance G3-6-3_4 (and G6-1-3_4 for the ESEF-in-KvK case),
+carried unchanged into RM 2026 (10 July 2026; checked 2026-09-03),
+prints the pattern as `kvk-{date}-{lang}.{extension}` (in effect
+`kvk-{date}-{lang}.xhtml`), and the manual states the
 reason: "This naming convention is implemented to ensure that this
 document is excluded from the auditor's hash calculation." The auditor
 hashes the annual report they consented to; the filing metadata is not
@@ -875,7 +937,8 @@ entry points (`kvk-annual-report-nlgaap-ext`, `-ifrs-ext`, `-other`)
 finds it in **no presentation network at all**; in the NL-GAAP and
 IFRS entry points it has a single definition edge, a domain-member arc
 under `kvk:NonDimensionalLineItems`, and in `-other` it has no edges. No
-RTS, Reporting Manual or FAQ text names it. So the three questions a
+RTS, Reporting Manual or FAQ text names it (RM 2026 searched for
+`AuditorsReport`: no hit, checked 2026-09-03). So the three questions a
 reviewer must keep apart resolve as: the concept **exists**; the
 reference filings **do not use it**; and no filing rule **requires** it.
 
@@ -885,8 +948,9 @@ establishes a profile, package type or filing route in which
 of the auditor's report. Where a converter or a validator demands that
 text block for a KvK deposit, treat the demand as unsupported and ask
 for its rule citation. Two forward-looking clauses may change this, and
-neither has a date yet: RM 2025 § 2.10 anticipates that tagging and
-signature "may be implemented in the future", and RTS Chapter 2
+neither has a date yet: RM 2025 § 2.10, unchanged in RM 2026,
+anticipates that tagging and signature "may be implemented in the
+future", and RTS Chapter 2
 Annex II point 2 states the intention to block-tag the management
 report, the notes **and the other information** (which is where the
 controleverklaring sits) for financial years beginning on or after a
@@ -896,7 +960,14 @@ describes as aligned ("afgestemd op") with ESMA's expected
 developments and XBRL International's best-practice work; FAQ 2.4.1
 (10 July 2026) says the date "is op dit moment nog niet bekend" and,
 more strongly than the RTS, that it "hangt af van" both (checked
-2026-09-03). The
+2026-09-03). RM 2026 § 2.9 (10 July 2026) says the same, "Any
+mandatory implementation is not expected before approximately two
+years after the introduction of the revised ESMA framework", and
+withdrew RM 2025's voluntary Guidance 2.9.1-2.9.3, 3.2.6 and 3.2.7
+(with rule G3-2-7_1), which had allowed voluntary block-tagging "for
+financial years starting on or after 1 January 2026 until it becomes
+mandatory" (checked 2026-09-03 against the publisher's track-changes
+edition). The
 prohibition that accompanies that intention is narrower than the
 intention itself. RTS 2026 reads: "Voor boekjaren die aanvangen vóór
 deze datum is vrijwillige toepassing van block-tagging in de
@@ -909,18 +980,55 @@ beginning before 1 January 2026 (checked 2026-09-03 against both
 texts and the English track-changes edition of RTS 2026). RTS art. 2
 sub 3 defines the jaarrapportage as "de geconsolideerde en/of
 enkelvoudige jaarrekening, het bestuursverslag en de overige
-gegevens", three sibling parts, and RM 2025 § 2.10 places the
-auditor's report under Other information; the Title 9 articles that
-draw the same line (art. 2:361, 2:391 and 2:392 BW) were not re-read
-for this entry, so verify them before citing. So a voluntary
-text-block tag on the notes is prohibited by the RTS text, while a
-voluntary text-block tag on the controleverklaring is neither
+gegevens", three sibling parts, and RM 2025 § 2.10, unchanged in RM
+2026 § 2.10 (10 July 2026; checked 2026-09-03 against the publisher's
+track-changes edition), places the auditor's report under Other
+information. Title 9 draws the same line (geldend 2026-09-03, checked
+2026-09-03): art. 2:361 lid 1 BW defines the jaarrekening as "de
+enkelvoudige jaarrekening die bestaat uit de balans en de winst- en
+verliesrekening met de toelichting, en de geconsolideerde
+jaarrekening indien de rechtspersoon een geconsolideerde jaarrekening
+opstelt"; art. 2:391 lid 1 BW makes the bestuursverslag a document of
+its own, which "geeft een getrouw beeld van de toestand op de
+balansdatum, de ontwikkeling gedurende het boekjaar en de
+resultaten"; and art. 2:392 lid 1 BW has the bestuur add "de volgende
+gegevens ... aan de jaarrekening en het bestuursverslag", sub a "de
+accountantsverklaring, bedoeld in artikel 393 lid 5 of een mededeling
+waarom deze ontbreekt", the gegevens art. 2:393 lid 7 BW calls "de
+overige gegevens". In the statute's own terms the controleverklaring
+is part of neither the jaarrekening nor the bestuursverslag. So a
+voluntary text-block tag on the notes is prohibited by the RTS text,
+while a voluntary text-block tag on the controleverklaring is neither
 prohibited nor required by any RTS, RM or FAQ text read, which leaves
-the "unsupported, ask for the citation" verdict above intact. No RTS
-or FAQ text names a Digipoort or filing-rule check that rejects block
-tags, and the NT Filing Rules were not searched for one; write
-"prohibited by rule", not "rejected" (same reading in the
-*Bi-temporal cheatsheet (which rule applied when)*).
+the "unsupported, ask for the citation" verdict above intact. No RTS,
+RM or FAQ text names a Digipoort or filing-rule check that rejects
+block tags. The NT20 SBR Filing Rules (v1.0, 2 June 2025; v1.1, 19
+November 2025, whose only listed change is the withdrawal of tuple
+rule FR-NL-5.04, Vervaldatum 31 October 2025), the KvK Filing Rules
+NT20 (v1.0, 2 June 2025) and the KvK Business Rules NT20 (v1.0, 2 June
+2025) were searched on 2026-09-03 for text blocks, textBlockItemType,
+narrative markup, block-tagging, ix:continuation and Inline XBRL: none
+of the terms occurs in any of the four. The nearest rules, FR-NL-5.03
+(an item "mag niet leeg zijn", possible only for string-based types)
+and FR-NL-5.11 (escaped-XHTML formatting "MAG ALLEEN worden opgenomen
+in concepten van type 'formattedExplanationItemType'"), govern
+classic XBRL string facts. All four documents address "XBRL instance
+documenten", and the RTS binds them to that route alone: Chapter 3
+art. 5, "Een jaarrapportage moet voldoen aan de van toepassing zijnde
+algemene SBR Filing Rules" (lid 1), "KVK Filing Rules" (lid 2) and
+"KVK Business Rules" (lid 3), identical in RTS 2025 and RTS 2026,
+while the Chapter 2 iXBRL articles name none of them. The NT20 KvK
+validation directory (8973 file names under
+`/nt20/kvk/20251210/validation/`, listed 2026-09-03) names no
+text-block formula, but a file-name listing is not the formula
+content: the `-for.xml` linkbases were not opened, so this is the
+absence of a check named for the purpose, not proof that none exists.
+RM 2026 Guidance 8.1.2 says only that the package "undergoes
+validation to ensure compliance with the requirements of the RTS",
+and RM 2026 has made Guidance 3.2.6 and 3.2.7, the RM 2025 text-block
+items with rule G3-2-7_1, "Reserved". Write "prohibited by rule", not
+"rejected" (same reading in the *Bi-temporal cheatsheet (which rule
+applied when)*).
 
 **The NBA taxonomy is a different instrument, not a text block.** RTS
 Chapter 3 Annex I Table 2 names NBA taxonomy 2.1
@@ -1155,8 +1263,20 @@ This is the area where converters drift fastest from review expectation.
   model A carries overlopende passiva twice, as C.12 (kortlopend) and
   F.12 (langlopend), and the standalone position after G.
   Voorzieningen lies outside both schulden totals; model C folds it
-  into caption C. Models B and D, published as images, were not read
-  (checked 2026-09-03). `bw2-titel9:AccruedIncome` and
+  into caption C. Model B carries it as C.12 (langlopend) and D.12
+  (kortlopend), the letters running the other way from model A
+  because B letters its passief side afresh; model D folds it into
+  caption D, "Kortlopende schulden (ten hoogste 1 jaar) en
+  overlopende passiva". In both, the two schulden captions are the
+  last on the passief side before "Totaal", so lid 2's "na de
+  schulden" is the foot of that side, and with no "som der vlottende
+  activa" in either model, lid 1's position after the liquide
+  middelen is the foot of the actief side (read from the annex
+  images, checked 2026-09-03). Art. 12 lid 3 adds, "in de toelichting
+  en in de modellen B en R", so among B and D for model B only, and
+  also in the notes and for model R, that the kortlopend and
+  langlopend splits "mogen ... gezamenlijk worden gegeven, mits de
+  onderverdeling weer uit de toelichting blijkt". `bw2-titel9:AccruedIncome` and
   `bw2-titel9:AccrualsAndDeferredIncome[Current]` carry this article
   in the FY2025 reference linkbase. How a presentation or calculation
   tree should mirror either position is this file's inference and a
@@ -1167,6 +1287,13 @@ This is the area where converters drift fastest from review expectation.
   blijven." Absent `bw2-titel9:SumOfExpenses` /
   `bw2-titel9:NetOperatingResult` in a functional income statement is
   not a gap.
+- **Models I and J may drop the column layout, not "som der
+  kosten".** Art. 14 lid 2: "In de modellen I en J mag van de
+  kolomindeling worden afgeweken", so a Klein income statement
+  printed in one amount column is not a defect. The lid 1 allowance
+  to drop "Som der kosten" and "Netto-omzetresultaat" is worded for
+  model F only, and both I and J print "som der kosten" (annex
+  images, checked 2026-09-03).
 - **The result-appropriation banner.** Art. 11: "Bovenaan de balans
   wordt aangegeven of daarin de bestemming van het resultaat is
   verwerkt." The FY2025 DTS carries it as the string fact
@@ -1188,21 +1315,49 @@ consolidation exemption), the package is **not** the shape in
 the official FY2025 example
 `403_voorbeeld-2025-12-31-nl.xbri` (downloaded and unzipped):
 
-- The IXDS holds **two XHTML documents**: the foreign group report
-  carried **UNTAGGED** (zero `ix:` tags), plus a separate **iXBRL
-  filing-data document** that carries all the markup.
-- META-INF contains **only `reportPackage.json`** (xBRI 2023). **No
-  `catalog.xml`, no `taxonomyPackage.xml`, no filer extension
-  taxonomy.** The *First: which Nederlandse Taxonomie applies?* /
-  *The auditor's report (controleverklaring) in the package* layout
-  above is the *Groot own-accounts* shape, wrong for this case.
+- In the official example the IXDS holds **two XHTML documents**: the
+  foreign group report carried **UNTAGGED** (zero `ix:` tags), plus a
+  separate **iXBRL filing-data document** that carries the mandatory
+  elements, the markup RM 2026 Guidance 5.1.1 requires "in a separate
+  iXBRL document" (checked 2026-09-03).
+- In the official example META-INF contains **only
+  `reportPackage.json`** (xBRI 2023): no `catalog.xml`, no
+  `taxonomyPackage.xml`, no filer extension taxonomy, the
+  no-extension route of Guidance 5.1.2-5.1.3. The *First: which
+  Nederlandse Taxonomie applies?* / *The auditor's report
+  (controleverklaring) in the package* layout above is the *Groot
+  own-accounts* shape; expect it here only when the filer takes
+  Guidance 5.1.3's extension route (see below).
 - `link:schemaRef` → the KvK **"Other" entry point**, FY-dated: FY2025
   `https://www.nltaxonomie.nl/kvk/2025-12-31/kvk-annual-report-other.xsd`
   (FY2024 was `…/2024-12-31/kvk-annual-report-other-gaap.xsd`, note the
-  `-gaap` suffix). **Same entry point for both 403 and 408.**
+  `-gaap` suffix; RM 2026 Guidance 5.1.3 adds the FY2026 row
+  `…/2026-12-31/kvk-annual-report-other.xsd`, a URL that answered 404
+  on 2026-08-21 and was not resolved again on 2026-09-03, see *DTS
+  and vintages*). **Same entry point for 403 and, from FY2028, 408,
+  whenever the Other-entry-point route is chosen** (Guidance 5.1.3;
+  Guidance 7.2.1 binds the 2:408 route to Chapter 5 from FY2028).
 - The filing-data file describes the **NL entity** claiming the exemption
   (its KvK number / name / legal form / seat); the untagged report is the
   **foreign parent's** group accounts. One package per NL entity.
+- RM 2026 Guidance 7.1.4 (last updated October 2025; checked
+  2026-09-03) is the rule behind that shape: the foreign group head's
+  report "or a translation of it in either Dutch, English, German, or
+  French" is what the NL entity files; the markup follows Chapter 5,
+  the mandatory elements only, "in a separate iXBRL document"
+  (Guidance 5.1.1). The no-extension layout above is the route the
+  official example takes, not the only one RM 2026 allows: Guidance
+  5.1.2 says such entities "do not have to use an extension
+  taxonomy", and Guidance 5.1.3 (July 2026) adds that a legal entity
+  that "chooses to create an extension taxonomy" should not start it
+  from the Other entry point but from one of the RM 2026 § 4.1 entry
+  points (checked 2026-09-03). A 403 package that carries a filer extension
+  is therefore Guidance 5.1.3's second route, to be checked against
+  Chapter 4, not a defect by itself. Of
+  the four 2:403 filings RM 2026 § 7.1 lists (declaration of consent,
+  declaration of liability, its withdrawal, group annual report)
+  "currently only the group annual report is required to be filed
+  electronically", Guidance 7.1.1-7.1.3 being "[Reserved]".
 
 Mandatory facts in the filing-data document (RTS Annex II, Table 2 +
 Table 3), against entity scheme `http://www.kvk.nl/kvk-id` and one
@@ -1218,8 +1373,8 @@ The article is distinguished **only** by one boolean (both
 `xbrli:booleanItemType`, `periodType=duration`, tagged
 `format="ixt:fixed-true"` value `Ja`, **must be True, never False**):
 
-- art. 2:403 → `kvk:AnnualReportOfForeignGroupHeadForExemptionUnderArticle403` (rules G7-1-4_1 / G7-1-4_2)
-- art. 2:408 → `kvk:AnnualReportOfForeignGroupHeadForExemptionUnderArticle408` (rules G7-2-1_1 / G7-2-1_2; note the manual's G7-2-1_2 has a typo naming the 403 QName)
+- art. 2:403 → `kvk:AnnualReportOfForeignGroupHeadForExemptionUnderArticle403` (rules G7-1-4_1 / G7-1-4_2, errors `requiredConcept403NotReported` / `reportedConcept403NotExpected`; RM 2026 Guidance 7.1.4, checked 2026-09-03)
+- art. 2:408 → `kvk:AnnualReportOfForeignGroupHeadForExemptionUnderArticle408` (rules G7-2-1_1 / G7-2-1_2, errors `requiredConcept408NotReported` / `reportedConcept408NotExpected`; both rules name the 408 QName in RM 2026 and in the RM 2025 errata edition as carried in the publisher's track-changes text, checked 2026-09-03)
 
 Note: in the FY2025 403 example, `kvk:AuditorsReportFinancialStatementsPresent`
 is **`Ja`**; set it per the actual deposit, not by assuming the
@@ -1242,9 +1397,17 @@ foreign-group-head report for a financial year beginning **before
 iXBRL obligation (following the same procedure as 403) is only
 *expected* for years starting on or after 2028-01-01. So an FY2026 or
 FY2027 art. 2:408 deposit arriving as a PDF by e-mail is **correct,
-not a defect**. The `…UnderArticle408` boolean and the
-"Other" entry point below remain the right shape when a filer does
-submit 408 in iXBRL, and for when the FY2028 date arrives.
+not a defect**. RM 2026 Guidance 7.2.1 (last updated July 2026) is
+the second source: the Chapter 5 iXBRL route applies "for financial
+years starting on or after 1 January 2028. For earlier financial
+years, filing the group annual report of a foreign group head by
+email in PDF format remains mandatory", and the `…UnderArticle408`
+boolean is required only for those filings (rules G7-2-1_1 /
+G7-2-1_2); the publisher's track-changes edition shows RM 2025 read
+"1 January 2026" and "For earlier financial year 2025" (checked
+2026-09-03). So the boolean and the "Other" entry point in the
+profile above are the FY2028 shape, and an FY2026 or FY2027 art.
+2:408 deposit sent as iXBRL is off-route, not merely early.
 
 ## Jurisdiction-specific invariants
 
@@ -1273,7 +1436,20 @@ remembered.
 
 The KvK Business Rules (NL-KVK.* family in *Recurring KvK deposit-blocker patterns*) layer
 KvK-specific validations on top of these. Re-check both code families
-when validating.
+when validating. As printed in the NT20 editions (read 2026-09-03),
+the SBR Filing Rules carry FR-NL-1.01 to 6.01 and FG-NL-01 to 12, the
+KvK Filing Rules FR-KVK-1.01, 2.01-2.03 and 5.01-5.02, and the KvK
+Business Rules BR-KVK-2.01 to 4.22. Not every Business Rule prints a
+Digipoort code: most are "geïmplementeerd als formula in de
+taxonomie" and print neither a Statuscode nor an SBR melding
+(BR-KVK-2.01-2.03, 3.02-3.03, 4.02, 4.04-4.06, 4.08-4.09, 4.11, 4.13
+and 4.21), 4.01 and 4.03 are printed "Vervallen", and only the
+non-formula validations carry an SBR melding of the form `VAL00nn`
+(for example VAL0034 / VAL0071 for BR-KVK-2.04), with a Digipoort
+Statuscode as well on the attachment rules 4.15, 4.18 and 4.19
+(Statuscode 2010; VAL0057 and VAL0058 on 4.18 / 4.19). The
+`NL-KVK.*` label used in this file is a validator-log family name,
+not the documents' own prefix.
 
 ### Recurring Dutch concept choices that are syntactically valid but wrong
 
@@ -1327,8 +1503,8 @@ balance type, and `preferredLabel` are three different things*:
   afzonderlijk worden vermeld als laatste post van het eigen
   vermogen". The FY2025 DTS binds that line to
   `bw2-titel9:ResultForTheYear` ("Resultaat na belastingen van het
-  boekjaar", `periodType="instant"`, credit) and the model E/F
-  closing line "Resultaat na belastingen" to
+  boekjaar", `periodType="instant"`, credit) and the model E/F (and
+  I/J) closing line "Resultaat na belastingen" to
   `bw2-titel9:ResultAfterTax` (`duration`, credit). Tagging the
   equity line with the P&L concept puts a duration fact inside an
   instant statement, and the two facts then no longer tie. A loss
@@ -1402,8 +1578,9 @@ arelleCmdLine \
 The operative `validate/NL` disclosure systems for FY2025 are
 **`NL-INLINE-2025`** (an entity's own NL-GAAP / NL-IFRS accounts) and
 **`NL-INLINE-2025-GAAP-OTHER-PREVIEW`** (the KvK "Other" entry point,
-used for the foreign-group-head 403/408 filings in the *art. 2:403
-foreign group head report in iXBRL* profile). Earlier editions of this
+used for the foreign-group-head 403/408 filings in *Profile: art.
+2:403 foreign group head report in iXBRL, a DIFFERENT package shape*).
+Earlier editions of this
 file cited `nl-fr-nt20-kvk-ifrs-2025`; that name is **not** registered
 in Arelle: the `validate/NL` `config.xml` declares the
 `NL-INLINE-2025*` names above (and their lowercase aliases), so the
@@ -1561,11 +1738,35 @@ Defer to and cite:
 - **Reporting Manual SBR-domein Handelsregister** and **KVK taxonomy
   documentation** for practical iXBRL construction, consolidated /
   separate placeholders, contexts, extension DRS, and examples.
-- **SBR Nederland Filing Rules (FR-NL- / FG-NL-)**: <https://www.sbr-nl.nl/>
-- **KvK Filing Rules supplements (NL-KVK.*)**, published with each
-  NT generation; the PDF lives in the same documentation tree.
+- **SBR Filing Rules NT20 (FR-NL- / FG-NL-)**, v1.0 of 2 June 2025
+  (Kenmerk SBR/NT20/FR/1.0) and v1.1 of 19 November 2025
+  (SBR/NT20/FR/1.1), rules FR-NL-1.01 to 6.01 and FG-NL-01 to 12; the
+  v1.1 version history lists one change, "Verwijdering van Filing
+  rule 5.04" (a tuple rule, Vervaldatum 31 October 2025). Neither
+  text mentions text blocks, textBlockItemType or Inline XBRL, and
+  the Voorwoord's enforcement clause covers "XBRL instance
+  documenten" checked in Digipoort (read 2026-09-03):
+  <https://www.sbr-nl.nl/sites/default/files/bestanden/taxonomie/20250602%20SBR%20Filing%20Rules%20NT20.pdf>,
+  <https://www.sbr-nl.nl/sites/default/files/bestanden/taxonomie/20251119%20SBR%20Filing%20Rules%20NT20_v1_1.pdf>.
+- **KvK Filing Rules NT20** v1.0 (2 June 2025, "géén wijzigingen
+  t.o.v. NT19"), six rules FR-KVK-1.01, 2.01-2.03 and 5.01-5.02: the
+  `.xbrl` extension, `xml:lang` in nl / en / de / fr and single-valued,
+  the `link:schemaRef` target, and `decimals` on numeric facts (read
+  2026-09-03):
+  <https://www.sbr-nl.nl/sites/default/files/bestanden/taxonomie/20250602%20KvK%20Filing%20Rules%20NT20%20v1_0.pdf>.
+- **KvK Business Rules NT20** v1.0 (2 June 2025, "géén aanpassingen
+  t.o.v. NT19"), rules BR-KVK-2.01 to 4.22 (no 4.14 printed) on
+  contexts, units, mandatory facts, dates, size class, preparer
+  extensions and Digipoort attachments; BR-KVK-4.18 / 4.19 carry the
+  accountantsverklaring as a Digipoort attachment of the XBRL route
+  (meldingen VAL0057 / VAL0058). No text-block rule (read 2026-09-03):
+  <https://www.sbr-nl.nl/sites/default/files/bestanden/taxonomie/20250602%20KvK%20Business%20Rules%20NT20%20v1_0.pdf>.
 - **Title 9 Book 2 BW** for legal disclosure obligations
-  (`wetten.overheid.nl`).
+  (`wetten.overheid.nl`, geldend 2026-09-03, checked 2026-09-03):
+  art. 2:361 (what the jaarrekening is), 2:391 (bestuursverslag),
+  2:392 (the gegevens added to both, the accountantsverklaring first
+  among them), 2:393 (audit duty and the verklaring), 2:395a (micro)
+  and 2:396 (klein), the six articles checked here.
 - **Besluit modellen jaarrekening** (BWBR0003648; besluit van 23
   december 1983, "Gelet op artikel 363 lid 6 van boek 2 van het
   Burgerlijk Wetboek"), consolidated text geldend vanaf 1 november
@@ -1590,8 +1791,9 @@ Defer to and cite:
   only by resolving it again); no model letter appears in the DTS, so
   the concept-level anchor is the reference linkbase, not the model.
   Models B, D, I and J are published on wetten.overheid.nl as images,
-  not text, and were not read for this entry, so nothing here
-  describes their line items:
+  not text; the captions this file quotes from them were read from
+  those images on 2026-09-03 and are transcriptions, so re-read the
+  image before quoting one of them verbatim in a finding:
   <https://wetten.overheid.nl/BWBR0003648/2015-11-01>
 - **Richtlijnen voor de Jaarverslaggeving (RJ)** for Dutch GAAP
   application detail.
@@ -1611,7 +1813,8 @@ Defer to and cite:
   mandatory as part of the annual report under Other information and is
   not required to be tagged or signed; guidance G3-6-3_4 and G6-1-3_4
   give the `kvk-{date}-{lang}` filename rule and its reason, exclusion
-  from the auditor's hash calculation:
+  from the auditor's hash calculation; superseded for FY2026 by the
+  RM 2026 bullet below:
   <https://www.sbr-nl.nl/sites/default/files/2026-02/20251031_Reporting_Manual_2025_EN_SBR-domein_Handelsregister_ERRATA_20260212.pdf>.
 - **FAQ SBR-domein Handelsregister** § 2.6, the direct answer on the
   auditor's report in iXBRL format: not yet required to be marked up
@@ -1644,6 +1847,26 @@ Defer to and cite:
   the primary source for that qualifier being new in 2026 (checked
   2026-09-03):
   <https://www.sbr-nl.nl/sites/default/files/2026-07/20260710_RTS_2026_EN_SBR-domein_Handelsregister_compare_RTS2025.pdf>.
+- **Reporting Manual 2026 SBR-domein Handelsregister** (10 July 2026,
+  for financial years beginning on or after 1 January 2026). RM 2026
+  § 2.10 repeats RM 2025 unchanged: the auditor's report is mandatory
+  as part of the annual report under Other information and is not
+  required to be tagged or signed. RM 2026 § 2.9 replaces RM 2025's
+  voluntary block-tagging guidance (Guidance 2.9.1-2.9.3 removed, § 2.9
+  now unnumbered prose; 3.2.6 and 3.2.7 headed "Reserved", rule
+  G3-2-7_1 gone with 3.2.7) with a statement that mandatory
+  block-tagging "is not expected before approximately two years after
+  the introduction of the revised ESMA framework". Guidance 7.1.4 (2:403, rules
+  G7-1-4_1/_2) is unchanged; Guidance 7.2.1 moves the 2:408 iXBRL
+  route to financial years starting on or after 1 January 2028, PDF
+  by e-mail remaining mandatory before that; new Guidance 3.6.4
+  (permitted file types, G3-6-4_1) and 4.4.9 (definition-linkbase
+  placeholders, G4-4-9_1/_2); Guidance 5.1.3 adds the FY2026 "Other"
+  entry point (checked 2026-09-03):
+  <https://www.sbr-nl.nl/sites/default/files/2026-07/20260710_Reporting_Manual_2026_EN_SBR-domein_Handelsregister.pdf>.
+  The publisher's track-changes edition against RM 2025 is the source
+  for what changed:
+  <https://www.sbr-nl.nl/sites/default/files/2026-07/20260710_Reporting_Manual_2026_EN_SBR-domein_Handelsregister_compare_RM2025.pdf>.
 - **FAQ SBR-domein Handelsregister**, revision of 10 July 2026. Q2.2.4
   governs the art. 2:403 / 2:408 foreign-group-head routes, Q2.2.5 the
   three-year KVK-taxonomy window, and Q2.4.1 confirms the block-tagging
