@@ -421,8 +421,8 @@ if you're a small or medium-sized company)".
 
 A `kvk-rpt-` name and a `kvk-annual-report-` name never belong in one
 selection statement. They are the entry-point families of two different
-filing systems with two different selectors, and merging them is the
-defect this section was rewritten to remove.
+filing systems with two different selectors, and merging them is a
+defect.
 
 ### Size class: what it decides, and what it does not (Title 9 Book 2 BW)
 
@@ -710,7 +710,8 @@ arelleCmdLine --plugins 'inlineXbrlDocumentSet|validate/NL' \
               --packages <NT package>.zip \
               -f report-package.zip --validate
 
-# Legacy / compatibility pass only if the operative validator profile uses it
+# Deposit-acceptance pass: Calc 1.0 semantics, the NT20 Filing Rules'
+# normative basis (`references/validation.md` §4)
 arelleCmdLine --plugins 'inlineXbrlDocumentSet|validate/NL' \
               --calc c10 \
               --packages <NT package>.zip \
@@ -1369,17 +1370,30 @@ KvK packages against an online cache can stall, intermittently fail,
 or pick up the wrong NT generation. For deposit-quality validation:
 
 1. Download the operative NT package(s) from sbr-nl.nl before
-   validating: KvK Dutch GAAP, RJ, BW2, jenv (Belastingdienst), and any
-   IFRS overlay used by the filer.
+   validating: KvK Dutch GAAP, RJ, BW2, the other `2025-12-31` core
+   schemas the KvK entry point's DTS reaches (`wnt`, `ww`, `ncgc`;
+   resolved from `kvk-annual-report-nlgaap-ext.xsd` on 2026-09-03),
+   jenv (Belastingdienst), and any IFRS overlay used by the filer.
 2. Pass them all to Arelle via `--packages` so the DTS resolves from
    local files only:
 
 ```bash
 # FY2025 KvK iXBRL RTS pass: Calc 1.1 (see "Calculation linkbase scope-bleed")
+# One --packages per archive: the option is repeatable ("Option can be
+# repeated for multiple files", Arelle CntlrCmdLine, main branch checked
+# 2026-09-03); do not join names with commas. The three archives named
+# below are the ones cited in *Two taxonomy trees, same prefix family*;
+# confirm each name against the file you downloaded. Add one
+# --packages per further archive once it is on disk: the wnt, ww and
+# ncgc zips of the same release (if shipped separately), the NT20
+# technical zip (it carries the jenv slice), and the IFRS overlay zip
+# only if the filer uses one.
 arelleCmdLine \
   --plugins 'inlineXbrlDocumentSet|validate/NL' \
   --disclosureSystem NL-INLINE-2025 \
-  --packages NT20-20251212.zip,kvk-nt20-fr-ifrs-2025.zip \
+  --packages kvk-2025_taxonomie.zip \
+  --packages bw2-titel9-2025_taxonomie.zip \
+  --packages rj-2025_taxonomie.zip \
   --calc c11r \
   -f report-package.zip --validate \
   --internetConnectivity offline
@@ -1396,10 +1410,9 @@ in Arelle: the `validate/NL` `config.xml` declares the
 old name silently falls back to no disclosure system. Confirm the
 operative name in your build with `arelleCmdLine --plugins validate/NL
 --showEnvironment`. Run a second pass with `--calc c10` for the formal
-deposit-acceptance verdict (`references/validation.md` §4), not merely
-"if the profile still checks it". When validation is slow or
-intermittent, suspect remote-taxonomy resolution before suspecting the
-package.
+deposit-acceptance verdict (`references/validation.md` §4). When
+validation is slow or intermittent, suspect remote-taxonomy resolution
+before suspecting the package.
 
 ## Review workflow: a pragmatic NL review pass, in order
 
@@ -1435,8 +1448,10 @@ walk this in order. Each step depends on the prior being clean.
    the RTS basis*, `references/validation.md` §4).
    Classify any cross-scope inconsistency by role-vs-context before
    treating it as a defect.
-5. **Classify each finding.** Route by code prefix using `SKILL.md`'s
-   common-error decision tree. Distinguish dual-scope artefacts
+5. **Classify each finding.** Route by code prefix:
+   `references/validation.md` § 5.3 for the NL-KVK.* and FR-NL- /
+   FG-NL- families, then `references/defect-causes.md` for the
+   candidate cause of each. Distinguish dual-scope artefacts
    (see *Calculation linkbase scope-bleed, and why Calc 1.1 is the RTS
    basis*) from real arithmetic defects, and rule violations from style
    warnings.
@@ -1472,7 +1487,7 @@ walk this in order. Each step depends on the prior being clean.
     is faithful to the source document; you can.
 
 When a finding is unclear, **quote the validator log line verbatim**
-and route by the code prefix in step 4; that is the cheapest way to
+and route by the code prefix in step 5; that is the cheapest way to
 distinguish a real defect from a known artefact.
 
 <a id="authorities-and-governance"></a>
