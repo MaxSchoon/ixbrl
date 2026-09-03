@@ -35,7 +35,7 @@ profiles:
   - [Long periods of account: separate computations, cross-document match](#long-periods-of-account-separate-computations-cross-document-match)
   - [Detailed Profit & Loss (DPL)](#detailed-profit--loss-dpl)
   - [CT technical mechanics and taxonomy-version enforcement](#ct-technical-mechanics-and-taxonomy-version-enforcement)
-- [Profile: FCA / UKSEF / National Storage Mechanism](#profile-fca-uksef)
+- [Profile: FCA / UKSEF / NSM (National Storage Mechanism)](#profile-fca-uksef)
   - [UKSEF: the optional multi-target document](#uksef-the-optional-multi-target-document)
 - [Profile: Irish Revenue (ROS), a separate disclosure system](#profile-irish-revenue-ros)
   - [The ROI mandate: phases, deferral thresholds, CT1 options, filing window](#the-roi-mandate-phases-deferral-thresholds-ct1-options-filing-window)
@@ -127,7 +127,7 @@ FRS 101        https://xbrl.frc.org.uk/FRS-101/<YYYY>-01-01/FRS-101-<YYYY>-01-01
 UK IFRS        https://xbrl.frc.org.uk/IFRS/<YYYY>-01-01/IFRS-<YYYY>-01-01.xsd
 FRS 102 UKSEF  https://xbrl.frc.org.uk/FRS-102/<YYYY>-01-01/UKSEF/FRS-102-<YYYY>-01-01.xsd
 IFRS UKSEF     https://xbrl.frc.org.uk/IFRS/<YYYY>-01-01/UKSEF/IFRS-<YYYY>-01-01.xsd
-DPL standalone https://xbrl.frc.org.uk/dpl/<YYYY>-01-01/dpl-<YYYY>-01-01.xsd   (2023 onward)
+DPL module     https://xbrl.frc.org.uk/dpl/<YYYY>-01-01/dpl-<YYYY>-01-01.xsd   (resolves 2023 onward; a section of each accounts entry point, not a standalone entry point: see *Taxonomy ownership split*)
 ```
 
 | Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
@@ -361,7 +361,7 @@ Taxonomy-version rejection codes at the HMRC gateway:
 
 <a id="profile-fca-uksef"></a>
 
-## Profile: FCA / UKSEF / National Storage Mechanism
+## Profile: FCA / UKSEF / NSM (National Storage Mechanism)
 
 Under the FCA Disclosure Guidance and Transparency Rules, issuers with
 transferable securities on UK regulated markets must **prepare, publish
@@ -867,19 +867,19 @@ number at the gateway"):
 | `HMRC.SG.3.8` | Images MUST be `data:` URIs (gif/jpeg/png only); no external image URLs in `<style>`/`style` |
 | `FRC.TG.3.6.1` | A context carries an `xbrli:scenario` element. The rule text is in the **FRC Developer Guide 2026 §4.2.5** ("Primary items and hypercubes"), not the Tagging Guide: "By convention, the 'all' arc is defined using the 'segment' element of context. The scenario element of context is not used. This is purely a matter of technical convention and does not alter the functionality of dimensions." `FRC.TG.3.6.1` is **Arelle's own code label** and its number does not point at the text of the rule: Tagging Guide 2026 §3.6.1 exists but is headed "Dimensions – general description" and the word "scenario" appears nowhere in that guide. The consequence for a filer is concrete rather than declaratory: the FRC hypercubes bind through **segment**, so a scenario-shaped context yields dimensionally invalid facts. This is the **inverse of ESEF** (Reporting Manual section 2.1.3 forbids segment, requires scenario): do not carry an ESEF context shape into a UK FRC filing |
 
-> **Honest gap, narrowed.** The code numbering in this table was read
-> from the **Arelle plugin**, which advertises **JFCVC v4.0 (2020-06-09)**
-> and Style Guide v2.2. The current instrument is **JFCVC v4.4a** (ODT on
+> **Honest gap.** The code numbering in this table was read from the
+> **Arelle plugin**, which advertises **JFCVC v4.0 (2020-06-09)** and
+> Style Guide v2.2. The current instrument is **JFCVC v4.4a** (ODT on
 > the GOV.UK CT technical-specifications page; change history "V4.3a to
-> V4.4a: FRS 2026 / 2026 FRS Charities taxonomies added"), and it has now
-> been read for the 3312 mandatory-item tables, the conditional
-> identifier-scheme check and 3316 (see *Filer classification*). What
-> remains unverified is whether every code the plugin emits is the exact
-> number a live gateway returns: the authoritative gateway numbers
+> V4.4a: FRS 2026 / 2026 FRS Charities taxonomies added"); its 3312
+> mandatory-item tables, the conditional identifier-scheme check and
+> 3316 are reflected under *Filer classification*. Unverified: whether
+> every code the plugin emits is the exact number a live gateway
+> returns. The authoritative gateway numbers
 > (**1606/1607/3312/3316/3317/3318/3320**) come from the HMRC/CH sources
 > in the *HMRC CT600* profile and *Companies House: the public XBRL
 > Company Accounts Validator*, not the plugin. The HMRC CT Inline XBRL
-> Style Guide is still unfetched.
+> Style Guide is unfetched.
 
 ## Review workflow
 

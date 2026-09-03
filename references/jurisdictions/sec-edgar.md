@@ -84,7 +84,7 @@ The rule, from the EDGAR XBRL Guide (August 2026) § 1: taxonomies are
 "updated at least annually … and removed from use after two years". In
 practice a vintage is added at the `NN.1` release in March and removed at
 the `NN.2` release in June or July two years later, a window of about two
-years and three months, stretched this year by the cancelled 26.2. **A
+years and three months, stretched in 2026 by the cancelled 26.2. **A
 fetchable URL is not an accepted vintage**: 2022 and 2023 still resolve
 and are refused. The machine-readable authority is
 `https://www.sec.gov/files/edgartaxonomies.xml`; the human pages no
@@ -92,7 +92,7 @@ longer carry a table.
 
 ### Recent rule updates (last ~24 months)
 
-- **Pay-Versus-Performance**: Release **34-95607**, adopted 25 August 2022, effective 11 October 2022. Compliance for proxy / information statements with fiscal years ending on or after **16 December 2022**. Each value in the PVP table is separately tagged; footnote, relationship, and Tabular List disclosures are block-text tagged. Smaller reporting companies provide Inline XBRL beginning the third PVP filing. Tagging uses the 2022Q4 ECD taxonomy.
+- **Pay-Versus-Performance**: Release **34-95607**, adopted 25 August 2022, effective 11 October 2022. Compliance for proxy / information statements with fiscal years ending on or after **16 December 2022**. Each value in the PVP table is separately tagged; footnote, relationship, and Tabular List disclosures are block-text tagged. Smaller reporting companies provide Inline XBRL beginning the third PVP filing. Tagging uses the ECD taxonomy of the same year as the submission's DEI (see *DTS and vintages*); the PVP elements entered ECD in its 2022Q4 edition.
 - **Cybersecurity Risk Management, Strategy, Governance, and Incident Disclosure**: Release **33-11216 / 34-97989**, adopted 26 July 2023. New Form 8-K Item 1.05 (and 6-K equivalent) for material cybersecurity incidents, due four business days after materiality determination. Annual-report disclosures sit at **Reg S-K Item 106 on Form 10-K** and at **Item 16K on Form 20-F**, not Item 106 on both. The Inline XBRL tagging obligation runs **one year after** each disclosure's own compliance date, so the two dates differ and must not be conflated: **Form 10-K Item 106 / Form 20-F Item 16K** are tagged for **fiscal years ending on or after 15 December 2024**, while **Form 8-K Item 1.05 / 6-K** (material-incident disclosures) are tagged from **18 December 2024**. Both apply to **all registrants subject to these rules, including SRCs**. The SRC extension applied to the incident *disclosure*, not to tagging. The rules do **not** reach every filer: eligible Form 40-F filers, asset-backed issuers, and registered investment companies are outside them.
 - **Tailored Shareholder Reports**: Release **33-11125**, adopted 26 October 2022. Open-end funds (Form N-1A) must transmit streamlined annual / semi-annual shareholder reports in Form N-CSR using Inline XBRL for transmittals on or after **24 July 2024**.
 - **EDGAR 25.1 and 26.1 taxonomy updates**: annual taxonomy refreshes became loadable in EDGAR through 2025 and 2026 (US-GAAP and SRT 2025 at Release 25.1; US-GAAP, SRT and DEI 2026 at Release 26.1; a submission uses one year's set throughout for these synchronised families, while IFRS remains the standing exception noted above). Filers transitioning concept usage should re-map extensions onto the new base elements where one is available and appropriate; anchoring arcs remain optional (see *Custom (extension) elements*).
@@ -144,7 +144,10 @@ Risk/return summaries continue to be filed in Inline XBRL.
 
 ### Required taxonomies
 
-Canonical list: https://www.sec.gov/info/edgar/edgartaxonomies
+Canonical list: `https://www.sec.gov/files/edgartaxonomies.xml`
+(machine-readable; v77 on 2026-09-04; see *DTS and vintages*). The
+old `/info/edgar/edgartaxonomies` page 301s to the human
+standard-taxonomies page, which carries no table.
 
 A submission package combines exactly one US-GAAP (or IFRS for FPIs)
 version plus DEI plus SRT plus any utility taxonomies it dimensionally
@@ -153,7 +156,7 @@ references.
 - **US-GAAP Financial Reporting Taxonomy** (FASB): core balance-sheet, income-statement, cash-flow, footnote elements. 2025 version mirrors FASB release of 16 December 2024.
 - **DEI (Document and Entity Information)**: entity identity, document type, period, amendment flag, filer category. The 2026 DEI taxonomy adds `NYSETX` for NYSE Texas to the exchange data type.
 - **SRT (SEC Reporting Taxonomy)**: schedules, ranges, disposal groups; cross-cutting across US GAAP and IFRS filers.
-- **ECD (Executive Compensation Disclosure)**: Pay-Versus-Performance and clawback disclosures (Reg S-K Item 402(v) and 10D-1). 2022Q4 ECD is the operative PVP version.
+- **ECD (Executive Compensation Disclosure)**: Pay-Versus-Performance and clawback disclosures (Reg S-K Item 402(v) and 10D-1). ECD is versioned annually with the DEI family; `edgartaxonomies.xml` v77 lists 2024, 2025 and 2026 (checked 2026-09-04), and a submission uses the year of its DEI (see *DTS and vintages*). The 2022Q4 edition introduced the PVP elements and is the edition the ECD taxonomy guide under *Sources* documents.
 - **COUNTRY, CURRENCY, EXCH, STPR, NAICS, SIC, SNJ**: utility code-list taxonomies.
 - **RR, OEF, CEF, VIP, FND**: fund taxonomies.
 - **RXP**: Resource Extraction Payments.
@@ -166,7 +169,7 @@ Extensions are declared in the filer's company schema
 - Declared in the filer's namespace, with a stable PascalCase name (no spaces).
 - Standard Label and (where applicable) Terse, Verbose, Negated, or Period-Start/End labels in a label linkbase.
 - Wired into a presentation linkbase under the appropriate parent and given a calculation-linkbase relationship if the value participates in an arithmetic roll-up.
-- **Not anchored.** Neither the EDGAR XBRL Guide (August 2026) nor EFM Volume II chapter 6 requires an extension to be anchored; the words "anchor" and "wider" do not occur in either. The ESMA `wider-narrower` arcrole is on EDGAR's list of supported base files, so an anchoring arc is *permitted*, never required. An earlier edition of this file stated the opposite.
+- **Not anchored.** Neither the EDGAR XBRL Guide (August 2026) nor EFM Volume II chapter 6 requires an extension to be anchored; the words "anchor" and "wider" do not occur in either. The ESMA `wider-narrower` arcrole is on EDGAR's list of supported base files, so an anchoring arc is *permitted*, never required.
 
 The EFM and EDGAR XBRL Guide explicitly require filers to use a base
 element when one is "available and appropriate" before creating an
@@ -191,10 +194,12 @@ Every iXBRL instance must tag cover-page DEI facts. Mandatory concepts
 - Trading-symbol set: `dei:TradingSymbol`, `dei:Security12bTitle`, `dei:SecurityExchangeName`
 
 Identifier facts with no display equivalent (CIK, AmendmentFlag) are
-placed in `<ix:hidden>`. EFM 6.5.14 requires that any `ix:hidden` fact
-whose value also appears as visible text be referenced via the
-`-sec-ix-hidden` CSS style on the visible element. A duplicate fact must
-have at least one occurrence outside `ix:hidden`.
+placed in `<ix:hidden>`. EFM 5.2.5.14 (EDGAR message `ix-0514`) requires
+that any `ix:hidden` fact whose value also appears as visible text be
+referenced via the `-sec-ix-hidden` CSS style on the visible element;
+for cover-page facts EDGAR enforces this as `dq-0545` (EFM v68
+§ 6.5.45). Checked 2026-09-04 against the SEC error and warning lists.
+A duplicate fact must have at least one occurrence outside `ix:hidden`.
 
 ### Decimals, units, and signs
 
@@ -245,7 +250,9 @@ reproduces the numbers in its "EFM v68 Ref" column:
 |---|---|---|
 | EFM.6.05.01 | CIK / identifier convention violation | 6.5.1 |
 | EFM.6.05.11 | Duplicate or equivalent units must be deduplicated | 6.5.11 |
-| EFM.6.05.14 | Hidden cover-page fact not referenced via `-sec-ix-hidden` | 6.5.14 |
+| EFM.6.05.14 | Text fact with `xml:lang` other than `en-US` and no matching English fact (`du-0514`) | 6.5.14 |
+| EFM.5.02.05.14.hidden-fact-not-referenced | `ix:hidden` fact not referenced by any `-sec-ix-hidden` style property (`ix-0514-Hidden-Fact-Not-Referenced`) | 5.2.5.14 |
+| EFM.6.05.45.coverPageFactNotVisible | Cover-page fact in `ix:hidden` neither visible nor referenced via `-sec-ix-hidden` (`dq-0545-Cover-Page-Fact-Not-Visible`) | 6.5.45 |
 | EFM.6.05.16 | `href`/`src` attribute scheme restrictions on embedded content | 6.5.16 |
 | EFM.6.05.17 | Numeric fact carries `precision` instead of `decimals` | 6.5.17 |
 | EFM.6.05.37 | A finite `decimals` truncates non-zero digits of the value | 6.5.37 |
@@ -316,7 +323,11 @@ these numbers:
 
 - **EFM 6.4**: Submission of Interactive Data (which forms, attachment names, EX-101 vs. embedded iXBRL).
 - **EFM 6.5**: *Syntax of Instances*. Master section for Inline XBRL syntax checks.
-- **EFM 6.5.14**: Cover-page facts in `ix:hidden` must be referenced elsewhere via `-sec-ix-hidden` style.
+- **EFM 5.2.5.14 / 6.5.45**: Facts in `ix:hidden` must be referenced
+  elsewhere via the `-sec-ix-hidden` style (`ix-0514`); a cover-page
+  fact that is neither visible nor so referenced fails `dq-0545`.
+- **EFM 6.5.14**: A text fact with `xml:lang` other than `en-US` needs
+  a matching `en-US` fact (`du-0514`).
 - **EFM 6.5.16**: Scheme restrictions on `href` and `src` attributes.
 - **EFM 6.5.17**: Numeric facts must carry `decimals`, not `precision`.
 - **EFM 6.5.37**: A non-nil numeric fact value must not be truncated by its
@@ -339,7 +350,7 @@ removed from chapter 6): https://www.sec.gov/files/edgar/filer-information/speci
 
 - **SEC, *EDGAR Filer Manual***: the version index. Volume II Version 77
   deployed 16 March 2026 (EDGAR Release 26.1, adopting release 33-11411);
-  always check this page for the version effective at submission date.
+  the operative-version rule is at *Vintage and applicability*.
   <https://www.sec.gov/submit-filings/edgar-filer-manual>.
 
 - **SEC, *Cybersecurity Risk Management … Small Entity Compliance Guide***:
@@ -359,7 +370,7 @@ removed from chapter 6): https://www.sec.gov/files/edgar/filer-information/speci
 - https://www.sec.gov/files/edgar/filermanual/efmvol2-c6.pdf
 - https://www.sec.gov/submit-filings/edgar-filer-manual
 - https://www.sec.gov/files/edgar/filer-information/specifications/xbrl-guide.pdf
-- https://www.sec.gov/info/edgar/edgartaxonomies
+- https://www.sec.gov/files/edgartaxonomies.xml
 - https://www.sec.gov/newsroom/whats-new/2603-2026-xbrl-taxonomies-update
 - https://www.sec.gov/newsroom/whats-new/2506-edgar-252-release-xbrl-taxonomies-update
 - https://www.sec.gov/newsroom/whats-new/2503-2025-xbrl-taxonomies-update

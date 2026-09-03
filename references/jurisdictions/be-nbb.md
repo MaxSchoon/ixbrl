@@ -22,7 +22,6 @@ profiles:
 **Contents**
 
 - [Start here: choose a filing profile](#start-here-choose-a-filing-profile)
-  - [Legacy section index](#legacy-section-index)
 - [Vintage and applicability](#vintage-and-applicability)
   - [DTS and vintages](#dts-and-vintages)
 - [Profile: NBB Central Balance Sheet Office, statutory annual accounts](#profile-nbb-cbso)
@@ -70,23 +69,6 @@ entity may touch in the same financial year:
 Three institutions (NBB, FSMA, FPS Finance), three legal bases, three
 taxonomies, and (decisively) **two different XBRL formats**. Establish which
 one you are producing before writing a single tag.
-
-### Legacy section index
-
-1. Regime identification: three separate Belgian XBRL regimes
-2. The critical split: iXBRL vs classic XBRL 2.1 (read before generating)
-3. Bi-temporal warning: pin the version to the reporting date
-4. NBB Central Balance Sheet Office: mandate and the Filing 2.0 application
-5. NBB `be-gaap` taxonomy: versions, architecture, model / entry-point matrix
-6. NBB accepted formats, controls, decimals, language, fees
-7. FSMA / ESEF: the listed-issuer layer (`corp.doc.`, STORI)
-8. Biztax: the corporate income-tax return (`be-tax`, FPS Finance)
-9. CSRD / ESRS in Belgium and the Omnibus I effect on digital tagging
-10. Stakeholders and governance
-11. Relation to EU reporting
-12. Validation how-to: Arelle coverage and the honest gaps
-13. Review checklist: a Belgian pass in order
-14. Primary sources
 
 ## Vintage and applicability
 
@@ -184,7 +166,7 @@ validation (see *Validation*). Earlier generations declared FRTA 1.0
 |---|---|---|
 | 26.0 | `nbb-cbso-26.0.15` | since 2 January 2026 (`.15` is an in-year patch) |
 | 25.0 | `nbb-cbso-25.0.11` | 6 January 2025 (technical guide 25.0.5) |
-| 23.0 | — | 3 April 2023 |
+| 23.0 | `nbb-cbso-23.0.8` | 3 April 2023 |
 | pre-2022 | `pfs` architecture (`pfs-full` / `pfs-abbr` / `pfs-mic` / `pfs-npo-*`) | legacy |
 
 **Instance mechanics** (CBSO technical guide): `.xbrl` extension, UTF-8; **one
@@ -282,11 +264,11 @@ to FPS Finance.
 **Scope: CSRD-regime companies only.** Everything in this section applies solely
 to companies that must include sustainability information in the annual report
 (*jaarverslag*). It does **not** reach the ordinary CBSO filer population, whose
-annual accounts remain `be-gaap` XBRL 2.1 (see the regime table). The Belgian
-basis is **art. 3:6/8 WVV**, inserted by art. 20 of the Law of 2 December 2024,
-which by its own operative wording binds only "een vennootschap die
-duurzaamheidsinformatie in het jaarverslag opneemt" (consolidated counterpart:
-art. 3:32/6).
+annual accounts remain `be-gaap` XBRL 2.1 (see *The critical split: iXBRL vs
+classic XBRL 2.1*). The Belgian basis is **art. 3:6/8 WVV**, inserted by
+art. 20 of the Law of 2 December 2024, which by its own operative wording
+binds only "een vennootschap die duurzaamheidsinformatie in het jaarverslag
+opneemt" (consolidated counterpart: art. 3:32/6).
 
 Per the NBB Balanscentrale notice *Rapportering van duurzaamheidsinformatie*
 (22 October 2024), sustainability information is **not** a separate report: it is
@@ -523,9 +505,10 @@ channels:
 
 ## Validation
 
-**There is no Belgium / BE Arelle plugin.** Verified against the installed
-`arelle-release`: the shipped `validate` plugins are exactly **CIPC, DBA, EBA,
-EDINET, ESEF, FERC, NL, ROS, UK**: no `be-gaap` (NBB CBSO) and no `be-tax`
+**There is no Belgium / BE Arelle plugin.** Verified 2026-07-07 and
+re-checked 2026-09-04 against `arelle-release` 2.39.11: the shipped
+`validate` plugins are exactly **CIPC, DBA, EBA, EDINET, ESEF, FERC, NL,
+ROS, UK**: no `be-gaap` (NBB CBSO) and no `be-tax`
 (Biztax) disclosure-system plugin, and **no `FR-BE-*` equivalent to the Dutch
 `FR-NL-*` family**. Do not invent Belgium-specific Arelle error codes.
 
@@ -745,8 +728,9 @@ entry notes what it establishes.
   URL has since been observed CAPTCHA-gated; re-request via the Biztax
   technical-documentation index below if it 403s):
   <https://financien.belgium.be/sites/default/files/downloads/be-tax-2025-04-30-ArchitectureGuide.pdf>
-- Biztax technical-documentation index (official; body CAPTCHA-gated this
-  session; existence/ownership confirmed, contents not fetched):
+- Biztax technical-documentation index (official; body observed
+  CAPTCHA-gated on 2026-07-07; existence/ownership confirmed, contents
+  not fetched):
   <https://financien.belgium.be/nl/E-services/biztax/technische-documentatie>
 - RD 13 April 2025 (return-form model AY2025; mandatory e-filing ITC 1992
   arts 307 §1 / 307bis):

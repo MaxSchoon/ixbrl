@@ -106,19 +106,19 @@ applied to financial periods starting in 2024) [S6][S7].
 
 > **Unverified identifiers.** The predecessor-decision identifiers *Finlex
 > 2025/5* and the *31.5.2024* in-force date come from the Finlex "replaces /
-> repeals" (Kumoaa/Korvaa) **relation metadata captured in-session**; they were
-> **not** re-verified against the rendered body of either predecessor decision.
-> Confirm against the superseded decision PDFs before relying on the exact
-> vintage identifiers.
+> repeals" (Kumoaa/Korvaa) **relation metadata as Finlex rendered it on
+> 2026-07-07**; they were **not** re-verified against the rendered body of
+> either predecessor decision. Confirm against the superseded decision PDFs
+> before relying on the exact vintage identifiers.
 >
 > **Partial extraction.** The Finlex detail pages render only a JavaScript
 > shell, but the decision PDFs are downloadable from Finlex's media
-> endpoint, and the sections quoted in this file (**PRH/1087 ss. 3 and 5**
-> and **PRH/1088 s. 1**) were extracted from those PDFs and are quoted
-> verbatim here [S6][S9]. The **remaining sections of both decisions have
-> not been read**. **For any clause not quoted here, pull the downloadable
-> PDFs from the Finlex pages in *Primary sources: what each establishes*
-> below**. Do not paraphrase a clause you have not read.
+> endpoint. From those PDFs this file quotes **PRH/1087 ss. 2, 3 and 5**
+> and **PRH/1088 s. 1** verbatim and applies **PRH/1087 ss. 4 and 6** as
+> read [S6][S9]. **Every other section of both decisions is unread.**
+> **For any clause not quoted here, pull the downloadable PDFs from the
+> Finlex pages in *Primary sources: what each establishes* below**. Do
+> not paraphrase a clause you have not read.
 
 ### The two-stage mandate: keep these distinct
 
@@ -224,7 +224,7 @@ today's date.
 | Structured **taxonomy markup** (PRH identifiers) mandatory | periods starting **on/after 1 Jan 2026** | FY2025 permitted XHTML **without** PRH identifiers [S1][S4]. |
 | **SBR-DPM-2025-12-31_fix_2026-02-19** is the SBR version to mark up FAS statements against | periods starting **1 Jan 2026** at latest | PRH/1088/01/2026 s. 1 names this package by name; the unsuffixed `SBR-DPM-2025-12-31` is withdrawn on avoindata.fi as *"VANHA VERSIO, ÄLÄ KÄYTÄ"* [S2][S9]. |
 | ESEF ZIP **also** filed to the Trade Register (not only to the OAM) | financial year starting **2024** onward | Listed issuers re-use their ESEF artifact [S2][S3]. |
-| **Law 555/2026** narrows CSRD scope (turnover >€450M **and** >1,000 employees on average, **in both the last completed and the immediately preceding financial year**) | periods starting **on/after 1 Jul 2026** (opt-in from 1 Jan 2026) | In force 30 Jun 2026; PRH repealed & replaced both decisions [S7] (see *The 2026 scope change: law 555/2026*). |
+| **Law 555/2026** narrows CSRD scope (turnover >€450M **and** >1,000 employees on average, **in both the last completed and the immediately preceding financial year**) | periods starting **on/after 1 Jul 2026** (opt-in from 1 Jan 2026) | In force 30 Jun 2026; PRH repealed & replaced both decisions [S7] (see *The 2026 scope change: law 555/2026 (supersedes older ≥500-employee framing)*). |
 | FY2026 **entry-trigger**: a company that *becomes* sustainability-reporting-obligated on/after 1 Jul 2026 | its FS for periods starting **on/after 1 Jul 2026** | The decision applies from that entry point [S10]. |
 
 When uncertain, **state the vintage you are applying** before declaring a
@@ -359,8 +359,9 @@ Packaging rules from the PRH example [S8]:
 
 ### Relation to EU reporting: ESEF coexistence and the CSRD/ESRS trajectory
 
-Delta-only; ESEF mechanics live in `references/esef.md`, *Which taxonomy applies*
-and *Packaging: the ESEF ZIP re-used for the Trade Register*.
+Delta-only: ESEF mechanics live in `references/esef.md`; the Finnish
+overlays are in *Which taxonomy applies* and *Packaging: the ESEF ZIP
+re-used for the Trade Register* above.
 
 - **ESEF / Transparency-Directive transposition.** The ESEF RTS (**Reg (EU)
   2019/815**) is directly applicable; the Transparency Directive is transposed
@@ -469,15 +470,13 @@ notification needs in practice, but a single XHTML file is what the
 closed interface and ytj.fi actually accept (see *Filing channels,
 signatures, deadline, tax forwarding, language*) and is **not** a defect.
 
-> **Divergence from the Dutch `.xbri` model (reviewer-critical).** "At the
-> moment, the PRH cannot receive material filed as an XBRI package"
-> (*PRH ei voi toistaiseksi vastaanottaa XBRI-pakettina ilmoitettuja
-> aineistoja*) [S1][S10]. Finland wants **XHTML, in a plain ZIP where the
-> notification carries more than one document**. **Any converter output
-> profile for Finland must emit XHTML, in a plain ZIP where the
-> notification carries more than one document, and must NOT emit a
-> `.xbri`.** Whether/when PRH will accept `.xbri` is **unknown**:
-> no roadmap was found.
+> **Divergence from the Dutch `.xbri` model.** "At the moment, the PRH
+> cannot receive material filed as an XBRI package" (*PRH ei voi
+> toistaiseksi vastaanottaa XBRI-pakettina ilmoitettuja aineistoja*)
+> [S1][S10], so a converter output profile for Finland emits **XHTML, in a
+> plain ZIP where the notification carries more than one document, and
+> never a `.xbri`**. Whether or when PRH will accept `.xbri` is
+> **unknown**: no roadmap was found.
 
 **Closed-interface format rule: what may stay plain XHTML.** Under PRH's
 **closed interface** (PRH/1087/01/2026 s. 2(a)), copies of the financial
@@ -621,11 +620,12 @@ the correction rule itself, which is s. 5 above.
 
 ### No Arelle FI/PRH plugin exists (honest gap) + what PRH's interface checks
 
-**Verified absence (implementation evidence).** The Arelle release
-installed in this repo has **no Finland/PRH validation plugin**. Listing
-`arelle/plugin/validate/` shows exactly: `CIPC, DBA, EBA, EDINET, ESEF,
-FERC, NL, ROS, UK`; there is **no FI, PRH, or SBR** disclosure-system
-module [S12].
+**Verified absence (implementation evidence).** Arelle ships **no
+Finland/PRH validation plugin**: in `arelle-release` 2.39.11 (checked
+2026-09-04) `arelle/plugin/validate/` contains exactly `CIPC, DBA, EBA,
+EDINET, ESEF, FERC, NL, ROS, UK`; there is **no FI, PRH, or SBR**
+disclosure-system module [S12]. Re-list that directory on the release
+you run before repeating the claim.
 
 Consequences for review and for any converter:
 
@@ -781,7 +781,7 @@ forwarding.
 This file is a reviewer's working reference, not the legal source. Defer
 to and cite: the **two PRH decision PDFs** at Finlex [S6][S9] before
 quoting any normative clause this file does not already quote verbatim
-(only PRH/1087 ss. 3 and 5 and PRH/1088 s. 1 have been read); the
+(only PRH/1087 ss. 2-6 and PRH/1088 s. 1 have been read); the
 **PRH digital-FS pages** [S1][S2][S4][S5][S8][S10] for
 operative filing/taxonomy/interface/packaging guidance; the **Accounting
 Act (Kirjanpitolaki 1336/1997)** ch. 3 s. 5 (language) and ch. 7 ss. 22–24 and 24a
@@ -846,13 +846,15 @@ given in [S6] and [S9].
   number is **1336/1997**; see [S19]). The operative text **is**
   extractable: FI PDF
   <https://www.finlex.fi/api/media/authority-regulation/1072570/mainPdf/main.pdf>,
-  SV twin at `…/1072569/…`. **s. 3** (closed-interface format; the
-  plain-XHTML carve-out for the toimintakertomus, tilintarkastuskertomus and
-  kestävyysraportin varmennuskertomus, conditional on PRH having confirmed
-  no applicable PRH identifiers) and **s. 5** (corrections are whole-package
-  resubmissions) are quoted in this file; **s. 6** applies the decision to
-  documents filed for registration on/after 1 Jan 2026 and it replaces
-  PRH/2287/01/2025 (19.12.2025). Other sections not read.
+  SV twin at `…/1072569/…`. **s. 2** (channels; XHTML alone or a ZIP),
+  **s. 3** (closed-interface format; the plain-XHTML carve-out for the
+  toimintakertomus, tilintarkastuskertomus and kestävyysraportin
+  varmennuskertomus, conditional on PRH having confirmed no applicable PRH
+  identifiers) and **s. 5** (corrections are whole-package resubmissions)
+  are quoted in this file; **s. 4** (ESEF consolidated statements) and
+  **s. 6** are applied as read: s. 6 applies the decision to documents
+  filed for registration on/after 1 Jan 2026 and it replaces
+  PRH/2287/01/2025 (19.12.2025). Sections other than 2-6 not read.
 - **[S7]** PRH news 2026, CSRD scope narrowed, law 555/2026 (FI):
   <https://www.prh.fi/fi/tietoa_prhsta/uutislistaus/tiedotteet/2026/kestavyysraportointi-laki-muuttuu.html>.
   Accounting Act amendment **555/2026** in force 30 Jun 2026 narrows
@@ -891,11 +893,11 @@ given in [S6] and [S9].
   <https://avoindata.prh.fi/en/info/swagger-ui>.
   Exposes P&L + balance-sheet detail only for iXBRL-format filings, which
   are "about 5 per cent of all financial statements".
-- **[S12]** Installed Arelle `validate/` plugin directory (this repo):
-  `arelle/plugin/validate/` contains **CIPC, DBA, EBA, EDINET, ESEF, FERC,
-  NL, ROS, UK only**: implementation evidence that **no Finland/PRH/SBR
-  disclosure-system plugin exists**; the ESEF plugin covers the IFRS/ESEF
-  re-use path.
+- **[S12]** Arelle `validate/` plugin directory, `arelle-release` 2.39.11
+  (checked 2026-09-04): `arelle/plugin/validate/` contains **CIPC, DBA,
+  EBA, EDINET, ESEF, FERC, NL, ROS, UK only**: implementation evidence
+  that **no Finland/PRH/SBR disclosure-system plugin exists**; the ESEF
+  plugin covers the IFRS/ESEF re-use path.
 - **[S13]** EUR-Lex, **Directive (EU) 2026/470** (Omnibus I), OJ L 2026/470,
   publ. 26.2.2026, "In force": <https://eur-lex.europa.eu/eli/dir/2026/470/oj/eng>.
   Of 24 Feb 2026; amends Dirs 2006/43/EC, 2013/34/EU, (EU) 2022/2464,
