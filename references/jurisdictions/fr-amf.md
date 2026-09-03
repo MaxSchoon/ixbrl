@@ -269,9 +269,11 @@ INPI", the correct answer is that INPI accepts a PDF, not iXBRL.
 
 ## Profile: Tax: the *liasse fiscale* via EDI-TDFC: EDIFACT, not XBRL
 
-The tax return plus accounting schedules go to the **DGFiP** under
-**EDI-TDFC** (*Transfert des Données Fiscales et Comptables*), whose
-format is **UN/EDIFACT**: the **INFENT** message family (INFENT DF for
+The tax return plus accounting schedules go to the **DGFiP** by one of
+two channels, **EDI-TDFC** (machine-to-machine, the channel this
+profile covers) or **EFI** (DGFiP's online form, see the bullets
+below); neither is XBRL. EDI-TDFC (*Transfert des Données Fiscales et
+Comptables*) has the format **UN/EDIFACT**: the **INFENT** message family (INFENT DF for
 the declaration/liasse, AUTACK for securisation, CONTRL for the
 syntactic ack) of directory D00B. **Not XBRL and not iXBRL** [S13].
 
