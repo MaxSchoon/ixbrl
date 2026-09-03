@@ -1384,16 +1384,16 @@ or pick up the wrong NT generation. For deposit-quality validation:
 # 2026-09-03); do not join names with commas. The three named archives
 # are the ones cited in *Two taxonomy trees, same prefix family*; the
 # rest are placeholders. Confirm each name against the file you
-# downloaded.
+# downloaded. Add one --packages per further archive once it is on
+# disk: the wnt, ww and ncgc zips of the same release (if shipped
+# separately), the NT20 technical zip (it carries the jenv slice), and
+# the IFRS overlay zip only if the filer uses one.
 arelleCmdLine \
   --plugins 'inlineXbrlDocumentSet|validate/NL' \
   --disclosureSystem NL-INLINE-2025 \
   --packages kvk-2025_taxonomie.zip \
   --packages bw2-titel9-2025_taxonomie.zip \
   --packages rj-2025_taxonomie.zip \
-  --packages <wnt, ww and ncgc zips of the same release, if shipped separately> \
-  --packages <NT20 technical zip, which carries the jenv slice> \
-  --packages <IFRS overlay zip, only if the filer uses one> \
   --calc c11r \
   -f report-package.zip --validate \
   --internetConnectivity offline
