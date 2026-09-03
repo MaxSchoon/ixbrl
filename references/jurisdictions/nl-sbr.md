@@ -224,7 +224,7 @@ defect.
 | KvK Groot-class **must** deposit digitally (SBR Report Package) | FY2025 | Earlier years allowed paper for Groot. Don't insist on iXBRL for a FY2023 Groot deposit. |
 | KvK Middelgroot must deposit digitally | FY2017 onward | Stable for years. |
 | KvK Klein / Microbedrijf must deposit digitally | FY2016 / FY2017 | Stable for years. |
-| Notes / management report / other-information block-tagging for KvK iXBRL | Not yet fixed: **not sooner than two years** after ESMA's definitive block-tagging requirements take effect | RTS 2026 Annex II point 2 still writes the date as `1 januari 20XX`, and *widened* the lag: RTS 2025 said one year after ESMA's amended approach, RTS 2026 says "niet eerder voorzien dan twee jaar na invoering van de definitieve ESMA-vereisten", adding XBRL International best-practice work as a second dependency. Voluntary block-tagging before that date remains **not permitted**. Check the current RTS / FAQ before requiring it. |
+| Block-tagging of narrative for KvK iXBRL (intended mandate: management report, notes, other information; prohibition on voluntary use: the jaarrekening only) | Mandate not yet dated: RTS 2026 Annex II pt 2 prints `1 januari 20XX`, "niet eerder voorzien dan twee jaar na invoering van de definitieve ESMA-vereisten"; FAQ 2.4.1 (10 July 2026): "op dit moment nog niet bekend". The prohibition runs "vóór deze datum", the same placeholder | Two rules with different scopes, and RTS 2026 changed the second (checked 2026-09-03). The intended *mandate* names "het bestuursverslag, de toelichting op de jaarrekening en de overige gegevens" in both RTS 2025 and RTS 2026; RTS 2026 widened the lag from one year after ESMA's amended approach to two years after ESMA's definitive requirements, and now describes the intended date as aligned ("afgestemd op") with both ESMA's expected developments and the best practices XBRL International is working on, timing subject to change; FAQ 2.4.1 puts it more strongly, the date "hangt af van" both (checked 2026-09-03). The *prohibition* is narrower than the mandate: RTS 2026 reads "vrijwillige toepassing van block-tagging **in de jaarrekening** niet toegestaan" (EN: "to the financial statements"); RTS 2025 had no scope qualifier ("niet toegestaan om op vrijwillige basis block-tagging toe te passen") and bounded the prohibition at financial years beginning before 1 januari 2026. RTS art. 2 sub 3 lists the jaarrekening, the bestuursverslag and the overige gegevens as sibling parts of the jaarrapportage, so under RTS 2026 a voluntary text-block tag on a note is prohibited by rule, while one on the management report or the other information is neither prohibited nor required by any RTS, RM or FAQ text read. Strength: prohibited by the RTS text; no RTS or FAQ text names a Digipoort or filing-rule rejection, and the NT Filing Rules were not checked for one. Operative version rule: RTS 2026 for financial years beginning on or after 1 januari 2026 (art. 9; early application to earlier years allowed), RTS 2025 for FY2025 and, where it permits, earlier years. RTS 2025's fixed 1 januari 2026 bound is that text's own end date, not a rule an FY2026 filing can rely on. Neither art. 9 carries a supersession clause; that is a drafting gap to note, not an applicability rule (checked 2026-09-03). Same reading in *The auditor's report (controleverklaring) in the package*. |
 | ESEF report deposited **directly** at the Handelsregister | Not a FY2026 change; the route already stood under RTS 2025 | Article 4 is textually identical in RTS 2025 and RTS 2026, so art. 4(5), an in-scope issuer "kan hun ESEF-rapportage rechtstreeks deponeren bij het handelsregister", is a standing rule, not a new one. Do not tell a filer this route opens with FY2026. Two review-visible consequences: the entity identifier becomes the **LEI** with scheme `http://standards.iso.org/iso/17442` instead of the KvK number with `http://www.kvk.nl/kvk-id` (Annex IV pt 2), and `esef_cor:NotesAccountingPoliciesAndMandatoryTags` joins the start points (Annex IV Table 7). Filing with the AFM still discharges the KvK obligation (art. 2:394 lid 8 BW). |
 | art. 2:403 BW foreign-group-head report in iXBRL | FY2025 | Operative. Untagged group report + separate filing-data iXBRL document in one Report Package (see the *art. 2:403 foreign group head report in iXBRL* profile). |
 | art. 2:408 BW foreign-group-head report in iXBRL | **Not before FY2028** | FAQ 2.2.4 (10 July 2026): for financial years beginning **before 2028-01-01** the 2:408 group report is deposited **by PDF e-mail**; the iXBRL obligation is only *expected* from FY2028. An FY2026 PDF-by-email 2:408 deposit is correct; do not flag it (see the *art. 2:408 foreign group head report by PDF e-mail (before FY2028)* profile). |
@@ -255,8 +255,15 @@ between them. **Article 4 itself did not change**: its text is
 identical in both RTS, so the ESEF-direct deposit route of art. 4(5) is
 a standing rule rather than an FY2026 delta. The substantive deltas sit
 in the Annexes: the LEI identifier and the `esef_cor` notes start point
-for ESEF reports (Annex IV pt 2 and Table 7), the widened block-tagging
-lag (Annex II pt 2), and the rolled base-taxonomy set (Annex VI).
+for ESEF reports (Annex IV pt 2 and Table 7); in Annex II pt 2 the
+widened block-tagging lag, a new scope qualifier on the prohibition of
+voluntary block-tagging ("in de jaarrekening", absent from RTS 2025)
+and that prohibition's end date, moved from a fixed 1 januari 2026 to
+the same open placeholder as the mandate (*Bi-temporal cheatsheet
+(which rule applied when)*, checked 2026-09-03); in Annex II pt 1 the
+nil-value sentence, reworded from "streepjes en lege cellen" to
+"streepjes of andere karakters en bewoordingen"; and the rolled
+base-taxonomy set (Annex VI).
 
 The RTS is not the same thing as the Reporting Manual (RM):
 
@@ -283,13 +290,43 @@ RTS points that matter in review:
   information, or cannot use a predefined XBRL entry point should expect
   to use iXBRL rather than legacy XBRL.
 - Annex II requires detailed tagging of all numbers in a declared
-  currency in the primary statements (including dashes / empty cells
-  that represent nil or zero) and the mandatory KvK filing metadata
-  facts such as registration number, legal-entity name, legal form,
-  registered office, entity size, period end, reporting period,
-  consolidation flag, auditor's-report-present flag, and adoption
-  status. Conditional facts include adoption date and 2:403 / 2:408
-  foreign-group filing flags when applicable.
+  currency in the primary statements, and of the symbols that stand
+  for zero values ("nulwaarden"; the English edition writes "nil- or
+  zero-value") in the statements *and the notes* it names: RTS 2025
+  Annex II pt 1, "Alle streepjes en lege cellen die nulwaarden
+  vertegenwoordigen in de overzichten en/of toelichtingen vermeld
+  onder a. en b. moeten ook worden gemarkeerd"; RTS 2026 Annex II
+  pt 1 rewords the subject to "Alle streepjes of andere karakters en
+  bewoordingen die nulwaarden vertegenwoordigen", keeps "in de
+  overzichten en/of toelichtingen", and no longer names "lege cellen"
+  (the English track-changes edition marks "and empty cells" as
+  changed text next to the inserted "or other characters and
+  terminology"; the Dutch text prevails; checked 2026-09-03). Three
+  rules of different strength follow: the face amounts are mandatory;
+  a zero symbol in a statement or note named under a. and b. is
+  mandatory under pt 1; and narrative block-tagging is deferred by
+  pt 2, whose prohibition reaches voluntary *block*-tagging of the
+  jaarrekening only, while RTS art. 4 lid 3 ("Rechtspersonen mogen
+  meer dan de in lid 2 bedoelde informatie in de jaarrapportage
+  markeren") leaves voluntary detail tagging of note amounts open.
+  Read pt 1 with art. 4 lid 3 Besluit modellen jaarrekening: "Posten
+  zonder bedrag worden weggelaten, tenzij een bedrag voor het
+  voorafgaande jaar moet worden vermeld." For an entity within the
+  decree (an NV or BV, not micro: art. 1 lid 1 and 3) a post with no
+  amount in either year is omitted, so a dash sits in a cell whose
+  other column carries an amount, current or prior; that cell is a
+  zero fact. Tagging it with the concept and unit of the amount beside
+  it is this file's tagging inference, as is the step that a post
+  absent altogether is not a cell and its absence is not an untagged
+  fact; neither RTS names the decree. `xsi:nil` stays forbidden
+  (*FR-NL- / FG-NL- (SBR Filing Rules / Filing Guidelines)*): the
+  value is `0`, not nil. Annex II also mandates
+  the KvK filing metadata facts such as registration number,
+  legal-entity name, legal form, registered office, entity size,
+  period end, reporting period, consolidation flag,
+  auditor's-report-present flag, and adoption status. Conditional
+  facts include adoption date and 2:403 / 2:408 foreign-group filing
+  flags when applicable.
 - Annex III lists the applicable XBRL specifications for iXBRL Report
   Packages: Inline XBRL 1.1, Transformation Registry 4 or 5, Units
   Registry 1.0, Data Type Registry 1.x, Link Role Registry 2.0, XBRL
@@ -306,10 +343,13 @@ RTS points that matter in review:
   linkbase; and anchor extension concepts to wider / narrower core
   concepts where required.
 
-**Honest gaps in this section (checked 2026-08-15).** The RTS 2026
-delta list above is a comparison of the two final texts, not the
-publisher's own track-changes document, so small Annex IV wording
-changes may be missing. The Reporting Manual 2026, whose chapter 7
+**Honest gaps in this section (checked 2026-08-15; Annex II
+re-checked 2026-09-03).** The RTS 2026 delta list above was first
+drawn from a comparison of the two final texts; on 2026-09-03 the
+Annex II point 1 and point 2 deltas were confirmed against the
+publisher's English track-changes edition, but the rest of the list
+was not, so small Annex IV wording changes may be missing. The
+Reporting Manual 2026, whose chapter 7
 governs the 403/408 package shape (see the *art. 2:403 foreign group
 head report in iXBRL* profile), has not been read into this file.
 NT21 entry-point names are **not** recorded here: the taxonomy is
@@ -420,6 +460,31 @@ entity" that opts for iXBRL. Size selects a schema only in the classic
 XBRL tree, whose `kvk-rpt-jaarverantwoording-` families are tabulated
 under *DTS and vintages*.
 
+The size class also selects which **model** of the Besluit modellen
+jaarrekening the face may follow (consolidated text geldend vanaf
+1 november 2015, checked 2026-09-03). Middelgroot and Groot NV/BV:
+balance sheet model A or B, income statement model E or F (art. 1
+lid 1: "moet zijn ingericht overeenkomstig model A of model B, de
+winst- en verliesrekening overeenkomstig model E of model F").
+Klein: art. 1 lid 2, "Is artikel 396 van boek 2 van het Burgerlijk
+Wetboek van toepassing, dan kan de vennootschap voor de balans ook
+model C of model D kiezen en voor de winst- en verliesrekening model
+I of model J", the condensed layouts. Model C's balance sheet stops
+at the roman-numeral level ("II. vorderingen en overlopende activa",
+"C. Kortlopende schulden (ten hoogste 1 jaar) en overlopende
+passiva"); model D is published as an image and was not read
+for this entry (*Sources: when to escalate to primary sources*). It
+is an option ("kan ... kiezen"), so a Klein filing on model A is
+conformant. Micro: art. 1 lid 3, "Dit besluit
+is niet van toepassing op een rechtspersoon als bedoeld in artikel
+395a van Boek 2", so no caption, ordering or sub-total finding may
+rest on the decree for a `kvk:LegalEntitySizeMicroMember` filing.
+Banks, insurers and investment companies have their own models
+(K/L/M, N/O/P, Q/R/S; art. 16, 16a, 16b), and each of art. 16 lid 1,
+16a lid 1 and 16b lid 1 lists which general articles apply to them;
+art. 5 lid 1-2 (the protected captions) is on none of those lists.
+Nothing in the iXBRL tree selects a model, so pin it from the face.
+
 A common reviewer slip: applying Middelgroot disclosure expectations
 to a Klein filing, or vice versa. Pin the size class first; it changes
 which absences count as defects. Also verify it as a reported metadata
@@ -430,8 +495,9 @@ fact, not as a context dimension.
 A medium / large group routinely files both a **consolidated** statement
 set and a **company-only (separate)** statement set in one report.
 Both use the same base concepts (`bw2-titel9:Assets`,
-`bw2-titel9:AssetsCurrent`, `bw2-titel9:Liabilities`,
-`bw2-titel9:NetResultAfterTax`) and are distinguished only by an
+`bw2-titel9:AssetsCurrent`, `bw2-titel9:Liabilities`; the result line
+is the exception, see *Recurring Dutch concept choices that are
+syntactically valid but wrong*) and are distinguished only by an
 explicit dimension member on **`bw2-titel9:FinancialStatementsTypeAxis`**:
 `bw2-titel9:ConsolidatedMember` vs `bw2-titel9:SeparateMember`. This
 is where SBR Dutch GAAP filings most often go wrong, not because of
@@ -672,8 +738,11 @@ content pass; the cheapest signals:
   not tagged into that scope, or were tagged into the wrong scope.
 - Subsidiaries-only concepts (`InvestmentsInParticipatingInterestsInGroupCompanies`)
   populated in the consolidated scope but not the separate scope.
-- `NetResultAfterTax` consolidated ≠ separate when the separate scope
-  reflects only the parent's standalone result.
+- The result after tax, `NetResultAfterTax` in the consolidated scope
+  against `ResultAfterTax` in the separate scope (*Recurring Dutch
+  concept choices that are syntactically valid but wrong*), differs
+  when the separate scope reflects only the parent's standalone
+  result.
 
 ### Recurring KvK deposit-blocker patterns
 
@@ -817,15 +886,40 @@ text block for a KvK deposit, treat the demand as unsupported and ask
 for its rule citation. Two forward-looking clauses may change this, and
 neither has a date yet: RM 2025 § 2.10 anticipates that tagging and
 signature "may be implemented in the future", and RTS Chapter 2
-Annex II point 2 intends block-tagging of the management report, the
-notes **and the other information** (which is where the
+Annex II point 2 states the intention to block-tag the management
+report, the notes **and the other information** (which is where the
 controleverklaring sits) for financial years beginning on or after a
-year the RTS still prints as a placeholder, pending ESMA's revised
-block-tagging approach. Nor may a filer get there early: the same point
-states that for financial years beginning before that date, applying
-block-tagging in the financial statements on a voluntary basis is not
-permitted (RTS 2026 wording; RTS 2025 printed the date as 1 January
-2026).
+year the RTS still prints as `1 januari 20XX`, not before two years
+after ESMA's definitive block-tagging requirements, a date the RTS
+describes as aligned ("afgestemd op") with ESMA's expected
+developments and XBRL International's best-practice work; FAQ 2.4.1
+(10 July 2026) says the date "is op dit moment nog niet bekend" and,
+more strongly than the RTS, that it "hangt af van" both (checked
+2026-09-03). The
+prohibition that accompanies that intention is narrower than the
+intention itself. RTS 2026 reads: "Voor boekjaren die aanvangen vóór
+deze datum is vrijwillige toepassing van block-tagging in de
+jaarrekening niet toegestaan" (EN: "to apply block tagging to the
+financial statements on a voluntary basis"). The qualifier "in de
+jaarrekening" is new in RTS 2026; RTS 2025 prohibited voluntary
+block-tagging without any scope ("niet toegestaan om op vrijwillige
+basis block-tagging toe te passen"), and only for financial years
+beginning before 1 January 2026 (checked 2026-09-03 against both
+texts and the English track-changes edition of RTS 2026). RTS art. 2
+sub 3 defines the jaarrapportage as "de geconsolideerde en/of
+enkelvoudige jaarrekening, het bestuursverslag en de overige
+gegevens", three sibling parts, and RM 2025 § 2.10 places the
+auditor's report under Other information; the Title 9 articles that
+draw the same line (art. 2:361, 2:391 and 2:392 BW) were not re-read
+for this entry, so verify them before citing. So a voluntary
+text-block tag on the notes is prohibited by the RTS text, while a
+voluntary text-block tag on the controleverklaring is neither
+prohibited nor required by any RTS, RM or FAQ text read, which leaves
+the "unsupported, ask for the citation" verdict above intact. No RTS
+or FAQ text names a Digipoort or filing-rule check that rejects block
+tags, and the NT Filing Rules were not searched for one; write
+"prohibited by rule", not "rejected" (same reading in the
+*Bi-temporal cheatsheet (which rule applied when)*).
 
 **The NBA taxonomy is a different instrument, not a text block.** RTS
 Chapter 3 Annex I Table 2 names NBA taxonomy 2.1
@@ -969,6 +1063,117 @@ This is the area where converters drift fastest from review expectation.
   number, registered office, etc.) and `kvk:AuditorsReportFinancialStatementsPresent`
   are the most frequently orphaned. Wire them into a metadata
   presentation role.
+- **The face follows the Besluit modellen jaarrekening.** For an NV
+  or BV within the decree the balance sheet is model A or B and the
+  income statement model E or F, with C/D and I/J as the Klein
+  alternatives; the decree prescribes no model for micro entities,
+  which art. 1 lid 3 places outside it (art. 1 lid 1-3; detail
+  under *Size class: what it decides, and what it does not (Title 9
+  Book 2 BW)*; consolidated text geldend vanaf 1 november 2015,
+  checked 2026-09-03). The order of posts is the model's order
+  (art. 6 lid 1: "De volgorde van de posten is die van het gekozen
+  model"). Art. 6 itself sanctions one move, the participating-interest
+  result "mag ook aan alle financiële baten en lasten vooraf gaan"
+  (the FY2025 reference linkbase pins art. 6 to
+  `bw2-titel9:ShareInResultsParticipatingInterests`), and one sector
+  exception: participatiemaatschappijen, as art. 6 lid 3 defines
+  them, "mogen de volgorde van de posten wijzigen in overeenstemming
+  met het gebruik in hun bedrijfstak" (lid 2). Other articles fix or
+  vary placement on their own terms: art. 7 lid 3 (overige
+  belastingen, see *Recurring Dutch concept choices that are
+  syntactically valid but wrong*), art. 7 lid 4 (income from and value
+  changes on participations not valued under art. 2:389 BW, two
+  permitted positions for the value changes), art. 8 (series moved to
+  the notes) and art. 12 (overlopende posten), the last two in the
+  bullets below (checked 2026-09-03). The decree binds the
+  rendered face, not the linkbases; that the presentation linkbase
+  reads in the same order is a reviewer expectation, and a reordered
+  face that Arelle accepts is still a question for the preparer.
+  Reviewer heuristic, not a rule: when the rendered order and the
+  presentation order disagree, the face is usually right and the
+  linkbase was generated from a template.
+- **Six captions are fixed; the rest are clarity-constrained.** Art.
+  5 lid 1:
+  "Van de benamingen Vaste activa, Vlottende activa, Kortlopende
+  schulden, Langlopende schulden, Voorzieningen en Eigen vermogen mag
+  niet worden afgeweken." The FY2025 `bw2-titel9-cor-ref.xml` pins
+  exactly this article to `AssetsNoncurrent`, `AssetsCurrent`,
+  `LiabilitiesCurrent`, `LiabilitiesNoncurrent`, `Provisions` and
+  `Equity` (plus two members), whose Dutch standard labels are those
+  six words. Any other caption may be reworded (art. 5 lid 2: "op ten
+  minste even duidelijke wijze"), so a caption that differs from the
+  concept label is not a defect by itself; ask whether it still names
+  the concept's content. Sub-totals may be inserted and named (art. 5
+  lid 3); a total the model carries but arts. 2:364 to 2:377 BW do
+  not name may stay unnamed, and consecutive totals that do not
+  differ for lack of intervening posts may be merged (lid 4): an
+  unnamed sub-total is still a number in a declared currency on the
+  face, and Annex II still wants it tagged. In a consolidated
+  jaarrekening "alle benamingen" may be adapted to show the group
+  character (art. 10 lid 1), wording that on its face reaches the six
+  as well.
+- **Inserted posts versus extensions.** Art. 7 lid 2 allows a new
+  post only "voor zover hun inhoud niet wordt gedekt door een in het
+  gekozen model vermelde post die niet als 'overige' is aangeduid";
+  splits of a model post are always allowed (lid 1). Two tests, not
+  one: art. 7 decides whether the rendered post may appear; Annex IV
+  pt 4 decides, separately, whether the closest base-taxonomy element
+  "representatief is voor de boekhoudkundige betekenis" of what is
+  tagged, and an `ext:` element may not "de betekenis en reikwijdte
+  van een basistaxonomie-element ... dupliceren" (pt 4 sub b). A
+  model post the DTS carries as a core concept needs no `ext:`; a
+  permitted split (lid 1) or inserted post (lid 2) may still need one
+  when no core concept is precise enough.
+- **Detail moved to the notes must leave its sum on the face.**
+  Art. 8 lets any unbroken series of arabic-numbered balance-sheet
+  posts (lid 1), or of income-statement posts not printed in capital
+  letters ("niet met hoofdletters gedrukte posten", lid 2), move to
+  the notes "met herhaling van de som", in the model's order
+  (lid 3). The face sum is the Annex II pt 1 fact. The series in the
+  notes is not a face amount, but it is not simply untagged either: a
+  zero symbol in it is still within pt 1 ("overzichten en/of
+  toelichtingen"), voluntary detail tagging of its amounts is open
+  under RTS art. 4 lid 3, and only voluntary *block*-tagging of the
+  jaarrekening is prohibited while the mandate is deferred
+  (*Bi-temporal cheatsheet (which rule applied when)*). Check that
+  the tagged sum equals the note series by hand; do not assume the
+  ordinary validation run covers it, unless the series is tagged and
+  the calculation or formula relationships in force demonstrably
+  reach it.
+- **Overlopende posten may stand alone, at fixed positions.** Art.
+  12 lid 1-2 permit "overlopende activa" after the liquide middelen
+  (models A-D) and "overlopende passiva" after the schulden (models
+  B, D) or after the voorzieningen (models A, C) "zelfstandig", as
+  independent posts. The positions are the model's, not free: in
+  model A the asset side moves from post B.II.6, a sub-post of
+  Vorderingen, to a standalone post after B.IV Liquide middelen and
+  still before B.V "Som der vlottende activa", so it stays within
+  Vlottende activa; in model C it sits within "II. vorderingen en
+  overlopende activa" or, standalone, after "IV. liquide middelen"
+  and before "V. som der vlottende activa". On the liability side
+  model A carries overlopende passiva twice, as C.12 (kortlopend) and
+  F.12 (langlopend), and the standalone position after G.
+  Voorzieningen lies outside both schulden totals; model C folds it
+  into caption C. Models B and D, published as images, were not read
+  (checked 2026-09-03). `bw2-titel9:AccruedIncome` and
+  `bw2-titel9:AccrualsAndDeferredIncome[Current]` carry this article
+  in the FY2025 reference linkbase. How a presentation or calculation
+  tree should mirror either position is this file's inference and a
+  reviewer finding at most, not a breach of the decree, which says
+  nothing about linkbases.
+- **Model F may drop two sub-totals.** Art. 14 lid 1: "In model F
+  mogen de posten Som der kosten en Netto-omzetresultaat achterwege
+  blijven." Absent `bw2-titel9:SumOfExpenses` /
+  `bw2-titel9:NetOperatingResult` in a functional income statement is
+  not a gap.
+- **The result-appropriation banner.** Art. 11: "Bovenaan de balans
+  wordt aangegeven of daarin de bestemming van het resultaat is
+  verwerkt." The FY2025 DTS carries it as the string fact
+  `bw2-titel9:BalanceSheetBeforeAfterAppropriationResults`, and when
+  the answer is "voor", the result "moet op de balans ... afzonderlijk
+  worden vermeld als laatste post van het eigen vermogen": the instant
+  concept `bw2-titel9:ResultForTheYear`, not the duration
+  `ResultAfterTax` (*Sign and balance: the Dutch flavour*).
 
 <a id="profile-kvk-403-foreign-group-head"></a>
 
@@ -1077,10 +1282,14 @@ the auditor doesn't.
 | Wrong | Right | Why it matters |
 |---|---|---|
 | `rj:Creditors` for trade payables | `bw2-titel9:TradePayablesCurrent` (or `TradePayablesNoncurrent`) | Both concepts exist. `rj:Creditors` is a broad RJ fallback covering all amounts owed; `bw2-titel9:TradePayables*` is the Title 9 line item. Using the broad concept loses the disclosure detail Title 9 requires. |
-| `rj:Result` used as a generic profit/loss line | The specific Title 9 income-statement concept (e.g. `bw2-titel9:NetResultAfterTax` for total result; `bw2-titel9:ResultBeforeTax`; the appropriate `rj:*` for movements) | Both `bw2-titel9:Result` and `rj:Result` exist as concepts, but neither is "the" result line for a Title 9 income statement. Pick the specific concept the statement reports, not the broad fallback. |
+| `rj:Result` used as a generic profit/loss line | The specific Title 9 income-statement concept (e.g. `bw2-titel9:ResultAfterTax` for the result after tax, or `bw2-titel9:NetResultAfterTax` in the consolidated scope, see the rows below; `bw2-titel9:ResultBeforeTax`; the appropriate `rj:*` for movements) | Both `bw2-titel9:Result` and `rj:Result` exist as concepts, but neither is "the" result line for a Title 9 income statement. Pick the specific concept the statement reports, not the broad fallback. |
 | `rj:TreasurySharesMovement` on financing-activity rows in the cash flow | The specific bw2-titel9 / rj movement concept | `rj:TreasurySharesMovement` is the equity-side movement; cash spent on treasury shares is a separate financing-activity outflow. |
 | `rj:PayablesBanksCurrent` | `bw2-titel9:PayablesBanksCurrent` | `rj:PayablesBanksCurrent` does not exist; the concept lives under `bw2-titel9:`. Right local name, wrong prefix → unbound fact. |
 | `bw2-titel9:InvestmentsInParticipatingInterests` as a flat line item | The typed-dimension architecture: `bw2-titel9:InvestmentsInParticipatingInterestsTypedAxis` with member; the substantive concepts are typed-dimension members, not a single flat concept | Title 9 captures participating interests as a typed dimension, not as a single flat line. Tagging a flat concept that doesn't exist as a non-dimensional concept will be unbound. Verify the actual axis usage in the example annual reports on sbr-nl.nl. |
+| `bw2-titel9:NetResultAfterTax` as the closing line of a separate (enkelvoudige) income statement | `bw2-titel9:ResultAfterTax` ("Resultaat na belastingen"), the closing line of models E and F (art. 1 lid 1 Besluit modellen jaarrekening; the DTS reference also cites art. 2:377 lid 1 onder c BW) | In the FY2025 DTS `NetResultAfterTax` is labelled "Nettoresultaat na belastingen toekomend aan de rechtspersoon", documented as "Het saldo van de geconsolideerde baten en lasten dat aan de rechtspersoon toekomt, na aftrek van belastingen", and its only reference is art. 10 lid 1 of the decree (group naming). It belongs in the consolidated scope, next to `ResultAttributableNoncontrollingInterest` (art. 10 lid 3). Checked 2026-09-03. |
+| `bw2-titel9:ResultAfterTax` (duration) as the last equity line of a balance sheet "voor resultaatbestemming" | `bw2-titel9:ResultForTheYear` (instant; art. 11 of the decree) | The balance-sheet line is an instant; see *Sign and balance: the Dutch flavour*. |
+| The minority interest outside the groepsvermogen in the **consolidated** balance sheet: as a liability, or under a plain `bw2-titel9:Equity` total that excludes it | `bw2-titel9:EquityGroup` ("Groepsvermogen") with `bw2-titel9:NoncontrollingInterest` ("Aandeel van derden in groepsmaatschappijen") as a component | Art. 10 lid 2: the third-party share is shown "afzonderlijk als onderdeel van het groepsvermogen". The same lid makes the rest optional, not wrong: "onderverdeling van het eigen vermogen in een geconsolideerde jaarrekening [is] niet vereist", so consolidated equity broken down into capital and reserves is a choice, not a defect. The FY2025 reference linkbase pins that lid to exactly these two concepts. |
+| An `ext:` concept for "overige belastingen", or that line placed after "Resultaat na belastingen" | `bw2-titel9:IncomeTaxExpenseOther` ("Overige belastingen"), immediately before `ResultAfterTax` (or before the minority-share line) | Art. 7 lid 3 fixes both the post and its position: "onmiddellijk voor de post resultaat na belastingen of onmiddellijk voor de post, bedoeld in artikel 10 lid 3". |
 
 When reviewing a KvK iXBRL package, run a per-concept namespace check:
 every fact's QName must resolve to a concept declared in (or imported
@@ -1097,11 +1306,12 @@ Two SBR-specific traps on top of the universal rules in
 `references/first-principles.md`, in particular § *Sign convention,
 balance type, and `preferredLabel` are three different things*:
 
-- **Loss-labelled subtotals tagged positive.** `NetResultAfterTax` on
-  a loss-making Dutch GAAP P&L must be **negative** in the canonical
-  XBRL value; the `negatedLabel` role flips the rendered sign for the
-  reader. A positive canonical value with a loss-labelled total is
-  the single most common substantive defect in NL filings.
+- **Loss-labelled subtotals tagged positive.** `ResultAfterTax` (or
+  `NetResultAfterTax` in the consolidated scope) on a loss-making
+  Dutch GAAP P&L must be **negative** in the canonical XBRL value; the
+  `negatedLabel` role flips the rendered sign for the reader. A
+  positive canonical value with a loss-labelled total is the single
+  most common substantive defect in NL filings.
 - **Cash-flow outflows.** Calculation weight `-1` on a child means
   "subtract from the parent". The fact itself should still be tagged
   as the as-reported magnitude (positive when the line items it
@@ -1109,6 +1319,33 @@ balance type, and `preferredLabel` are three different things*:
   on the presentation arc renders parentheses. Do not negate the fact
   to compensate for the calc weight; one of the two will be wrong on
   the other side.
+- **The balance-sheet result line is an instant, the P&L line a
+  duration.** Art. 11 Besluit modellen jaarrekening (consolidated
+  text geldend vanaf 1 november 2015, checked 2026-09-03): before
+  appropriation "moet op de balans het resultaat na belastingen
+  afzonderlijk worden vermeld als laatste post van het eigen
+  vermogen". The FY2025 DTS binds that line to
+  `bw2-titel9:ResultForTheYear` ("Resultaat na belastingen van het
+  boekjaar", `periodType="instant"`, credit) and the model E/F
+  closing line "Resultaat na belastingen" to
+  `bw2-titel9:ResultAfterTax` (`duration`, credit). Tagging the
+  equity line with the P&L concept puts a duration fact inside an
+  instant statement, and the two facts then no longer tie. A loss
+  makes both negative; a positive `ResultForTheYear` under an
+  "Onverdeeld verlies" caption is the balance-sheet twin of the first
+  bullet.
+- **Column headers and contexts.** Art. 3 binds the rendered
+  headers: "Boven de kolommen wordt in de balans de balansdatum en in
+  de winst- en verliesrekening het boekjaar vermeld", and "Zo veel
+  mogelijk worden daarnaast de bedragen voor het voorafgaande boekjaar
+  gegeven." That the instant and duration contexts, and the
+  `bw2-titel9:FinancialReportingPeriod*` facts which carry art. 3 in
+  the FY2025 reference linkbase, reproduce those dates is iXBRL
+  correctness (a fact reports what its column reports), not a rule of
+  the decree, which says nothing about contexts. Reviewer
+  heuristic, not a rule: a comparative column whose header year does
+  not match the prior-period context is nearly always a copied
+  context, not a real change of year end.
 
 ### Concept-period class: the silent mis-map
 
@@ -1216,7 +1453,11 @@ walk this in order. Each step depends on the prior being clean.
    *Concept-period class: the silent mis-map*. Walk the IS, CF, and SoCE.
 9. **Presentation pass.**
    *Presentation linkbase: what KvK reviewers actually look at*.
-   Roots on official placeholders, IS/CF flat, BS nested, every tagged fact placed somewhere.
+   Roots on official placeholders, IS/CF flat, BS nested, every
+   tagged fact placed somewhere, and the face on a model the size
+   class allows, in that model's order allowing the placements the
+   decree itself sanctions (art. 1, 6 lid 1-2, 7 lid 3-4, 8 and 12
+   Besluit modellen jaarrekening).
 10. **Package shape.** *The auditor's report (controleverklaring) in
    the package*. Auditor's report **visibly** present, and untagged, if
    the size class requires it; the sidecar's presence flag agrees with
@@ -1310,6 +1551,33 @@ Defer to and cite:
   NT generation; the PDF lives in the same documentation tree.
 - **Title 9 Book 2 BW** for legal disclosure obligations
   (`wetten.overheid.nl`).
+- **Besluit modellen jaarrekening** (BWBR0003648; besluit van 23
+  december 1983, "Gelet op artikel 363 lid 6 van boek 2 van het
+  Burgerlijk Wetboek"), consolidated text geldend vanaf 1 november
+  2015, checked 2026-09-03. Governs the face for the entities within
+  its scope, NVs and BVs other than art. 2:395a BW micro entities
+  (art. 1 lid 1 and 3), with banks, insurers and investment companies
+  on their own models (art. 16, 16a, 16b):
+  which model the size class allows (art. 1), comparatives and column
+  headers (art. 3), omission of empty posts (art. 4 lid 3), the six
+  protected captions (art. 5 lid 1), ordering (art. 6), inserted posts
+  (art. 7), detail moved to the notes with the sum repeated (art. 8),
+  consolidated naming and minority interest (art. 10), the
+  result-appropriation banner (art. 11), overlopende posten (art. 12)
+  and the model F allowances (art. 14). The FY2025
+  `bw2-titel9-cor-ref.xml` cites it by article and lid as "Besluit
+  modellen jaarrekening" with `IssueDate` 2015-11-01 (40 resources, 38
+  of them dated; counted on 2026-09-03 in the DTS resolved from the NT
+  entry point
+  <https://www.nltaxonomie.nl/kvk/2025-12-31/kvk-annual-report-nlgaap-ext.xsd>;
+  the repository holds no copy of that DTS, so every "FY2025 DTS"
+  label, period type or count quoted in this file is re-checkable
+  only by resolving it again); no model letter appears in the DTS, so
+  the concept-level anchor is the reference linkbase, not the model.
+  Models B, D, I and J are published on wetten.overheid.nl as images,
+  not text, and were not read for this entry, so nothing here
+  describes their line items:
+  <https://wetten.overheid.nl/BWBR0003648/2015-11-01>
 - **Richtlijnen voor de Jaarverslaggeving (RJ)** for Dutch GAAP
   application detail.
 - **NBA Alert 50** for external-accountant consent, scope, and
@@ -1352,11 +1620,19 @@ Defer to and cite:
   reference when a `--disclosureSystem` name silently fails to bind:
   <https://github.com/Arelle/Arelle/blob/master/arelle/plugin/validate/NL/resources/config.xml>.
 - **RTS 2026 SBR-domein Handelsregister**, final 10 July 2026, for
-  financial years beginning on or after 1 January 2026:
+  financial years beginning on or after 1 January 2026. Annex II
+  point 2 carries the narrative block-tagging intention and the
+  jaarrekening-scoped prohibition on voluntary block-tagging. Dutch
+  final text (prevails):
   <https://www.sbr-nl.nl/sites/default/files/2026-07/20260710_RTS_2026_NL_SBR-domein_Handelsregister.pdf>.
+  The publisher's English track-changes edition against RTS 2025 is
+  the primary source for that qualifier being new in 2026 (checked
+  2026-09-03):
+  <https://www.sbr-nl.nl/sites/default/files/2026-07/20260710_RTS_2026_EN_SBR-domein_Handelsregister_compare_RTS2025.pdf>.
 - **FAQ SBR-domein Handelsregister**, revision of 10 July 2026. Q2.2.4
-  governs the art. 2:403 / 2:408 foreign-group-head routes and Q2.2.5 the
-  three-year KVK-taxonomy window:
+  governs the art. 2:403 / 2:408 foreign-group-head routes, Q2.2.5 the
+  three-year KVK-taxonomy window, and Q2.4.1 confirms the block-tagging
+  mandate date is "op dit moment nog niet bekend":
   <https://www.sbr-nl.nl/sites/default/files/2026-07/20260710_FAQ_NL_SBR-domein_Handelsregister.pdf>.
 
 If the question concerns a rule version newer than what this file
