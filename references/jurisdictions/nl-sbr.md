@@ -1381,13 +1381,13 @@ or pick up the wrong NT generation. For deposit-quality validation:
 # FY2025 KvK iXBRL RTS pass: Calc 1.1 (see "Calculation linkbase scope-bleed")
 # One --packages per archive: the option is repeatable ("Option can be
 # repeated for multiple files", Arelle CntlrCmdLine, main branch checked
-# 2026-09-03); do not join names with commas. The three named archives
-# are the ones cited in *Two taxonomy trees, same prefix family*; the
-# rest are placeholders. Confirm each name against the file you
-# downloaded. Add one --packages per further archive once it is on
-# disk: the wnt, ww and ncgc zips of the same release (if shipped
-# separately), the NT20 technical zip (it carries the jenv slice), and
-# the IFRS overlay zip only if the filer uses one.
+# 2026-09-03); do not join names with commas. The three archives named
+# below are the ones cited in *Two taxonomy trees, same prefix family*;
+# confirm each name against the file you downloaded. Add one
+# --packages per further archive once it is on disk: the wnt, ww and
+# ncgc zips of the same release (if shipped separately), the NT20
+# technical zip (it carries the jenv slice), and the IFRS overlay zip
+# only if the filer uses one.
 arelleCmdLine \
   --plugins 'inlineXbrlDocumentSet|validate/NL' \
   --disclosureSystem NL-INLINE-2025 \
