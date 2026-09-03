@@ -149,9 +149,10 @@ only *groups* the arcs; it does **not** restrict which contexts they
 apply to. A summation-item network is evaluated for **every** context in
 which its summation concept has a fact. So when an entity files both a
 consolidated and a separate (company-only) statement set that share base
-concepts (`bw2-titel9:Assets`, `AssetsCurrent`, `Liabilities`,
-`NetResultAfterTax`, distinguished only by a member such as
-`FinancialStatementsTypeAxis` Consolidated/Separate), the
+concepts (`bw2-titel9:Assets`, `AssetsCurrent`, `Liabilities`;
+the result line is not shared, see the concept table in
+`references/jurisdictions/nl-sbr.md`), distinguished only by a member
+such as `FinancialStatementsTypeAxis` Consolidated/Separate, the
 "BalanceSheetConsolidated" network is *also* bound against the separate
 contexts (and vice versa), where its children follow a different
 structure. Calc 1.1 round-to-nearest reports these as
