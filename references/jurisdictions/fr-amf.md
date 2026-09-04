@@ -30,7 +30,7 @@ profiles:
 - [Vintage and applicability](#vintage-and-applicability)
 - [Profile: Listed issuers: ESEF filed via the AMF](#profile-amf-esef)
 - [Profile: Statutory annual accounts: PDF via INPI, no XBRL (honest negative)](#profile-inpi-comptes-annuels)
-- [Profile: Tax: the *liasse fiscale* is EDIFACT via EDI-TDFC, not XBRL](#profile-dgfip-edi-tdfc)
+- [Profile: Tax: the *liasse fiscale* via EDI-TDFC: EDIFACT, not XBRL](#profile-dgfip-edi-tdfc)
 - [Profile: Banking and insurance: ACPR DPM/xBRL via OneGate (not inline)](#profile-acpr-dpm)
 - [Profile: CSRD / ESRS digital tagging: taxonomy exists, mandate not in force](#profile-csrd-esrs)
 - [Jurisdiction-specific invariants](#jurisdiction-specific-invariants)
@@ -267,11 +267,13 @@ INPI", the correct answer is that INPI accepts a PDF, not iXBRL.
 
 <a id="profile-dgfip-edi-tdfc"></a>
 
-## Profile: Tax: the *liasse fiscale* is EDIFACT via EDI-TDFC, not XBRL
+## Profile: Tax: the *liasse fiscale* via EDI-TDFC: EDIFACT, not XBRL
 
-The tax return plus accounting schedules go to the **DGFiP** under
-**EDI-TDFC** (*Transfert des Données Fiscales et Comptables*), whose
-format is **UN/EDIFACT**: the **INFENT** message family (INFENT DF for
+The tax return plus accounting schedules go to the **DGFiP** by one of
+two channels, **EDI-TDFC** (machine-to-machine, the channel this
+profile covers) or **EFI** (DGFiP's online form, see the bullets
+below); neither is XBRL. EDI-TDFC (*Transfert des Données Fiscales et
+Comptables*) has the format **UN/EDIFACT**: the **INFENT** message family (INFENT DF for
 the declaration/liasse, AUTACK for securisation, CONTRL for the
 syntactic ack) of directory D00B. **Not XBRL and not iXBRL** [S13].
 
@@ -585,9 +587,6 @@ obligation to its own channel (see *Regime map*).
 - **INPI XBRL roadmap.** INPI keys structured data out of PDFs [S11];
   no announced plan to move filers to structured/XBRL submission was
   found, treated as absent, not confirmed-absent-by-statement.
-- **info-financiere.fr as formal "OAM"** is resolved. The AMF ESEF FAQ
-  [S5] confirms the OAM designation and names **DILA** as its operator;
-  the earlier Tier-3-only sourcing concern no longer applies.
 - **ESRS mark-up now statutorily suspended.** Directive (EU) 2026/470
   (Omnibus I, in force 18 Mar 2026) suspends the sustainability mark-up
   until Reg. 2019/815 is updated, and the underlying taxonomy must be

@@ -24,7 +24,6 @@ profiles:
 **Contents**
 
 - [Start here: choose a filing profile](#start-here-choose-a-filing-profile)
-  - [Section index (legacy numbering, superseded by the profiles above)](#section-index-legacy-numbering-superseded-by-the-profiles-above)
 - [Vintage and applicability](#vintage-and-applicability)
   - [DTS and vintages](#dts-and-vintages)
 - [Profile: E-Bilanz (§ 5b EStG)](#profile-e-bilanz)
@@ -52,22 +51,6 @@ profiles:
 | Statutory publication or permanent deposit of annual accounts with the Unternehmensregister (XML/XBRL default; Word/PDF for a fee) | Offenlegung / Hinterlegung | [Profile: Offenlegung / Hinterlegung](#profile-offenlegung) |
 | Listed Inlandsemittent publishing a Jahresfinanzbericht, the only Inline XBRL regime in Germany | ESEF, German layer | [Profile: ESEF](#profile-esef) |
 | Sustainability reporting under CSRD / ESRS for a German undertaking | CSRD / ESRS, mark-up suspended | [Profile: CSRD / ESRS](#profile-esrs) |
-
-### Section index (legacy numbering, superseded by the profiles above)
-
-1. Which regime? The three-way split and the bi-temporal warning
-2. Regime A, E-Bilanz (§ 5b EStG): scope, exemptions, transmission
-3. Regime A: the HGB taxonomy family and its yearly cadence
-4. Regime B: Offenlegung / Hinterlegung (§§ 325 ff. HGB)
-5. Regime B: accepted formats, size classes, and enforcement
-6. Regime C: the German ESEF layer (§ 114 WpHG / § 328 HGB, BaFin)
-7. CSRD / ESRS: the German transposition state and the Omnibus effect
-8. Stakeholders and governance (who does what)
-9. Relation to EU reporting (how the national formats coexist with ESEF)
-10. Validation how-to, and the honest Arelle gap
-11. A pragmatic German review pass, in order
-12. Honest gaps
-13. Primary sources
 
 ---
 
@@ -272,8 +255,8 @@ The register body checks only *fristgemäß / vollzählig*
 (timeliness/completeness), not content correctness (§ 329 HGB); for a
 Kapitalgesellschaft that is an Inlandsemittent and not a § 327a company that
 check runs **after** the forwarding to the zentrales europäisches
-Zugangsportal (§ 329 Abs. 1 S. 2 HGB, see *Profile: ESEF, the German
-listed-issuer layer*).
+Zugangsportal (§ 329 Abs. 1 S. 2 HGB, see
+[Profile: ESEF](#profile-esef)).
 
 ### Accepted formats, size classes, and enforcement
 
@@ -614,9 +597,10 @@ expect a separate HGB-XBRL deposit alongside the ESEF filing.
 
 ## Validation, and the honest Arelle gap
 
-The installed **arelle-release is version 2.41.6**; its `plugin/validate`
-directory ships exactly **CIPC, DBA, EBA, EDINET, ESEF, FERC, NL, ROS,
-UK**, with **no Germany-specific national plugin.** Map the regimes to what
+`arelle-release` ships in its `plugin/validate` directory exactly **CIPC,
+DBA, EBA, EDINET, ESEF, FERC, NL, ROS, UK**, with **no Germany-specific
+national plugin** (checked 2026-09-04 on 2.39.11; the same list was
+recorded on 2.41.6 at the 2026-08-15 restructure). Map the regimes to what
 can and cannot be gated deterministically:
 
 1. **E-Bilanz (§ 5b EStG): NO deterministic Arelle validator here.**
@@ -647,7 +631,8 @@ with the shipped Arelle plugins; E-Bilanz and HGB Offenlegung require ERiC
 and the register operator's intake validation respectively. Do not present
 an Arelle "clean" result as evidence that an E-Bilanz or an ordinary HGB
 Offenlegung will be accepted. (The "no DE plugin" finding is scoped to
-arelle-release 2.41.6; see *Coverage and known limitations*.)
+the arelle-release versions named above; see *Coverage and known
+limitations*.)
 
 ---
 
@@ -757,9 +742,9 @@ current primary source:
   Einreichungskriterien Standards" document (viewer, ZIP structure,
   extension handling) was not fetched in full; German-layer ESEF intake
   specifics beyond the format list are not exhaustively cited.
-- **Arelle plugin scope.** The "no DE plugin" finding is scoped to the
-  installed **arelle-release 2.41.6**; newer/third-party distributions were
-  not inspected.
+- **Arelle plugin scope.** The "no DE plugin" finding is scoped to
+  **arelle-release 2.39.11 (checked 2026-09-04) and 2.41.6 (2026-08-15)**;
+  newer/third-party distributions were not inspected.
 - **Statutory-mirror citations.** § 328 HGB, § 117 WpHG, and § 106 WpHG were
   verified via commercial/legal-database mirrors
   (handelsgesetzbuch-hgb.com, dejure.org), corroborated by BaFin/legislative
@@ -932,11 +917,11 @@ what the source establishes.
 
 **Environment evidence**
 
-- Installed arelle-release 2.41.6 `plugin/validate` listing: ships CIPC,
-  DBA, EBA, EDINET, ESEF, FERC, NL, ROS, UK; **no German (DE) plugin**.
-  Establishes the deterministic-validation gap for E-Bilanz and HGB
-  Offenlegung (*Validation, and the honest Arelle gap*). Scoped to this
-  installed version.
+- arelle-release `plugin/validate` listing (2.39.11, checked 2026-09-04;
+  2.41.6, 2026-08-15): ships CIPC, DBA, EBA, EDINET, ESEF, FERC, NL, ROS,
+  UK; **no German (DE) plugin**. Establishes the deterministic-validation
+  gap for E-Bilanz and HGB Offenlegung (*Validation, and the honest Arelle
+  gap*). Scoped to those versions.
 
 For anything newer than these sources (a passed CSRD-UG, an updated
 E-Bilanz taxonomy version, an ESEF RTS update that re-enables ESRS

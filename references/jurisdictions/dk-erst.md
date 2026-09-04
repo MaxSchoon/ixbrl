@@ -301,10 +301,11 @@ distributed only in the taxonomy package whose catalog rewrites the prefix
 | `dst` / `tax` / `eogs` | Statistics Denmark / tax authority / other Business Authority concepts |
 | `tch.xsd`, `cmn.xsd` | Common/technical schemas + bilingual label linkbases `cmn_lab-da` / `cmn_lab-en` |
 
-**Entry points** are schema files that combine reporting requirements.
-The framework frames entry-point selection along balance-sheet form
+**Entry points** are schema files that combine reporting requirements
+[S4]. The 2015 framework paper framed selection along balance-sheet form
 (account vs report) × income-statement form (by nature vs by function),
-plus the disclosure set [S4].
+plus the disclosure set; the shipped `20251001` set uses a different
+first axis, set out below.
 
 **Current generation = `20251001`** (published Nov 2025) [S3][S6].
 Changes in `20251001` [S3]: updated auditor's-statement enumerations
@@ -489,7 +490,7 @@ first time in annual and interim reports for financial year 2024 (§ 18)
   calls *"de kommende EU-taksonomier"*, the **forthcoming** ones, with the
   duty grounded in the ESEF regulation [S5]. Neither taxonomy has been
   adopted, and the substituted Art. 29d suspends mark-up until they are
-  (*CSRD / ESRS trajectory*), so do **not** require ESRS or Art. 8 mark-up
+  (*Relation to EU / ESEF reporting*), so do **not** require ESRS or Art. 8 mark-up
   of a filing today [S5][S10].
 
 DKFIN has **eight top-level entry points** by entity type [S5]: (1)
