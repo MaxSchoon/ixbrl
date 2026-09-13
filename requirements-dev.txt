@@ -6,15 +6,15 @@
 # static assets. These are only for running the checks locally and in CI.
 
 # Standardization gate: linter + formatter for scripts/ and tests/ (ruff.toml).
-ruff==0.16.4
+ruff==0.16.6
 
 # Runtime dependency of scripts/check_facts.py only.
-lxml==6.1.2
+lxml==6.1.3
 
 # Type gate. pyrightconfig.json declared a type standard from the start but
 # nothing ran it; CI now does. lxml ships no inline types, so the stubs are
 # what make the declared standard achievable rather than aspirational.
-pyright==1.1.411
+pyright==1.1.413
 lxml-stubs==0.5.1
 
 # CommonMark parser for the reference-structure and move-integrity gates.
