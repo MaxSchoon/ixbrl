@@ -2,7 +2,7 @@
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
-**Load this when:** the question is how a taxonomy is wired: XLink locators, arcs and resources, what each of the five standard linkbases does, role and arcrole types, tuples, the footnote model, the OIM serialisations, nil policy, or the pointers an instance may carry.
+**Load this when:** the question is how a taxonomy is wired: XLink locators, arcs and resources, what each of the five standard linkbases does, role and arcrole types, tuples, the footnote model, the OIM serialisations, the Project Tavi draft (formerly OIM Taxonomy), nil policy, or the pointers an instance may carry.
 
 **Do not load this when:** you need the discovery closure itself, offline resolution, or which release was operative for a period (`references/dts.md`), or you are designing dimensional structure (`references/dimensions.md`).
 
@@ -16,6 +16,7 @@
 - [Tuples (legacy)](#tuples-legacy)
 - [Footnotes: XBRL model vs iXBRL `ix:footnote`](#footnotes-xbrl-model-vs-ixbrl-ixfootnote)
 - [Open Information Model (OIM)](#open-information-model-oim)
+- [Project Tavi: the next-generation model (draft)](#project-tavi-the-next-generation-model-draft)
 - [Versioning](#versioning)
 - [Nil values and per-regulator policy](#nil-values-and-per-regulator-policy)
 - [`link:schemaRef` / `linkbaseRef` / `roleRef` / `arcroleRef` in instances](#linkschemaref--linkbaseref--roleref--arcroleref-in-instances)
@@ -235,6 +236,67 @@ For an iXBRL skill, OIM matters because:
 - xBRL-JSON is what Arelle and modern viewers emit when downstream tools want a structured fact list.
 - Calc 1.1 leverages OIM rounding semantics rather than XBRL 2.1 fact-level decimals.
 
+## Project Tavi: the next-generation model (draft)
+
+Project Tavi 1.0 is XBRL International's draft of the next generation
+of the XBRL standard: one syntax-independent model for taxonomies
+*and* reports, serialised for now in JSON. It was called "OIM
+Taxonomy" until the September 2026 draft; "Project Tavi" is itself a
+working title that XBRL International will replace with a formal name,
+so search the work-product index in Sources under either name.
+
+**Status, and what it changes for a filing today: nothing.** The only
+edition is the Public Working Draft of 1 September 2026. It says it
+is "not recommended for use in production systems, and may change
+significantly prior to finalisation"; XBRL International advises
+vendors not to invest development resources in a new specification
+before Candidate Recommendation, which Tavi has not reached. No
+regulator accepts or requires it. So:
+
+- Review, validate and fix every iXBRL or xBRL-XML filing against
+  XBRL 2.1, Dimensions 1.0, Inline XBRL 1.1 and the regime's manual;
+  departing from a Tavi rule is not a defect in a filing.
+- Cite Tavi by edition (`PWD-2026-09-01`) and section, and say it is a
+  draft. Before relying on anything here, open the work-product index
+  in Sources: a later draft or the new name supersedes this section.
+- Every Tavi namespace and error code carries the draft date
+  (`xbrl` = `https://xbrl.org/PWD/2026-09-01`, errors under
+  `oimte` = `https://xbrl.org/PWD/2026-09-01/oimtaxonomy/error`). Code
+  that hard-wires them breaks at the next draft; key them on the
+  edition. `oimte:*` codes are Tavi-draft codes, not the
+  `oime:` / `oimce:` codes of the OIM 1.0 and OIM Common specifications, which
+  Tavi reuses for JSON syntax and prefix errors.
+- Tool support is experimental and may track a different edition.
+  Arelle's `OimTaxonomy` plugin (checked 2026-10-08) binds the
+  pre-draft `https://xbrl.org/2025` namespace and an `abstractObject`
+  that the PWD renamed `headingObject`, so its output is not evidence
+  of what the PWD requires.
+
+**How familiar XBRL 2.1 constructs map onto the PWD model**, for
+reading the draft or the published demos (all section numbers are
+PWD-2026-09-01's):
+
+| XBRL 2.1 / Dimensions / iXBRL | Tavi PWD object | Change worth knowing |
+|---|---|---|
+| Taxonomy schema + linkbases + instance | one `xbrlModel` per JSON document, with `documentInfo` (§ 4–5) | a *module* defines objects in one namespace and imports others; a *compiled model* is the resolved, single-file form |
+| `xs:element` item with `abstract="true"` | `headingObject` (§ 5.3) | headings are not concepts; one used as a fact's dimension member is an error |
+| Item concept | `conceptObject` (§ 5.4) | `periodType` gains `none` (no period dimension allowed); datatypes such as `xbrlr:monetary` derive from XML Schema types, not from the 2003 item types (§ 11.1.2, § 14.2) |
+| `balance` attribute | `xbrla:balance` property (§ 15.3.1) | a property from the built-in accounting model, not core |
+| Extended link role | `groupObject` + `groupContentObject` (§ 10.1–10.2) | `groupURI` keeps the old role URI for backward compatibility |
+| Arcs in an extended link | `networkObject` of `relationshipObject`s (§ 10.3–10.4) | arcroles become relationship types; `xbrl:parent-child` keeps its 2003 arcrole URI |
+| Presentation `preferredLabel` | `xbrl:preferredLabel` property (§ 14.3.3) | may sit on the whole network as well as on one relationship |
+| Calculation `summation-item` | `xbrl:summation-item` (§ 14.1.2) | still a placeholder: planned weights of +1 or −1 only, a `reconciliation` property, and calculations bound to cubes to stop bleed-through |
+| Hypercube (`all` / `notAll`) | `cubeObject` with a `cubeType` (§ 5.9, § 14.5) | a cube names its core dimensions too (concept, period, entity, unit, language); exclusion is a negative cube |
+| Label and reference roles | `labelType` / `referenceType` QNames (§ 14.6–14.7) | the 2003 and Link Role Registry roles stay available by QName; labels can ship as a separate label bundle |
+| Context + unit + fact | `factObject` with `factDimensions` (§ 8.3) | no contexts: period, entity and unit are dimensions of the fact |
+| `ix:nonFraction` / `ix:nonNumeric` in XHTML | `xbrl:inline-XBRL-1.1` fact map (§ 9.3, § 16.3) | processors MUST support the xBRL-XML and xBRL-JSON fact maps but only MAY support the Inline XBRL one, and § 16.3 is four short paragraphs; the HTML element id becomes a fact value source (§ 8.7, locator `xbrl:htmlElementId`) |
+
+For a generator or converter, the practical consequence is the
+Inline XBRL row: an iXBRL pipeline keeps producing Inline XBRL 1.1,
+and Tavi consumes it through a fact map. Pin the draft before writing
+code that emits Tavi JSON; gaps go to XBRL International through the
+comment channel the work-product index names for the open draft.
+
 ## Versioning
 
 XBRL Versioning 1.0 is a separate XBRL International specification.
@@ -288,6 +350,11 @@ the equivalents in a standalone xBRL-XML instance.
 - https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18/inlineXBRL-part1-REC-2013-11-18.html (`ix:footnote`, `ix:relationship`)
 - https://specifications.xbrl.org/work-product-index-open-information-model-open-information-model-1.0.html (OIM 1.0 work-product index)
 - https://specifications.xbrl.org/work-product-index-versioning-versioning-1.0.html (Versioning 1.0 work-product index)
+- https://www.xbrl.org/Specification/tavi/PWD-2026-09-01/tavi-PWD-2026-09-01.html (Project Tavi 1.0, Public Working Draft 1 September 2026, read 2026-10-08: status §1, namespaces §2.4, documentInfo §4, heading and concept §5.3–5.4, cube §5.9, fact §8.3, fact value source §8.7, fact maps §9.3 and §16, groups and networks §10, summation-item placeholder §14.1.2, cube types §14.5, balance §15.3.1)
+- https://specifications.xbrl.org/work-product-index-open-information-model-tavi.html (Project Tavi work-product index: current edition, OIM Taxonomy Requirements 2025-12-17, demos)
+- https://www.xbrl.org/next-generation-xbrl-the-first-public-working-draft/ (XBRL International, 2 September 2026: temporary name, no vendor investment before Candidate Recommendation)
+- https://xbrl.us/events/xii-tavi-260902/ (comment period 2 September – 16 October 2026; Data Amplified 26–27 October)
+- https://github.com/Arelle/Arelle/tree/master/arelle/plugin/OimTaxonomy (experimental plugin; `XbrlConst.py` binds `https://xbrl.org/2025`, read 2026-10-08)
 
 > Items not freshly fetched in this run, mentioned because they are
 > part of the asked-for scope; re-verify against the current regulator
