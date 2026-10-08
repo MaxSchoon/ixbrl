@@ -62,7 +62,7 @@ Scope manifest -- which licence covers what, exhaustively:
     README.md, CONTRIBUTING.md, and the other repository documentation
 
   Neither (legal / metadata, reproduce verbatim)
-    LICENSE, LICENSE-CONTENT, LICENSES/**, NOTICE, ATTRIBUTION.md,
+    LICENSE, LICENSE-CONTENT, NOTICE, ATTRIBUTION.md,
     rsl.xml, llms.txt
 
 Apache-2.0 section 6 grants no trademark rights. "Doc2iXBRL" is not licensed to
@@ -75,8 +75,9 @@ Relicensing history -- read this before assuming which terms apply
 --------------------------------------------------------------------------------
 
 This repository was published under the MIT License from its creation
-(2026-04-30) until the commit that added this file. The MIT text is preserved
-verbatim at LICENSES/MIT.txt. As of the relicensing commit:
+(2026-04-30) until the commit that added this file. The MIT text as last
+published is the LICENSE file at commit 1535cb7 in this repository's history
+(`git show 1535cb7:LICENSE`). As of the relicensing commit:
 
   * All current and future versions are licensed as set out above.
   * Max Schoon's own historic contributions are ADDITIONALLY offered under

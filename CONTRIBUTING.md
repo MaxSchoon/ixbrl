@@ -288,4 +288,5 @@ repository's terms: **Apache-2.0** for code (`scripts/`, `tests/`) and
 Contributions merged before the relicensing commit were made under the MIT
 License. They remain identified under MIT (see `NOTICE` § Relicensing history,
 which names them) and are not represented as relicensed. Written consent will
-be sought before doing so. The MIT text is preserved at `LICENSES/MIT.txt`.
+be sought before doing so. The MIT text as last published is in git history
+(`git show 1535cb7:LICENSE`).
