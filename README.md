@@ -48,7 +48,7 @@ Load one. Do not load them all.
 | `first-principles.md` | The eight things that decide whether tagged output is right, in any jurisdiction |
 | `spec.md` | Inline XBRL 1.1, XBRL 2.1, XDT, Transformation Registry, calculation semantics |
 | `types.md` | QNames, item types, concept attributes |
-| `structure.md` | Linkbases, roles, tuples, OIM, instance pointers |
+| `structure.md` | Linkbases, roles, tuples, OIM, the Project Tavi draft, instance pointers |
 | `dts.md` | How a DTS works and how to read one: discovery, entry points, packages and catalogs, fact to concept to label to statement, six regulator DTSs compared by measurement, valid time vs acceptance window |
 | `dimensions.md` | Hypercubes, axes, default members, `xbrldie:*` errors |
 | `advanced-specs.md` | Generic links, Functions Registry, Versioning |
