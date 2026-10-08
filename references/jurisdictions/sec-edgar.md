@@ -196,12 +196,15 @@ Every iXBRL instance must tag cover-page DEI facts. Mandatory concepts
 Identifier facts with no display equivalent (CIK, AmendmentFlag) are
 placed in `<ix:hidden>`. EFM 5.2.5.14 has three EDGAR **warnings**,
 not rejections, and none depends on whether the value also appears as
-visible text:
+visible text. The section exempts `dei` facts: unless it is a
+cover-page fact (6.5.45), a `dei` fact may always sit in `ix:hidden`,
+referenced or not. The warnings:
 
-- `ix-0514-Hidden-Fact-Not-Referenced`: a fact in `ix:hidden` that no
-  `-sec-ix-hidden` style property references.
-- `ix-0514-Hidden-Fact-Eligible-For-Transform`: a hidden fact that a
-  transformation could have displayed, so it belongs in the visible text.
+- `ix-0514-Hidden-Fact-Not-Referenced`: a non-`dei` fact in `ix:hidden`
+  that no `-sec-ix-hidden` style property references.
+- `ix-0514-Hidden-Fact-Eligible-For-Transform`: a non-`dei` fact whose
+  value a transformation could produce; EFM 5.2.5.14 says such a fact
+  "should not be in ix:hidden".
 - `ix-0514-Hidden-Fact-Multiple-References`: a hidden fact referenced by
   more than one `-sec-ix-hidden` style property.
 
@@ -209,8 +212,9 @@ Cover-page facts fall under a separate rule, `dq-0545-Cover-Page-Fact-Not-Visibl
 (EFM v68 § 6.5.45): a cover-page fact in `ix:hidden` must be visible or
 referenced by `-sec-ix-hidden`. EDGAR lists it as an error for most
 cover-page elements and as a warning for a few, such as
-`dei:AmendmentDescription`. Checked 2026-10-08 against the SEC error
-and warning lists (both pages updated 14 September 2026).
+`dei:AmendmentDescription`. Checked 2026-10-08 against EFM Volume II
+(June 2025) § 5.2.5.14 and the SEC error and warning lists (both pages
+updated 14 September 2026).
 
 The EDGAR XBRL Guide's visibility convention is a separate point: a
 duplicate fact must have at least one occurrence outside `ix:hidden`.

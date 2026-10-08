@@ -175,7 +175,11 @@ subtotal that does not exist). Which calculation basis applies:
   hides carry real information about the dual-statement architecture;
   they're "diagnostic" in the sense that not every one is a defect to
   fix, but they tell you the dual-scope structure is in play and any
-  *in-scope* inconsistency in the same log is a real arithmetic gap.
+  *in-scope* inconsistency in the same log is a real arithmetic gap,
+  with one exception: KvK Reporting Manual 2026 Guidance 4.4.1 says
+  Calc 1.1 "may still trigger false positives when there are incomplete
+  fact sets" (enough facts to trigger a calculation, not enough to
+  check it) and that these "should be disregarded".
 - **For a KvK iXBRL Report Package, Calc 1.1 is also the acceptance
   basis.** RTS Annex III (2025 and 2026) lists Calculations 1.1 among
   the specifications filers apply "uitsluitend" (only). The NT20 Filing

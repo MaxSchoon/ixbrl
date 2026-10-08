@@ -1626,8 +1626,10 @@ walk this in order. Each step depends on the prior being clean.
    duplicate facts and surfaces the dual-statement cross-scope
    inconsistencies Calc 1.0 hides). Calc 1.1 is also the acceptance
    basis; a **Calc 1.0** pass (`--calc c10`) is an optional
-   compatibility diagnostic. Clear every in-scope inconsistency and
-   document each cross-scope one; a non-empty calc log is not by itself a rejection
+   compatibility diagnostic. Clear every in-scope inconsistency except
+   an incomplete-fact-set false positive, which RM 2026 Guidance 4.4.1
+   says to disregard, and document each cross-scope one; a non-empty
+   calc log is not by itself a rejection
    (*Calculation linkbase scope-bleed, and why Calc 1.1 is
    the RTS basis*, `references/validation.md` §4).
    Classify any cross-scope inconsistency by role-vs-context before
