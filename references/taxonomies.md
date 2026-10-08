@@ -296,9 +296,10 @@ flaky validation. See `references/jurisdictions/nl-sbr.md` *Validation: offline 
 disclosure system matching the NT generation in the report. For SBR
 Dutch GAAP 2025 work prefer `--calc c11r` (Calc 1.1: handles iXBRL
 duplicate facts and surfaces the dual-statement cross-scope
-inconsistencies that Calc 1.0 hides), then run `--calc c10`
-separately as the formal deposit-acceptance check, since NT20 Filing
-Rules still list XBRL 2.1 as the normative calculation basis. End-
+inconsistencies that Calc 1.0 hides); it is also the RTS Annex III
+acceptance basis for an iXBRL package. A `--calc c10` pass is an
+optional compatibility diagnostic: the NT20 Filing Rules' XBRL 2.1
+basis binds the Chapter 3 XBRL instance route. End-
 to-end review checklist in `references/jurisdictions/nl-sbr.md` *Review workflow*; calculation-
 verdict reasoning in *Calculation linkbase scope-bleed*.
 

@@ -92,11 +92,10 @@ Walk these in order. Each step builds on the prior.
 - **Calc 1.1 toolbar.** Enable **Calculations v1.1** when the
   regulator accepts Calc 1.1. Inspect calculation relationships for
   subtotal completeness and sign errors. For SBR Dutch GAAP 2025,
-  Calc 1.1 is the preferred review/diagnostic basis (it handles
-  iXBRL duplicate facts correctly and surfaces the dual-statement
-  cross-scope inconsistencies Calc 1.0 hides); Calc 1.0 is run
-  separately as the formal deposit-acceptance check per NT20 Filing
-  Rules. Classify each cross-scope warning by role-vs-context before
+  Calc 1.1 is the review and acceptance basis for an iXBRL package
+  (RTS Annex III; it handles iXBRL duplicate facts correctly and
+  surfaces the dual-statement cross-scope inconsistencies Calc 1.0
+  hides); a Calc 1.0 pass is an optional compatibility diagnostic. Classify each cross-scope warning by role-vs-context before
   treating it as a defect. See `references/jurisdictions/nl-sbr.md` *Calculation linkbase scope-bleed*.
 - **Review mode for drafts.** For partially tagged or incomplete
   drafts, enable viewer review mode with `--viewer-feature-review` or

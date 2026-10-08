@@ -273,9 +273,15 @@ The tax return plus accounting schedules go to the **DGFiP** by one of
 two channels, **EDI-TDFC** (machine-to-machine, the channel this
 profile covers) or **EFI** (DGFiP's online form, see the bullets
 below); neither is XBRL. EDI-TDFC (*Transfert des Données Fiscales et
-Comptables*) has the format **UN/EDIFACT**: the **INFENT** message family (INFENT DF for
-the declaration/liasse, AUTACK for securisation, CONTRL for the
-syntactic ack) of directory D00B. **Not XBRL and not iXBRL** [S13].
+Comptables*) has the format **UN/EDIFACT**, with three separate
+messages (Volume IV § 4.1.1, "Trois messages EDIFACT ont été
+retenus"): **INFENT** of directory D00B carries the declaration, the
+technical acknowledgement, the error reports and the processing
+report (GUMs INFENT DF, INFENT RCS, INFENT CR); **AUTACK**, part 6 of
+EDIFACT version 4, carries the electronic security data; **CONTRL**,
+part 4 of EDIFACT version 4, carries the syntactic rejection. The
+three are separate UN/EDIFACT messages, and only INFENT comes from
+D00B. **Not XBRL and not iXBRL** [S13].
 
 - DGFiP adopted EDIFACT per the directive of 16 January 1997; since
   **April 2002 EDI-TDFC is the mandatory EDI format**. On the EDI

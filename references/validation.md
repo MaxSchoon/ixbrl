@@ -164,7 +164,7 @@ and show a dozen+ cross-scope inconsistencies under `--calc c11r`.
 
 The architecture is **inherent to dual full-tagging** and is not
 removable without mis-tagging (you cannot invent a separate-scope
-subtotal that does not exist). Two different verdicts are needed:
+subtotal that does not exist). Which calculation basis applies:
 
 - **For substantive review of an SBR Dutch GAAP 2025 filing, prefer
   Calc 1.1** (`--calc c11r`). Calc 1.1 uses OIM rounding semantics
@@ -175,13 +175,20 @@ subtotal that does not exist). Two different verdicts are needed:
   hides carry real information about the dual-statement architecture;
   they're "diagnostic" in the sense that not every one is a defect to
   fix, but they tell you the dual-scope structure is in play and any
-  *in-scope* inconsistency in the same log is a real arithmetic gap.
-- **For the formal deposit-acceptance verdict, run Calc 1.0
-  separately** (`--calc c10`). NT20 Filing Rules list XBRL 2.1 as the
-  normative calculation basis (Calculations 1.1 is not referenced;
-  Calculations 2.0 had a 2019 requirements note only, no specification),
-  so the KvK acceptance test runs on Calc 1.0 semantics. The package
-  must pass Calc 1.0 as well; running both is cheap.
+  *in-scope* inconsistency in the same log is a real arithmetic gap,
+  with one exception: KvK Reporting Manual 2026 Guidance 4.4.1 says
+  Calc 1.1 "may still trigger false positives when there are incomplete
+  fact sets" (enough facts to trigger a calculation, not enough to
+  check it) and that these "should be disregarded".
+- **For a KvK iXBRL Report Package, Calc 1.1 is also the acceptance
+  basis.** RTS Annex III (2025 and 2026) lists Calculations 1.1 among
+  the specifications filers apply "uitsluitend" (only). The NT20 Filing
+  Rules list XBRL 2.1 as normative and do not name Calculations 1.1,
+  but RTS Chapter 3 art. 5 binds them to the classic XBRL instance
+  route; the Chapter 2 iXBRL articles name none of them. A Calc 1.0
+  pass (`--calc c10`) on an iXBRL package is an optional compatibility
+  diagnostic, never the acceptance verdict. Calc 1.0 semantics are the
+  basis for a Chapter 3 XBRL instance.
 
 Before concluding a calc is "broken," classify each inconsistency:
 *in-scope* (role-scope == context-scope) is a real arithmetic gap to
@@ -271,9 +278,10 @@ applies across SBR channels (KvK, Belastingdienst, DNB).
 For **SBR Dutch GAAP 2025 review work, prefer Calc 1.1** (`--calc
 c11r`). It handles iXBRL duplicate facts and dimensional alignment
 correctly and surfaces the dual-statement cross-scope inconsistencies
-Calc 1.0 hides. Run `--calc c10` separately as the formal
-deposit-acceptance check, because NT20 Filing Rules list XBRL 2.1 as
-the normative basis. See §4 above for the full discussion of which
+Calc 1.0 hides, and it is the RTS Annex III acceptance basis for an
+iXBRL package. A `--calc c10` pass is an optional compatibility
+diagnostic; the NT20 Filing Rules' XBRL 2.1 basis binds the Chapter 3
+XBRL instance route. See §4 above for the full discussion of which
 calculation verdict to apply when. For the dual-scope pattern, the
 auditor's report as a separate iXBRL document in the package, the
 per-fiscal-year cheatsheet, the size-class entry points, and the
