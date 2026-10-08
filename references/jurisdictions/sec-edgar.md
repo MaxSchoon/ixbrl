@@ -194,12 +194,26 @@ Every iXBRL instance must tag cover-page DEI facts. Mandatory concepts
 - Trading-symbol set: `dei:TradingSymbol`, `dei:Security12bTitle`, `dei:SecurityExchangeName`
 
 Identifier facts with no display equivalent (CIK, AmendmentFlag) are
-placed in `<ix:hidden>`. EFM 5.2.5.14 (EDGAR message `ix-0514`) requires
-that any `ix:hidden` fact whose value also appears as visible text be
-referenced via the `-sec-ix-hidden` CSS style on the visible element;
-for cover-page facts EDGAR enforces this as `dq-0545` (EFM v68
-§ 6.5.45). Checked 2026-09-04 against the SEC error and warning lists.
-A duplicate fact must have at least one occurrence outside `ix:hidden`.
+placed in `<ix:hidden>`. EFM 5.2.5.14 has three EDGAR **warnings**,
+not rejections, and none depends on whether the value also appears as
+visible text:
+
+- `ix-0514-Hidden-Fact-Not-Referenced`: a fact in `ix:hidden` that no
+  `-sec-ix-hidden` style property references.
+- `ix-0514-Hidden-Fact-Eligible-For-Transform`: a hidden fact that a
+  transformation could have displayed, so it belongs in the visible text.
+- `ix-0514-Hidden-Fact-Multiple-References`: a hidden fact referenced by
+  more than one `-sec-ix-hidden` style property.
+
+Cover-page facts fall under a separate rule, `dq-0545-Cover-Page-Fact-Not-Visible`
+(EFM v68 § 6.5.45): a cover-page fact in `ix:hidden` must be visible or
+referenced by `-sec-ix-hidden`. EDGAR lists it as an error for most
+cover-page elements and as a warning for a few, such as
+`dei:AmendmentDescription`. Checked 2026-10-08 against the SEC error
+and warning lists (both pages updated 14 September 2026).
+
+The EDGAR XBRL Guide's visibility convention is a separate point: a
+duplicate fact must have at least one occurrence outside `ix:hidden`.
 
 ### Decimals, units, and signs
 
@@ -323,9 +337,10 @@ these numbers:
 
 - **EFM 6.4**: Submission of Interactive Data (which forms, attachment names, EX-101 vs. embedded iXBRL).
 - **EFM 6.5**: *Syntax of Instances*. Master section for Inline XBRL syntax checks.
-- **EFM 5.2.5.14 / 6.5.45**: Facts in `ix:hidden` must be referenced
-  elsewhere via the `-sec-ix-hidden` style (`ix-0514`); a cover-page
-  fact that is neither visible nor so referenced fails `dq-0545`.
+- **EFM 5.2.5.14 / 6.5.45**: EDGAR warns (`ix-0514`) when a fact in
+  `ix:hidden` is not referenced via the `-sec-ix-hidden` style; a
+  cover-page fact that is neither visible nor so referenced fails
+  `dq-0545`.
 - **EFM 6.5.14**: A text fact with `xml:lang` other than `en-US` needs
   a matching `en-US` fact (`du-0514`).
 - **EFM 6.5.16**: Scheme restrictions on `href` and `src` attributes.
