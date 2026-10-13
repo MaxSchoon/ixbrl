@@ -1,0 +1,13 @@
+{
+ "about": "Descriptions of neighbouring skills an agent runtime might list beside this one. A trigger case passes when the iXBRL description outranks all of them; a negative case passes when it does not. Part of the eval harness: changing this file requires a re-freeze.",
+ "skills": [
+  {"name": "spreadsheets", "description": "Use when creating, reading, editing or analysing spreadsheets: xlsx, csv, formulas, pivot tables, charts, conditional formatting, financial models, budgets and data cleaning in Excel-compatible workbooks."},
+  {"name": "pdf", "description": "Use when reading, extracting text and tables from, filling forms in, merging, splitting, OCR-ing or generating PDF documents, including scanned annual reports and invoices."},
+  {"name": "chart-of-accounts", "description": "Use for bookkeeping questions: choosing a ledger account, mapping a chart of accounts to a reference chart, journal entries, debit and credit, VAT codes, trial balance, year-end closing entries and general ledger structure for small businesses."},
+  {"name": "xml-schema", "description": "Use when writing or validating generic XML and XSD: namespaces, schema validation errors, XPath and XSLT transforms, DTDs, xmllint, SOAP payloads and converting XML to JSON."},
+  {"name": "financial-analysis", "description": "Use when analysing company financial statements: ratios, valuation, discounted cash flow, earnings quality, comparing balance sheet and income statement trends across peers, and summarising an annual report for investors."},
+  {"name": "tax-returns", "description": "Use for personal and small-business income tax returns: deductions, allowances, filing deadlines, self-assessment, VAT returns, payroll tax and how to complete a tax form."},
+  {"name": "web-frontend", "description": "Use when building web pages with HTML, CSS and JavaScript: layout, accessibility, responsive design, React components, rendering tables, and fixing browser display bugs."},
+  {"name": "data-visualization", "description": "Use when making charts, dashboards and plots: choosing a chart type, colour palettes, axis scales, legends, sparklines and KPI tiles in any plotting library."}
+ ]
+}

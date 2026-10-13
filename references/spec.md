@@ -133,6 +133,7 @@ A processor reports a **calculation inconsistency** (not an error) when the pare
 ## Sources
 
 - https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18/inlineXBRL-part1-REC-2013-11-18.html
+- https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18+errata-2026-07-14/inlineXBRL-part1-REC-2013-11-18+corrected-errata-2026-07-14.html (Inline XBRL 1.1 Part 1 with errata corrections to 14 July 2026, the current edition; read 2026-10-13, errata not diffed)
 - https://specifications.xbrl.org/work-product-index-inline-xbrl-transformation-registry-5.html
 - https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html
 - https://www.xbrl.org/specification/dimensions/rec-2012-01-25/dimensions-rec-2006-09-18+corrected-errata-2012-01-25-clean.html

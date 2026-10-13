@@ -409,6 +409,12 @@ filing (§ 22 stk. 2-3) [S1].
 
 ## Profile: IFRS filers, dual ÅRL + ESEF tagging
 
+**Which ESEF taxonomy.** Erhvervsstyrelsen implemented ESEF taxonomy
+2025 in its systems on 26 August 2026, with the two filer entry points
+(IAS 1 or IFRS 18). It may be used only for periods starting on or
+after 1 January 2026; earlier periods stay on ESEF 2024, the vintage
+`references/esef.md` § DTS and vintages gives for those years [S15].
+
 ### The stand-alone DK-IFRS taxonomy is phased out
 
 The stand-alone DK-IFRS taxonomy has been **phased out**: BEK 859/2025
@@ -940,3 +946,7 @@ what each establishes.
   and § 4 stk. 4 nr. 1 to 10 January 2030; § 18: applies to financial years
   beginning 1 January 2025 or later, §§ 6-9 usable voluntarily, wholly or
   partly, first for financial year 2024.
+- **[S15]** Erhvervsstyrelsen: "ESEF-taksonomi 2025 er implementeret og
+  klar til brug" (news, 26 August 2026), Tier 1:
+  <https://erhvervsstyrelsen.dk/esef-taksonomi-2025-er-implementeret-og-klar-til-brug>,
+  read 2026-10-13.

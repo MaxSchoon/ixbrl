@@ -96,6 +96,20 @@ wc -c SKILL.md  # must stay under 32768
 
 and trim or relocate content if you cross the limit. The intake and the reference index are the only sections that may grow; everything else moves to a reference file.
 
+## Evals and the monthly cycle
+
+`tests/eval_skill.py --check` runs in CI and holds the frozen bars in
+`evals/baseline.json`: an edit that makes the description lose a query it
+used to win, sends a query to the wrong reference, drops a fact a case
+expects, or removes a release row from a *DTS and vintages* table fails.
+Held-out cases (`"split": "test"` in `evals/cases.json`) are append-only;
+do not read them while choosing an edit and never copy their wording into
+the skill. Add train cases freely. After a deliberate improvement, or any
+change to the eval harness, freeze a new baseline with
+`python3 tests/eval_skill.py --freeze --reason "..."`; it never lowers a
+bar. The monthly maintenance routine that uses all this is
+`maintenance/README.md`.
+
 ## Intake and references
 
 The skill has two layers, and the rule that keeps them apart is the one

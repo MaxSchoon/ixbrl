@@ -1,0 +1,842 @@
+{
+ "about": "Eval cases for tests/eval_skill.py. `train` cases may be read while choosing an edit; `test` cases are held out: never read them while editing the skill, never copy their wording into it. Held-out cases are append-only and frozen in evals/baseline.json.",
+ "cases": [
+  {
+   "id": "rt-01",
+   "split": "train",
+   "kind": "route",
+   "query": "What does the decimals attribute on ix:nonFraction mean and how does scale interact with it?",
+   "expect": "references/spec.md"
+  },
+  {
+   "id": "rt-02",
+   "split": "train",
+   "kind": "route",
+   "query": "Which transformation registry format should I use for a date written as 31 December 2025?",
+   "expect": "references/spec.md"
+  },
+  {
+   "id": "rt-03",
+   "split": "train",
+   "kind": "route",
+   "query": "Is a monetary item type with balance credit allowed to hold a negative value?",
+   "expect": "references/types.md"
+  },
+  {
+   "id": "rt-04",
+   "split": "train",
+   "kind": "route",
+   "query": "What is the difference between periodType instant and duration on a concept?",
+   "expect": "references/types.md"
+  },
+  {
+   "id": "rt-05",
+   "split": "train",
+   "kind": "route",
+   "query": "My schemaRef points at the extension; how do I find which entry point and taxonomy package the DTS discovers?",
+   "expect": "references/dts.md"
+  },
+  {
+   "id": "rt-06",
+   "split": "train",
+   "kind": "route",
+   "query": "How do I resolve a taxonomy offline with a catalog instead of fetching from the web?",
+   "expect": "references/dts.md"
+  },
+  {
+   "id": "rt-07",
+   "split": "train",
+   "kind": "route",
+   "query": "Explain hypercubes, explicit versus typed dimensions and default members.",
+   "expect": "references/dimensions.md"
+  },
+  {
+   "id": "rt-08",
+   "split": "train",
+   "kind": "route",
+   "query": "Arelle reports xbrldie:PrimaryItemDimensionallyInvalidError, what does it mean?",
+   "expect": "references/dimensions.md"
+  },
+  {
+   "id": "rt-09",
+   "split": "train",
+   "kind": "route",
+   "query": "How do generic links and the Functions Registry work?",
+   "expect": "references/advanced-specs.md"
+  },
+  {
+   "id": "rt-10",
+   "split": "train",
+   "kind": "route",
+   "query": "Which label role gives a negated label in the Label Role Registry?",
+   "expect": "references/registries.md"
+  },
+  {
+   "id": "rt-11",
+   "split": "train",
+   "kind": "route",
+   "query": "Who issues the taxonomy for a Danish filer and which country regime file applies?",
+   "expect": "references/taxonomies.md"
+  },
+  {
+   "id": "rt-12",
+   "split": "train",
+   "kind": "route",
+   "query": "How do I run arelleCmdLine with plugins and Calc 1.1 and read the error codes?",
+   "expect": "references/validation.md"
+  },
+  {
+   "id": "rt-13",
+   "split": "train",
+   "kind": "route",
+   "query": "The validator says a calculation inconsistency; what pipeline stage could have produced it and how do I confirm the cause?",
+   "expect": "references/defect-causes.md"
+  },
+  {
+   "id": "rt-14",
+   "split": "train",
+   "kind": "route",
+   "query": "How do I use the iXBRL Viewer fact inspector to review a document set?",
+   "expect": "references/viewer.md"
+  },
+  {
+   "id": "rt-15",
+   "split": "train",
+   "kind": "route",
+   "query": "Convert a PDF annual report into faithful iXBRL including the statement of changes in equity.",
+   "expect": "references/conversion.md"
+  },
+  {
+   "id": "rt-16",
+   "split": "train",
+   "kind": "route",
+   "query": "What are the ESEF anchoring rules for extension elements?",
+   "expect": "references/esef.md"
+  },
+  {
+   "id": "rt-17",
+   "split": "train",
+   "kind": "route",
+   "query": "Which Annex II elements must be block tagged in the notes?",
+   "expect": "references/esef-block-tags.md"
+  },
+  {
+   "id": "rt-18",
+   "split": "train",
+   "kind": "route",
+   "query": "How do filing indicators work in an EBA COREP submission?",
+   "expect": "references/dpm.md"
+  },
+  {
+   "id": "rt-19",
+   "split": "train",
+   "kind": "route",
+   "query": "Which KvK entry point should a small Dutch company use for its jaarverantwoording?",
+   "expect": "references/jurisdictions/nl-sbr.md"
+  },
+  {
+   "id": "rt-20",
+   "split": "train",
+   "kind": "route",
+   "query": "What does HMRC require in a CT600 iXBRL computation and accounts?",
+   "expect": "references/jurisdictions/uk-frc.md"
+  },
+  {
+   "id": "rt-21",
+   "split": "train",
+   "kind": "route",
+   "query": "Which DEI elements are required on the cover page of a 10-K under EFM?",
+   "expect": "references/jurisdictions/sec-edgar.md"
+  },
+  {
+   "id": "rt-22",
+   "split": "train",
+   "kind": "route",
+   "query": "How does the Danish floating-year dimension work in an årsrapport?",
+   "expect": "references/jurisdictions/dk-erst.md"
+  },
+  {
+   "id": "rt-23",
+   "split": "train",
+   "kind": "route",
+   "query": "What formats does PRH accept for Finnish digital financial statements?",
+   "expect": "references/jurisdictions/fi-prh.md"
+  },
+  {
+   "id": "rt-24",
+   "split": "train",
+   "kind": "route",
+   "query": "Do French statutory accounts have to be filed in XBRL with INPI?",
+   "expect": "references/jurisdictions/fr-amf.md"
+  },
+  {
+   "id": "rt-25",
+   "split": "train",
+   "kind": "route",
+   "query": "Is the German E-Bilanz an inline XBRL filing?",
+   "expect": "references/jurisdictions/de-hgb.md"
+  },
+  {
+   "id": "rt-26",
+   "split": "train",
+   "kind": "route",
+   "query": "Which NBB Central Balance Sheet Office model applies to a Belgian non-profit?",
+   "expect": "references/jurisdictions/be-nbb.md"
+  },
+  {
+   "id": "rt-27",
+   "split": "train",
+   "kind": "route",
+   "query": "Give me a valid iXBRL skeleton and extension schema to start from.",
+   "expect": "assets"
+  },
+  {
+   "id": "rt-28",
+   "split": "train",
+   "kind": "route",
+   "query": "What is OIM and how do xBRL-JSON and xBRL-CSV relate to the XBRL 2.1 instance?",
+   "expect": "references/structure.md"
+  },
+  {
+   "id": "rt-29",
+   "split": "train",
+   "kind": "route",
+   "query": "Why does sign versus balance versus preferredLabel matter before I review any filing?",
+   "expect": "references/first-principles.md"
+  },
+  {
+   "id": "rt-30",
+   "split": "train",
+   "kind": "route",
+   "query": "What changed in the Project Tavi draft and is it final?",
+   "expect": "references/structure.md"
+  },
+  {
+   "id": "rx-01",
+   "split": "test",
+   "kind": "route",
+   "query": "How should I interpret the scale attribute when a table is presented in thousands?",
+   "expect": "references/spec.md"
+  },
+  {
+   "id": "rx-02",
+   "split": "test",
+   "kind": "route",
+   "query": "Is a shares item type a monetary concept, and what is pure used for?",
+   "expect": "references/types.md"
+  },
+  {
+   "id": "rx-03",
+   "split": "test",
+   "kind": "route",
+   "query": "A QName in my instance does not resolve; how do I check which schemas the discovery closure loaded?",
+   "expect": "references/dts.md"
+  },
+  {
+   "id": "rx-04",
+   "split": "test",
+   "kind": "route",
+   "query": "When do I put a dimension in the segment versus the scenario of a context?",
+   "expect": "references/dimensions.md"
+  },
+  {
+   "id": "rx-05",
+   "split": "test",
+   "kind": "route",
+   "query": "How does XBRL Versioning describe concept renames and deprecations?",
+   "expect": "references/advanced-specs.md"
+  },
+  {
+   "id": "rx-06",
+   "split": "test",
+   "kind": "route",
+   "query": "What does the Data Types Registry define?",
+   "expect": "references/registries.md"
+  },
+  {
+   "id": "rx-07",
+   "split": "test",
+   "kind": "route",
+   "query": "Which regulator issues the taxonomy used by Belgian listed companies, and who must file?",
+   "expect": "references/taxonomies.md"
+  },
+  {
+   "id": "rx-08",
+   "split": "test",
+   "kind": "route",
+   "query": "What is the formula linkbase and what anti-patterns does Arelle flag?",
+   "expect": "references/validation.md"
+  },
+  {
+   "id": "rx-09",
+   "split": "test",
+   "kind": "route",
+   "query": "A duplicate fact error appears; which candidate causes should I test first?",
+   "expect": "references/defect-causes.md"
+  },
+  {
+   "id": "rx-10",
+   "split": "test",
+   "kind": "route",
+   "query": "What doesn't the viewer catch during a visual review?",
+   "expect": "references/viewer.md"
+  },
+  {
+   "id": "rx-11",
+   "split": "test",
+   "kind": "route",
+   "query": "How do I keep abstracts and hierarchy faithful when tagging a Word document?",
+   "expect": "references/conversion.md"
+  },
+  {
+   "id": "rx-12",
+   "split": "test",
+   "kind": "route",
+   "query": "How do I build an ESEF report package and which ESEF error codes apply?",
+   "expect": "references/esef.md"
+  },
+  {
+   "id": "rx-13",
+   "split": "test",
+   "kind": "route",
+   "query": "How should ix:continuation split a long accounting policy disclosure across pages?",
+   "expect": "references/esef-block-tags.md"
+  },
+  {
+   "id": "rx-14",
+   "split": "test",
+   "kind": "route",
+   "query": "What is the Table Linkbase used for in Solvency II reporting?",
+   "expect": "references/dpm.md"
+  },
+  {
+   "id": "rx-15",
+   "split": "test",
+   "kind": "route",
+   "query": "How does the auditor's report go into an SBR package for KvK?",
+   "expect": "references/jurisdictions/nl-sbr.md"
+  },
+  {
+   "id": "rx-16",
+   "split": "test",
+   "kind": "route",
+   "query": "Which JFCVC codes does Companies House return and what do they mean?",
+   "expect": "references/jurisdictions/uk-frc.md"
+  },
+  {
+   "id": "rx-17",
+   "split": "test",
+   "kind": "route",
+   "query": "How do I tag Pay-Versus-Performance and cybersecurity disclosures for the SEC?",
+   "expect": "references/jurisdictions/sec-edgar.md"
+  },
+  {
+   "id": "rx-18",
+   "split": "test",
+   "kind": "route",
+   "query": "What do Fejl and Advis messages from Erhvervsstyrelsen mean?",
+   "expect": "references/jurisdictions/dk-erst.md"
+  },
+  {
+   "id": "rx-19",
+   "split": "test",
+   "kind": "route",
+   "query": "Which ACPR supervisory reports in France are not iXBRL?",
+   "expect": "references/jurisdictions/fr-amf.md"
+  },
+  {
+   "id": "rx-20",
+   "split": "test",
+   "kind": "route",
+   "query": "How does Biztax relate to the NBB filing?",
+   "expect": "references/jurisdictions/be-nbb.md"
+  },
+  {
+   "id": "tt-01",
+   "split": "train",
+   "kind": "trigger",
+   "query": "Review this ESEF report package for anchoring errors"
+  },
+  {
+   "id": "tt-02",
+   "split": "train",
+   "kind": "trigger",
+   "query": "Arelle says EFM.6.05.20 on my 10-Q, what is wrong?"
+  },
+  {
+   "id": "tt-03",
+   "split": "train",
+   "kind": "trigger",
+   "query": "Which NT20 entry point applies for financial year 2025?"
+  },
+  {
+   "id": "tt-04",
+   "split": "train",
+   "kind": "trigger",
+   "query": "Generate inline XBRL from our accounts export"
+  },
+  {
+   "id": "tt-05",
+   "split": "train",
+   "kind": "trigger",
+   "query": "The calculation linkbase weights look wrong in our taxonomy"
+  },
+  {
+   "id": "tt-06",
+   "split": "train",
+   "kind": "trigger",
+   "query": "What does xbrldte:PrimaryItemPolymorphismError mean?"
+  },
+  {
+   "id": "tt-07",
+   "split": "train",
+   "kind": "trigger",
+   "query": "Build a report package .xbri for Companies House"
+  },
+  {
+   "id": "tt-08",
+   "split": "train",
+   "kind": "trigger",
+   "query": "Which IFRS taxonomy version was operative for FY2024?"
+  },
+  {
+   "id": "tt-09",
+   "split": "train",
+   "kind": "trigger",
+   "query": "Our converter writes contexts and units incorrectly"
+  },
+  {
+   "id": "tt-10",
+   "split": "train",
+   "kind": "trigger",
+   "query": "Explain DPM filing indicators for EBA reporting"
+  },
+  {
+   "id": "tx-01",
+   "split": "test",
+   "kind": "trigger",
+   "query": "Is this UKSEF filing tagged correctly?"
+  },
+  {
+   "id": "tx-02",
+   "split": "test",
+   "kind": "trigger",
+   "query": "Help me debug a dimension error in Arelle"
+  },
+  {
+   "id": "tx-03",
+   "split": "test",
+   "kind": "trigger",
+   "query": "Which US-GAAP taxonomy should a 10-K for 2026 use?"
+  },
+  {
+   "id": "tx-04",
+   "split": "test",
+   "kind": "trigger",
+   "query": "Tag the notes with block tagging for ESMA"
+  },
+  {
+   "id": "tx-05",
+   "split": "test",
+   "kind": "trigger",
+   "query": "What schemaRef does a KvK filing need?"
+  },
+  {
+   "id": "tx-06",
+   "split": "test",
+   "kind": "trigger",
+   "query": "Which Danish ERST taxonomy applies to an ÅRL filing?"
+  },
+  {
+   "id": "tx-07",
+   "split": "test",
+   "kind": "trigger",
+   "query": "Fix the transformation registry format on dates in our iXBRL"
+  },
+  {
+   "id": "tx-08",
+   "split": "test",
+   "kind": "trigger",
+   "query": "What changed in the EIOPA Solvency II taxonomy?"
+  },
+  {
+   "id": "nt-01",
+   "split": "train",
+   "kind": "negative",
+   "query": "Which ledger account should office rent be booked to?"
+  },
+  {
+   "id": "nt-02",
+   "split": "train",
+   "kind": "negative",
+   "query": "Make a bar chart of revenue by quarter"
+  },
+  {
+   "id": "nt-03",
+   "split": "train",
+   "kind": "negative",
+   "query": "Merge these three PDF invoices into one file"
+  },
+  {
+   "id": "nt-04",
+   "split": "train",
+   "kind": "negative",
+   "query": "Calculate the price-earnings ratio and a DCF valuation for this company"
+  },
+  {
+   "id": "nt-05",
+   "split": "train",
+   "kind": "negative",
+   "query": "Center this table on the web page with CSS"
+  },
+  {
+   "id": "nt-06",
+   "split": "train",
+   "kind": "negative",
+   "query": "When is my personal income tax return due?"
+  },
+  {
+   "id": "nx-01",
+   "split": "test",
+   "kind": "negative",
+   "query": "Write a pivot table summarising sales by region in the workbook"
+  },
+  {
+   "id": "nx-02",
+   "split": "test",
+   "kind": "negative",
+   "query": "Validate this SOAP payload against its XSD"
+  },
+  {
+   "id": "nx-03",
+   "split": "test",
+   "kind": "negative",
+   "query": "What journal entry records accrued interest?"
+  },
+  {
+   "id": "nx-04",
+   "split": "test",
+   "kind": "negative",
+   "query": "OCR the scanned invoice and extract the totals"
+  },
+  {
+   "id": "nx-05",
+   "split": "test",
+   "kind": "negative",
+   "query": "Pick a colour palette for the dashboard legend"
+  },
+  {
+   "id": "nx-06",
+   "split": "test",
+   "kind": "negative",
+   "query": "Which deductions can a freelancer claim on the VAT return?"
+  },
+  {
+   "id": "ft-01",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/esef.md",
+   "pattern": "2026/283",
+   "note": "ESEF 2025 taxonomy has its delegated regulation"
+  },
+  {
+   "id": "ft-02",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/jurisdictions/sec-edgar.md",
+   "pattern": "us-gaap/2026",
+   "note": "US-GAAP 2026 entry point is recorded"
+  },
+  {
+   "id": "ft-03",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/jurisdictions/uk-frc.md",
+   "pattern": "2026 suite",
+   "note": "FRC 2026 suite is recorded"
+  },
+  {
+   "id": "ft-04",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/jurisdictions/nl-sbr.md",
+   "pattern": "NT21",
+   "note": "NT21 is recorded"
+  },
+  {
+   "id": "ft-05",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/dpm.md",
+   "pattern": "2\\.10\\.0",
+   "note": "EIOPA Solvency II 2.10.0 is recorded"
+  },
+  {
+   "id": "ft-06",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/jurisdictions/de-hgb.md",
+   "pattern": "6\\.10",
+   "note": "E-Bilanz taxonomy 6.10 is recorded"
+  },
+  {
+   "id": "ft-07",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/validation.md",
+   "pattern": "c11r",
+   "note": "Calc 1.1 round-to-nearest mode is named"
+  },
+  {
+   "id": "ft-08",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/structure.md",
+   "pattern": "Tavi",
+   "note": "Project Tavi status is recorded"
+  },
+  {
+   "id": "fx-01",
+   "split": "test",
+   "kind": "fact",
+   "file": "references/jurisdictions/be-nbb.md",
+   "pattern": "26\\.0",
+   "note": "NBB framework 26.0 is recorded"
+  },
+  {
+   "id": "fx-02",
+   "split": "test",
+   "kind": "fact",
+   "file": "references/jurisdictions/dk-erst.md",
+   "pattern": "20251001",
+   "note": "ERST taxonomy 20251001 is recorded"
+  },
+  {
+   "id": "fx-03",
+   "split": "test",
+   "kind": "fact",
+   "file": "references/jurisdictions/fi-prh.md",
+   "pattern": "SBR-DPM-2025-12-31",
+   "note": "PRH SBR-DPM 2025 package is recorded"
+  },
+  {
+   "id": "fx-04",
+   "split": "test",
+   "kind": "fact",
+   "file": "references/spec.md",
+   "pattern": "Inline XBRL 1\\.1|iXBRL 1\\.1",
+   "note": "Inline XBRL 1.1 is the spec cited"
+  },
+  {
+   "id": "fx-05",
+   "split": "test",
+   "kind": "fact",
+   "file": "references/esef.md",
+   "pattern": "2019/815",
+   "note": "the ESEF RTS is cited"
+  },
+  {
+   "id": "fx-06",
+   "split": "test",
+   "kind": "fact",
+   "file": "references/dpm.md",
+   "pattern": "EBA 4\\.2",
+   "note": "EBA 4.2 is recorded"
+  },
+  {
+   "id": "rt-31",
+   "split": "train",
+   "kind": "route",
+   "query": "All my tagged amounts are a thousand times too big after conversion",
+   "expect": "references/first-principles.md"
+  },
+  {
+   "id": "rt-32",
+   "split": "train",
+   "kind": "route",
+   "query": "Companies House rejected our accounts with a validation error",
+   "expect": "references/jurisdictions/uk-frc.md"
+  },
+  {
+   "id": "rt-33",
+   "split": "train",
+   "kind": "route",
+   "query": "Which version of the taxonomy was in force for a 2023 year end?",
+   "expect": "references/dts.md",
+   "note": "expect corrected 2026-10-13: taxonomies.md defers the release operative for a period to dts.md"
+  },
+  {
+   "id": "rt-34",
+   "split": "train",
+   "kind": "route",
+   "query": "The hidden section has facts that are not shown in the document, is that allowed?",
+   "expect": "references/first-principles.md"
+  },
+  {
+   "id": "rt-35",
+   "split": "train",
+   "kind": "route",
+   "query": "How many releases does KvK accept at the moment of deposit?",
+   "expect": "references/jurisdictions/nl-sbr.md"
+  },
+  {
+   "id": "rt-36",
+   "split": "train",
+   "kind": "route",
+   "query": "What is a taxonomy package META-INF catalog and how do I write one?",
+   "expect": "assets"
+  },
+  {
+   "id": "rt-37",
+   "split": "train",
+   "kind": "route",
+   "query": "Our generator gets worse with every release; how do I improve it round after round over a corpus?",
+   "expect": "references/defect-causes.md"
+  },
+  {
+   "id": "rt-38",
+   "split": "train",
+   "kind": "route",
+   "query": "Should the negative sign be shown with a minus or with the sign attribute?",
+   "expect": "references/spec.md"
+  },
+  {
+   "id": "rt-39",
+   "split": "train",
+   "kind": "route",
+   "query": "Where do I see real ESEF filings from other companies to copy market practice?",
+   "expect": "https://filings.xbrl.org/"
+  },
+  {
+   "id": "rt-40",
+   "split": "train",
+   "kind": "route",
+   "query": "Which tuple and footnote constructs are allowed, and how is ix:footnote different?",
+   "expect": "references/structure.md"
+  },
+  {
+   "id": "rt-41",
+   "split": "train",
+   "kind": "route",
+   "query": "How is a textBlock item different from a string item?",
+   "expect": "references/types.md"
+  },
+  {
+   "id": "rt-42",
+   "split": "train",
+   "kind": "route",
+   "query": "Which concept carries the label shown in the statement and how do I find it from a fact?",
+   "expect": "references/dts.md"
+  },
+  {
+   "id": "rt-43",
+   "split": "train",
+   "kind": "route",
+   "query": "Is a solo insurance undertaking's quarterly template submitted as xBRL-CSV?",
+   "expect": "references/dpm.md"
+  },
+  {
+   "id": "rt-44",
+   "split": "train",
+   "kind": "route",
+   "query": "Do I file a German annual report to the Unternehmensregister in iXBRL?",
+   "expect": "references/jurisdictions/de-hgb.md"
+  },
+  {
+   "id": "rt-45",
+   "split": "train",
+   "kind": "route",
+   "query": "Our 20-F uses IFRS, which taxonomy does EDGAR accept?",
+   "expect": "references/jurisdictions/sec-edgar.md"
+  },
+  {
+   "id": "rx-21",
+   "split": "test",
+   "kind": "route",
+   "query": "The figures in our filing show in millions but were tagged as units",
+   "expect": "references/first-principles.md"
+  },
+  {
+   "id": "rx-22",
+   "split": "test",
+   "kind": "route",
+   "query": "Is the European XBRL taxonomy for prudential bank returns different from the one for insurers?",
+   "expect": "references/dpm.md"
+  },
+  {
+   "id": "rx-23",
+   "split": "test",
+   "kind": "route",
+   "query": "Can I still deposit accounts prepared with last year's taxonomy at the Dutch chamber of commerce?",
+   "expect": "references/jurisdictions/nl-sbr.md"
+  },
+  {
+   "id": "rx-24",
+   "split": "test",
+   "kind": "route",
+   "query": "How do I write the catalog that remaps taxonomy URLs inside a package?",
+   "expect": "assets"
+  },
+  {
+   "id": "ft-09",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/jurisdictions/sec-edgar.md",
+   "pattern": "Version 78",
+   "note": "EFM Volume II v78 (Release 26.3, 14 Sep 2026) is current"
+  },
+  {
+   "id": "ft-10",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/jurisdictions/sec-edgar.md",
+   "pattern": "removed\\*\\* at Release 26\\.3",
+   "note": "2024 SEC taxonomies removed at Release 26.3"
+  },
+  {
+   "id": "ft-11",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/dpm.md",
+   "pattern": "EBA 4\\.4 \\(phase 1",
+   "note": "EBA 4.4 phase 1 package published 12 Oct 2026"
+  },
+  {
+   "id": "ft-12",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/esef.md",
+   "pattern": "2026/338",
+   "note": "IFRS 18 endorsed by Regulation (EU) 2026/338"
+  },
+  {
+   "id": "ft-13",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/jurisdictions/hk-ird.md",
+   "pattern": "2025/26",
+   "note": "Hong Kong IRD iXBRL mandate from YA 2025/26"
+  },
+  {
+   "id": "ft-14",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/jurisdictions/uk-frc.md",
+   "pattern": "2027 suite \\(draft\\)",
+   "note": "FRC draft 2027 suite is recorded as a draft"
+  },
+  {
+   "id": "rt-46",
+   "split": "train",
+   "kind": "route",
+   "query": "Which taxonomy does a multinational use for its Hong Kong profits tax return and tax computation?",
+   "expect": "references/jurisdictions/hk-ird.md"
+  },
+  {
+   "id": "tt-11",
+   "split": "train",
+   "kind": "trigger",
+   "query": "Our Hong Kong subsidiary has to e-file its tax return with tagged accounts for the IRD"
+  }
+ ]
+}

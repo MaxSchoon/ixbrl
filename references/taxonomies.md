@@ -112,6 +112,17 @@ markets that prepare consolidated IFRS financial statements. National
 competent authorities (AFM, AMF, BaFin, CNMV, etc.) operate the actual
 filing infrastructure.
 
+**Sustainability tagging is not yet in force.** EFRAG published a
+draft XBRL taxonomy for the revised ESRS on 17 September 2026 (entry
+point `https://xbrl.efrag.org/taxonomy/esrs/2026-08-30/esrs.xsd`;
+consultation until 11 November 2026, as technical advice to ESMA and the
+Commission). It is a draft: sustainability statements are not marked up
+until a delegated regulation amending the ESEF RTS adopts rules for it,
+and Directive (EU) 2026/470 suspends that obligation meanwhile. Do not
+flag an untagged sustainability statement as a defect.
+<https://www.efrag.org/en/projects/esrs-xbrl-taxonomy/exposure-draft-consultation>
+(read 2026-10-13).
+
 **Download:**
 
 - https://www.esma.europa.eu/electronic-reporting/esef-taxonomy
@@ -123,11 +134,15 @@ filing infrastructure.
 **Issuer / Jurisdiction:** Financial Accounting Standards Board (FASB),
 United States. Accepted and operationalized by the SEC.
 
-**Current version:** **2025 GAAP Financial Reporting Taxonomy (GRT)**,
-accepted by EDGAR on **17 March 2025** (Release 25.1; FASB announced the
-acceptance on 18 March). The SEC concurrently accepted
-the **2025 SEC Reporting Taxonomy (SRT)** and the **2025 GAAP Employee
-Benefit Plan Taxonomy (EBPT)**.
+**Current version:** **2026 GAAP Financial Reporting Taxonomy (GRT)**
+and 2026 SRT, accepted by EDGAR at Release 26.1 on **16 March 2026**;
+EDGAR accepts 2025 and 2026, and removed every 2024 SEC taxonomy at
+Release 26.3 on 14 September 2026. The 2027 GRT and SRT are proposed
+(FASB release notes of 1 October and 1 September 2026, comments due
+30 October 2026) and not accepted. The release-by-release table, with
+sources, is `references/jurisdictions/sec-edgar.md` § DTS and vintages.
+Earlier: the **2025 GRT**, 2025 SRT and 2025 GAAP Employee Benefit Plan
+Taxonomy (EBPT) were accepted on **17 March 2025** (Release 25.1).
 
 **Publication path:** FASB authors and exposes the GRT for public review;
 the SEC formally "accepts" each annual release for use in EDGAR filings.
@@ -145,7 +160,7 @@ Until acceptance, the prior year's taxonomy applies.
 - `country`, `currency`, `exch`, `naics`, `sic`, `stpr`: code-list
   reference taxonomies.
 
-**2025 content additions:** New elements for SEC Release Nos. 33-11070 /
+**2025 content additions** (kept for the 2025 vintage): New elements for SEC Release Nos. 33-11070 /
 34-95025 (Form 11-K employee benefit plans), disaggregation of income
 statement expenses, profits-interest awards, induced conversions of
 convertible debt instruments.
@@ -451,7 +466,20 @@ NBB `be-gaap` models: with-capital `m02-f`/`m01-f`/`m07-f`, without-capital `m82
 **Japan: EDINET (FSA).** The Financial Services Agency of Japan operates
 EDINET for electronic disclosure of statutory filings (annual securities
 reports, quarterly reports, prospectuses) by listed Japanese issuers, in
-XBRL since 2008. https://disclosure2.edinet-fsa.go.jp/
+XBRL since 2008, and in Inline XBRL for the main documents. The FSA
+published the draft **2027 EDINET taxonomy** on 11 September 2026: it
+adds a sustainability-related taxonomy importing the IFRS Sustainability
+Disclosure Taxonomy, and updates the financial-statement, IFRS and
+disclosure taxonomies for the amended disclosure ordinances; it is a
+draft, and its application dates are those the final notice states.
+https://www.fsa.go.jp/search/20260911.html (read 2026-10-13). https://disclosure2.edinet-fsa.go.jp/
+
+**Hong Kong: IRD Profits Tax iXBRL (new mandate).** Inline XBRL became
+mandatory for the first phase of Profits Tax e-filing: in-scope
+multinational enterprise groups file their financial statements and tax
+computations in iXBRL from year of assessment 2025/26, with transitional
+paper exceptions the IRD lists. Full treatment:
+`references/jurisdictions/hk-ird.md`.
 
 **Spain: CNMV IPP.** Comisión Nacional del Mercado de Valores receives
 Periodic Public Information in XBRL from listed issuers, originating with

@@ -1,0 +1,442 @@
+{
+ "about": "What the monthly maintenance cycle re-reads (maintenance/README.md). Every entry is a primary source: a regulator, standard-setter, official journal, the specification body, or a paper or repository a practice comes from. `checked_on` is the date the source was last read in a cycle; tests/check_sources.py keeps the registry well-formed and, with --max-age, reports what a cycle has not re-read.",
+ "topics": [
+  {
+   "id": "esef",
+   "task": "jurisdictions",
+   "files": [
+    "references/esef.md",
+    "references/esef-block-tags.md"
+   ],
+   "sources": [
+    {
+     "publisher": "ESMA",
+     "url": "https://www.esma.europa.eu/issuer-disclosure/electronic-reporting",
+     "watch": "ESEF taxonomy packages, Reporting Manual edition, conformance suite, RTS amendments",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "EUR-Lex",
+     "url": "https://eur-lex.europa.eu/eli/reg_del/2019/815/oj",
+     "watch": "the ESEF RTS and its amending delegated regulations (consolidated versions)",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "IFRS Foundation",
+     "url": "https://www.ifrs.org/issued-standards/ifrs-taxonomy/",
+     "watch": "IFRS Accounting Taxonomy releases and proposed updates",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "EUR-Lex",
+     "url": "https://eur-lex.europa.eu/eli/reg/2023/1803/oj",
+     "watch": "EU endorsement of IFRS standards (amendments to Regulation 2023/1803)",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "dpm",
+   "task": "jurisdictions",
+   "files": [
+    "references/dpm.md"
+   ],
+   "sources": [
+    {
+     "publisher": "EBA",
+     "url": "https://www.eba.europa.eu/risk-and-data-analysis/reporting/reporting-frameworks",
+     "watch": "reporting framework releases, taxonomy packages, filing rules",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "EIOPA",
+     "url": "https://www.eiopa.europa.eu/tools-and-data/supervisory-reporting-dpm-and-xbrl_en",
+     "watch": "Solvency II, IORP, IRRD, PEPP taxonomy versions and applicability",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "sustainability",
+   "task": "new-mandates",
+   "files": [
+    "references/taxonomies.md",
+    "references/esef.md"
+   ],
+   "sources": [
+    {
+     "publisher": "EFRAG",
+     "url": "https://www.efrag.org/en/projects/esrs-xbrl-taxonomy/exposure-draft-consultation",
+     "watch": "ESRS XBRL taxonomy drafts and finals",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "EFRAG",
+     "url": "https://www.efrag.org/en/vsme-digital-template-and-xbrl-taxonomy",
+     "watch": "VSME digital template and taxonomy",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "European Commission",
+     "url": "https://finance.ec.europa.eu/capital-markets-union-and-financial-markets/company-reporting-and-auditing/company-reporting/corporate-sustainability-reporting_en",
+     "watch": "CSRD and Omnibus timing; when sustainability mark-up becomes mandatory",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "nl-sbr",
+   "task": "jurisdictions",
+   "files": [
+    "references/jurisdictions/nl-sbr.md"
+   ],
+   "sources": [
+    {
+     "publisher": "SBR Nederland",
+     "url": "https://www.sbr-nl.nl/werken-met-sbr/taxonomie/releasekalender",
+     "watch": "NT and KVK iXBRL release calendar",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "SBR Nederland",
+     "url": "https://www.sbr-nl.nl/sbr-domeinen/handelsregister/uitbreiding-elektronische-deponering-handelsregister",
+     "watch": "KvK RTS, Reporting Manual and FAQ per financial year",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "nltaxonomie.nl",
+     "url": "https://www.nltaxonomie.nl/",
+     "watch": "entry points actually served",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "uk-frc",
+   "task": "jurisdictions",
+   "files": [
+    "references/jurisdictions/uk-frc.md"
+   ],
+   "sources": [
+    {
+     "publisher": "FRC",
+     "url": "https://www.frc.org.uk/library/standards-codes-policy/accounting-and-reporting/frc-taxonomies/",
+     "watch": "FRC taxonomy suites, drafts, tagging guide",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "HMRC",
+     "url": "https://www.gov.uk/government/publications/taxonomies-accepted-by-hm-revenue-and-customs",
+     "watch": "CT600 taxonomy acceptance windows",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "Companies House",
+     "url": "https://www.gov.uk/government/news/companies-house-to-bring-in-changes-to-accounts-filing-from-april-2028",
+     "watch": "software-only iXBRL accounts filing timeline",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "FCA",
+     "url": "https://www.fca.org.uk/publication/primary-market/guidelines-preparation-esef-annual-financial-reports-fca.pdf",
+     "watch": "NSM technical guidelines and accepted ESEF taxonomies",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "sec-edgar",
+   "task": "jurisdictions",
+   "files": [
+    "references/jurisdictions/sec-edgar.md",
+    "references/taxonomies.md"
+   ],
+   "sources": [
+    {
+     "publisher": "SEC",
+     "url": "https://www.sec.gov/submit-filings/edgar-filer-manual",
+     "watch": "EDGAR Filer Manual Volume II edition and changes",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "SEC",
+     "url": "https://www.sec.gov/files/edgartaxonomies.xml",
+     "watch": "machine-readable list of accepted taxonomies",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "SEC",
+     "url": "https://www.sec.gov/submit-filings/edgar-news-announcements",
+     "watch": "release previews, taxonomy additions and removals",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "FASB",
+     "url": "https://xbrl.fasb.org/",
+     "watch": "GAAP Financial Reporting Taxonomy releases and proposed updates",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "dk-erst",
+   "task": "jurisdictions",
+   "files": [
+    "references/jurisdictions/dk-erst.md"
+   ],
+   "sources": [
+    {
+     "publisher": "Erhvervsstyrelsen",
+     "url": "https://erhvervsstyrelsen.dk/vejledning-teknisk-vejledning-og-dokumentation-regnskab-20-taksonomier-aktuelle",
+     "watch": "current ÅRL taxonomy versions and accept lists",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "fi-prh",
+   "task": "jurisdictions",
+   "files": [
+    "references/jurisdictions/fi-prh.md"
+   ],
+   "sources": [
+    {
+     "publisher": "PRH",
+     "url": "https://prh.fi/fi/yrityksetjayhteisot/tilinpaatokset/digitaalinen-tilinpaatosraportointi/taksonomiat.html",
+     "watch": "supported taxonomy versions",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "Eduskunta",
+     "url": "https://www.eduskunta.fi/",
+     "watch": "bills changing the Accounting Act or the trade-register filing duty",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "de-hgb",
+   "task": "jurisdictions",
+   "files": [
+    "references/jurisdictions/de-hgb.md"
+   ],
+   "sources": [
+    {
+     "publisher": "esteuer.de",
+     "url": "https://www.esteuer.de/",
+     "watch": "E-Bilanz taxonomy versions and BMF-Schreiben",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "fr-amf",
+   "task": "jurisdictions",
+   "files": [
+    "references/jurisdictions/fr-amf.md"
+   ],
+   "sources": [
+    {
+     "publisher": "AMF",
+     "url": "https://www.amf-france.org/",
+     "watch": "ESEF filing instructions (DOC-2007-03) and ONDE",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "be-nbb",
+   "task": "jurisdictions",
+   "files": [
+    "references/jurisdictions/be-nbb.md"
+   ],
+   "sources": [
+    {
+     "publisher": "NBB",
+     "url": "https://www.nbb.be/en/central-balance-sheet-office/preparation-and-filing/technical-information-and-taxonomy-9",
+     "watch": "be-gaap framework versions in production",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "hk-ird",
+   "task": "jurisdictions",
+   "files": [
+    "references/jurisdictions/hk-ird.md"
+   ],
+   "sources": [
+    {
+     "publisher": "Inland Revenue Department",
+     "url": "https://www.ird.gov.hk/eng/tax/bus_ixbrl.htm",
+     "watch": "iXBRL mandate phases, taxonomy package, preparation tools",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "Inland Revenue Department",
+     "url": "https://www.ird.gov.hk/eng/tax/bus_ixbrl_materials.htm",
+     "watch": "taxonomy, mandatory items, validation lists",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "specifications",
+   "task": "topics",
+   "files": [
+    "references/spec.md",
+    "references/structure.md",
+    "references/dts.md",
+    "references/validation.md"
+   ],
+   "sources": [
+    {
+     "publisher": "XBRL International",
+     "url": "https://specifications.xbrl.org/specifications.html",
+     "watch": "new Recommendations, errata, drafts (Inline XBRL, OIM, Calculations, Taxonomy and Report Packages, Project Tavi)",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "Arelle",
+     "url": "https://github.com/Arelle/Arelle/releases",
+     "watch": "validator releases and plugin behaviour",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "mandate-discovery",
+   "task": "new-mandates",
+   "files": [
+    "references/taxonomies.md"
+   ],
+   "sources": [
+    {
+     "publisher": "XBRL International",
+     "url": "https://filings.xbrl.org/",
+     "watch": "jurisdictions publishing filings",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "Japan FSA",
+     "url": "https://www.fsa.go.jp/search/index.html",
+     "watch": "EDINET taxonomy releases",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "ASIC",
+     "url": "https://www.asic.gov.au/regulatory-resources/financial-reporting-and-audit/preparers-of-financial-reports/digital-financial-reports/",
+     "watch": "whether Australian XBRL lodgement stays voluntary",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "ACRA",
+     "url": "https://www.acra.gov.sg/manage/companies/legal-requirements-common-offences/filing-financial-statements-in-xbrl-format/",
+     "watch": "Singapore BizFinx requirements",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "NSSMC",
+     "url": "https://www.nssmc.gov.ua/en/",
+     "watch": "Ukraine UA IFRS XBRL taxonomy and filing start",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "CRO Ireland",
+     "url": "https://cro.ie/",
+     "watch": "Irish Companies Registration Office iXBRL plans",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "skill-craft",
+   "task": "skill-craft",
+   "files": [
+    "SKILL.md",
+    "CONTRIBUTING.md",
+    "tests/eval_skill.py"
+   ],
+   "sources": [
+    {
+     "publisher": "Anthropic",
+     "url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices",
+     "watch": "skill authoring: size, progressive disclosure, descriptions, evaluations first",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "Anthropic",
+     "url": "https://github.com/anthropics/skills/tree/main/skills/claude-api",
+     "watch": "eval building, eval audit and hillclimb guides (shared/evals)",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "Anthropic",
+     "url": "https://github.com/anthropics/skills/tree/main/skills/skill-creator",
+     "watch": "description optimisation with a held-out split; with-skill vs baseline evals",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "Agent Skills",
+     "url": "https://agentskills.io/specification",
+     "watch": "the open SKILL.md format: frontmatter fields and limits",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "Agent Skills",
+     "url": "https://agentskills.io/skill-creation/optimizing-descriptions",
+     "watch": "trigger sets with near-miss negatives, fixed train/validation split",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "OpenAI",
+     "url": "https://developers.openai.com/codex/skills",
+     "watch": "skill listing budget; descriptions that say when to and not to trigger",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "OpenAI",
+     "url": "https://developers.openai.com/blog/eval-skills",
+     "watch": "should-trigger and should-not prompts; deterministic graders first",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "xAI",
+     "url": "https://docs.x.ai/build/features/skills-plugins-marketplaces",
+     "watch": "which skill fields the runtime reads",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "arXiv",
+     "url": "https://arxiv.org/abs/2606.10546",
+     "watch": "SkillAxe: evaluation-guided refinement of agent skills",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "arXiv",
+     "url": "https://arxiv.org/abs/2610.08875",
+     "watch": "skill utility measured against no-skill, per configuration",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "arXiv",
+     "url": "https://arxiv.org/abs/2610.12601",
+     "watch": "topic-disjoint splits; optimisers that leak training answers into prompts",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "arXiv",
+     "url": "https://arxiv.org/abs/2610.13287",
+     "watch": "optimising one metric regresses unscored requirements",
+     "checked_on": "2026-10-13"
+    },
+    {
+     "publisher": "arXiv",
+     "url": "https://arxiv.org/abs/1506.02629",
+     "watch": "adaptive data analysis and holdout reuse",
+     "checked_on": "2026-10-13"
+    }
+   ]
+  }
+ ]
+}

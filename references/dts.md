@@ -122,7 +122,11 @@ SEC).
 top-level directory containing `META-INF/taxonomyPackage.xml` (required) and
 optionally `META-INF/catalog.xml`. The manifest carries `tp:identifier`,
 `tp:version`, `tp:publicationDate`, the entry points, and optionally a
-`tp:versioningReport`.
+`tp:versioningReport`. Taxonomy Packages 1.1 (Candidate Recommendation,
+22 September 2026) extends 1.0 to declare dependencies on other
+taxonomies and xBRL-CSV metadata entry points; it is not a
+Recommendation, so a regulator package is still read as 1.0 unless its
+manifest says otherwise.
 
 **The catalog is what makes a DTS resolve offline.** `catalog.xml` is an OASIS
 XML Catalog restricted to `rewriteURI` entries; "if you are about to fetch this
@@ -563,6 +567,7 @@ All fetched 2026-08-21.
 - XBRL 2.1 REC 2003-12-31 with corrected errata 2013-02-20: https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html (DTS definition section 1.4; discovery rules section 3.2; schemaRef and linkbaseRef sections 4.2 and 4.3; roleRef / arcroleRef in instances 4.4 and 4.5; concept definitions 5.1.1; roleType 5.1.3; arcroleType 5.1.4; redefine 5.1.5; linkbases 5.2; presentation locators 5.2.4.1; calculation 5.2.5)
 - XBRL Dimensions 1.0 REC 2006-09-18 with corrected errata 2012-01-25: https://www.xbrl.org/specification/dimensions/rec-2012-01-25/dimensions-rec-2006-09-18+corrected-errata-2012-01-25.html (terminology section 1.3; targetRole section 2.4; typedDomainRef 2.5.2)
 - Taxonomy Packages 1.0 REC 2016-04-19: https://www.xbrl.org/Specification/taxonomy-package/REC-2016-04-19/taxonomy-package-REC-2016-04-19.html (layout 3.1; entry points 3.2.2; versioning report 3.2.4.1; catalog 3.3)
+- Taxonomy Packages 1.1 Candidate Recommendation 2026-09-22 (work-product index, read 2026-10-13): https://specifications.xbrl.org/work-product-index-taxonomy-packages-taxonomy-packages-1.1.html
 - Report Packages 1.0 REC 2023-09-22 with corrected errata 2025-03-11: https://www.xbrl.org/Specification/report-package/REC-2023-09-22+corrected-errata-2025-03-11/report-package-REC-2023-09-22+corrected-errata-2025-03-11.html (remappings section 6)
 - XBRL Versioning 1.0 Base REC 2013-02-27: https://www.xbrl.org/specification/versioning-base/rec-2013-02-27/versioning-base-rec-2013-02-27.html ; Versioning Primer 1.0 PWD 2011-10-19 (the "not possible in general to reliably reproduce the To DTS" limit): https://www.xbrl.org/WGN/versioning-primer/PWD-2011-10-19/versioning-primer-WGN-PWD-2011-10-19.html
 - Calculations 1.1 arcrole schema: https://www.xbrl.org/2023/calculation-1.1.xsd
