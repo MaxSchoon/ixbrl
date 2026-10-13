@@ -86,10 +86,12 @@ class Registry(unittest.TestCase):
         reg = copy.deepcopy(REGISTRY)
         reg["topics"][0]["files"] = "references/esef.md"
         reg["topics"][1]["files"] = [1]
+        reg["topics"][2]["sources"] = "https://example.org"
         problems, _ = check(reg)
         self.assertTrue(
             any("files must be a list of paths" in p for p in problems), problems
         )
+        self.assertTrue(any("sources must be a list" in p for p in problems), problems)
 
     def test_every_task_needs_a_topic(self):
         reg = copy.deepcopy(REGISTRY)

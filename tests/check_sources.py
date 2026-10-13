@@ -79,7 +79,10 @@ def problems_in(
                 problems.append(f"topic {tid}: file {rel} does not exist")
             watched.add(rel)
         sources = topic.get("sources") or []
-        if not sources:
+        if not isinstance(sources, list):
+            problems.append(f"topic {tid}: sources must be a list")
+            sources = []
+        elif not sources:
             problems.append(f"topic {tid}: lists no source")
         for source in sources:
             if not isinstance(source, dict):
@@ -132,7 +135,7 @@ def main(argv: list[str] | None = None) -> int:
     for line in stale:
         print(f"stale: {line}")
     count = sum(
-        len(t.get("sources") or [])
+        len(t["sources"]) if isinstance(t.get("sources"), list) else 0
         for t in registry.get("topics", [])
         if isinstance(t, dict)
     )
