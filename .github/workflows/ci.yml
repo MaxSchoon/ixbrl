@@ -82,8 +82,14 @@ jobs:
       - name: Scripts compile
         run: python3 -m py_compile scripts/check_facts.py
 
-      - name: Unit tests (check_facts)
+      - name: Unit tests (scripts and the skill eval)
         run: .venv/bin/python -m unittest discover -s tests -p 'test_*.py' -v
+
+      # The hillclimb bars: frozen baseline, held-out cases, safety floors.
+      # Deterministic and stdlib-only, so a red here is an edit that made the
+      # skill route, trigger or state facts worse (tests/eval_skill.py).
+      - name: Skill eval (frozen baseline, held-out cases, safety floors)
+        run: python3 tests/eval_skill.py --check
 
       # Uses the venv (needs lxml). check_skill.py above deliberately stays on
       # system python3 — it is stdlib-only by design, so it runs before any install.

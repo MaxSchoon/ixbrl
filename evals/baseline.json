@@ -1,0 +1,161 @@
+{
+ "frozen_on": "2026-10-13",
+ "harness": "1b826f4b22291a46",
+ "metrics": {
+  "train": {
+   "trigger_recall": 1.0,
+   "trigger_specificity": 1.0,
+   "route_mrr": 0.91,
+   "route_hit1": 0.8889,
+   "fact_recall": 1.0
+  },
+  "test": {
+   "trigger_recall": 0.875,
+   "trigger_specificity": 1.0,
+   "route_mrr": 0.9514,
+   "route_hit1": 0.9167,
+   "fact_recall": 1.0
+  }
+ },
+ "tolerance": {
+  "trigger_recall": 0.0,
+  "trigger_specificity": 0.0,
+  "route_mrr": 0.02,
+  "route_hit1": 0.0,
+  "fact_recall": 0.0
+ },
+ "heldout": {
+  "rx-01": "3c9aadbf89237570",
+  "rx-02": "d85c385942058a5f",
+  "rx-03": "a4121296dac645eb",
+  "rx-04": "531c3bb4951f7f9e",
+  "rx-05": "7eae5147e4f4ffee",
+  "rx-06": "21c9fd4a649cecee",
+  "rx-07": "091ac5b1d9888741",
+  "rx-08": "a056c76b96404db1",
+  "rx-09": "86d79baaeef7edbf",
+  "rx-10": "a4584516130cf5a7",
+  "rx-11": "8fcbc0379f65a7ae",
+  "rx-12": "d6e7a1fa58e6ca32",
+  "rx-13": "b8a275ee3abffb50",
+  "rx-14": "7d0afedeaff3d6a6",
+  "rx-15": "dad9fb248d0c2975",
+  "rx-16": "ca4862377b37d009",
+  "rx-17": "8ddd9c42fe8669ba",
+  "rx-18": "7393a95df746eadb",
+  "rx-19": "6b2ce51660881803",
+  "rx-20": "6e81bb5592eba468",
+  "tx-01": "b5a8935465d26c96",
+  "tx-02": "3b08b53d10d40ae7",
+  "tx-03": "0b1155e2f384d731",
+  "tx-04": "c9a878113f18c8a8",
+  "tx-05": "ec0bcb11a41e4d66",
+  "tx-06": "416cfa3856594408",
+  "tx-07": "28e5169433029ec9",
+  "tx-08": "5bc19e54c82d841e",
+  "nx-01": "21d09630bcd49730",
+  "nx-02": "c3ade3a2666f4bc9",
+  "nx-03": "5cd6851250530bee",
+  "nx-04": "e51ee2258487aa72",
+  "nx-05": "e20e16a08e64a49b",
+  "nx-06": "a6f924c2650e233b",
+  "fx-01": "65dcd77a7a68bbff",
+  "fx-02": "ea8c85c507cc1ccd",
+  "fx-03": "4b4a3ecf76b1543e",
+  "fx-04": "2c2019b0ce0e2b2d",
+  "fx-05": "b606a85124a1be4a",
+  "fx-06": "5b6b4f1ddc3f3fac",
+  "rx-21": "530ee21eb5f80d3c",
+  "rx-22": "7469156b5a56b95f",
+  "rx-23": "e8c9055e1d92c59c",
+  "rx-24": "1be2d9a93c26c795"
+ },
+ "vintages": {
+  "references/dpm.md": [
+   "eba 4.2",
+   "eba 4.3",
+   "eba 4.4",
+   "eba 4.1",
+   "eiopa solvency ii 2.8.2",
+   "eiopa solvency ii 2.10.0",
+   "eiopa iorp 2.9.0 hotfix",
+   "eiopa irrd 2.11.0"
+  ],
+  "references/esef.md": [
+   "2025",
+   "2024",
+   "2023",
+   "2022",
+   "esef 2024",
+   "esef 2025",
+   "esef 2022",
+   "esef 2021",
+   "esef 2020",
+   "esef 2019",
+   "esef 2017"
+  ],
+  "references/jurisdictions/be-nbb.md": [
+   "nbb-cbso-26.0.15",
+   "nbb-cbso-25.0.11",
+   "nbb-cbso-23.0.8",
+   "pfs-"
+  ],
+  "references/jurisdictions/de-hgb.md": [
+   "6.10",
+   "6.9",
+   "6.8",
+   "6.7 and earlier",
+   "\"previewfassung modernisierung taxonomie\""
+  ],
+  "references/jurisdictions/dk-erst.md": [
+   "20251001",
+   "20241001",
+   "20231001",
+   "20221001",
+   "20211001",
+   "20201001",
+   "20191001 and older",
+   "dk-ifrs stand-alone"
+  ],
+  "references/jurisdictions/fi-prh.md": [
+   "sbr-dpm-2025-12-31_fix_2026-02-19",
+   "sbr-dpm-2025-12-31",
+   "kpl-2016-12/2022-09-30, 2019-11-06, 2019-03-28",
+   "ifrs accounting taxonomy 2025 / 2024"
+  ],
+  "references/jurisdictions/nl-sbr.md": [
+   "2025-12-31",
+   "2024-12-31",
+   "2024-03-31",
+   "2026-12-31",
+   "nt20 20251210",
+   "nt19 20241211",
+   "nt18 20231213",
+   "nt21 20261209"
+  ],
+  "references/jurisdictions/sec-edgar.md": [
+   "2026 grt + srt",
+   "2025 grt + srt",
+   "2024 grt + srt",
+   "2023 grt + srt",
+   "2022 grt + srt",
+   "dei, ecd, cyd, sbs, sro, country, currency, exch, naics, sic, snj, stpr",
+   "ifrs"
+  ],
+  "references/jurisdictions/uk-frc.md": [
+   "2026 suite",
+   "2025 suite",
+   "2024 suite",
+   "2023 suite",
+   "2022 suite",
+   "standalone uksef taxonomy, 2021 / 2022"
+  ]
+ },
+ "history": [
+  {
+   "on": "2026-10-13",
+   "reason": "first baseline: the incumbent skill as of main 5354521, before the first monthly cycle",
+   "dropped": []
+  }
+ ]
+}
