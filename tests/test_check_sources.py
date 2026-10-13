@@ -71,6 +71,17 @@ class Registry(unittest.TestCase):
         self.assertTrue(any("references/nope.md does not exist" in p for p in problems))
         self.assertTrue(any("is listed twice" in p for p in problems))
 
+    def test_malformed_entries_are_reported_not_crashed_on(self):
+        reg = copy.deepcopy(REGISTRY)
+        reg["topics"].append("not a topic")
+        reg["topics"][0]["sources"].append("not a source")
+        reg["topics"][1]["sources"].append(
+            {"publisher": "x", "url": 42, "watch": "y", "checked_on": "2026-10-01"}
+        )
+        problems, _ = check(reg)
+        self.assertTrue(any("is not an object" in p for p in problems), problems)
+        self.assertTrue(any("url is not a string" in p for p in problems), problems)
+
     def test_every_task_needs_a_topic(self):
         reg = copy.deepcopy(REGISTRY)
         reg["topics"] = [t for t in reg["topics"] if t["task"] != "skill-craft"]

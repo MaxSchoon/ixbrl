@@ -55,7 +55,10 @@ def problems_in(
     seen_urls: set[str] = set()
     watched: set[str] = set()
     tasks: set[str] = set()
-    for topic in topics:
+    for position, topic in enumerate(topics):
+        if not isinstance(topic, dict):
+            problems.append(f"topic #{position + 1} is not an object")
+            continue
         tid = topic.get("id", "?")
         if tid in seen_ids:
             problems.append(f"topic {tid}: duplicate id")
@@ -76,11 +79,17 @@ def problems_in(
         if not sources:
             problems.append(f"topic {tid}: lists no source")
         for source in sources:
+            if not isinstance(source, dict):
+                problems.append(f"topic {tid}: a source is not an object")
+                continue
             missing = [f for f in SOURCE_FIELDS if not source.get(f)]
             if missing:
                 problems.append(f"topic {tid}: a source lacks {', '.join(missing)}")
                 continue
             url = source["url"]
+            if not isinstance(url, str):
+                problems.append(f"topic {tid}: a source url is not a string")
+                continue
             if not url.startswith("https://"):
                 problems.append(f"topic {tid}: {url} is not https")
             if url in seen_urls:
@@ -119,7 +128,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"::error::{line}")
     for line in stale:
         print(f"stale: {line}")
-    count = sum(len(t.get("sources") or []) for t in registry.get("topics", []))
+    count = sum(
+        len(t.get("sources") or [])
+        for t in registry.get("topics", [])
+        if isinstance(t, dict)
+    )
     if not problems and not stale:
         topics = len(registry["topics"])
         print(f"Source registry OK ({count} sources across {topics} topics)")
