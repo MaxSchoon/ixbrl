@@ -32,10 +32,18 @@ held-out case and the digest of this harness. `--check` (CI) fails when:
     release row dropped from any *DTS and vintages* table (historical
     applicability and acceptance windows are kept, never pruned).
 
-`--freeze --reason "..."` records a new baseline. It refuses to lower any
-metric and refuses to edit or remove a held-out case, so the bar only
-ratchets up. A release row may leave a vintages table only by naming it with
-`--drop-row` in that freeze, which records the reason.
+Each bar is measured on the case set frozen with it, so adding a case never
+moves an old bar; a new train case is scored and reported, and counts from
+the next freeze.
+
+`--freeze --reason "..."` records a new baseline. It is refused when, on the
+old case set, any metric is below its bar by more than the slack, or when a
+held-out case was edited or removed. The new bars are measured on the new
+case set; where the set is unchanged a bar keeps the higher of old and new,
+so it never goes down. The measured scores are kept
+in the freeze's history entry, so a cycle's delta stays readable. A release
+row may leave a vintages table only by naming it with `--drop-row` in that
+freeze, which records the reason.
 
 Run: python3 tests/eval_skill.py [--check | --freeze --reason TEXT] [--json]
 Exit codes: 0 clean, 1 a bar failed, 2 usage error.
@@ -64,8 +72,9 @@ SPLITS = ("train", "test")
 KINDS = ("trigger", "negative", "route", "fact")
 # Declared slack per metric. Every metric is deterministic, so this is not a
 # noise allowance: it absorbs the small rank shifts that adding a reference
-# row causes through IDF. A freeze still refuses any decrease, so the slack
-# cannot accumulate across cycles.
+# row causes through IDF. A bar is never lowered (a freeze keeps the higher
+# of old and new), so the slack is always measured from the best accepted
+# score and cannot accumulate across cycles.
 TOLERANCE = {
     "trigger_recall": 0.0,
     "trigger_specificity": 0.0,
@@ -288,9 +297,20 @@ def score(cases: list[dict], skill_text: str, distractors: list[dict]) -> dict:
             found = re.search(case["pattern"], text, re.S) is not None
             outcomes[cid] = {"pass": found}
 
+    metrics = summarise(cases, outcomes)
+    return {"metrics": metrics, "outcomes": outcomes}
+
+
+def summarise(
+    cases: list[dict], outcomes: dict[str, dict], only: dict | None = None
+) -> dict[str, dict[str, float]]:
+    """Per-split metrics; `only` ({split: [ids]}) limits each split to those ids."""
     metrics: dict[str, dict[str, float]] = {}
     for split in SPLITS:
         mine = [c for c in cases if c["split"] == split]
+        if only is not None:
+            keep = set(only.get(split, []))
+            mine = [c for c in mine if c["id"] in keep]
 
         def frac(kind: str, mine: list[dict] = mine) -> float:
             group = [outcomes[c["id"]]["pass"] for c in mine if c["kind"] == kind]
@@ -304,7 +324,33 @@ def score(cases: list[dict], skill_text: str, distractors: list[dict]) -> dict:
             "route_hit1": frac("route"),
             "fact_recall": frac("fact"),
         }
-    return {"metrics": metrics, "outcomes": outcomes}
+    return metrics
+
+
+def frozen_ids(baseline: dict, cases: list[dict]) -> dict[str, list[str]] | None:
+    """The case set each bar was measured on (ids still present).
+
+    A baseline without `case_ids` measures on every current case, so an old
+    baseline is held to the stricter reading rather than to an empty set.
+    """
+    if "case_ids" not in baseline:
+        return None
+    present = {c["id"] for c in cases}
+    case_ids = baseline["case_ids"]
+    return {
+        split: [i for i in case_ids.get(split, []) if i in present] for split in SPLITS
+    }
+
+
+def below_bars(measured: dict, bars: dict, prefix: str) -> list[str]:
+    """Metrics below their bar by more than the declared slack."""
+    problems = []
+    for split in SPLITS:
+        for metric, value in measured[split].items():
+            bar = bars.get(split, {}).get(metric)
+            if bar is not None and value < bar - TOLERANCE.get(metric, 0.0):
+                problems.append(f"{prefix}{split} {metric} fell to {value} (bar {bar})")
+    return problems
 
 
 def floors(skill_text: str, cases: list[dict]) -> list[str]:
@@ -363,13 +409,8 @@ def compare(
             problems.append(f"held-out case {cid} was edited")
     for cid in sorted(set(test_now) - set(frozen)):
         problems.append(f"held-out case {cid} is not frozen yet; run --freeze")
-    for split in SPLITS:
-        for metric, value in current["metrics"][split].items():
-            bar = baseline["metrics"][split].get(metric)
-            if bar is None:
-                continue
-            if value < bar - TOLERANCE.get(metric, 0.0):
-                problems.append(f"{split} {metric} fell to {value} (frozen {bar})")
+    on_frozen = summarise(cases, current["outcomes"], frozen_ids(baseline, cases))
+    problems += below_bars(on_frozen, baseline["metrics"], "")
     for path, keys in sorted(baseline.get("vintages", {}).items()):
         now = set(rows.get(path, []))
         for key in keys:
@@ -390,13 +431,8 @@ def freeze(
     problems = []
     vintages = {p: list(k) for p, k in rows.items()}
     if baseline:
-        for split in SPLITS:
-            for metric, value in current["metrics"][split].items():
-                bar = baseline["metrics"][split].get(metric)
-                if bar is not None and value < bar:
-                    problems.append(
-                        f"refusing to lower {split} {metric} from {bar} to {value}"
-                    )
+        on_frozen = summarise(cases, current["outcomes"], frozen_ids(baseline, cases))
+        problems += below_bars(on_frozen, baseline["metrics"], "refusing: ")
         test_now = {c["id"]: case_digest(c) for c in cases if c["split"] == "test"}
         for cid, digest in baseline.get("heldout", {}).items():
             if test_now.get(cid) != digest:
@@ -414,11 +450,31 @@ def freeze(
     if problems:
         return None, problems
     history = list((baseline or {}).get("history", []))
-    history.append({"on": date.today().isoformat(), "reason": reason, "dropped": drop})
+    history.append(
+        {
+            "on": date.today().isoformat(),
+            "reason": reason,
+            "dropped": drop,
+            "measured": current["metrics"],
+        }
+    )
+    ids = {
+        split: sorted(c["id"] for c in cases if c["split"] == split) for split in SPLITS
+    }
+    bars = json.loads(json.dumps(current["metrics"]))
+    if baseline:
+        # Same case set: a bar never goes down. A changed set is measured
+        # afresh, after the old set has shown no regression above.
+        for split in SPLITS:
+            if sorted(baseline.get("case_ids", {}).get(split, [])) == ids[split]:
+                for metric, value in bars[split].items():
+                    old_bar = baseline["metrics"][split].get(metric, value)
+                    bars[split][metric] = max(value, old_bar)
     return {
         "frozen_on": date.today().isoformat(),
         "harness": harness_digest(),
-        "metrics": current["metrics"],
+        "metrics": bars,
+        "case_ids": ids,
         "tolerance": TOLERANCE,
         "heldout": {c["id"]: case_digest(c) for c in cases if c["split"] == "test"},
         "vintages": vintages,

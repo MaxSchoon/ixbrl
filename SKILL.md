@@ -1,7 +1,8 @@
 ---
 name: ixbrl
-description: Use when preparing, reviewing, validating, converting, generating or debugging Inline XBRL (iXBRL) or XBRL filings for any regulator, when building or fixing software, a converter, generator or pipeline that reads or writes XBRL, and whenever a question touches a taxonomy, a DTS, an entry point, a taxonomy package, a schemaRef, a concept, a label role, a linkbase, or which taxonomy version was operative for a financial year, even if the user does not say "XBRL". Trigger on iXBRL, XBRL, ESEF, ESMA, EDGAR, EFM, SEC, US-GAAP, IFRS, UK FRC, HMRC, Companies House, UKSEF, Dutch SBR, KvK, NT20, AFM, Danish ERST, ÅRL, Finnish PRH, French AMF, German E-Bilanz, Belgian NBB, EBA, EIOPA, DPM, Project Tavi, OIM Taxonomy, Arelle, anchoring, block tagging, contexts, units, decimals, transformation registry, calculation or dimension errors, report package, .xbri, and validator codes such as FR-NL-*, EFM.6.*, ESEF.*, JFCVC.*, xbrldie:*, xbrldte:*, xbrl.5.2.5.2.
+description: Use when preparing, reviewing, validating, converting, generating or debugging Inline XBRL (iXBRL) or XBRL filings for any regulator, when building or fixing software, a converter, generator or pipeline that reads or writes XBRL, and whenever a question touches a taxonomy, a DTS, an entry point, a taxonomy package, a schemaRef, a concept, a label role, a linkbase, or which taxonomy version was operative for a financial year, even if the user does not say "XBRL". Trigger on iXBRL, XBRL, ESEF, ESMA, EDGAR, EFM, SEC, US-GAAP, IFRS, UK FRC, HMRC, Companies House, UKSEF, Dutch SBR, KvK, NT20, AFM, Danish ERST, ÅRL, Finnish PRH, French AMF, German E-Bilanz, Belgian NBB, Hong Kong IRD profits tax e-filing, EBA, EIOPA, DPM, Project Tavi, OIM Taxonomy, Arelle, anchoring, block tagging, contexts, units, decimals, transformation registry, calculation or dimension errors, report package, .xbri, and validator codes such as FR-NL-*, EFM.6.*, ESEF.*, JFCVC.*, xbrldie:*, xbrldte:*, xbrl.5.2.5.2.
 license: see NOTICE
+compatibility: The references need nothing. The scripts need Python 3.10+ and lxml; full validation needs Arelle (arelle-release). dts_profile.py fetches taxonomies over the network unless given packages with --offline.
 ---
 
 # iXBRL skill
@@ -63,8 +64,8 @@ open with a contents list.
 
 | Read when the question is about | File |
 |---|---|
-| The eight things that decide whether tagged output is right in any regime: decimals, sign vs balance vs `preferredLabel`, period type, identifier scheme, dimensions, anchoring, block tagging, the hidden section; read before a first review in an unfamiliar regime and whenever a validator passes but the numbers look wrong | `references/first-principles.md` |
-| What `ix:nonFraction`, `decimals`, `scale`, `contextRef`, the transformation registry and calc weights mean; the iXBRL 1.1 and XBRL 2.1 mechanics of one fact | `references/spec.md` |
+| The eight things that decide whether tagged output is right in any regime: decimals, sign vs balance vs `preferredLabel`, period type, identifier scheme, dimensions, anchoring, block tagging, the hidden section; read before a first review in an unfamiliar regime and whenever a validator passes but the numbers look wrong, or every amount is a thousand times off | `references/first-principles.md` |
+| What `ix:nonFraction`, `decimals`, `scale`, the `sign` attribute for negative values, `contextRef`, the transformation registry and calc weights mean; the iXBRL 1.1 and XBRL 2.1 mechanics of one fact | `references/spec.md` |
 | QNames and NCNames, substitution groups, item types (monetary, decimal, shares, pure, textBlock, date, boolean, QName), concept attributes (`periodType`, `balance`, `nillable`) | `references/types.md` |
 | The DTS: how discovery works, entry points vs packages vs catalogs, offline resolution, how a fact resolves to its concept, label and statement, six regulator DTSs compared by measurement, valid time vs acceptance window, and `scripts/dts_profile.py`; read when a QName does not resolve, a label or statement binding is in doubt, or a taxonomy version must be pinned | `references/dts.md` |
 | XLink primitives, the five standard linkbases, role and arcrole types, tuples, the footnote model vs `ix:footnote`, OIM (xBRL-XML / -JSON / -CSV), the Project Tavi draft (formerly OIM Taxonomy) and its draft status, versioning, nil values, instance pointers | `references/structure.md` |
@@ -73,7 +74,7 @@ open with a contents list.
 | The Label Role Registry (negated labels), the Data Types Registry, URI resolution conventions | `references/registries.md` |
 | Which taxonomies exist, who issues them, who must file, and pointers to every regime's release table | `references/taxonomies.md` |
 | Arelle CLI and plugins, the formula linkbase, Calc 1.1 vs 1.0, the full anti-pattern list, and every error code family with cause and fix | `references/validation.md` |
-| A symptom or validator code and what could have produced it: candidate causes by pipeline stage, each with the check that confirms or refutes it, and where the rule lives | `references/defect-causes.md` |
+| A symptom or validator code and what could have produced it: candidate causes by pipeline stage, each with the check that confirms or refutes it, and where the rule lives; how a generator improves round after round over a corpus | `references/defect-causes.md` |
 | Preparing and driving the Arelle iXBRL Viewer for a visual review: document sets, fact inspector, search, duplicate-fact cycle, Calc 1.1 toolbar, and what the viewer does not catch | `references/viewer.md` |
 | Turning a PDF, Word or accounts-production document into faithful iXBRL: hierarchy, abstracts, periods, completeness, the changes-in-equity matrix, calculation completeness, label discipline, the hidden section, and the content-level review checklist | `references/conversion.md` |
 | ESEF: legal basis, the Reporting Manual, anchoring, extension taxonomies, report packages, NCAs, `ESEF.*` codes, and the IFRS and ESEF release tables | `references/esef.md` |
@@ -87,6 +88,7 @@ open with a contents list.
 | French AMF / ONDE ESEF, and why French statutory accounts, the liasse fiscale and ACPR are not iXBRL | `references/jurisdictions/fr-amf.md` |
 | German E-Bilanz (XBRL, not inline), Unternehmensregister, ESEF via BaFin | `references/jurisdictions/de-hgb.md` |
 | Belgian NBB Central Balance Sheet Office, FSMA ESEF, Biztax | `references/jurisdictions/be-nbb.md` |
+| Hong Kong IRD Profits Tax returns in iXBRL: the multinational-group mandate from year of assessment 2025/26, the IRD FS / FS-PE / TC taxonomies, minimum tagging and mandatory items, `553-E-` and `NVAD-E-` validation codes, eTAX filing | `references/jurisdictions/hk-ird.md` |
 | Runnable scaffolds to start an extension taxonomy or a package from: a valid iXBRL skeleton, an extension schema with all five linkbases, `taxonomyPackage.xml` and `catalog.xml`, each annotated with the rule it implements | `assets/` |
 | Real filings to learn market practice from, before and after authoring: ESEF, UKSEF and Ukraine filings with viewer, xBRL-JSON and report package; evidence, not authority | <https://filings.xbrl.org/> |
 

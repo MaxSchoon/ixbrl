@@ -132,6 +132,7 @@ DPL module     https://xbrl.frc.org.uk/dpl/<YYYY>-01-01/dpl-<YYYY>-01-01.xsd   (
 
 | Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
 |---|---|---|---|---|---|---|
+| 2027 suite (draft) | draft entry points in `https://www.frc.org.uk/documents/9780/Draft_2027_UK_and_Irish_digital_reporting_taxonomies.zip` (19.8 MB; zip not unpacked) | none final; the FRC aims to release the final suite in November 2026 with a feedback statement | not for filing | **not accepted** anywhere; consultation 3 Aug to 20 Sep 2026 (IFRS 18, FRS 102 amendments, FRS 103 digitised under the FRS 102 entry point, FRS 101 annual review) | draft | FRC "Draft 2027 Taxonomy Suite" consultation page (read 2026-10-13) |
 | **2026 suite** (`2026-01-01`, v1.0.0, released 18 Nov 2025) | pattern above with `2026` | `https://www.frc.org.uk/documents/8907/FRC-2026-Taxonomy-v1.0.0.zip`; Charities `…/8898/Charities-2026-Taxonomy-v1.0.0.zip`; Irish Revenue `…/8899/Irish-Revenue-2026-Taxonomy-v1.0.0.zip` | FRC Tagging Guide v13.0 section 6.6: "the latest version"; "All reporters may elect to use this 2026 taxonomy suite" | Companies House from ~1 Apr 2026 (XML Gateway Forum, 22 Dec 2025); HMRC: acceptance end "to be advised" | current | FRC 2026 suite page; Tagging Guide v13.0 § 6.6; CH forum; "Taxonomies accepted by HMRC" (updated 17 Apr 2026) |
 | **2025 suite** (`2025-01-01`, v1.0.0, released 18 Oct 2024) | pattern with `2025` | 2025 suite ZIP on the FRC 2025 page (7.8 MB) | Tagging Guide section 6.6: "the penultimate version" | CH accepted; HMRC end "to be advised" | accepted | same |
 | **2024 suite** (`2024-01-01`, v1.0.0, released 3 Nov 2023) | pattern with `2024` | `https://www.frc.org.uk/documents/6566/FRC-2024-Taxonomy-v1.0.0_GJp67Do.zip`; Charities `…/6567/Charities-2024-Taxonomy-v1.0.0_l5PHCwA.zip` | Tagging Guide section 6.6: "should only be used prior to 1 January 2025" | CH accepted; HMRC: accounting periods ending on or before **31 Mar 2027** | accepted (contrary to the FRC's own use policy) | same |
@@ -406,7 +407,11 @@ format", FCA]
 **multi-target document**: one iXBRL file satisfying *both* the FCA
 (ESEF-style IFRS tagging) and Companies House (FRC UK tags). UKSEF
 (introduced 2022) lets one filing serve both regulators; NSM switchover
-dates are announced each year in the FCA Filing Manual. For AFR tagging
+dates are announced each year in the FCA Filing Manual. The FCA's
+*Technical Guidelines for the preparation of structured AFRs* are at
+**V11.0 (August 2026)**, whose change note is the implementation of the
+2025 ESEF Reporting Manual (read 2026-10-13); check its entry-point list
+before assuming ESEF 2025 is accepted at the NSM. For AFR tagging
 mechanics (anchoring, block tagging, hidden facts, report-package layout)
 read `references/esef.md`. UKSEF inherits the ESEF model. UK overlay:
 consolidated **UKSEF** data may use **minimum tagging** where regulations
@@ -1024,6 +1029,9 @@ honest gaps that remain above). The cost of a wrong citation on a
 regulated filing is high.
 
 ## Sources
+
+- **FRC draft 2027 suite (3 August 2026)**: <https://www.frc.org.uk/consultations/draft-2027-taxonomy-suite/>, read 2026-10-13.
+- **FCA Technical Guidelines V11.0 (August 2026)**: <https://www.fca.org.uk/publication/primary-market/guidelines-preparation-esef-annual-financial-reports-fca.pdf>, read 2026-10-13.
 
 - **HMRC, *XBRL tagging: context entity identifiers***: the identifier
   scheme URL table. Companies Act 2006 entities use

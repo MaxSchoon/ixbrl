@@ -76,10 +76,11 @@ cleanly into XBRL-XML, where each fact is a verbose XML element. DPM
 ## EBA Reporting Frameworks (COREP / FINREP / etc.)
 
 The EBA Reporting Frameworks page lists every framework release back
-to 2.3. The page menu runs up to **Reporting framework 4.4**, but on
-2026-08-21 the latest release with a published technical package was
-**4.2**; 4.3 and 4.4 are announced for later reference dates with no
-artefacts yet (see *DTS and vintages* below). The frameworks bundle the
+to 2.3. The page menu runs up to **Reporting framework 4.4**. On
+2026-08-21 the latest release with a downloadable technical package was
+**4.2**; by 2026-10-13 the 4.3 package (July 2026) and the 4.4 phase 1
+package (final, 12 October 2026) are downloadable too, each for later
+reference dates (see *DTS and vintages* below). The frameworks bundle the
 modules a credit institution or investment firm must file:
 
 - **COREP** (Common Reporting): own funds, capital requirements, large exposures, leverage ratio, NSFR/LCR liquidity.
@@ -117,8 +118,9 @@ template beside every module; EIOPA ships no JSON and remains xBRL-XML.
 | Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
 |---|---|---|---|---|---|---|
 | **EBA 4.2** (Q4 2025; hotfix and FINREP9DP artefacts 27 Feb 2026) | 50 modules `…/crr/fws/<framework>/4.2/mod/<module>.xsd` | `https://www.eba.europa.eu/sites/default/files/2026-01/b54d2c74-877c-4195-a32a-6591253d8b0f/taxo_package_4.2_hotfix.zip` (200, 65 MB); 4.2.1 FINREP9DP `…/2026-02/5ecd43ca-893a-4b72-a6aa-08e19d125926/taxonomy%20package%204.2.1%20%28FINREP9DP%29.zip` | module-specific: most from reference date **31 Mar 2026** (`corep_of.json` `FromReferenceDate 2026-03-31`), Resolution and MREL 12/2025, COREP OF 06/2026 | **xBRL-CSV mandatory for reference dates on or after 31 Mar 2026**; XML and CSV both accepted below that; MiCA, Pillar 3, Instant Payments, DORA always CSV; from 1 Jul 2026 Euclid rejects CSV files with a negative filing indicator | current released framework | EBA 4.2 page; EBA Filing Rules v5.8 (25 Feb 2026) |
-| EBA 4.3 (expected Q2 2026; "expected to apply from Q4 2026") | Third Country Branches, AMLA risk assessment | the 4.3 page carries "Taxonomy package 4.3", "Sample files 4.3" and "EBA filing rule V5.9" headings with **no downloadable artefact** behind them on 2026-08-21 | TCB 03/2027; AMLA 12/2026 | AMLA components "must not be used for data submissions" | announced; artefacts not yet published | EBA 4.3 page (fetched 2026-08-21) |
-| EBA 4.4 (expected Q3 2026) | phase 1 FINREP (IFRS 18), DORA, Resolution, MREL, AMLA, Pillar 3; phase 2 ESG, COREP, AE, ALMM, LCR, … | not published | phase 1 from 12/2026, phase 2 from 09/2027 | | announced, no artefacts | EBA reporting-frameworks page |
+| EBA 4.3 (package July 2026; "expected to apply from Q4 2026") | Third Country Branches, AMLA risk assessment | `https://www.eba.europa.eu/sites/default/files/2026-07/855cbf85-0715-463e-a33a-48d98856b538/taxo_package.zip` (200 on 2026-10-13); on 2026-08-21 the page showed the "Taxonomy package 4.3", "Sample files 4.3" and "EBA filing rule V5.9" headings with no file behind them | TCB 03/2027; AMLA 12/2026 | AMLA components "must not be used for data submissions" | published, future-dated | EBA 4.3 page (fetched 2026-08-21); package URL (2026-10-13) |
+| EBA 4.4 (phase 1: final technical package 12 Oct 2026; draft 24 Jul 2026) | FINREP for IFRS 18 (plus an ECB LSI FINREP collection the EBA does not collect), Resolution and MREL amendments, AMLA eligibility and the revised AMLA risk assessment, Pillar 3 (ESG, equity, shadow banking, selected FRTB disclosures), a TCB template correction | `https://www.eba.europa.eu/sites/default/files/2026-10/031ef0eb-bdae-4faa-a4cc-3d425eeda7de/taxo_package.zip` (200, 10.2 MB); sample instances and annotated table layouts beside it on the 4.4 page | first reference dates 31 Dec 2026 (Resolution, MREL, AMLA, Pillar 3; 31 Dec 2027 for SNCIs) and 31 Mar 2027 (IFRS 18 FINREP; FRTB disclosure templates) | not yet; a targeted hotfix "may" follow in January 2027 | published, future-dated | EBA 4.4 page and press release (both read 2026-10-13) |
+| EBA 4.4.1 (phase 2) | the remaining items of the April 2026 reporting-simplification consultation | not published; the EBA says early 2027 | phase 2 reference dates to 09/2027 (DORA amendments 12/2027) | | announced, no artefacts | EBA 4.4 press release (2026-10-13) |
 | EBA 4.1 (Q2 2025), 4.0 (from 12/2024) | MiCAR, Pillar 3; CRR3/CRD6 COREP, DORA | own pages | module-specific from 06/2025 and 03/2025 | superseded; 4.0 and 4.1 were the last to ship DPM 1.0 beside 2.0 | historical | EBA pages |
 | **EIOPA Solvency II 2.8.2** (15 Oct 2024; optional NACE 2.1 hotfix 30 Jun 2025, same entry points) | dated `mod/` set | `https://dev.eiopa.europa.eu/Taxonomy/Full/2.8.2/S2/EIOPA_SolvencyII_XBRL_Taxonomy_2.8.2_Final.zip` (200) | **Q4 / annual 2024 until Q4 / annual 2026 included** | in production | **the operative Solvency II version** | EIOPA DPM-and-XBRL page |
 | **EIOPA Solvency II 2.10.0** (Final, 3 Jul 2026; `publicationDate` 2026-06-30) | 17 modules `…/s2md/fws/solvency/solvency2/2026-06-30/mod/{qrs,qes,ars,aes,…}.xsd` | `https://dev.eiopa.europa.eu/Taxonomy/Full/2.10.0/S2/EIOPA_SolvencyII_XBRL_Taxonomy_2.10.0.zip` (200, 50 MB) | from **Q1 2027** | not yet in production | published, future-dated | EIOPA page; package manifest |
@@ -267,6 +269,7 @@ extension-taxonomy semantics, anchoring conventions, or output format.
 
 ## Sources
 
+- https://www.eba.europa.eu/risk-and-data-analysis/reporting/reporting-frameworks/reporting-framework-4.4 and https://www.eba.europa.eu/publications-and-media/press-releases/eba-releases-final-technical-package-release-44-its-reporting-and-pillar-3-disclosure-framework (EBA 4.4 phase 1 final package of 12 October 2026, its first reference dates and the planned 4.4.1; read 2026-10-13)
 - https://www.eba.europa.eu/risk-and-data-analysis/reporting/reporting-frameworks (EBA Reporting Frameworks index: Reporting framework 4.4 down to 2.3; module list including COREP, FINREP, Resolution, MREL, Asset Encumbrance, Funding Plans, Remuneration, Pillar 3, MiCA, DORA, Instant Payments)
 - https://www.eba.europa.eu/risk-and-data-analysis/reporting/dpm-data-dictionary (EBA DPM Data Dictionary; DPM Standard 1.0 → 2.0 Refit project; "Towards an enhanced DPM standard 2.0"; DPM Xplor and DPM table layout tools)
 - https://www.eiopa.europa.eu/tools-and-data/supervisory-reporting-dpm-and-xbrl_en (EIOPA "DPM and XBRL"; Solvency II Taxonomy 2.9.1 PWD; 2.8.2 prior release; IORP and PEPP framework history)

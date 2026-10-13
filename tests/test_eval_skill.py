@@ -120,7 +120,8 @@ class Scoring(unittest.TestCase):
         problems = ev.compare(after, baseline, CASES, ev.vintage_rows())
         self.assertTrue(any("route" in p and "fell" in p for p in problems), problems)
         self.assertLess(
-            after["metrics"]["test"]["route_mrr"], before["metrics"]["test"]["route_mrr"]
+            after["metrics"]["test"]["route_mrr"],
+            before["metrics"]["test"]["route_mrr"],
         )
 
     def test_a_description_without_its_trigger_words_stops_triggering(self):
@@ -202,25 +203,40 @@ class Baseline(unittest.TestCase):
         problems = ev.compare(self.current, self.baseline, cases, self.rows)
         self.assertTrue(any("zz-new is not frozen" in p for p in problems))
 
-    def test_freeze_never_lowers_a_metric(self):
-        lower = json.loads(json.dumps(self.current))
-        lower["metrics"]["test"]["route_mrr"] -= 0.01
-        new, refused = ev.freeze(lower, self.baseline, CASES, self.rows, "r", [])
+    def worsened(self, kind: str) -> dict:
+        """The current result with one passing held-out case of `kind` failing."""
+        out = json.loads(json.dumps(self.current))
+        cid = next(
+            c["id"]
+            for c in CASES
+            if c["split"] == "test"
+            and c["kind"] == kind
+            and out["outcomes"][c["id"]]["pass"]
+        )
+        out["outcomes"][cid].update({"pass": False, "rr": 0.0, "rank": None})
+        return out
+
+    def test_freeze_never_lowers_a_bar(self):
+        bar = self.baseline["metrics"]["test"]["route_mrr"]
+        measured = self.current["metrics"]["test"]["route_mrr"]
+        self.assertLessEqual(measured, bar)
+        new, refused = ev.freeze(self.current, self.baseline, CASES, self.rows, "r", [])
+        self.assertEqual(refused, [])
+        assert new is not None
+        self.assertEqual(new["metrics"]["test"]["route_mrr"], bar)
+        self.assertEqual(new["history"][-1]["measured"]["test"]["route_mrr"], measured)
+
+    def test_freeze_refuses_a_drop_beyond_the_slack(self):
+        worse = self.worsened("route")
+        new, refused = ev.freeze(worse, self.baseline, CASES, self.rows, "r", [])
         self.assertIsNone(new)
-        self.assertTrue(any("refusing to lower test route_mrr" in p for p in refused))
+        self.assertTrue(any("test route_mrr fell" in p for p in refused), refused)
 
     def test_check_tolerates_only_the_declared_slack(self):
-        within = json.loads(json.dumps(self.current))
-        within["metrics"]["test"]["route_mrr"] = (
-            self.baseline["metrics"]["test"]["route_mrr"] - 0.01
-        )
-        self.assertEqual(ev.compare(within, self.baseline, CASES, self.rows), [])
-        beyond = json.loads(json.dumps(self.current))
-        beyond["metrics"]["test"]["fact_recall"] = (
-            self.baseline["metrics"]["test"]["fact_recall"] - 0.01
-        )
-        problems = ev.compare(beyond, self.baseline, CASES, self.rows)
-        self.assertTrue(any("fact_recall fell" in p for p in problems))
+        # The committed state sits inside the route_mrr slack, and holds.
+        self.assertEqual(ev.compare(self.current, self.baseline, CASES, self.rows), [])
+        problems = ev.compare(self.worsened("fact"), self.baseline, CASES, self.rows)
+        self.assertTrue(any("test fact_recall fell" in p for p in problems))
 
     def test_freeze_ratchets_up_and_keeps_history(self):
         higher = json.loads(json.dumps(self.current))
@@ -246,6 +262,33 @@ class Baseline(unittest.TestCase):
         self.assertEqual(refused, [])
         assert new is not None
         self.assertEqual(new["history"][-1]["dropped"], [f"{path}:{keys[0]}"])
+
+    def test_a_new_failing_train_case_does_not_move_an_old_bar(self):
+        cases = [
+            *CASES,
+            {"id": "zz-hard", "split": "train", "kind": "trigger", "query": "bake"},
+        ]
+        current = ev.score(cases, SKILL_TEXT, DISTRACTORS)
+        self.assertFalse(current["outcomes"]["zz-hard"]["pass"])
+        self.assertEqual(ev.compare(current, self.baseline, cases, self.rows), [])
+
+    def test_a_baseline_without_case_ids_is_held_on_every_case(self):
+        legacy = {k: v for k, v in self.baseline.items() if k != "case_ids"}
+        self.assertIsNone(ev.frozen_ids(legacy, CASES))
+        cases = [
+            *CASES,
+            {"id": "zz-hard", "split": "train", "kind": "trigger", "query": "bake"},
+        ]
+        current = ev.score(cases, SKILL_TEXT, DISTRACTORS)
+        problems = ev.compare(current, legacy, cases, self.rows)
+        self.assertTrue(any("train trigger_recall fell" in p for p in problems))
+
+    def test_freeze_records_the_case_set_its_bars_were_measured_on(self):
+        new, refused = ev.freeze(self.current, self.baseline, CASES, self.rows, "r", [])
+        self.assertEqual(refused, [])
+        assert new is not None
+        held = sorted(c["id"] for c in CASES if c["split"] == "test")
+        self.assertEqual(new["case_ids"]["test"], held)
 
     def test_a_changed_harness_is_refused(self):
         stale = {**self.baseline, "harness": "0" * 16}

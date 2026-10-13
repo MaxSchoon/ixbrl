@@ -230,6 +230,11 @@ reference date on or after **31 March 2026** must be submitted and
 resubmitted in xBRL-CSV. MiCA, Pillar 3 and Instant Payments reports
 are xBRL-CSV regardless of reference date, and DORA is plain CSV.
 
+xBRL-CSV Table Constraints 1.0 became a Recommendation on 10 September
+2026: it lets a report's metadata declare keys, column roles and value
+constraints over xBRL-CSV tables, checked before any fact is read. No
+regulator in this skill was found requiring it on 2026-10-13.
+
 For an iXBRL skill, OIM matters because:
 
 - Inline XBRL is one of the "input syntaxes" the OIM normalises into the same fact set.
@@ -347,7 +352,8 @@ the equivalents in a standalone xBRL-XML instance.
 - https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html (DTS §3.1, XLink usage §3.5, linkbase definitions §5.2, role/arcrole types §5.1.3 / §5.1.4, tuples §4.9, footnotes §4.11, instance refs §4.2 / §4.3)
 - https://www.w3.org/TR/xlink11/ (XLink 1.1: `xlink:type`, `xlink:href`, `xlink:label`, `xlink:from`, `xlink:to`, `xlink:role`, `xlink:arcrole`, `xlink:show`, `xlink:actuate`)
 - https://specifications.xbrl.org/work-product-index-inline-xbrl-inline-xbrl-1.1.html (Inline XBRL 1.1 work-product index)
-- https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18/inlineXBRL-part1-REC-2013-11-18.html (`ix:footnote`, `ix:relationship`)
+- https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18/inlineXBRL-part1-REC-2013-11-18.html (`ix:footnote`, `ix:relationship`); the current edition is the same Recommendation with errata corrections to 14 July 2026, https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18+errata-2026-07-14/inlineXBRL-part1-REC-2013-11-18+corrected-errata-2026-07-14.html (read 2026-10-13; the errata were not diffed here)
+- xBRL-CSV Table Constraints 1.0 REC 2026-09-10: https://www.xbrl.org/Specification/table-constraints/REC-2026-09-10/table-constraints-REC-2026-09-10.html (read 2026-10-13)
 - https://specifications.xbrl.org/work-product-index-open-information-model-open-information-model-1.0.html (OIM 1.0 work-product index)
 - https://specifications.xbrl.org/work-product-index-versioning-versioning-1.0.html (Versioning 1.0 work-product index)
 - https://www.xbrl.org/Specification/tavi/PWD-2026-09-01/tavi-PWD-2026-09-01.html (Project Tavi 1.0, Public Working Draft 1 September 2026, read 2026-10-08: status §1, namespaces §2.4, documentInfo §4, heading and concept §5.3–5.4, cube §5.9, fact §8.3, fact value source §8.7, fact maps §9.3 and §16, groups and networks §10, summation-item placeholder §14.1.2, cube types §14.5, balance §15.3.1)

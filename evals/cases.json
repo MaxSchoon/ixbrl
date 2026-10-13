@@ -662,7 +662,8 @@
    "split": "train",
    "kind": "route",
    "query": "Which version of the taxonomy was in force for a 2023 year end?",
-   "expect": "references/taxonomies.md"
+   "expect": "references/dts.md",
+   "note": "expect corrected 2026-10-13: taxonomies.md defers the release operative for a period to dts.md"
   },
   {
    "id": "rt-34",
@@ -775,6 +776,67 @@
    "kind": "route",
    "query": "How do I write the catalog that remaps taxonomy URLs inside a package?",
    "expect": "assets"
+  },
+  {
+   "id": "ft-09",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/jurisdictions/sec-edgar.md",
+   "pattern": "Version 78",
+   "note": "EFM Volume II v78 (Release 26.3, 14 Sep 2026) is current"
+  },
+  {
+   "id": "ft-10",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/jurisdictions/sec-edgar.md",
+   "pattern": "removed\\*\\* at Release 26\\.3",
+   "note": "2024 SEC taxonomies removed at Release 26.3"
+  },
+  {
+   "id": "ft-11",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/dpm.md",
+   "pattern": "EBA 4\\.4 \\(phase 1",
+   "note": "EBA 4.4 phase 1 package published 12 Oct 2026"
+  },
+  {
+   "id": "ft-12",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/esef.md",
+   "pattern": "2026/338",
+   "note": "IFRS 18 endorsed by Regulation (EU) 2026/338"
+  },
+  {
+   "id": "ft-13",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/jurisdictions/hk-ird.md",
+   "pattern": "2025/26",
+   "note": "Hong Kong IRD iXBRL mandate from YA 2025/26"
+  },
+  {
+   "id": "ft-14",
+   "split": "train",
+   "kind": "fact",
+   "file": "references/jurisdictions/uk-frc.md",
+   "pattern": "2027 suite \\(draft\\)",
+   "note": "FRC draft 2027 suite is recorded as a draft"
+  },
+  {
+   "id": "rt-46",
+   "split": "train",
+   "kind": "route",
+   "query": "Which taxonomy does a multinational use for its Hong Kong profits tax return and tax computation?",
+   "expect": "references/jurisdictions/hk-ird.md"
+  },
+  {
+   "id": "tt-11",
+   "split": "train",
+   "kind": "trigger",
+   "query": "Our Hong Kong subsidiary has to e-file its tax return with tagged accounts for the IRD"
   }
  ]
 }

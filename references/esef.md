@@ -259,8 +259,19 @@ financial years beginning on or after 1 January 2027 with early
 application permitted, the availability of the IFRS 18 entry point
 imposes no obligation to adopt it earlier, and IFRS 18 and IFRS 19
 elements may be used only once those standards are formally endorsed at
-EU level. ESMA has stated that it does not plan to amend the ESEF RTS or
-taxonomy in 2026, so do not assume a further annual release.
+EU level. IFRS 18 is endorsed: Commission Regulation (EU) 2026/338 of
+13 February 2026 (OJ L, 16 February 2026) amends Regulation (EU)
+2023/1803 to adopt it, so IFRS 18 elements are usable by EU issuers that
+apply IFRS 18; IFRS 19 endorsement was not found on 2026-10-13, so treat
+its elements as not yet usable by EU issuers until a regulation is
+cited. ESMA has stated that it does not plan to amend the ESEF RTS or
+taxonomy in 2026, so do not assume a further annual release; on
+2026-10-13 its electronic-reporting page still listed the 2025 package
+and the October 2025 Reporting Manual as the latest. The IFRS Foundation
+keeps the 2025 IFRS Accounting Taxonomy current for 2026 reporting and
+plans the next annual taxonomy for Q1 2027; its 2026 proposed updates
+(general improvements of 3 June 2026, and IFRS 20 with related changes
+of 15 July 2026) are proposals, not a taxonomy an ESEF filing can use.
 
 **Common rejection grounds:** invalid LEI in the context entity scheme,
 mismatched ESEF entry point, untagged Annex II elements, anchoring
@@ -396,6 +407,8 @@ NCA post-filing review reports (notably AMF) consistently flag
 errors.
 
 ## Sources
+
+- Commission Regulation (EU) 2026/338 of 13 February 2026 (IFRS 18 endorsement), <https://eur-lex.europa.eu/eli/reg/2026/338/oj/eng>, read 2026-10-13; IFRS Foundation, "IFRS Accounting Taxonomy 2025 to remain current for 2026 reporting" (25 February 2026), <https://www.ifrs.org/news-and-events/news/2026/02/ifrs-accounting-taxonomy-2025-to-remain-current-for-2026/>, read 2026-10-13; ESMA electronic reporting page, <https://www.esma.europa.eu/issuer-disclosure/electronic-reporting>, read 2026-10-13.
 
 - https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R0815
 - https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02019R0815-20250101

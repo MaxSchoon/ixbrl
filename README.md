@@ -80,6 +80,7 @@ accepts them, with a source per row.
 | `de-hgb.md` | E-Bilanz, Offenlegung, ESEF via BaFin |
 | `fr-amf.md` | AMF ESEF, and the French obligations that are not XBRL |
 | `be-nbb.md` | NBB Central Balance Sheet Office, FSMA, Biztax |
+| `hk-ird.md` | Hong Kong IRD Profits Tax returns with iXBRL financial statements and tax computations |
 
 A jurisdiction that has no XBRL obligation says so plainly. That is worth as
 much as a rule, and harder to find.
@@ -103,6 +104,16 @@ and it never touches the network.
 all four linkbases, plus a taxonomy package and catalog. They are not
 illustrations. They pass `xmllint`, and CI keeps them passing, because a broken
 example teaches the wrong thing with total confidence.
+
+## Staying current
+
+Once a month a maintenance cycle re-reads every primary source in
+`maintenance/sources.json`, updates the jurisdiction tables, adds a
+reference when a regime introduces a new iXBRL obligation, re-reads the
+published guidance on skill authoring, and hillclimbs the skill's routing
+against a frozen, held-out eval (`tests/eval_skill.py`). The routine and its
+gates are in `maintenance/README.md`; each month's record is in
+`maintenance/cycles/`.
 
 ## Source discipline
 
