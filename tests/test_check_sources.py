@@ -82,6 +82,15 @@ class Registry(unittest.TestCase):
         self.assertTrue(any("is not an object" in p for p in problems), problems)
         self.assertTrue(any("url is not a string" in p for p in problems), problems)
 
+    def test_files_must_be_a_list_of_paths(self):
+        reg = copy.deepcopy(REGISTRY)
+        reg["topics"][0]["files"] = "references/esef.md"
+        reg["topics"][1]["files"] = [1]
+        problems, _ = check(reg)
+        self.assertTrue(
+            any("files must be a list of paths" in p for p in problems), problems
+        )
+
     def test_every_task_needs_a_topic(self):
         reg = copy.deepcopy(REGISTRY)
         reg["topics"] = [t for t in reg["topics"] if t["task"] != "skill-craft"]

@@ -78,8 +78,9 @@ states the facts it must. Cases are split into `train` and held-out `test`
 - **A round is accepted** when train improves and no held-out metric falls
   below its value before the round. The declared slack in the eval absorbs
   rank shifts that a new reference row causes; it is not room for a round.
-- **Stop** after three rounds without a train gain, or at the first round
-  that would lower a held-out metric (that round is reverted).
+- **A round that would lower a held-out metric is reverted**; the next round
+  may try the same lever in another form. **Stop** after two reverted rounds
+  in a row, or three rounds without a train gain.
 - **A wrong expectation is fixed in the case, not in the skill**, and only
   for train cases; held-out cases are append-only.
 - **Freeze** after the last accepted round:

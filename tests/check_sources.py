@@ -69,7 +69,10 @@ def problems_in(
         else:
             tasks.add(task)
         files = topic.get("files") or []
-        if not files:
+        if not isinstance(files, list) or not all(isinstance(f, str) for f in files):
+            problems.append(f"topic {tid}: files must be a list of paths")
+            files = []
+        elif not files:
             problems.append(f"topic {tid}: names no file it keeps current")
         for rel in files:
             if not (root / rel).is_file():
