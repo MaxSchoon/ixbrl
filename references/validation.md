@@ -242,15 +242,16 @@ work but not in itself a defect. Distinguish them by reading the
 
 | Code | Meaning | Typical root cause | Fix |
 |---|---|---|---|
-| `EFM.6.05.16` | Default member must not be used in `xbrli:scenario` (must omit the member to assert the default) | Generator emits the default member explicitly | Remove the explicit default member |
+| `EFM.6.05.16` | Text-block fact content not valid in an HTML `body` (`cp-0516-Prohibited-Html-Body`; sub-codes `.activeContent`, `.externalReference`, `.graphicDataUrl`, `.graphicFileContent`, `.graphicFileError`, `.graphicFileType`, `.nestedTable`) | Escaped HTML in a text block carries script, an external `href`/`src`, a data-URL or non-GIF/JPEG image, or nested tables | Strip active content, keep references inside the submission, use `.gif`/`.jpg` files, flatten nested tables |
 | `EFM.6.05.19` | A custom segment / scenario element is not a dimensional construct | Free-form XML in scenario | Replace with `xbrldi:explicitMember` / `xbrldi:typedMember` |
 | `EFM.6.05.20.missingAmendmentFlag` | `dei:AmendmentFlag` not reported | Required DEI tag missing | Tag `dei:AmendmentFlag` in the cover page |
 | `EFM.6.05.27` | Two contexts have equal period+entity+segment but different IDs | Duplicate contexts with different `id`s | Collapse to one context, repoint contextRef |
-| `EFM.6.05.34` | Numeric fact missing `decimals` attribute | `decimals` omitted on a non-nil numeric fact | Add `decimals` (use `INF` only for exact values) |
+| `EFM.6.05.34` | Footnote content not valid in an HTML `body` (`cp-0534-Prohibited-Html-Footnote-Body`; the `6.05.16` sub-codes plus `.dtdError` and `.disallowedMetaContent`) | Footnote text carries script, external references, disallowed images or malformed XHTML | Same repairs as `6.05.16`, applied to the footnote |
 | `EFM.6.05.36` | Calculation-link inconsistency at the declared decimals | Sum of children does not match parent within tolerance | Fix the data, or revisit `decimals` |
-| `EFM.6.05.42` | `xbrli:unit` for a monetary fact does not match the reporting currency declared in DEI | USD-typed unit on a EUR filing | Use the matching ISO-4217 unit |
+| `EFM.6.05.42` | Deprecated concept used (warning, `dq-0542-Deprecated-Concept`) | A concept the taxonomy release deprecated is still tagged | Retag with the replacement concept the taxonomy's deprecation metadata names |
 | `EFM.6.05.45` | Required DEI cover-page tag missing or invalid | `EntityRegistrantName` / `DocumentPeriodEndDate` etc. missing | Tag the missing DEI element |
 | `EFM.6.05.37` | A finite `decimals` truncates non-zero digits of the reported value | `decimals="-3"` on a value of 2,345.67 | Raise `decimals` so no non-zero digit is zeroed, or report the rounded figure |
+| `xbrl.4.6.3:missingPrecisionDecimals` | Numeric fact missing `decimals` (XBRL 2.1 §4.6.3; an XBRL 2.1 error, so EDGAR rejects it before any EFM rule; `EFM.6.05.17` is the separate rule against `precision`) | `decimals` omitted on a non-nil numeric fact | Add `decimals` (use `INF` only for exact values) |
 | `EFM.6.08.x` | Linkbase validations for industry taxonomies (`cef`, `ecd`, `oef`, `rxp`, `vip`, `sro`, `spac`) | Wrong relationships for the relevant SEC industry overlay | Repair presentation/calculation/definition arcs against the industry config |
 
 ### 5.3 SBR Dutch GAAP / KvK (NL-KVK.* and FR-NL- / FG-NL-)
@@ -305,7 +306,7 @@ tooling).
 
 1. **Sign-convention errors via "negated terse" labels.** Preparers see `(1,234)` on the page and tag the underlying fact as `-1234`. Result: the reported XBRL value is `-1234` while the calc tree expects `+1234`. Review every `negatedLabel`/`negatedTerseLabel` arc against the underlying numeric sign.
 2. **Calc inconsistencies from `decimals` mismatches.** Parent at `decimals="-3"` and child at `decimals="0"`: the calc engine takes the looser `-3` and rounds. Drift accumulates. Reconcile decimals across calc tree levels.
-3. **Missing `decimals` on scaled facts.** Scaling `1,234` thousand to "1.234" with no `decimals` is an EFM violation (`EFM.6.05.34`) and an ESEF nonconformance.
+3. **Missing `decimals` on scaled facts.** Scaling `1,234` thousand to "1.234" with no `decimals` is an XBRL 2.1 error (§4.6.3, `xbrl.4.6.3:missingPrecisionDecimals`) and an ESEF nonconformance.
 4. **Same fact value reported with conflicting `decimals` across documents.** Multi-XHTML iXBRL document sets often tag the same revenue concept twice with different `decimals`. Triggers `ESEF.2.2.4` if values disagree once rounded.
 5. **Continuation chain ordering and forking.** `ix:continuation` is a strict singly-linked chain: every continuation referenced exactly once, no loops. Two facts pointing to the same continuation, or a continuation pointing back into the chain, breaks iXBRL 1.1.
 6. **`ix:hidden` facts with no transformable rendering elsewhere.** ESEF requires every `ix:hidden` fact to be surfaced visibly somewhere: for transformable types via a normal ix tag, for non-transformable types via the `-esef-ix-hidden` style mechanism.
@@ -316,13 +317,13 @@ tooling).
 11. **Footnotes vs `ix:footnote` element confusion.** Visual footnotes in the rendered XHTML are not XBRL footnotes. The XBRL footnote model is `ix:footnote` plus a fact-footnote arc. Visual footnotes carry zero validation weight.
 12. **Empty / whitespace-only `ix:nonNumeric` blocks.** Tagged paragraph with only whitespace is technically valid but useless and frequently trips formula assertions.
 13. **Format mismatches (TR transformation against value).** `format="ixt:num-dot-decimal"` on a number rendered with thousands-dot and decimal-comma. Triggers `ESEF.2.2.3`.
-14. **Currency mismatch between `unitRef` and reported currency.** EUR-presenting filing tagging revenue with a USD `xbrli:unit`. SEC catches via `EFM.6.05.42`.
+14. **Currency mismatch between `unitRef` and reported currency.** EUR-presenting filing tagging revenue with a USD `xbrli:unit`. No EFM code in the SEC's message catalogue names this mismatch (Arelle/EDGAR `render/resources/arelleMessagesText.xml` at `4891c4c` (2026-09-11)); catch it by comparing each monetary `unitRef` with the currency the statements present.
 15. **Wrong namespace for shared concepts.** A concept exists in exactly one namespace. Using a jurisdiction-extension version when the core concept exists makes the calc tree fail.
 16. **`decimals` that does not match the reported value.** `INF` asserts the value is exact, so on a rounded figure it is a lie, and the EDGAR XBRL Guide section 6.6.4 reserves it for exactly reported amounts. The machine-checkable half is the converse: a finite `decimals` that zeroes a non-zero digit triggers `EFM.6.05.37` (Guide section 9.5) and equivalent ESEF inconsistency checks. Note the test is asymmetric, so a `decimals` finer than the value's accuracy is conformant.
 17. **Tuples used in ESEF reports.** Forbidden (`ESEF.2.4.1.tupleElementUsed`). Migrate to dimensional facts.
 18. **External CSS / JS / `<script>` references.** Forbidden in both ESEF (`ESEF.2.5.1`, `ESEF.2.5.4`) and SEC EFM. Inline everything; sanitise the HTML at generation time.
 19. **`xml:base` / HTML `<base>` smuggled into the report.** Trips `ESEF.2.4.2.htmlOrXmlBaseUsed`. Most commonly introduced by frontend rendering frameworks. Strip in the iXBRL serialiser.
-20. **Default-member explicit emission.** A dimension's default member should be implicit (omitted). Triggers `EFM.6.05.16` / `xbrldie:DefaultValueUsedInInstanceError`.
+20. **Default-member explicit emission.** A dimension's default member should be implicit (omitted). Triggers `xbrldie:DefaultValueUsedInInstanceError` (XDT §2.7.1; `references/dimensions.md` § Default members); it is not an EFM 6.5.16 matter.
 21. **Concepts tagged but absent from any presentation link.** Triggers `ESEF.3.4.6.UsableConceptsNotIncludedInPresentationLink`.
 22. **Subtotal arcs without `preferredLabel="totalLabel"`.** Triggers `ESEF.3.4.4.missingPreferredLabelRole`.
 23. **Mismatched `id` references across the iXBRL document set.** Each fact `id` must be unique across the IXDS, not only within a single XHTML file.

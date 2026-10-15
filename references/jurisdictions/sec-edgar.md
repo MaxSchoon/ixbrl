@@ -283,14 +283,14 @@ reproduces the numbers in its "EFM v68 Ref" column:
 | EFM.6.05.14 | Text fact with `xml:lang` other than `en-US` and no matching English fact (`du-0514`) | 6.5.14 |
 | EFM.5.02.05.14.hidden-fact-not-referenced | `ix:hidden` fact not referenced by any `-sec-ix-hidden` style property (`ix-0514-Hidden-Fact-Not-Referenced`) | 5.2.5.14 |
 | EFM.6.05.45.coverPageFactNotVisible | Cover-page fact in `ix:hidden` neither visible nor referenced via `-sec-ix-hidden` (`dq-0545-Cover-Page-Fact-Not-Visible`) | 6.5.45 |
-| EFM.6.05.16 | `href`/`src` attribute scheme restrictions on embedded content | 6.5.16 |
+| EFM.6.05.16 | Text-block fact content not valid in an HTML `body`: active content, external references, data-URL or non-GIF/JPEG images, nested tables (`cp-0516-Prohibited-Html-Body`) | 6.5.16 |
 | EFM.6.05.17 | Numeric fact carries `precision` instead of `decimals` | 6.5.17 |
 | EFM.6.05.37 | A finite `decimals` truncates non-zero digits of the value | 6.5.37 |
 | EFM.6.05.20 | Required DEI element missing (e.g., `dei:AmendmentFlag`) | 6.5.20 |
 | EFM.6.05.21 | Required DEI per document type (e.g., `EntityRegistrantName`) | 6.5.21 |
-| EFM.6.05.34 | Inline XBRL submission / well-formedness violation | 6.5.34 |
+| EFM.6.05.34 | Footnote content not valid in an HTML `body`: the 6.05.16 sub-codes plus `.dtdError` and `.disallowedMetaContent` (`cp-0534-Prohibited-Html-Footnote-Body`) | 6.5.34 |
 | EFM.6.05.40 | DEI elements added in newer taxonomies | 6.5.40 |
-| EFM.6.05.42 | Deprecated concept used (warning) | 6.5.42 |
+| EFM.6.05.42 | Deprecated concept used (warning, `dq-0542-Deprecated-Concept`) | 6.5.42 |
 | EFM.6.05.48 | Address element tagging via DEI address concepts | 6.5.48 |
 
 Full lists:
@@ -359,13 +359,13 @@ these numbers:
   `dq-0545`.
 - **EFM 6.5.14**: A text fact with `xml:lang` other than `en-US` needs
   a matching `en-US` fact (`du-0514`).
-- **EFM 6.5.16**: Scheme restrictions on `href` and `src` attributes.
+- **EFM 6.5.16**: Text-block content must be valid HTML `body` content: no active content, no external `href`/`src` references, no data-URL, unreadable or non-GIF/JPEG images, no nested tables (`cp-0516`).
 - **EFM 6.5.17**: Numeric facts must carry `decimals`, not `precision`.
 - **EFM 6.5.37**: A non-nil numeric fact value must not be truncated by its
   `decimals` attribute. There is no separate rule prohibiting `INF`; guidance on
   choosing `decimals` is Guide section 6.6.4, formerly EFM v68 section 6.6.32.
 - **EFM 6.5.20 / 6.5.21**: Required DEI facts present for the document type.
-- **EFM 6.5.34**: Inline XBRL submission-level validation (well-formedness of inline document and XHTML host).
+- **EFM 6.5.34**: The same HTML-body checks applied to footnotes, plus footnote-specific `.dtdError` (XML error) and `.disallowedMetaContent` (`<meta>` content other than `text/html`) (`cp-0534`).
 - **EFM 6.5.40**: DEI completeness for the relevant taxonomy version (`EntitySmallBusiness`, `EntityEmergingGrowthCompany`, etc.).
 - **EFM 6.5.42**: Use of deprecated concepts triggers a warning.
 - **EFM 6.5.48**: Address-component DEI elements used to tag the registrant address block.
