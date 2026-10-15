@@ -17,6 +17,8 @@ profiles:
 
 *Part of the iXBRL Skill by Max Schoon, Founder, Doc2iXBRL — <https://doc2ixbrl.com>. Licensed CC BY 4.0. If you use this material, you must credit it (see `ATTRIBUTION.md`).*
 
+**Last verified (UTC): 2026-10-15.** Every specific claim was re-read against the primary source cited for it; claims no primary source settles are marked as gaps.
+
 **Load this when:** the filing is a Danish årsrapport to Erhvervsstyrelsen, or the codes carry the Fejl / Advis, TH / TR / TM or FR prefixes.
 
 **Do not load this when:** the Danish entity is a listed issuer whose question is the ESEF layer itself (`references/esef.md`).
@@ -85,11 +87,11 @@ reviewing:
 
 | Rule / obligation | Applies from | Notes |
 |---|---|---|
-| iXBRL (Inline XBRL) mandatory for the årsrapport | Balance date **on/after 2025-01-01** | ERST: "kravet om indberetning i Inline XBRL for årsrapporter med en balancedato fra den 1. januar 2025" [S3]. Do not demand iXBRL of a 2024 balance-date filing. ERST control `FR83` (Fejl) enforces the same balancedato threshold [S2]. |
+| iXBRL (Inline XBRL) mandatory for the årsrapport | Balance date **on/after 2025-01-01** | ERST: "kravet om indberetning i Inline XBRL for årsrapporter med en balancedato fra den 1. januar 2025" [S3]. Do not demand iXBRL of a 2024 balance-date filing. The threshold comes from BEK 1003/2023 § 2 stk. 2 [S13] and [S3]. ERST control `FR83` "Der skal indberettes inlineXBRL" (Fejl) blocks plain-XBRL filing, but names no balance date, and the Kontroller corpus states "Kontrollen er pt. inaktiv" [S2]. |
 | ÅRL taxonomy `20251001` | Published Nov 2025; live in ERST PreProd + Prod (announced 2026-01-16) | ERST recommends filing with the 2025 or the previous **2024** taxonomy [S3][S6]. |
-| DKFIN (financial-sector) mandatory | Financial year **2025** onward | BEK nr. 917 af 27/06/2025 § 18: applies to financial years beginning 1 January 2025 or later, with §§ 6-9 usable voluntarily already for FY2024 [S14][S5]. |
+| DKFIN (financial-sector) mandatory for entities required to file in Inline XBRL | Financial year **2025** onward | Scope: BEK nr. 917 af 27/06/2025 § 3 stk. 2-6 (listed issuers, sustainability reporters, Taxonomy-Regulation Art. 8 reporters); every other financial-sector entity files a searchable PDF via Regnskab Special (§ 3 stk. 1) [S14]. § 18: applies to financial years beginning 1 January 2025 or later, with §§ 6-9 usable voluntarily already for FY2024 [S14][S5]. |
 | Dual ÅRL + ESEF tagging for IFRS filers | Balance date **on/after 2025-01-01** | Introduced by BEK nr. 1003 af 26/06/2023 § 1 nr. 4, which rewrote § 17 of BEK 1054/2021; its § 2 stk. 2 gives nr. 4-6 effect for balance dates on/after 2025-01-01 [S13]. Re-enacted **verbatim** as BEK 859/2025 § 17 stk. 3 [S1]. Note BEK 859/2025 § 35 stk. 2-3 repealed BEK 1054/2021 and gives the current order effect for documents **filed** on/after 2025-07-01, so § 17 stk. 3 as now in force carries no balance-date carve-out of its own. The stand-alone DK-IFRS taxonomy is **phased out** [S3] (see the *IFRS filers* profile). |
-| Raised ÅRL § 7 size thresholds | ~2024 amendment | New DKK limits in *Reporting classes and channel mapping*; measured two-of-three over two consecutive years [S7]. |
+| Raised ÅRL § 7 size thresholds | Financial years beginning on/after **2023-01-01** | Raised by lov nr. 480 af 22. maj 2024 § 1 nr. 2-3, with effect under its § 14 stk. 2 [S16]. New DKK limits in *Reporting classes and channel mapping*; measured two-of-three over two consecutive years [S7]. |
 
 State the balance date and taxonomy generation back to the user before
 declaring any defect. "This violates ÅRL taxonomy 20251001 control X for
@@ -99,7 +101,7 @@ a 2025 balance date" is reviewable; "this is wrong" is not.
 
 Which release to load, where it lives, and what is accepted when.
 Vocabulary and column order are fixed in `references/dts.md`
-§ Vocabulary. Verified 2026-08-21 by downloading and unpacking the
+§ Vocabulary. Re-verified 2026-10-15 by downloading and unpacking the
 packages; publication dates are read from each package's
 `tp:publicationDate`.
 
@@ -112,25 +114,36 @@ the zip; load the package, never the URL.
 
 | Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
 |---|---|---|---|---|---|---|
-| **20251001** (`tp:identifier` `http://www.erst.dk/XBRL20251001`, `tp:publicationDate` 2025-11-15) | 24 declared: seven DKGAAP filing entry points `http://archprod.service.eogs.dk/taxonomy/20251001/entryDanishGAAP{BalanceSheetAccountForm,BalanceSheetAccountByCurrentAndLongTermForm}IncomeStatementBy{Nature,Function}IncludingManagementsReviewStatisticsAndTax20251001.xsd`, `…/entryDanishGAAPExcludingBalanceSheetIncomeStatementIncludingManagementsReview20251001.xsd` (the IFRS/ESEF companion), `…/entryDKGAAPRequiredInformation20251001.xsd`, `…/entryAll.xsd` (accession only); eight DFSA / DKFIN `entryDFSA*.xsd`; UVM entry points | `https://erhvervsstyrelsen.dk/sites/default/files/2025-11/XBRL20251001-20251120.zip` | årsrapporter with balance date on or after 2025-01-01 must be Inline XBRL (control `FR83`); ERST "anbefaler" (recommends) the 2025 or the 2024 taxonomy | no published acceptance matrix; the package's `frm_injection/` carries ERST's current formula controls for vintages **20201001 to 20251001**, the strongest machine-readable evidence of the window | current, recommended | package manifest; Kontroller corpus; ERST "Taksonomier, aktuelle" |
+| **20251001** (`tp:identifier` `http://www.erst.dk/XBRL20251001`, `tp:publicationDate` 2025-11-15) | 24 declared: six DKGAAP filing entry points plus `entryAll.xsd`: `http://archprod.service.eogs.dk/taxonomy/20251001/entryDanishGAAP{BalanceSheetAccountForm,BalanceSheetAccountByCurrentAndLongTermForm}IncomeStatementBy{Nature,Function}IncludingManagementsReviewStatisticsAndTax20251001.xsd`, `…/entryDanishGAAPExcludingBalanceSheetIncomeStatementIncludingManagementsReview20251001.xsd` (the IFRS/ESEF companion), `…/entryDKGAAPRequiredInformation20251001.xsd`, `…/entryAll.xsd` (accession only); eight DFSA / DKFIN `entryDFSA*.xsd`; UVM entry points | `https://erhvervsstyrelsen.dk/sites/default/files/2025-11/XBRL20251001-20251120.zip` | årsrapporter with balance date on or after 2025-01-01 must be Inline XBRL ([S3]; BEK 1003/2023 § 2 stk. 2 [S13]); ERST "anbefaler" (recommends) the 2025 or the 2024 taxonomy | no published acceptance matrix; the package's `frm_injection/` carries ERST's current formula controls for vintages **20201001 to 20251001**, the strongest machine-readable evidence of the window | current, recommended | package manifest; Kontroller corpus; ERST "Taksonomier, aktuelle" |
 | **20241001** (`tp:publicationDate` 2024-10-01) | 23 declared; DFSA / DKFIN entry points first appear here | `https://erhvervsstyrelsen.dk/sites/default/files/2024-11/AARL%20taksonomi%E2%80%93version-20241001%20%28zip-fil%29.zip` | FY2024 onward; DKFIN mandatory from FY2025 | recommended alternative to 20251001; in `frm_injection` | accepted, recommended | same |
-| **20231001** (2023-10-01) | 16 declared | `https://erhvervsstyrelsen.dk/sites/default/files/2023-11/XBRL20231001_20231108.zip` | FY2023 onward | carried in `frm_injection`, so still validated at ERST against the **current** controls | accepted (inferred from the package, not from a published rule) | "historiske" page, updated 2025-11-25 |
-| **20221001** (2022-10-01) | 15 declared | `https://erhvervsstyrelsen.dk/sites/default/files/2022-11/XBRL20221001-20221117.zip` | FY2022 onward | in `frm_injection` | accepted (inferred) | same |
-| **20211001** (2021-10-01) | 13 declared | `https://erhvervsstyrelsen.dk/sites/default/files/2021-11/XBRL20211001_20211105_0459.zip` | FY2021 onward | in `frm_injection` | accepted (inferred) | same |
+| **20231001** (2023-10-01) | 14 declared | `https://erhvervsstyrelsen.dk/sites/default/files/2023-11/XBRL20231001_20231108.zip` | FY2023 onward | carried in `frm_injection`; not verified against any ERST statement that receipt validation applies the current controls to this vintage | accepted (inferred from the package; not verified against a published ERST acceptance rule) | "historiske" page, updated 2025-11-25 [S18] |
+| **20221001** (2022-10-01) | 13 declared | `https://erhvervsstyrelsen.dk/sites/default/files/2022-11/XBRL20221001-20221117.zip` | FY2022 onward | in `frm_injection` | accepted (inferred) | same |
+| **20211001** (2021-10-01) | 11 declared | `https://erhvervsstyrelsen.dk/sites/default/files/2021-11/XBRL20211001_20211105_0459.zip` | FY2021 onward | in `frm_injection` | accepted (inferred) | same |
 | 20201001 | not unpacked | `https://erhvervsstyrelsen.dk/sites/default/files/2021-11/XBRL20201001_20210115_1135%20%284%29.zip` | FY2020 onward | oldest vintage in `frm_injection` | accepted (inferred) | same |
 | 20191001 and older (20171001, 20161001, 20151001, 20140701, 20130401, 20121001, 20110701, 20101108; no 20181001 exists) | | listed on the "historiske" page | | **not** in `frm_injection` | likely not accepted; not confirmed | same |
 | DK-IFRS stand-alone (20211220 last; 20191220, 20171220, …) | | "historiske" page | | phased out; IFRS filers use the ÅRL companion entry point plus ESEF | retired | same |
 
-No 2026 release existed on 2026-08-21; the cadence is one `YYYY1001`
-release published each November. Per release ERST publishes a machine
-diff (`compare-DKGAAP-2025-vs-2024_0.zip`) and a human change summary.
+> **Honest gap (acceptance window).** "Accepted (inferred)" in the table
+> above is not verified against any published ERST acceptance matrix: the
+> Taksonomier-aktuelle [S3], historiske [S18] and Kontroller [S2] pages
+> publish none.
 
-The fact that decides validation here: ERST **back-ports** its current
-control set into older vintages through `frm_injection/`, so a 2022-vintage
-filing is judged at the receiver against 2025 controls. Validating against
-the pristine 2022 package reproduces the wrong rule set; inject the current
-formula package first (`HowToDoInjectionOfFormulaIntoDkgaapYYYY.txt` in the
-package says how).
+No final 2026 release existed on 2026-10-15; the cadence is one `YYYY1001`
+release published each November. On 2 October 2026 ERST sent a draft 2026
+DKGAAP taxonomy out for consultation (comments by 23 October 2026; final
+version "i løbet af november 2026"); the draft adds EBITDA in the key
+figures, changes the data type `StringItemType` to `TextBlockItemType`, and
+implements ESAP metadata [S19]. Per release ERST publishes a machine diff
+(`compare-DKGAAP-2025-vs-2024_0.zip`) and a human change summary [S3].
+
+The package's `frm_injection/` holds ERST formula controls for vintages
+20201001 to 20251001, which suggests that ERST validates older-vintage
+filings against its current control set. That is an inference from the
+package: it is **not verified against** any ERST statement that receipt
+validation applies the injected controls to a 2022-vintage filing. If it
+holds, validating against the pristine 2022 package reproduces the wrong
+rule set; inject the current formula package first
+(`HowToDoInjectionOfFormulaIntoDkgaapYYYY.txt` in the package says how).
 
 <a id="profile-arl-arsrapport"></a>
 
@@ -143,19 +156,23 @@ package says how).
   `www.data.virk.dk` [S1].
 - **Primary statute:** *Årsregnskabsloven* (ÅRL, the Danish Financial
   Statements Act), consolidated as **LBK nr. 402 af 23/03/2026**, which
-  expressly supersedes lovbekendtgørelse nr. 1057 af 23. september 2024
-  [S7]. ÅRL § 155 is the core authority to prescribe IT systems and
-  formats; § 138 fixes the filing deadlines (*Deadlines*) [S7].
+  re-promulgates lovbekendtgørelse nr. 1057 af 23. september 2024 with the
+  later amendments [S7]. ÅRL § 155 empowers ERST to lay down rules on
+  submission (indsendelse); § 153 a stk. 2 empowers it to prescribe IT
+  systems, digital formats and signatures; § 138 fixes the filing deadlines
+  (*Deadlines*) [S7].
 - **Operative filing rules:** the *indsendelsesbekendtgørelse* (submission
   executive order), currently **BEK nr. 859 af 18/06/2025** (j.nr.
   2025-4279, Lovtidende A 28 June 2025), issued "i medfør af" ÅRL §§ 99 d,
   137 j, 137 n, 138, 138 a, 148 a, 153 a-153 c, 155, 155 b, 157, and 164
   [S1].
 - **Who files:** entities subject to ÅRL, reporting classes B, C, D, plus
-  class A voluntary filers: a company that may omit preparing and filing an
-  årsrapport under ÅRL §§ 4-6 but does not use that option must follow ÅRL
-  and this executive order's rules on filing an årsrapport (BEK 859/2025
-  § 1 stk. 3) [S1]. BEK 859/2025 § 1 stk. 1 defines scope by **document
+  voluntary filers: a company that may omit preparing and filing an
+  årsrapport under the ÅRL §§ 4-6 exemptions but does not use that option
+  must follow ÅRL and this executive order's rules on filing an årsrapport
+  (BEK 859/2025 § 1 stk. 3) [S1]. Reporting class A itself is ÅRL § 7
+  stk. 1 nr. 1: entities without a § 3 stk. 1 duty that report
+  voluntarily [S7]. BEK 859/2025 § 1 stk. 1 defines scope by **document
   type** rather than by reporting class, so the B/C/D framing is an
   inference from ÅRL. That scope also covers exemption declarations
   (undtagelseserklæringer) filed in lieu, half-year reports for state
@@ -185,22 +202,29 @@ the reporting class fixes its length [S7][S1]:
   requires filing "uden ugrundet ophold" once the årsrapport is approved, so
   an unexplained approval-to-filing delay is itself a breach even inside the
   6-month window [S7].
-- **No discretionary extension outside ÅRL §§ 140-141 and BEK 859/2025
-  § 26.** ÅRL § 138 stk. 1, 3. pkt. bars dispensation "jf. dog §§ 140 og
-  141": ERST may allow an undertaking in *rekonstruktionsbehandling* to file
+- **No dispensation from the § 138 deadline outside ÅRL §§ 140-141; BEK
+  859/2025 § 26 can only extend a påkrav deadline.** ÅRL § 138 stk. 1,
+  3. pkt. bars dispensation "jf. dog §§ 140 og 141": ERST may allow an undertaking in *rekonstruktionsbehandling* to file
   within 1 month of the reconstruction ending (§ 140 stk. 1), and an
   undertaking in *konkurs* files no årsrapport at all, back-years falling
   due within 1 month of the bankruptcy ending if the undertaking resumes
-  (§ 141) [S7]. BEK 859/2025 § 26 adds an extension where a digital
-  reporting solution was unavailable for 2 consecutive hours between 08:00
-  and 24:00 on the påkrav deadline day, announced maintenance excluded [S1].
+  (§ 141) [S7]. BEK 859/2025 § 26 extends the **påkrav** deadline, not the
+  § 138 deadline: where the undertaking has received a påkrav (ÅRL § 150
+  stk. 2) and a digital reporting solution was unavailable for 2
+  consecutive hours between 08:00 and 24:00 on the påkrav deadline day, the
+  påkrav deadline moves to 8 working days after the solution works again;
+  announced maintenance and the undertaking's or its adviser's own IT
+  problems do not qualify (§ 26 stk. 1-4) [S1].
 - **Receipt governs.** The deadline is met if the årsrapport is received by
   **24:00 on the deadline day** (BEK 859/2025 § 25 stk. 2) [S1].
 - **Miss it** (or file late, not in proper form, or not through the
-  prescribed channel) and ÅRL §§ 150-152 and § 162 stk. 1 nr. 1 apply: a
-  *påkrav* followed by an *afgift* (late fee) computed from expiry of the
-  § 138 stk. 1 deadline (BEK 859/2025 § 25 stk. 3; ÅRL §§ 150, 152)
-  [S1][S7].
+  prescribed channel) and ÅRL §§ 150-152 and § 162 stk. 1 nr. 1 apply
+  (BEK 859/2025 § 25 stk. 3) [S1]: a *påkrav* with an 8-working-day
+  deadline (ÅRL § 150 stk. 2), then, only if the report arrives after that
+  deadline, an *afgift* (late fee) per management member of DKK 500 / 2,000
+  / 3,000 for the 1st / 2nd / 3rd month begun (maximum DKK 3,000), computed
+  from expiry of the § 138 stk. 1, 2. pkt. deadline (ÅRL § 151 stk. 1-3);
+  § 152 allows a waiver in quite special circumstances [S7].
 - **Half-year reports for state joint-stock companies:** within **3 months**
   of the end of the half-year period, via Regnskab Special (BEK 859/2025
   § 30 stk. 1) [S1].
@@ -237,10 +261,16 @@ one case where an extension is permitted; see *Extensions are available,
 and they bar system-til-system*); (7) where the general
 meeting changed the profit appropriation documented by minutes.
 
-> **Honest gap.** The exact system-til-system upload payload/schema
-> (raw XHTML vs a zipped container; the "via www.erst.dk" access shape)
-> was **not fetched**: the packaging contract for an automated filer is
-> unverified (*Packaging / artifact shape*).
+**system-til-system upload contract.** ERST's REST guide (Version 6) [S17]
+documents it: base URL `https://erst-api.virk.dk/ri/api`, endpoints
+`/ixbrl/indberet` and `/ixbrl/test` (GET and POST; `/xbrl/…` for plain
+XBRL), and a JSON body whose required fields are `destinationErst` (value
+`true`) and `iXbrl`, which "Indeholder inline XBRL. Værdien er Base64
+kodet". Optional fields: `supplerendeInstans`, `token` (sent to file despite
+an Advis), `returnDocuments`, `dirigent`, `godkendelsesdato`,
+`legatarfortegnelse`. Status code 76: "Entrypointet {0} er ikke understøttet
+i indberetning via System til System". Omgørelse and berigtigelse are not
+possible through system-til-system (Bilag B) [S17].
 
 ### Reporting classes and channel mapping
 
@@ -250,9 +280,10 @@ mellemstor) and large (C stor); **Class D** = state joint-stock companies
 and entities with securities on an EU/EEA regulated market, regardless of
 size.
 
-Size thresholds (ÅRL § 7 stk. 2, as raised ~2024). An entity crosses a
-class when it exceeds two of the three limits in two consecutive years,
-measured at the balance date [S7]:
+Size thresholds (ÅRL § 7 stk. 2, as raised by lov nr. 480 af 22. maj 2024
+§ 1 nr. 2-3 for financial years beginning on or after 1 January 2023
+[S16]). An entity crosses a class when it exceeds two of the three limits
+in two consecutive years, measured at the balance date [S7]:
 
 | Class | Balance sum | Net revenue | Average FTE |
 |---|---|---|---|
@@ -267,25 +298,31 @@ income; investment income includes positive value adjustments under ÅRL
 § 38 stk. 1 and realised gains on the sale of investment properties [S7].
 
 The reporting class is itself a tagged fact; `fsa:ClassOfReportingEntity`
-carries the enumerated value (Regnskabsklasse A / B mikro / B / C
-mellemstor / C stor / D) [S3][S8].
+carries the enumerated value ("Regnskabsklasse A", "Regnskabsklasse B",
+"Regnskabsklasse B, mikrovirksomhed", "Regnskabsklasse C, mellemstor
+virksomhed", "Regnskabsklasse C, stor virksomhed", "Regnskabsklasse D",
+read from the `20251001` package) [S3][S8]. Embedded control `v801.0100`
+(Advis) states that "Regnskabsklasse A" / "Reporting class A" cannot be
+used [S2].
 
 **Channel by class** (BEK 859/2025 §§ 13-16) [S1]:
 
 | Class | Channel |
 |---|---|
-| B | Regnskab Basis **or** Special (or system-til-system, § 13 stk. 3), but **must** use Special if it applies one or more class-C rules (unless Basis offers those C-elements), if the report is IFRS, if it is multilingual (one language Danish/English), or if it splits accounting-policy disclosure per ÅRL § 16 stk. 1 (§ 14) |
+| B | Regnskab Basis **or** Special (or system-til-system, § 13 stk. 3), but **must** use Special if it applies one or more class-C rules (unless Basis offers those C-elements), if the report is IFRS, if it is multilingual (one language Danish/English), or if it splits accounting-policy disclosure per ÅRL § 16 stk. 1, 2. pkt. (§ 14) |
 | C | Regnskab Special or system-til-system (§ 15; § 13 stk. 3) |
 | D | Regnskab Special or system-til-system, ÅRL or IFRS alike (§ 16; § 13 stk. 3) |
 
 ### ÅRL taxonomy architecture, versions, and entry points
 
 **Official root URI:** `http://archprod.service.eogs.dk/taxonomy/`,
-controlled by the DCCA. Namespaces and `schemaRef` values take the form
+controlled by the DCCA. File locations (`schemaRef` values) take the form
 `{root}/{yyyymmdd publication date}/{optional 3-letter component}/{file}`,
 with the official location embedded per-file as an `officialURI`
-processing instruction [S4]. **The host serves nothing under that path
-(404 on every probe, 2026-08-21)**: it is an identifier, and the files are
+processing instruction; namespaces are `http://xbrl.dcca.dk/{prefix}`
+(e.g. `http://xbrl.dcca.dk/fsa`, the `targetNamespace` in the `20251001`
+package's `fsa.xsd`) [S4]. **The host serves nothing under that path
+(404 on every probe, 2026-08-21 and again 2026-10-15)**: it is an identifier, and the files are
 distributed only in the taxonomy package whose catalog rewrites the prefix
 (see *DTS and vintages*).
 
@@ -321,8 +358,10 @@ section.
 `schemaRef` pointing at an archprod entry point. `TH01`: the first
 schemaRef must contain `http://archprod.service.eogs.dk/taxonomy/`
 (regulator control, **Fejl**, Entrypoints: Alle [S2]; in Arelle DBA [S8]);
-`TH10`: no `linkbaseRef`, no `roleRef`, exactly one `schemaRef` [S8];
-`TH02`: the entrypoint must be usable / an absolute URI [S2].
+`TH10`: no `linkbaseRef`, no `roleRef` (the corpus adds `arcroleRef`),
+exactly one `schemaRef` (Fejl) [S2][S8]; `TH02`: the first schemaRef must
+be recognisable as a valid entrypoint (Fejl) [S2], not implemented in
+Arelle. The absolute-URI requirement belongs to `TH01`.
 
 The `20251001` entry-point filenames are enumerated in *DTS and vintages*
 above, read from the package manifest. The selection axis is
@@ -355,26 +394,47 @@ ERST adopted a single format that is both human- and machine-readable
 
 **Self-containment controls** (regulator Kontroller corpus, implemented
 in Arelle DBA) [S2][S8]. The corpus states a Fejl/Advis severity for every
-rule; `—` below marks one this reference has not transcribed, so read it
-off the Kontroller page before gating on the code:
+rule:
 
 | Code | Requirement | Severity |
 |---|---|---|
-| `TR11` | No references to external images: only Base64-encoded content is accepted | — |
+| `TR11` | No references to external images: only Base64-encoded content is accepted | Fejl [S2] |
 | `FR87` | No links to external CSS: all CSS must be inline | Fejl [S2] |
-| `TR12` | No executable code | — |
-| `TR17` | No HTML `<base>` element and no `xml:base` attribute | — |
-| `TR16` | `xml:lang` must be present on the root of the inline XBRL document | — |
+| `FR88` | XBRL elements must have the same CSS media type: "Reglen omfatter forbud mod XBRL-elementer i print-only afsnit" (not implemented in Arelle DBA) | Fejl [S2] |
+| `TR12` | No executable code | Fejl [S2] |
+| `TR17` | No HTML `<base>` element and no `xml:base` attribute | Fejl [S2] |
+| `TR16` | `xml:lang` must be present on the root of the inline XBRL document | Fejl [S2] |
 
-A published "Whitelist for hidden elements i Inline XBRL" (Kapitel 3 of
-the Taksonomier-aktuelle page) governs permissible `ix:hidden` usage [S3].
+**Hidden elements: the Acceptliste.** Kapitel 3 of the Taksonomier-aktuelle
+page, "Acceptliste for hidden elements i Inline XBRL" (formerly the
+"Whitelist for hidden elements"), restricts `ix:hidden`: "Indberetninger
+fra den 1. januar 2027 må kun benytte nedenstående felter som hidden
+elements" [S3]. Version 4 of that page (25 November 2025) moved the start
+of the check from 1 January 2026 to 1 January 2027 [S3]. Permitted fields:
 
-> **Honest gaps.** (a) The `ix:hidden` whitelist entries were **not
-> readable**: the chapter is truncated in the fetched render [S3];
-> treat the permitted-hidden list as unverified. (b) The seed rule
-> "FR88 = no XBRL tags in print-only sections" is **not implemented** in
-> the Arelle DBA plugin and **not confirmed** on any fetched page. Do
-> **not** assert it as a live rule; pending citation.
+- `gsd:IdentificationNumberCvrOfSubmittingEnterprise`,
+  `gsd:LegalEntityIdentifierOfSubmittingEnterprise`,
+  `gsd:NameOfSubmittingEnterprise`,
+  `gsd:AddressOfSubmittingEnterpriseStreetAndNumber`,
+  `gsd:AddressOfSubmittingEnterprisePostcodeAndTown`;
+- `gsd:DateOfGeneralMeeting`, `gsd:NameAndSurnameOfChairmanOfGeneralMeeting`,
+  `gsd:ToolForPreparingTheXBRLInstanceDocument`;
+- `gsd:ReportingPeriodStartDate` and `gsd:ReportingPeriodEndDate` with the
+  member `RegisteredReportingPeriodDeviatingFromReportedReportingPeriodDueArbitraryDatesMember`;
+- `gsd:PrecedingReportingPeriodStartDate` and the preceding-period end date
+  (printed on the page as `gsd:PredingReportingPeriodEndDate`);
+- `cmn:TypeOfAuditorAssistance` and `fsa:ClassOfReportingEntity`, the
+  latter only when the report follows reporting class B, Mikro;
+- `arr:TypeOfOpinionSustainabilityReport`,
+  `arr:TypeOfOpinionAuditSustainabilityReport`,
+  `sob:TheReportingEntityAppliesTheExceptionConcerningOptingOutOfTheStatementByManagementEtc`;
+- the 31 ESAP metadata `gsd:` fields listed on the page, including
+  `gsd:SizeOfReportingEntityBySectorDBA`, the
+  `gsd:Is…DisclosedInTheDocument` / `gsd:Is…SubmittedMandatory` pairs and
+  `gsd:InformationOnDisclosureOfPersonalData` [S3].
+
+ERST says the list "vil løbende blive evalueret"; read the page before
+gating on it [S3].
 
 ### Block (clob) tagging vs mandatory detail tagging
 
@@ -452,8 +512,11 @@ rather than replacing it. Delta-only: the dual-tagging mechanics live in the *IF
 - **ESEF / Transparency-Directive transposition.** ESEF (Commission Delegated
   Regulation (EU) 2019/815) applies to issuers caught by **kapitel 5 of the
   Danish Capital Markets Act** (*lov om kapitalmarkeder*), in practice every
-  entity with securities on an EU/EEA regulated market. **Finanstilsynet** is the
-  NCA and directs issuers to ESMA's ESEF taxonomy [S9]. Denmark **took the
+  entity with securities on an EU/EEA regulated market. **Finanstilsynet**
+  directs issuers to ESMA's ESEF taxonomy [S9]; that it is the national
+  competent authority under the Transparency Directive is **not verified
+  against** a primary source here ([S9] does not state it; the designation
+  sits in *lov om kapitalmarkeder*, not fetched). Denmark **took the
   one-year deferral**: ESEF is mandatory for financial years starting **on/after
   2021-01-01** (first reports published 2022), with iXBRL **block tagging of the
   notes** phased in from FY2022 [S9].
@@ -541,8 +604,12 @@ report, or supplied at filing time when filed in Inline XBRL
 (§ 27 stk. 2) [S1].
 
 **CVR and context controls** (Arelle DBA; pair with BEK 859/2025 § 27 and
-the Kontroller corpus) [S8]. `TR02`, `TH06`, and `TC02` are carried by the
-regulator corpus too, the first two as **Fejl** [S2]:
+the Kontroller corpus) [S8]. `TR01`, `TR02`, `TR03`, `TR05`, `TR06`,
+`TR09`, `TR15`, `TH06`, `TH14` and `TC02` are regulator rules too, all
+**Fejl** [S2]. `TM12`, `TM16`, `TM22` and `TM24` survive in the corpus only
+in Bilag 2, as business rules replaced by embedded controls (`e000.0001`,
+`v000.0104`, `v000.0105`, `v000.0107`, all Advis); `TM13`, `TM25`, `TM27`
+and `TM29` are Arelle-only [S2][S8]:
 
 | Code | Requirement |
 |---|---|
@@ -555,7 +622,7 @@ regulator corpus too, the first two as **Fejl** [S2]:
 | `TR01` | All `gsd` facts share the CVR context's entity + period |
 | `TR05` / `TR06` | `gsd:ReportingPeriodStartDate` / `EndDate` tie to the CVR context period |
 | `TM16` | `gsd:InformationOnTypeOfSubmittedReport` tagged once |
-| `TH14` | Report-type fact must not use certain enumerations (Selskabsselvangivelse; the exemption-declaration value; ESG-rapport) |
+| `TH14` | Arelle: report-type fact must not use certain enumerations (Selskabsselvangivelse; the exemption-declaration value; ESG-rapport) [S8]. The regulator's `TH14` (Fejl) is instead a whitelist that includes Selskabsselvangivelse and "Erklæring om undtagelse fra aflæggelse årsrapport" [S2]; the two differ |
 | `TM22` / `TM24` | Entity-name / submitter-name capped to one tag each |
 | `TM25` / `TM27` | Submitter street+number and postcode+town mandatory |
 | `TM29` | Either `gsd:DateOfGeneralMeeting` or `gsd:DateOfApprovalOfAnnualReport` present |
@@ -563,9 +630,10 @@ regulator corpus too, the first two as **Fejl** [S2]:
 | `FR1` | Dirigent name (`gsd:NameAndSurnameOfChairmanOfGeneralMeeting`) required when a meeting date is given |
 | `TC02` | CPR (personal-ID) numbers must not appear as typed-dimension values |
 
-> **Honest gap.** The seed's "TH03 = valid CVR" code appears **incorrect**:
-> no `rule_th03` exists in the plugin. CVR validity/uniqueness maps to
-> `TM12`/`TM13`/`TR02`/`TR03`/`TH06`. Treat "TH03" as unverified.
+`TH03` is a regulator rule: "Der skal oplyses et gyldigt CVR-nr. for
+regnskabsaflæggende virksomhed" (Fejl, Entrypoints: Alle): the CVR number
+must be filled in and registered in the CVR register [S2]. The Arelle DBA
+plugin does not implement it (no `rule_th03`) [S8].
 
 ### Broken / floating fiscal years: the RegisteredReportingPeriod dimension
 
@@ -590,12 +658,21 @@ place and publish the filing against the registered obligation, and they
 
 Controls (Arelle DBA) [S8]: `TM18`/`TM20` constrain
 `ReportingPeriodStartDate`/`EndDate` (no dimension, or the default
-`AllReportingPeriodsMember`) to a single tagging; `TM32`/`TM33` do the
-same for the `RegisteredReportingPeriodDeviating…ArbitraryDatesMember`
-dimension; `FR107`/`FR108`/`FR109`/`FR115` police accounting-system period
-coverage (gaps, overlaps, out-of-range, end-before-start), with `FR109` keying
-consolidated reports to `AllReportingPeriodsMember` and floating-period
-reports to the deviating member.
+`AllReportingPeriodsMember`) to a single tagging (in the regulator corpus
+these survive only in Bilag 2, replaced by the embedded Advis controls
+`v000.0103`/`v000.0102` [S2]); `TM32`/`TM33` do the same for the
+`RegisteredReportingPeriodDeviating…ArbitraryDatesMember` dimension, and
+are regulator rules too (Fejl) [S2].
+
+`FR107`/`FR108`/`FR109`/`FR115` are **not** fiscal-period checks: they
+check the dates of the **bookkeeping system** (bogføringssystem, ÅRL
+§ 138 a) reported in the supplementary instance. In the corpus: `FR107` a
+date in the accounting period with no bookkeeping system (Fejl), `FR108`
+overlapping systems (Fejl), `FR109` a system period outside the accounting
+period (Fejl), `FR115` end date before start date (Advis); all
+"Entrypoints: Supplerende instans" [S2]. Arelle's `FR109` resolves the
+accounting period via `AllReportingPeriodsMember` for consolidated reports
+and via the deviating member for floating-period reports [S8].
 
 ### Packaging / artifact shape
 
@@ -608,11 +685,10 @@ single XHTML must satisfy the self-containment controls in *iXBRL format rules: 
 images/CSS, no executable code, no `<base>`/`xml:base`, `xml:lang` on the
 root); Base64-embed any images.
 
-> **Honest gap.** The exact system-til-system upload contract (raw XHTML
-> vs a zipped container; the "access via www.erst.dk" mechanics) was
-> **not fetched**: the packaging shape for an automated filer is
-> unverified. Confirm against ERST's system-til-system technical
-> documentation before building an uploader.
+For an automated filer the system-til-system REST service takes the same
+single Inline XBRL document, Base64-encoded in the JSON field `iXbrl` of a
+POST to `/ixbrl/indberet`, not a filer-assembled zip (*Channels: Regnskab
+Basis / Regnskab Special / system-til-system*) [S17].
 
 ## Validation
 
@@ -630,9 +706,11 @@ errors-gate / warnings-inform validator split: gate on `Fejl`, surface
 
 **Rule naming** (Kapitel 1.2-1.3) [S2]: business rules
 (*Forretningsregler*) carry **2-3 letters + a number** (e.g. `FR1`,
-`TH01`), sometimes with a trailing letter splitting one rule into variants
-(`FR74a`/`FR74b`, `FR84a`/`FR84b`/`FR84c`); a separate `FRU` series covers
-undtagelses- and fritagelseserklæringer (`FRU09`, `FRU010`, `FRU011`).
+`TH01`), sometimes with a trailing letter (`FR74a`/`FR74b`,
+`FR84a`/`FR84b`/`FR84c`); a separate `FRU` series (`FRU01`-`FRU11`) covers
+undtagelses- and fritagelseserklæringer, with the CVR-period trio
+`FRU09`/`FRU10`/`FRU11` ("FRU010"/"FRU011" appear only as
+cross-references inside `FR43`/`FR44`).
 Embedded taxonomy rules carry an **assertion letter + 3 section-digits + an
 ID**, where the assertion letter is **E** = Existence (selected fields
 present) or **V** = Value (reported values valid); a section digit may be
@@ -649,16 +727,19 @@ validator's message level.
 
 Codes verified on the fetched regulator page [S2]: `FR1` (missing dirigent
 name), `FR6` (general-meeting date not after filing date), `FR8` (approval
-date not after filing date), `FR42`/`FR43` (CVR start-date
-existence/mismatch = Fejl), `FR44` (end-date mismatch = Advis), `FR47`
-(changed attachment set on omgørelse = Advis); `TH01` (first schemaRef
-begins with the archprod URI; Fejl, Entrypoints: Alle), `TH02` (entrypoint
-must be usable), `TH06` (context period cannot be "forever"; Fejl), `TR02`
-(entity-identifier scheme = the absolute URI `http://www.dcca.dk/cvr`;
-Fejl, Entrypoints: DKGAAPRequiredInformation), and `TC02` (CPR number in a
-context). The embedded assertions render with severities too: `v40x.0101`
-(errors in the balance sheet; Fejl), `e50x.0001` (`ProfitLoss` must be
-stated; Advis), `v806.0100` and `v808.0100` (both Advis) [S2].
+date not after filing date), `FR42` (accounting period not found in CVR;
+Fejl), `FR43` (start date differs from CVR; Fejl), `FR44` (end-date
+mismatch = Advis), `FR47` (changed attachment set on omgørelse = Advis);
+`TH01` (first schemaRef begins with the archprod URI; Fejl, Entrypoints:
+Alle), `TH02` (first schemaRef must be a valid entrypoint; Fejl), `TH03`
+(valid, registered CVR number; Fejl), `TH06` (context period cannot be
+"forever"; Fejl), `TR02` (entity-identifier scheme = the absolute URI
+`http://www.dcca.dk/cvr`; Fejl, Entrypoints: DKGAAPRequiredInformation),
+and `TC02` (CPR number as context id for a typedMember; Fejl). The
+embedded assertions render with severities too: `v40x.0100` (assets must
+equal liabilities and equity; Fejl), `v40x.0101` (all asset fields must be
+positive; Fejl), `e50x.0001` (`ProfitLoss` must be stated; Advis),
+`v806.0100` and `v808.0100` (both Advis) [S2].
 
 `FR34`, `FR41`, `FR82`, and `FR91` appear **nowhere** in the corpus. They
 are Arelle-only, and a finding resting on one of them establishes "Arelle
@@ -707,39 +788,39 @@ python3 -m arelle.CntlrCmdLine \
 
 The technical TH / TR / TM / TC codes are tabulated in the functional
 sections where they bite: self-containment (*iXBRL format rules: one self-contained XHTML*), CVR + context (*Mandatory structured fields, CVR contexts, and periods*), and
-period coverage (*Broken / floating fiscal years: the RegisteredReportingPeriod dimension*). Additional plugin codes: `TH05` (no segments in
-contexts), `TR19` (duplicate facts must not differ in content),
-`TM30`/`TM31` (meeting/approval dates tagged once), `TC02` (no CPR in
-typed dimensions) [S2][S8]. The **FR business rules** carry the
-substantive accounting/formal checks. Severity and Anvendelse are the
-regulator's own [S2]; a `—` severity is one the corpus states but this
-reference has not transcribed, and `n/a` marks a code the corpus does not
-carry at all. Predicates without an [S2] marker come from the plugin
+period coverage (*Broken / floating fiscal years: the RegisteredReportingPeriod dimension*). Additional codes: `TH05` (no segments in
+contexts; Fejl) and `TC02` (no CPR in typed dimensions; Fejl) are in both
+the corpus and the plugin [S2][S8]; `TR19` (duplicate facts must not
+differ in content) and `TM30`/`TM31` (meeting/approval dates tagged once)
+are Arelle-only [S8]. The **FR business rules** carry the substantive
+accounting/formal checks. Severity and Anvendelse are the regulator's own
+[S2], and `n/a` marks a code the corpus does not carry at all. Predicates without an [S2] marker come from the plugin
 docstrings [S8]:
 
 | Code | Predicate | Severity | Anvendelse / source |
 |---|---|---|---|
-| `FR1` | Dirigent name required when a general-meeting date is given | — | [S2] |
+| `FR1` | Dirigent name required when a general-meeting date is given | Fejl | Entrypoints: Alle; Taksonomier: Alle [S2] |
 | `FR33` | SoCE/equity-disclosure minimums for class C/D groups | Advis | Entrypoints: Alle; Taksonomier: Alle; Regnskabsklasse C og D [S2] |
 | `FR34` | If `Equity` is non-zero, at least one other balance-sheet field (Assets / NoncurrentAssets / CurrentAssets / liabilities lines / LiabilitiesAndEquity) must also be tagged | n/a | Not in the corpus, Arelle-only [S8] |
 | `FR63` | Balance-sheet item must not exceed the balance-sheet total | Fejl | Entrypoints: Balance i kontoform [S2] |
-| `FR74a` / `FR74b` / `FR77a` / `FR77b` | Provisions/liabilities ≤ balance-sheet total minus equity; the corpus splits each rule into an `a`/`b` variant | — | [S2] |
+| `FR74a` / `FR74b` / `FR77a` / `FR77b` | Each line group ≤ balance-sheet total minus equity: `FR74a` provisions, `FR74b` liabilities other than provisions, `FR77a` long-term liabilities, `FR77b` short-term liabilities (four line groups, not variants of one rule) | Fejl | Entrypoints: Alle; Taksonomier: Alle [S2] |
 | `FR41` | Tax expense required when `ProfitLoss` > DKK 1000 | n/a | Not in the corpus, Arelle-only [S8] |
 | `FR56` | Result appropriation (resultatdisponering) required when \|`ProfitLoss`\| > DKK 1000 (ÅRL §§ 31, 95 a) | Fejl | Entrypoints: Alle; Taksonomier: Alle [S2] |
 | `FR75` | Employee count (`fsa:AverageNumberOfEmployees`) required when `fsa:EmployeeBenefitsExpense` or `fsa:WagesAndSalaries` exceeds DKK 200,000 (ÅRL § 68) | Advis | [S2] |
-| `FR81` | At least one fact carries `xml:lang` of `da` or `en` | — | [S8] |
+| `FR81` | At least one fact carries `xml:lang` of `da` or `en` | Advis | Entrypoints: Alle; Taksonomier: ESEF [S2][S8] |
 | `FR82` | Blocks plain XBRL for DK ESEF | n/a | Not in the corpus, Arelle-only [S8] |
-| `FR83` | Blocks plain XBRL for DK GAAP: an årsrapport with balancedato on/after 2025-01-01 must be filed as Inline XBRL | Fejl | Entrypoints: Alle; Taksonomier: Alle [S2] |
+| `FR83` | Blocks plain XBRL; allows only Inline XBRL. The rule text names no balance date, and the corpus states "Kontrollen er pt. inaktiv" | Fejl (inactive per the corpus) | Entrypoints: Alle; Taksonomier: Alle [S2] |
 | `FR87` | No external CSS: all CSS inline | Fejl | [S2] |
+| `FR88` | XBRL elements must have the same CSS media type; no XBRL elements in print-only sections (not implemented in Arelle) | Fejl | Entrypoints: Alle; Taksonomier: Alle [S2] |
 | `FR89` | Audit cannot be opted out of when the årsrapport is prepared under reporting class C or D | Fejl | [S2] |
 | `FR91` | General-meeting date = approval date when both present | n/a | Not in the corpus, Arelle-only [S8] |
-| `FR107` / `FR108` / `FR109` / `FR115` | Accounting-system period coverage (gap: date with no system / overlap / period outside accounting period / end-before-start) | — | [S8] |
-| `FR116` / `FR117` | Single value per numeric field per period; rendering dimension numeric-only | — | [S8] |
+| `FR107` / `FR108` / `FR109` / `FR115` | Bookkeeping-system (bogføringssystem) dates: a date with no system / overlapping systems / system period outside the accounting period / end before start | Fejl / Fejl / Fejl / Advis | Entrypoints: Supplerende instans [S2][S8] |
+| `FR116` / `FR117` | Single value per numeric field per period; rendering dimension numeric-only | Advis | Entrypoints: ERST entrypoints; all report types from 2024 onward [S2][S8] |
 
 The corpus is finer-grained than the plugin in places: besides the
 `FR74a`/`FR74b` and `FR77a`/`FR77b` splits it carries `FR84a`/`FR84b`/
-`FR84c` and `FR85b`/`FR85c` on the audit requirement, and an `FRU` series
-(`FRU09`, `FRU010`, `FRU011`) for undtagelses- and fritagelseserklæringer
+`FR84c` and `FR85b`/`FR85c` on the audit requirement (all Advis), and an
+`FRU` series (`FRU01`-`FRU11`) for undtagelses- and fritagelseserklæringer
 [S2]. Check a code against the corpus before reporting it as absent.
 
 ## Review workflow
@@ -750,8 +831,9 @@ The corpus is finer-grained than the plugin in places: besides the
    within 6 months of financial-year end; class D: 4 months; a foreign
    branch: 6 months for the foreign undertaking's own audited report.
    Receipt by 24:00 on the deadline day governs, not dispatch, and filing
-   must follow approval "uden ugrundet ophold". Extensions exist only under
-   ÅRL §§ 140-141 and BEK 859/2025 § 26.
+   must follow approval "uden ugrundet ophold". The § 138 deadline admits
+   no dispensation outside ÅRL §§ 140-141; BEK 859/2025 § 26 extends only a
+   påkrav deadline after a system outage.
 3. **Pin the class, channel, and basis** (*Reporting classes and channel mapping*; the *IFRS filers* profile). Class B/C/D changes
    the legal channel and mandatory detail-tags (read
    `fsa:ClassOfReportingEntity`); IFRS ⇒ dual ÅRL+ESEF tagging and
@@ -793,8 +875,9 @@ organ, the digital-reporting operator, and the årsrapport taxonomy author.
 
 - **Business register + publication organ: Erhvervsstyrelsen.** Runs the
   Central Business Register (*Det Centrale Virksomhedsregister*, CVR), the
-  authoritative master register of Danish and Greenlandic entities since 1999,
-  and publishes every deposited årsrapport openly via `CVR.dk` / `data.virk.dk`
+  authoritative register of basic data for all registered enterprises
+  since 1999 (Danish entities; CVR.dk also shows Greenlandic companies
+  registered under other legislation), and publishes every deposited årsrapport openly via `CVR.dk` / `data.virk.dk`
   [S11][S1]. The CVR number is the entity key threaded through every context
   (*Mandatory structured fields, CVR contexts, and periods*).
 - **Digital-business-reporting programme: Erhvervsstyrelsen (Regnskab
@@ -821,12 +904,14 @@ organ, the digital-reporting operator, and the årsrapport taxonomy author.
   Erhverv**), separate from the årsrapport deposit [S12]; the DCCA taxonomy's
   `tax` component carries concepts submittable *with* the annual accounts for tax
   settlement [S4].
-- **Securities regulator / NCA: Finanstilsynet (the Danish FSA).** The National
-  Competent Authority under the Transparency Directive; it administers ESEF for
-  issuers on EU-regulated markets (*Relation to EU / ESEF reporting*) and overlays DKFIN for financial-sector
+- **Securities regulator: Finanstilsynet (the Danish FSA).** Its status as
+  National Competent Authority under the Transparency Directive is **not
+  verified against** a primary source here ([S9] does not state it). It
+  publishes the ESEF guidance for issuers on EU-regulated markets (*Relation to EU / ESEF reporting*) and overlays DKFIN for financial-sector
   entities (the *DKFIN* profile) [S9][S5]. Erhvervsstyrelsen stays the *receiver/publisher* even
-  for these issuers (they still deposit via Regnskab Special), while
-  Finanstilsynet is the *supervisor* [S9].
+  for these issuers: listed class-D filers deposit via Regnskab Special
+  (BEK 859/2025 § 16) [S1], financial-sector filers likewise (BEK 917/2025
+  § 3 stk. 8), and ERST forwards the receipt to Finanstilsynet (§ 4) [S14].
 
 They interlock at the CVR number and the archprod taxonomy: Erhvervsstyrelsen
 collects and publishes; Finanstilsynet supervises the capital-market and
@@ -840,8 +925,7 @@ renders in full and states a Fejl/Advis severity and an Anvendelse scope
 for every rule, so route a severity or scope question to it rather than
 inferring one (*The ERST Kontroller corpus: the filing-rules authority*).
 If the question concerns an un-enumerated entry-point filename or matrix (*ÅRL taxonomy architecture, versions, and entry points*), the
-system-til-system upload contract (*Packaging / artifact shape*), the `ix:hidden` whitelist
-contents (*iXBRL format rules: one self-contained XHTML*), CSRD/sustainability applicability by class/year, or any
+acceptance window for older taxonomy vintages (*DTS and vintages*), CSRD/sustainability applicability by class/year, or any
 code carrying the plugin's `-preview` caveat (*How to run it: the Arelle DBA plugin*), say so and route to
 the primary source: Kontroller [S2], Taksonomier-aktuelle [S3], BEK
 859/2025 [S1], or Finanstilsynet [S5]. Do not invent a rule id,
@@ -877,7 +961,9 @@ what each establishes.
   <https://erhvervsstyrelsen.dk/vejledning-teknisk-vejledning-og-dokumentation-regnskab-20-taksonomier-aktuelle>.
   ÅRL taxonomy `20251001` and its changes; iXBRL mandate from balance
   date 2025-01-01; DK-IFRS phased out ⇒ ÅRL(Excluding…) + ESEF; the
-  floating-year dimension members; the `ix:hidden` whitelist chapter.
+  floating-year dimension members; the Kapitel 3 "Acceptliste for hidden
+  elements i Inline XBRL" (Version 5, updated 2 October 2026; read
+  2026-10-15).
 - **[S4]** DCCA XBRL Taxonomy Framework Architecture, v1.0 (2015-10-01),
   Tier 1:
   <https://danishbusinessauthority.dk/sites/default/files/2023-10/xbrl-taxonomy-framework-architecture-01102015_wa.pdf>.
@@ -914,10 +1000,11 @@ what each establishes.
 - **[S9]** Finanstilsynet: European Single Electronic Format
   (Transparensdirektivet), Tier 1:
   <https://www.finanstilsynet.dk/lovgivning/eu-lovsamling/transparensdirektivet/european-single-electronic-format>.
-  Finanstilsynet as NCA; ESEF applies to kapitel-5 *lov om kapitalmarkeder*
-  issuers; Denmark's one-year deferral (mandatory FY2021, published 2022); notes
-  block tagging from FY2022; ESMA-authored ESEF taxonomy; sustainability markup
-  to arrive later in ESEF technical standards.
+  ESEF applies to kapitel-5 *lov om kapitalmarkeder* issuers; Denmark's
+  one-year deferral (mandatory FY2021, published 2022); notes block tagging
+  from FY2022; ESMA-authored ESEF taxonomy. The page (updated 27-02-2023)
+  does not state that Finanstilsynet is the NCA and does not address
+  sustainability mark-up; neither point is verified against it.
 - **[S10]** Directive (EU) 2026/470 (Omnibus I), Tier 1:
   <https://eur-lex.europa.eu/eli/dir/2026/470/oj/eng>. Adopted 24 Feb 2026, in
   force 18 Mar 2026; recital 24 + the amendment to Accounting-Directive Art. 29d:
@@ -925,8 +1012,8 @@ what each establishes.
   undertakings are not required to mark up sustainability reporting.
 - **[S11]** Erhvervsstyrelsen: Det Centrale Virksomhedsregister (CVR), Tier 1:
   <https://erhvervsstyrelsen.dk/det-centrale-virksomhedsregister-cvr>. CVR = the
-  authoritative master register of Danish/Greenlandic entities since 1999;
-  grunddata published via CVR.dk.
+  authoritative register of basic data for all registered enterprises
+  since 1999; grunddata published via CVR.dk.
 - **[S12]** Skattestyrelsen: Tax return for companies and foundations (TastSelv
   Erhverv), Tier 1:
   <https://skat.dk/en-us/businesses/companies-and-foundations/companies-and-foundations/tax-return-for-companies-and-foundations>.
@@ -950,3 +1037,25 @@ what each establishes.
   klar til brug" (news, 26 August 2026), Tier 1:
   <https://erhvervsstyrelsen.dk/esef-taksonomi-2025-er-implementeret-og-klar-til-brug>,
   read 2026-10-13.
+- **[S16]** Lov nr. 480 af 22. maj 2024 (amending årsregnskabsloven, incl.
+  the EU directive raising the size criteria), Tier 1:
+  <https://www.retsinformation.dk/eli/lta/2024/480/pdf>, read 2026-10-15.
+  § 1 nr. 2-3 raise the ÅRL § 7 stk. 2 limits (44 → 55, 89 → 111, 156 →
+  195, 313 → 391 mio. kr.); § 14 stk. 2 gives them effect for financial
+  years beginning on or after 1 January 2023.
+- **[S17]** Erhvervsstyrelsen: "XBRL og Inline XBRL REST Klient Eksempel i
+  Java" (system-til-system guide, Version 6, updated 11 February 2026),
+  Tier 1:
+  <https://erhvervsstyrelsen.dk/vejledning-xbrl-og-inline-xbrl-rest-klient-eksempel-i-java>,
+  read 2026-10-15. Base URL, endpoints, JSON fields (Base64 `iXbrl`),
+  status codes, and the bar on omgørelse via system-til-system.
+- **[S18]** Dokumentation for Regnskab Indberet: Taksonomier, historiske,
+  Tier 1:
+  <https://erhvervsstyrelsen.dk/vejledning-teknisk-vejledning-og-dokumentation-regnskab-20-taksonomier-historiske>,
+  read 2026-10-15 (updated 25 November 2025). Older ÅRL and DK-IFRS
+  taxonomy packages and compare files.
+- **[S19]** Erhvervsstyrelsen: "Udkast til ny version af taksonomi til
+  årsrapporter sendt i høring" (news, 2 October 2026), Tier 1:
+  <https://erhvervsstyrelsen.dk/udkast-til-ny-version-af-taksonomi-til-aarsrapporter-sendt-i-hoering>,
+  read 2026-10-15. Draft 2026 DKGAAP taxonomy, consultation to 23 October
+  2026, final version due November 2026.

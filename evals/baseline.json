@@ -1,5 +1,5 @@
 {
- "frozen_on": "2026-10-13",
+ "frozen_on": "2026-10-15",
  "harness": "886d647f5386c67b",
  "metrics": {
   "train": {
@@ -248,8 +248,9 @@
   "references/jurisdictions/fi-prh.md": [
    "sbr-dpm-2025-12-31_fix_2026-02-19",
    "sbr-dpm-2025-12-31",
-   "kpl-2016-12/2022-09-30, 2019-11-06, 2019-03-28",
-   "ifrs accounting taxonomy 2025 / 2024"
+   "sbr-dpm-2022-09-30",
+   "kpl-2016-12/2019-11-06, 2019-03-28",
+   "ifrs accounting taxonomy 2025"
   ],
   "references/jurisdictions/hk-ird.md": [
    "2026-04-01",
@@ -300,6 +301,30 @@
    "on": "2026-10-13",
    "reason": "cycle 2026-10: harness review (bars measured per frozen case set; a bar keeps the higher of old and new); index wording round 2 accepted; HK row and cycle fact cases added; rt-33 expectation corrected to dts.md",
    "dropped": [],
+   "measured": {
+    "train": {
+     "trigger_recall": 0.9091,
+     "trigger_specificity": 1.0,
+     "route_mrr": 0.9746,
+     "route_hit1": 0.9565,
+     "fact_recall": 1.0
+    },
+    "test": {
+     "trigger_recall": 1.0,
+     "trigger_specificity": 1.0,
+     "route_mrr": 0.9479,
+     "route_hit1": 0.9167,
+     "fact_recall": 1.0
+    }
+   }
+  },
+  {
+   "on": "2026-10-15",
+   "reason": "fi-prh primary-source verification 2026-10-15 (doc2ixbrl #4960): PRH's applicable-versions page lists IFRS 2025 only and SBR-DPM-2022-09-30 as the legacy SBR release; the combined rows split into rows that state what PRH accepts",
+   "dropped": [
+    "references/jurisdictions/fi-prh.md:kpl-2016-12/2022-09-30, 2019-11-06, 2019-03-28",
+    "references/jurisdictions/fi-prh.md:ifrs accounting taxonomy 2025 / 2024"
+   ],
    "measured": {
     "train": {
      "trigger_recall": 0.9091,

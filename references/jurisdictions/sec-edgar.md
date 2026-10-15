@@ -283,14 +283,14 @@ reproduces the numbers in its "EFM v68 Ref" column:
 | EFM.6.05.14 | Text fact with `xml:lang` other than `en-US` and no matching English fact (`du-0514`) | 6.5.14 |
 | EFM.5.02.05.14.hidden-fact-not-referenced | `ix:hidden` fact not referenced by any `-sec-ix-hidden` style property (`ix-0514-Hidden-Fact-Not-Referenced`) | 5.2.5.14 |
 | EFM.6.05.45.coverPageFactNotVisible | Cover-page fact in `ix:hidden` neither visible nor referenced via `-sec-ix-hidden` (`dq-0545-Cover-Page-Fact-Not-Visible`) | 6.5.45 |
-| EFM.6.05.16 | `href`/`src` attribute scheme restrictions on embedded content | 6.5.16 |
+| EFM.6.05.16 | Text-block fact content not valid in an HTML `body`: active content, external references, data-URL or non-GIF/JPEG images, nested tables (`cp-0516-Prohibited-Html-Body`) | 6.5.16 |
 | EFM.6.05.17 | Numeric fact carries `precision` instead of `decimals` | 6.5.17 |
 | EFM.6.05.37 | A finite `decimals` truncates non-zero digits of the value | 6.5.37 |
 | EFM.6.05.20 | Required DEI element missing (e.g., `dei:AmendmentFlag`) | 6.5.20 |
 | EFM.6.05.21 | Required DEI per document type (e.g., `EntityRegistrantName`) | 6.5.21 |
-| EFM.6.05.34 | Inline XBRL submission / well-formedness violation | 6.5.34 |
+| EFM.6.05.34 | Footnote content not valid in an HTML `body`, same sub-codes as 6.05.16 (`cp-0534-Prohibited-Html-Footnote-Body`) | 6.5.34 |
 | EFM.6.05.40 | DEI elements added in newer taxonomies | 6.5.40 |
-| EFM.6.05.42 | Deprecated concept used (warning) | 6.5.42 |
+| EFM.6.05.42 | Deprecated concept used (warning, `dq-0542-Deprecated-Concept`) | 6.5.42 |
 | EFM.6.05.48 | Address element tagging via DEI address concepts | 6.5.48 |
 
 Full lists:
