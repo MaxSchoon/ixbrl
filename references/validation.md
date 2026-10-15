@@ -242,11 +242,11 @@ work but not in itself a defect. Distinguish them by reading the
 
 | Code | Meaning | Typical root cause | Fix |
 |---|---|---|---|
-| `EFM.6.05.16` | Text-block fact content not valid in an HTML `body` (`cp-0516-Prohibited-Html-Body`; sub-codes `.activeContent`, `.externalReference`, `.graphicDataUrl`, `.graphicFileType`, `.nestedTable`) | Escaped HTML in a text block carries script, an external `href`/`src`, a data-URL or non-GIF/JPEG image, or nested tables | Strip active content, keep references inside the submission, use `.gif`/`.jpg` files, flatten nested tables |
+| `EFM.6.05.16` | Text-block fact content not valid in an HTML `body` (`cp-0516-Prohibited-Html-Body`; sub-codes `.activeContent`, `.externalReference`, `.graphicDataUrl`, `.graphicFileContent`, `.graphicFileError`, `.graphicFileType`, `.nestedTable`) | Escaped HTML in a text block carries script, an external `href`/`src`, a data-URL or non-GIF/JPEG image, or nested tables | Strip active content, keep references inside the submission, use `.gif`/`.jpg` files, flatten nested tables |
 | `EFM.6.05.19` | A custom segment / scenario element is not a dimensional construct | Free-form XML in scenario | Replace with `xbrldi:explicitMember` / `xbrldi:typedMember` |
 | `EFM.6.05.20.missingAmendmentFlag` | `dei:AmendmentFlag` not reported | Required DEI tag missing | Tag `dei:AmendmentFlag` in the cover page |
 | `EFM.6.05.27` | Two contexts have equal period+entity+segment but different IDs | Duplicate contexts with different `id`s | Collapse to one context, repoint contextRef |
-| `EFM.6.05.34` | Footnote content not valid in an HTML `body` (`cp-0534-Prohibited-Html-Footnote-Body`; same sub-codes as `6.05.16`, plus `.dtdError`) | Footnote text carries script, external references, disallowed images or malformed XHTML | Same repairs as `6.05.16`, applied to the footnote |
+| `EFM.6.05.34` | Footnote content not valid in an HTML `body` (`cp-0534-Prohibited-Html-Footnote-Body`; the `6.05.16` sub-codes plus `.dtdError` and `.disallowedMetaContent`) | Footnote text carries script, external references, disallowed images or malformed XHTML | Same repairs as `6.05.16`, applied to the footnote |
 | `EFM.6.05.36` | Calculation-link inconsistency at the declared decimals | Sum of children does not match parent within tolerance | Fix the data, or revisit `decimals` |
 | `EFM.6.05.42` | Deprecated concept used (warning, `dq-0542-Deprecated-Concept`) | A concept the taxonomy release deprecated is still tagged | Retag with the replacement concept the taxonomy's deprecation metadata names |
 | `EFM.6.05.45` | Required DEI cover-page tag missing or invalid | `EntityRegistrantName` / `DocumentPeriodEndDate` etc. missing | Tag the missing DEI element |

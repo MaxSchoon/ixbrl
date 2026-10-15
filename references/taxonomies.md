@@ -384,13 +384,13 @@ version.
 
 ## 7. Denmark: ÅRL Taxonomy / DCCA (Erhvervsstyrelsen)
 
-**Issuer / Jurisdiction:** Erhvervsstyrelsen (Danish Business Authority / DCCA), which runs the Regnskab Indberet platform and publishes filed data on `www.data.virk.dk`. Statute: Årsregnskabsloven (ÅRL, lovbek. nr. 1057 af 23/09/2024); filing rules: BEK nr. 859 af 18/06/2025 (indsendelsesbekendtgørelsen).
+**Issuer / Jurisdiction:** Erhvervsstyrelsen (Danish Business Authority / DCCA), which runs the Regnskab Indberet platform and publishes filed data on `www.data.virk.dk`. Statute: Årsregnskabsloven (ÅRL, LBK nr. 402 af 23/03/2026, which re-promulgates LBK 1057/2024 with amendments); filing rules: BEK nr. 859 af 18/06/2025 (indsendelsesbekendtgørelsen).
 
 **Versioning:** Annual ÅRL taxonomy generations (`20241001`, `20251001`, …). Inline XBRL is mandatory for the årsrapport from **balance date on/after 2025-01-01** (bi-temporal, keyed to the balance date not the filing date). The pairing of balance date → taxonomy generation → Kontroller version matters; see the cheatsheet in *Vintage and applicability* in `references/jurisdictions/dk-erst.md`.
 
 **Architecture:** Root URL `http://archprod.service.eogs.dk/taxonomy/`, `{yyyymmdd}/{component}` layout. Modular three-letter namespaces: `gsd` (general + submission data), `arr` (auditor's reports), `mrv` (management's review), `sob` (statement of boards), `fsa` (financial statements), `dst`/`tax`/`eogs`, plus `tch`/`cmn` common schemas with `da`/`en` label linkbases.
 
-**Entry points:** ÅRL schema files selected by balance-sheet form (account vs report) × income-statement form (by nature vs by function) plus disclosure set. IFRS filers use the ÅRL taxonomy **plus** ESEF (§ 17 stk. 3: the DK-IFRS taxonomy is phased out). Financial-sector entities use Finanstilsynet's **DKFIN** taxonomy (embedded in ÅRL, mandatory FY2025, eight entry points by entity type).
+**Entry points:** ÅRL schema files selected by balance-sheet form (account form, or account form split by current and long term) × income-statement form (by nature vs by function), plus the "excluding balance sheet and income statement" companion for IFRS/ESEF filers; the `20251001` filenames are enumerated in `references/jurisdictions/dk-erst.md`. IFRS filers use the ÅRL taxonomy **plus** ESEF (§ 17 stk. 3: the DK-IFRS taxonomy is phased out). Financial-sector entities **required to file Inline XBRL** (BEK 917/2025 § 3 stk. 2-6: listed issuers, sustainability reporters, Art. 8 reporters) use Finanstilsynet's **DKFIN** taxonomy (embedded in ÅRL, financial years from 1 Jan 2025, eight entry points by entity type); other financial entities file a searchable PDF (§ 3 stk. 1).
 
 **Channels:** Regnskab Basis (guided web-keying), Regnskab Special (file upload), or system-til-system (API). The filer submits **one Inline XBRL file**; the platform derives the XBRL instance(s) server-side.
 

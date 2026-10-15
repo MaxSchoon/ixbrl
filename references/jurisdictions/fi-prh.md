@@ -709,7 +709,7 @@ Consequences for review and for any converter:
   non-negative), each with a severity (for example `WARNING`) and
   FI/SV/EN messages. Since 8.9.2026 avoindata.fi also carries an **SBR
   Conformance Suite** with per-rule valid and invalid iXBRL test reports
-  (`OYTP_2026_vN.N`, `LSTP_2026_vN.N`, `VYTP_2026_vN.N`) [S23]. Which of
+  (files named `OYTP_2026_vN.N`; the naming of any LSTP and VYTP files in the suite was not verified) [S23]. Which of
   these rules PRH's intake interface enforces, and at what severity, is not
   stated in [S5] (honest gap).
 - For a **FAS / SBR** filing the deterministic gate is therefore core

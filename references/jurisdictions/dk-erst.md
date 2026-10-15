@@ -984,8 +984,8 @@ what each establishes.
   (Bekendtgørelse af årsregnskabsloven), Tier 1:
   <https://www.retsinformation.dk/eli/lta/2026/402> (PDF at
   <https://www.retsinformation.dk/eli/lta/2026/402/pdf>; the page itself is
-  JS-rendered, the `/pdf` path serves plain text). Consolidates and
-  supersedes lovbekendtgørelse nr. 1057 af 23/09/2024. Reporting classes
+  JS-rendered, the `/pdf` path serves plain text). Re-promulgates
+  lovbekendtgørelse nr. 1057 af 23/09/2024 with later amendments. Reporting classes
   A/B/C/D and the size thresholds (§ 7 stk. 2 and stk. 4); filing deadlines
   and their carve-outs (§§ 138, 140, 141, 143); late-filing consequences
   (§§ 150-152, § 162 stk. 1 nr. 1); regnskabskontrol (§§ 159-159 b,
