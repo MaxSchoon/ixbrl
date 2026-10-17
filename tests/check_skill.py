@@ -240,6 +240,7 @@ def check_attribution() -> None:
     for name in (
         "LICENSE",
         "LICENSE-CONTENT",
+        "LICENSES/MIT.txt",
         "NOTICE",
         "ATTRIBUTION.md",
         "rsl.xml",
