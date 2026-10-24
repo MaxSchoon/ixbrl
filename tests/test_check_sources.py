@@ -10,9 +10,11 @@ Run: python3 -m unittest discover -s tests -p 'test_*.py'
 from __future__ import annotations
 
 import copy
+import io
 import json
 import sys
 import unittest
+from contextlib import redirect_stderr
 from datetime import date
 from pathlib import Path
 
@@ -110,6 +112,11 @@ class Registry(unittest.TestCase):
 
     def test_cli_is_green_without_max_age(self):
         self.assertEqual(cs.main(["--today", "2026-10-13"]), 0)
+
+    def test_cli_refuses_a_malformed_today(self):
+        with self.assertRaises(SystemExit) as raised, redirect_stderr(io.StringIO()):
+            cs.main(["--today", "not-a-date"])
+        self.assertEqual(raised.exception.code, 2)
 
 
 if __name__ == "__main__":
