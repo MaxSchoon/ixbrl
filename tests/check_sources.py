@@ -42,6 +42,14 @@ def parse_day(value: object) -> date | None:
         return None
 
 
+def cli_day(value: str) -> date:
+    """`--today`'s argparse type: a malformed date is a usage error, never today."""
+    day = parse_day(value)
+    if day is None:
+        raise argparse.ArgumentTypeError(f"not an ISO date: {value!r}")
+    return day
+
+
 def problems_in(
     registry: dict, root: Path, today: date, max_age: int | None = None
 ) -> tuple[list[str], list[str]]:
@@ -121,7 +129,7 @@ def problems_in(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=(__doc__ or "").split("\n\n")[0])
     parser.add_argument("--max-age", type=int, metavar="DAYS")
-    parser.add_argument("--today", type=parse_day, help="the date to judge age at")
+    parser.add_argument("--today", type=cli_day, help="the date to judge age at")
     args = parser.parse_args(argv)
     today = args.today or date.today()
     try:
