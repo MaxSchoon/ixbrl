@@ -196,8 +196,9 @@ unchanged by the committee [S18][S22]. Status: referred to the Commerce
 Committee (talousvaliokunta) 27 May 2026; committee report **TaVM 23/2026
 vp** of 2.10.2026 approved the bill **with amendments**; Parliament
 completed the second reading on **13.10.2026** (*"Asian käsittely
-päättyi"*), Parliament's reply **EV 140/2026 vp** [S22]. As of 2026-10-15
-the act **awaits presidential confirmation** and Finlex publication, so
+päättyi"*), Parliament's reply **EV 140/2026 vp** [S22], delivered on 16.10.2026. As of
+2026-11-01 the Eduskunta record ends there, with no presidential
+confirmation or Finlex publication found, so
 filing stays voluntary until it applies. The committee's amendments also
 repeal Accounting Act **ch. 7 s. 24**, extend the Trade Register Act
 amendment to **§ 31**, and require PRH to publish the taxonomy decision for
@@ -219,6 +220,7 @@ returns 403), so resolution is by the package catalog only [S23].
 
 | Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
 |---|---|---|---|---|---|---|
+| `SBR-DPM-2026-10-29_PWD` (draft) | `…/oytp/kpl-2016-12/2026-10-29/mod/oytp_gaap_{ind,con}.xsd`, with `lstp` and `vytp` modules; new `…/aykytp/kpl-2016-12/2026-10-29/mod/aykytp_gaap_{ind,con}.xsd` (partnerships) and a `TPILM` reporting set (filing data), per the package's `taxonomyPackage.xml` and `LueMinut.txt` | `https://avoindata.suomi.fi/data/dataset/644a8ee5-1de5-4f9d-a7bf-ef5edfcb619a/resource/f85ef6d9-cc5b-4e24-a5b5-f9c535ae9aa8/download/sbr-dpm-2026-10-29.zip` (34 MB; `LueMinut.txt`: "katselmointiversio joulukuussa 2026 julkaistavasta" taxonomy, a review version of the one due December 2026) | not for reporting | not on PRH's applicable-versions page (read 2026-11-01) | draft | package; [S23] |
 | **`SBR-DPM-2025-12-31_fix_2026-02-19`** | `http://www.valtiokonttori.fi/fi/fr/xbrl/crr/fws/oytp/kpl-2016-12/2025-10-16/mod/oytp_gaap_{ind,con}.xsd` (note the entry-point date, 2025-10-16) (companies); `lstp_*` under `…/lstp/tiltoia_2018/2025-10-16/`; `vytp_*` under `…/vytp/stmtpa_2016/2025-10-16/`; foundations `stp/` and `stk/` still at `…/kpl-2016-12/2022-09-30/` ("ei päivitetty vuonna 2025") | `https://avoindata.suomi.fi/data/dataset/644a8ee5-1de5-4f9d-a7bf-ef5edfcb619a/resource/0f00c1d5-cc7b-4159-909d-05df806de1c6/download/sbr-dpm-2025-12-31_fix_2026-02-19.zip` (200; its manifest still says `tp:version` `SBR-DPM-2025-12-31`) | financial periods starting on or after **1 Jan 2026** | the version PRH names for markup | current | [S9][S20][S23] |
 | `SBR-DPM-2025-12-31` | same modules | the unfixed zip on the same dataset page | superseded before use | labelled "VANHA VERSIO, ÄLÄ KÄYTÄ" (old version, do not use); "PRH ei tue tätä taksonomiaversiota vastaanottorajapinnassa" (not supported by PRH's interface) | withdrawn | [S23] |
 | `SBR-DPM-2022-09-30` (`kpl-2016-12/2022-09-30`) | `…/oytp/kpl-2016-12/2022-09-30/mod/oytp_gaap_{ind,con}.xsd`, also shipped inside the current package | current package (and its own dataset resource) | periods starting in 2024 and 2025 | listed by PRH for those periods | legacy, supported | [S20][S23] |

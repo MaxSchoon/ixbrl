@@ -119,9 +119,27 @@ consultation until 11 November 2026, as technical advice to ESMA and the
 Commission). It is a draft: sustainability statements are not marked up
 until a delegated regulation amending the ESEF RTS adopts rules for it,
 and Directive (EU) 2026/470 suspends that obligation meanwhile. Do not
-flag an untagged sustainability statement as a defect.
+flag an untagged sustainability statement as a defect. EFRAG expects to
+deliver its final advice by the end of 2026.
 <https://www.efrag.org/en/projects/esrs-xbrl-taxonomy/exposure-draft-consultation>
-(read 2026-10-13).
+(read 2026-11-01).
+
+The standards themselves have moved. Commission Delegated Regulation (EU)
+2026/1563 (OJ L, 21 September 2026; in force 10 November 2026) replaces the
+ESRS annexes for financial years beginning on or after 1 January 2027, and
+for years starting in 2026 lets an undertaking apply the old set, the new
+set, or the old set with listed reliefs, stating which. That changes which
+datapoints exist, not the suspension above.
+<https://eur-lex.europa.eu/eli/reg_del/2026/1563/oj/eng>
+
+**Voluntary reporting (no filing obligation).** Delegated Regulation (EU)
+2026/1560 (OJ L, 21 September 2026) sets the Voluntary Sustainability
+Reporting Standard. EFRAG's VSME XBRL taxonomy and Digital Template predate
+it; EFRAG says the updated template, taxonomy and converter are "scheduled
+for Q4 2026". The taxonomy allows Inline XBRL, xBRL-JSON and xBRL-CSV.
+<https://eur-lex.europa.eu/eli/reg_del/2026/1560/oj/eng>
+<https://www.efrag.org/en/vsme-digital-template-and-xbrl-taxonomy>
+(read 2026-11-01).
 
 **Download:**
 
@@ -139,7 +157,9 @@ and 2026 SRT, accepted by EDGAR at Release 26.1 on **16 March 2026**;
 EDGAR accepts 2025 and 2026, and removed every 2024 SEC taxonomy at
 Release 26.3 on 14 September 2026. The 2027 GRT and SRT are proposed
 (FASB release notes of 1 October and 1 September 2026, comments due
-30 October 2026) and not accepted. The release-by-release table, with
+30 October 2026; a further GRT reference-project proposal, comments due
+2 November 2026; a proposed 2027 DQC Rules Taxonomy, comments due
+20 November 2026) and not accepted. The release-by-release table, with
 sources, is `references/jurisdictions/sec-edgar.md` § DTS and vintages.
 Earlier: the **2025 GRT**, 2025 SRT and 2025 GAAP Employee Benefit Plan
 Taxonomy (EBPT) were accepted on **17 March 2025** (Release 25.1).
@@ -220,8 +240,9 @@ versions should be in active use simultaneously.
 - FCA for UKSEF AFR filings of premium- and standard-listed issuers.
 - **Companies House April 2028 (ECCTA):** software-only iXBRL accounts
   mandate confirmed 9 June 2026 (moved from the paused April-2027 date).
-  Web and paper accounts routes close; small/micro P&L with a
-  publication opt-out; abridged accounts abolished. See
+  Web and paper accounts routes close. Reconfirmed on 23 October 2026, when
+  the government paused the small/micro P&L filing requirement and kept
+  abridged accounts and filleting. See
   `references/jurisdictions/uk-frc.md` the *Companies House* profile.
 
 **Deep dive:** for the receiver-by-receiver filing rules, bi-temporal
@@ -341,12 +362,10 @@ reports referencing periods ≥ 31 March 2026 must be filed in **xBRL-CSV**
 ### EBA: COREP / FINREP
 
 **Current version:** **Reporting Framework 4.2** (Q4 2025, hotfix and
-FINREP9DP artefacts February 2026) is the latest *released* framework;
-4.3 (expected Q2 2026) and 4.4 (expected Q3 2026) are announced for
-later reference dates, and on 2026-08-21 the 4.3 page carried "Taxonomy
-package 4.3" and "Sample files 4.3" headings with **no downloadable
-artefact** behind them. An earlier edition of this file had that
-inverted. Per-release table with
+FINREP9DP artefacts February 2026) carries most modules' reference dates
+in 2026. **4.3** (package July 2026) and **4.4 phase 1** (final technical
+package 12 October 2026) are published for later reference dates, and
+4.4.1 (phase 2) is announced for early 2027. Per-release table with
 package URLs and reference-date windows: `references/dpm.md` § DTS and
 vintages. Re-verify against the EBA page at filing date.
 
@@ -471,8 +490,49 @@ published the draft **2027 EDINET taxonomy** on 11 September 2026: it
 adds a sustainability-related taxonomy importing the IFRS Sustainability
 Disclosure Taxonomy, and updates the financial-statement, IFRS and
 disclosure taxonomies for the amended disclosure ordinances; it is a
-draft, and its application dates are those the final notice states.
-https://www.fsa.go.jp/search/20260911.html (read 2026-10-13). https://disclosure2.edinet-fsa.go.jp/
+draft, and its application dates are those the final notice states. The
+FSA's outline plans the final for early December and operation from late
+December 2026, and annual securities reports for years ending on or after
+31 March 2027.
+https://www.fsa.go.jp/search/20260911.html, https://www.fsa.go.jp/search/20260911/1a-1_KoshinGaiyo.pdf (read 2026-11-01). https://disclosure2.edinet-fsa.go.jp/
+The duty to disclose under the SSBJ sustainability standards is already law:
+the ordinance of 20 February 2026 binds Tokyo Stock Exchange Prime companies
+with average market capitalisation of ¥1 trillion or more from years ending on
+or after 31 March 2028, and of ¥3 trillion or more from 31 March 2027. The
+disclosure binds; the sustainability tags are still draft.
+https://www.fsa.go.jp/news/r7/shouken/20260220/20260220.html
+TDnet is a separate channel: JPX specifies XBRL for earnings reports, with
+2026 quarterly financial-statement taxonomies for periods in years beginning
+on or after 1 April 2026. Whether that XBRL is mandatory was not confirmed on
+a JPX page.
+https://www.jpx.co.jp/english/equities/listing/disclosure/xbrl/03.html
+
+**Korea: DART (FSS).** The FSS has extended XBRL financial disclosure from the
+statements to listed companies' notes in phases since the 2023 financial year,
+through the 2027 financial year (disclosed March 2028). Its press release of
+14 October 2026 promises a new taxonomy during 2026 for K-IFRS 1118 (IFRS 18),
+which applies from the 2027 financial year. That taxonomy was not found
+published, so it is a plan.
+https://eiec.kdi.re.kr/policy/callDownload.do?dtime=20261013190632&filenum=1&num=288021
+
+**Singapore: BizFinx (ACRA).** Financial statements are filed in XBRL through
+the BizFinx Preparation Tool. Version 4.0.1 was released on 19 October 2026 and
+"Users must transition to the latest version by 30 November 2026"; the employee
+number fields become optional, and some rule exceptions become possible errors.
+https://www.acra.gov.sg/news-events/news-announcements/new-bizfinx-prep-tool/
+
+**Ukraine: Financial Reporting System (NSSMC, NBU).** Submission on the UA IFRS
+XBRL 2025 taxonomy opened on 17 March 2026, for annual and consolidated
+statements for 2025 and interim statements for 2026. It "is mandatory for
+entities that, pursuant to the law, prepare financial statements in accordance
+with" IFRS, and for companies that adopted IFRS voluntarily.
+https://www.nssmc.gov.ua/en/ua-startuie-podannia-informatsii-do-tsentru-zboru-finansovoi-zvitnosti-na-osnovi-taksonomii-2025-roku/
+
+**Ireland: Companies Registration Office (a plan, no filer obligation).** CRO
+minutes of 18 March 2026 say "CSRD will require the implementation of iXBRL in
+the CRO and the CRO has applied for sanction for this project". No tender or
+requirement on filers was found.
+https://cro.ie/wp-content/uploads/2026/04/CRO-Stakeholder-Forum-Minutes-March-2026.pdf
 
 **Hong Kong: IRD Profits Tax iXBRL (new mandate).** Inline XBRL became
 mandatory for the first phase of Profits Tax e-filing: in-scope
@@ -497,8 +557,11 @@ Taxonomy (Indian GAAP / IND-AS) and Costing Taxonomy used for filing
 financial statements via e-form AOC-4 XBRL. Mandatory for listed
 companies, their Indian subsidiaries, companies with paid-up capital
 ≥ INR 5 crore, companies with turnover ≥ INR 100 crore, and all companies
-preparing accounts under IND-AS Rules 2015.
-https://www.mca.gov.in/MinistryV2/xbrl.html
+preparing accounts under IND-AS Rules 2015; non-banking financial, housing
+finance, banking and insurance companies are exempt. The authenticated
+financial statements are attached to AOC-4 XBRL in addition to the XBRL
+statements.
+https://www.mca.gov.in/XBRL/Policy_specific_FAQs.html, https://www.mca.gov.in/content/mca/global/en/help-faq/annual-filing.html (read 2026-11-01). https://www.mca.gov.in/MinistryV2/xbrl.html
 
 ## Sources
 

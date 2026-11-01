@@ -1,12 +1,12 @@
 {
- "frozen_on": "2026-10-15",
+ "frozen_on": "2026-11-01",
  "harness": "886d647f5386c67b",
  "metrics": {
   "train": {
-   "trigger_recall": 0.9091,
+   "trigger_recall": 1.0,
    "trigger_specificity": 1.0,
-   "route_mrr": 0.9746,
-   "route_hit1": 0.9565,
+   "route_mrr": 0.9891,
+   "route_hit1": 0.9783,
    "fact_recall": 1.0
   },
   "test": {
@@ -246,6 +246,7 @@
    "dk-ifrs stand-alone"
   ],
   "references/jurisdictions/fi-prh.md": [
+   "sbr-dpm-2026-10-29_pwd",
    "sbr-dpm-2025-12-31_fix_2026-02-19",
    "sbr-dpm-2025-12-31",
    "sbr-dpm-2022-09-30",
@@ -270,6 +271,7 @@
   ],
   "references/jurisdictions/sec-edgar.md": [
    "2027 grt + srt",
+   "2027 dqc rules taxonomy",
    "2026 grt + srt",
    "2025 grt + srt",
    "2024 grt + srt",
@@ -331,6 +333,27 @@
      "trigger_specificity": 1.0,
      "route_mrr": 0.9746,
      "route_hit1": 0.9565,
+     "fact_recall": 1.0
+    },
+    "test": {
+     "trigger_recall": 1.0,
+     "trigger_specificity": 1.0,
+     "route_mrr": 0.9479,
+     "route_hit1": 0.9167,
+     "fact_recall": 1.0
+    }
+   }
+  },
+  {
+   "on": "2026-11-01",
+   "reason": "cycle 2026-11: train trigger recall, route hit@1 and MRR raised by three description and index rounds; held-out unchanged",
+   "dropped": [],
+   "measured": {
+    "train": {
+     "trigger_recall": 1.0,
+     "trigger_specificity": 1.0,
+     "route_mrr": 0.9891,
+     "route_hit1": 0.9783,
      "fact_recall": 1.0
     },
     "test": {

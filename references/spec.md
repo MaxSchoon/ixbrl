@@ -128,7 +128,7 @@ Weights validate only when child concepts have compatible **balance** types (deb
 
 A processor reports a **calculation inconsistency** (not an error) when the parent fact differs from the weighted sum of child facts beyond rounding implied by `decimals`/`precision`. Resolve inconsistencies before filing in regimes that mandate calc-linkbase compliance (ESEF, Dutch SBR, SEC EDGAR for primary statements).
 
-**Calculations 1.1** (2024) clarifies behavior under dimensions and is more permissive in narrow cases. Check the target regulator's manual for the required version.
+**Calculations 1.1** (Recommendation, 22 February 2023) clarifies behavior under dimensions and is more permissive in narrow cases. Check the target regulator's manual for the required version.
 
 ## Sources
 
