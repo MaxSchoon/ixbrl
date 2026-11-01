@@ -6,7 +6,7 @@
 # static assets. These are only for running the checks locally and in CI.
 
 # Standardization gate: linter + formatter for scripts/ and tests/ (ruff.toml).
-ruff==0.16.10
+ruff==0.17.3
 
 # Runtime dependency of scripts/check_facts.py only.
 lxml==6.1.3
@@ -24,4 +24,4 @@ markdown-it-py==4.2.0
 
 # CA bundle for scripts/dts_profile.py's online walks. python.org macOS builds
 # ship no system CA bundle, and the script uses certifi's when it is importable.
-certifi==2026.10.19
+certifi==2026.10.23
