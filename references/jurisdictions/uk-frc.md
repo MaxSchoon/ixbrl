@@ -173,7 +173,7 @@ filing.
 | FCA/NSM: **ESEF-2024** (Reg (EU) 2025/19) is the generally-accepted taxonomy (ESEF-2022 before) | AFR deadlines **from 30 April 2026**: the earliest deadline in the DTR 4.1.3R four-month range (FY on/after 1 Jan 2025) | TN/507.2 |
 | CH accepts **FRC suites 2026 / 2025 / 2024 / 2023 / 2022** (aligned with HMRC) | From **April 2026** | CH XML Gateway Forum, 22 Dec 2025 |
 | HMRC's free **CATO** filing service closes | **31 March 2026** | COM60040 |
-| CH: **software-only iXBRL accounts mandate** (ECCTA); web + paper accounts routes **close** (see the *Companies House* profile) | **April 2028** | GOV.UK news 9 June 2026; ICAEW |
+| CH: **software-only iXBRL accounts mandate** (ECCTA); web + paper accounts routes **close** (see the *Companies House* profile) | **April 2028** | GOV.UK news 23 Oct 2026 (the mandate "is going ahead as planned"); GOV.UK news 9 June 2026 (withdrawn 23 Oct 2026); ICAEW |
 
 The FRC's own version policy: **only two suite versions should be in
 use at once (the latest and the penultimate)**, to satisfy HMRC full
@@ -229,23 +229,32 @@ Today CH accepts accounts through **web filing, paper, and software
 accounts-reform package effective **April 2028** (moved from the paused
 April-2027 date; 21 months' notice). From April 2028: ["Using software to
 file your company's information", GOV.UK; GOV.UK news 9 June 2026; ICAEW]
+**On 23 October 2026 the government changed that package**: it withdrew the
+9 June story, paused the profit-and-loss filing requirement, and kept the
+software mandate. ["Companies House update to accounts filing from April
+2028", GOV.UK news 23 October 2026]
 
 - **All** UK-registered companies file accounts in **iXBRL via commercial
   software**; CH **web and paper accounts routes close** (web filing
   survives for non-accounts filings).
-- Small companies and micro-entities must file a **profit-and-loss
-  account**, with an **opt-out from publication** (CH, HMRC, law
-  enforcement retain access).
-- **Abridged accounts abolished**; **strengthened audit-exemption
-  eligibility statement**; **all component parts** filed together;
-  **fewer** accounting-reference-period shortenings.
+- **Paused on 23 October 2026**: the requirement for small companies and micro-entities to file a **profit-and-loss
+  account**. The 9 June package paired it with an opt-out from publication
+  and abolished abridged accounts. The government now "will continue to
+  allow companies to file abridged accounts and retain the option for smaller
+  companies to remove, or 'fillet', their profit and loss information" after
+  1 April 2028, while it explores streamlining Companies House and HMRC
+  filing. Do not flag filleted or abridged accounts as defects on the strength
+  of the 9 June text.
+- **Still going ahead**: a **strengthened audit-exemption eligibility
+  statement**; **all component parts** filed together; **fewer**
+  accounting-reference-period shortenings.
 - Per ICAEW: public-register **annotation** for non-compliance with a
   Companies Act 2006 notice; small-company directors'-report requirement
   dropped under Modernising Corporate Reporting.
 
 > **Honest gap.** The *scope* of mandatory tagging at April 2028 is
-> **not restated** in the 9 June 2026 announcement or current gov.uk
-> guidance: whether it extends beyond the financial statements to
+> **not restated** in the 9 June 2026 announcement, the 23 October 2026
+> update or current gov.uk guidance: whether it extends beyond the financial statements to
 > directors'/strategic reports and (for charitable companies) trustees'
 > reports. The pre-pause April-2027 plan trailed broader
 > scope, but it is **not confirmed for 2028**. [GOV.UK news; "Using
@@ -803,7 +812,9 @@ package types are defined: [CH TIS for accounts v5.9]
   directories; the consolidated side is checked only for valid iXBRL.
 - **Overseas Accounts**: `english-accounts`, optional
   `untranslated-accounts`, optional OSAA01 PDF; not validated against UK
-  law.
+  law. Overseas companies can file iXBRL package accounts online since the
+  guidance update of 25 September 2026 ("Filing your Companies House
+  accounts", GOV.UK).
 
 `parent-accounts` may itself be an FRC iXBRL file **or** a nested UKSEF
 zip package. Audit Exempt and Filing Exempt Subsidiary packages replace
@@ -1043,7 +1054,15 @@ Cite these, with version, before declaring a defect. Do not cite a rule
 from memory; the FRC suites and filing rules evolve annually. Each line
 notes what the source establishes; section refs point to the detail.
 
-- **CH accounts changes from April 2028 (GOV.UK, 9 June 2026)**:
+- **Companies House update to accounts filing from April 2028 (GOV.UK,
+  23 October 2026)**: the P&L pause, abridged accounts kept, the software
+  mandate reconfirmed; the *Companies House* profile.
+  <https://www.gov.uk/government/news/companies-house-update-to-accounts-filing-from-april-2028>
+- **Filing your Companies House accounts (GOV.UK, last updated 23 October
+  2026)**: the update log, overseas iXBRL package accounts.
+  <https://www.gov.uk/government/publications/filing-your-companies-house-accounts>
+- **CH accounts changes from April 2028 (GOV.UK, 9 June 2026; withdrawn
+  23 October 2026)**: the superseded package, kept as history;
   *Vintage and applicability*; the *Companies House* profile.
   <https://www.gov.uk/government/news/companies-house-to-bring-in-changes-to-accounts-filing-from-april-2028>
 - **Using software to file your company's information (GOV.UK, 9 June

@@ -15,7 +15,7 @@ There are no harness-specific assumptions in this repo. Do not introduce them.
 
 ## Discipline
 
-Three rules govern every change:
+Four rules govern every change:
 
 ### 1. Primary-source validation
 
@@ -45,6 +45,10 @@ Do not paper over uncertainty. A documented gap is a contribution; a confident-s
 ### 3. Vendor-neutral language
 
 The skill must be usable in any agent harness that supports the skill convention. Do not mention specific harnesses, vendors, IDEs, or assistants by name. Use "the agent", "an AI agent", "the agent runtime", "the harness".
+
+### 4. No instruction that removes a checkpoint
+
+A skill's line reaches every agent that loads it. Do not tell an agent to skip a validator, a review or a confirmation, to pass a flag that bypasses a check, or to proceed without asking. A rule that narrows a finding ("do not flag X for periods before Y") is fine when it cites the rule that makes X correct. Checked in review, because scanners catch these poorly (arXiv 2610.37734).
 
 ## Size discipline (skill-runtime limits)
 

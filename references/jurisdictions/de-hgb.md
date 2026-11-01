@@ -102,11 +102,15 @@ prior year under `versioning/`.
 
 | Release | Entry point(s) | Package | Valid time | Accepted at deposit | Status | Source |
 |---|---|---|---|---|---|---|
-| **6.10** (taxonomy date 2026-04-01; BMF-Schreiben 8 Jun 2026) | `de-{gcd,gaap-ci,bra,fi,pi,ins}-2026-04-01-shell*.xsd` (16 shells) | `https://www.esteuer.de/download/taxonomie_20260615/germany-gaap-taxonomy-v6.10-2026-04-01-xbrl.zip` (200; note **`germany-`**, earlier years use `german-`); table linkbase `…/Tabellenlayouts-v6.10-2026-04-01-table-linkbase.zip` | Wirtschaftsjahre beginning **after 31 Dec 2026**; may be used for WJ 2026 or 2026/2027 | ERiC test cases from ~Nov 2026; live cases (Echtfälle) from ~May 2027 | published, not yet the live filing version | esteuer.de; BMF-Schreiben |
-| **6.9** (2025-04-01; BMF-Schreiben 10 Jun 2025) | `de-*-2025-04-01-shell*.xsd` | `https://www.esteuer.de/download/taxonomie_20250618/german-gaap-taxonomy-v6.9-2025-04-01-xbrl.zip` (200) | WJ beginning after 31 Dec 2025; usable for WJ 2025 or 2025/2026 | Echtfälle since ~May 2026 | **current filing version** | esteuer.de |
-| 6.8 (2024-04-01; BMF-Schreiben 27 May 2024) | `de-*-2024-04-01-shell*.xsd` | esteuer.de 2024 folder | WJ beginning after 31 Dec 2024; usable for WJ 2024 or 2024/2025 | Echtfälle since ~May 2025 | accepted for its window | esteuer.de |
+| **6.10** (taxonomy date 2026-04-01; BMF-Schreiben 8 Jun 2026) | `de-{gcd,gaap-ci,bra,fi,pi,ins}-2026-04-01-shell*.xsd` (16 shells) | `https://www.esteuer.de/download/taxonomie_20260615/germany-gaap-taxonomy-v6.10-2026-04-01-xbrl.zip` (200; note **`germany-`**, earlier years use `german-`); table linkbase `…/Tabellenlayouts-v6.10-2026-04-01-table-linkbase.zip` | Wirtschaftsjahre beginning **after 31 Dec 2026**; may be used for WJ 2026 or 2026/2027 | ERiC 45 for test cases from Nov 2026; ERiC 46 for live cases (Echtfälle) from May 2027 (esteuer.de overview, Stand 3 Jun 2026) | published, not yet the live filing version | esteuer.de; BMF-Schreiben |
+| **6.9** (2025-04-01; BMF-Schreiben 10 Jun 2025) | `de-*-2025-04-01-shell*.xsd` | `https://www.esteuer.de/download/taxonomie_20250618/german-gaap-taxonomy-v6.9-2025-04-01-xbrl.zip` (200) | WJ beginning after 31 Dec 2025; usable for WJ 2025 or 2025/2026 | Echtfälle since **26 May 2026** (ERiC 43.5 and 44.1; esteuer.de overview, Stand 3 Jun 2026) | **current filing version** | esteuer.de |
+| 6.8 (2024-04-01; BMF-Schreiben 27 May 2024) | `de-*-2024-04-01-shell*.xsd` | esteuer.de 2024 folder | WJ beginning after 31 Dec 2024; usable for WJ 2024 or 2024/2025 | Echtfälle since **7 Apr 2025** (esteuer.de overview, Stand 3 Jun 2026) | accepted for its window | esteuer.de |
 | 6.7 and earlier | `de-*-YYYY-04-01-shell*.xsd` | historical folders | per year, each with its own BMF-Schreiben | per year | historical | esteuer.de |
 | "Previewfassung Modernisierung Taxonomie" | | `…/taxonomie_20260615/Previewfassung_Modernisierung_Taxonomie.zip` | none: testing only | not accepted | preview | esteuer.de |
+
+The next version is named **6.11**, not 7.0: the 6.10 change log makes `nt`
+(Anhang) and `mgmtRep` (Lagebericht) mandatory fields "ab der
+Taxonomie-Version 6.11" (`https://www.esteuer.de/download/taxonomie_20260615/Aenderungsnachweis_Tax_6.10.pdf`).
 
 The rule is a Wirtschaftsjahr rule, not a calendar rule, and each version
 is additionally tolerated ("nicht beanstandet") for the immediately

@@ -18,7 +18,7 @@
 # or a Danish vintage override:
 #   validate_with_arelle.sh report.xhtml dk --disclosureSystem arl-2024-multi-target-preview
 #
-# Requires: Python 3.10+, `pip install arelle-release`
+# Requires: Python 3.10+ (3.11+ for arelle-release 2.47.0 or later), `pip install arelle-release`
 #
 # What this does:
 #   - Accepts a single .xhtml/.html file, an iXBRL document set folder, or

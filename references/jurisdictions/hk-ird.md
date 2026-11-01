@@ -323,10 +323,13 @@ File** service in the Business Tax Portal (no business account needed): the
 same validation is run, results arrive within one working day, and test files
 are not linked to any return or kept.
 
-Arelle has no Hong Kong disclosure-system plugin that this file could confirm;
-generic XBRL 2.1, Dimensions and Inline XBRL validation with the IRD package
-loaded offline is the closest local check, and it does not run the `NVAD-E-`
-rules. Not tested here; see `references/validation.md`.
+Arelle now has a Hong Kong plugin, `validate/IRD`, with disclosure system
+`ird-2025-preview` (year of assessment 2025/26, taxonomy dated 2026-04-01). Its
+`ixbrl_technical` and `nvad_*` rule modules arrived from release 2.47.0, and
+2.47.4 (31 October 2026) lists "Hong Kong IRD Preview". It is a preview, not
+tested here, and its coverage of the IRD's `NVAD-E-` rules is not confirmed, so
+treat its result as implementation evidence and the IRD's Test File service as
+the check of record; see `references/validation.md`.
 
 ## Filing channel
 
@@ -376,7 +379,8 @@ verified until an HKEX or SFC source says so.
 - **Element counts** are declaration counts in the schemas, not a statement of
   usable concepts (abstracts and dimension members are included).
 - **HKEX:** absence of an HKEX iXBRL mandate rests on not finding one.
-- **Arelle:** no Hong Kong plugin confirmed; nothing was run against Arelle.
+- **Arelle:** the `validate/IRD` preview was read at tag 2.47.4; nothing was
+  run against it.
 
 If a rule version newer than the ones cited here is in force, re-read the IRD
 materials page and cite it.

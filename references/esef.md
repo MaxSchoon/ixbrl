@@ -262,11 +262,12 @@ elements may be used only once those standards are formally endorsed at
 EU level. IFRS 18 is endorsed: Commission Regulation (EU) 2026/338 of
 13 February 2026 (OJ L, 16 February 2026) amends Regulation (EU)
 2023/1803 to adopt it, so IFRS 18 elements are usable by EU issuers that
-apply IFRS 18; IFRS 19 endorsement was not found on 2026-10-13, so treat
+apply IFRS 18; EFRAG's endorsement status report of 24 September 2026
+still lists IFRS 19 as not yet endorsed (expected Q3/Q4 2026), so treat
 its elements as not yet usable by EU issuers until a regulation is
 cited. ESMA has stated that it does not plan to amend the ESEF RTS or
 taxonomy in 2026, so do not assume a further annual release; on
-2026-10-13 its electronic-reporting page still listed the 2025 package
+2026-11-01 its electronic-reporting page still listed the 2025 package
 and the October 2025 Reporting Manual as the latest. The IFRS Foundation
 keeps the 2025 IFRS Accounting Taxonomy current for 2026 reporting and
 plans the next annual taxonomy for Q1 2027; its 2026 proposed updates
@@ -405,6 +406,39 @@ NCA post-filing review reports (notably AMF) consistently flag
 **incorrect signs**, **calculation inconsistencies**, and
 **inappropriate extensions** as the highest-frequency substantive
 errors.
+
+### 8.1 Enforcement priority for 2026 reports: the statement of changes in equity
+
+ESMA's European common enforcement priorities for 2026 annual financial
+reports (ESMA32-2064178921-9738, 13 October 2026, Section 3) tell enforcers
+to pay particular attention to common ESEF errors in the statement of changes
+in equity. They are not new rules, but they say where a 2026 report will be
+read closely, and most of them pass a validator:
+
+- **Markups:** a movement in one equity component tagged with a broad "total
+  equity" member; a member combining issued capital and share premium tagged
+  with only one of the two concepts.
+- **Completeness and consistency:** only total equity marked up, with columns
+  such as non-controlling interests or retained earnings left out; the same
+  concept differing across statements; the same disclosure tagged both with
+  and without dimensions.
+- **Dashes and empty cells:** not required to be marked up under Annex II.1,
+  though ESMA recommends it. Where marked up, `ixt:fixed-zero` only for genuine
+  zeros, nil facts without a transformation only for genuinely nil disclosures,
+  and no fact for non-applicable information.
+- **Signs and scales:** ESMA notes calculations cannot validate the full
+  roll-forward, so a wrong sign in one movement may go undetected. A
+  distribution to owners must not be tagged so that it increases equity.
+- **Opening balances:** an opening balance on 1 January 2026 uses an instant
+  date of 31 December 2025.
+- **Structure and links:** nested ZIP files inside the package; dimensioned and
+  non-dimensioned facts mixed in one roll-forward; calculation relationships
+  that do not match the arithmetic the statement presents.
+- **Extensions:** created for reserves a core element already covers; equity
+  transactions anchored to profit-or-loss elements.
+
+`references/conversion.md` covers building the changes-in-equity matrix.
+<https://www.esma.europa.eu/sites/default/files/2026-10/ESMA32-2064178921-9738_Statement_-_2026_European_Common_Enforcement_Priorities__ECEP_.pdf>
 
 ## Sources
 

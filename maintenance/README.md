@@ -72,7 +72,9 @@ states the facts it must. Cases are split into `train` and held-out `test`
 (`evals/cases.json`); the bars live in `evals/baseline.json`.
 
 - **One lever per round** (for example the wording of index rows, or the
-  description), chosen by reading train failures only.
+  description), chosen by reading train failures only. The round names the
+  train case it targets and what it expects to change, so a rejected form can
+  seed the next round rather than be lost.
 - **Held-out cases are never read while editing** and never copied into the
   skill; the eval fails a held-out query that appears in the skill text.
 - **A round is accepted** when train improves and no held-out metric falls

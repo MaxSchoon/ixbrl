@@ -168,7 +168,8 @@ assumptions about which model or vendor you use, only about the
 skill-loading convention.
 
 The bundled scripts require Python 3.10+, `lxml`, and (for full
-validation) `pip install arelle-release`. The skill is useful even
+validation) `pip install arelle-release`, whose releases from 2.47.0 need
+Python 3.11+. The skill is useful even
 without those dependencies; the references work on their own.
 
 ## License

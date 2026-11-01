@@ -27,7 +27,7 @@ If a code or behaviour is not cited here, treat it as folklore until verified in
 ### Installation
 
 ```bash
-pip install arelle-release                              # minimal
+pip install arelle-release                              # minimal; 2.47.0+ needs Python 3.11
 pip install arelle-release[Crypto,DB,EFM,WebServer]     # SEC/EBA work
 arelleCmdLine --help
 arelleGUI                                                # desktop app
@@ -58,6 +58,10 @@ triggers full validation, `--file` accepts a zip report package, an
 XHTML, or an instance XBRL.
 
 ## 2. Plugins relevant to iXBRL
+
+**`validate/IRD`**: Hong Kong Profits Tax iXBRL, a preview
+(`ird-2025-preview`, listed in release 2.47.4); see
+`references/jurisdictions/hk-ird.md`.
 
 **`validate/ESEF`**: ESMA's European Single Electronic Format
 validator. Implements the full numbered ruleset (`ESEF.2.x`,
@@ -263,7 +267,7 @@ applies across SBR channels (KvK, Belastingdienst, DNB).
 
 | Code | Meaning | Typical root cause | Fix |
 |---|---|---|---|
-| `NL-KVK.4.4.2.5.extensionTaxonomyLineItemNotLinkedToDesignatedPlaceholder` | Dual-scope extension concept missing from the `MixedScopeFinancialStatementsCompatibility` ELR | Concept added to consolidated **and** separate placeholders without updating the compatibility ELR | Add the missing domain-member arc; treat all three memberships as derived from one source predicate |
+| `NL-KVK.4.4.2.5.extensionTaxonomyLineItemNotLinkedToDesignatedPlaceholder` | Dual-scope extension concept missing from the `MixedScopeFinancialStatementsCompatibility` ELR | Concept added to consolidated **and** separate placeholders without updating the compatibility ELR | Add the missing domain-member arc; treat all three memberships as derived from one source predicate. Version matters: from Arelle 2.47.0 the rule passes when the matching placeholder is among the concept's definition roles; before that, any extra role failed it, so an older run may report a concept linked correctly under both placeholders |
 | `NL-KVK.4.4.6.1.usableConceptsNotAppliedByTaggedFacts` | Concept present in the extension presentation/definition linkbase but never tagged in the instance | Over-inclusive linkbase (often a concept left behind after a tagging redesign) | Either tag the missing fact or remove the unused concept from the linkbase |
 | `NL.NL-KVK.3.4.1.3.transformableElementIncludedInHiddenSection` | Numeric / transformable fact emitted into `ix:hidden` instead of visible | Convenience hiding of facts that don't fit visually | Render the fact visibly; only non-transformable required-metadata facts belong in `ix:hidden` |
 | `NL-KVK.*.missingRelevantPlaceholder` | Primary-statement root is an extension abstract, not an official Title 9 / RJ placeholder | Generator emitted its own abstract root | Replace the root with `bw2-titel9:*Title` or `rj:CashFlowStatementTitle` etc. |
