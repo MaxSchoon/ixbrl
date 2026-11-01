@@ -2,7 +2,9 @@
 """Tests for tests/check_sources.py, the maintenance source registry.
 
 Hermetic: the repository's own registry is read, and every negative case is
-an edited copy of it in memory, judged against a fixed date.
+an edited copy of it in memory, judged against the registry's latest
+`checked_on`: a date that does not depend on the clock and that a cycle moves
+when it re-reads its sources.
 
 Run: python3 -m unittest discover -s tests -p 'test_*.py'
 """
@@ -15,7 +17,7 @@ import json
 import sys
 import unittest
 from contextlib import redirect_stderr
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -23,7 +25,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import check_sources as cs
 
 REGISTRY = json.loads(cs.REGISTRY.read_text(encoding="utf-8"))
-TODAY = date(2026, 10, 13)
+TODAY = max(
+    date.fromisoformat(source["checked_on"])
+    for topic in REGISTRY["topics"]
+    for source in topic["sources"]
+)
 
 
 def check(registry: dict, max_age: int | None = None) -> tuple[list[str], list[str]]:
@@ -58,7 +64,9 @@ class Registry(unittest.TestCase):
     def test_dates_must_be_real_and_not_ahead(self):
         reg = copy.deepcopy(REGISTRY)
         reg["topics"][0]["sources"][0]["checked_on"] = "2026-13-01"
-        reg["topics"][1]["sources"][0]["checked_on"] = "2026-12-01"
+        reg["topics"][1]["sources"][0]["checked_on"] = (
+            TODAY + timedelta(days=1)
+        ).isoformat()
         problems, _ = check(reg)
         self.assertTrue(any("not YYYY-MM-DD" in p for p in problems))
         self.assertTrue(any("in the future" in p for p in problems))
@@ -111,7 +119,7 @@ class Registry(unittest.TestCase):
         self.assertEqual(check(reg)[1], [])
 
     def test_cli_is_green_without_max_age(self):
-        self.assertEqual(cs.main(["--today", "2026-10-13"]), 0)
+        self.assertEqual(cs.main(["--today", TODAY.isoformat()]), 0)
 
     def test_cli_refuses_a_malformed_today(self):
         with self.assertRaises(SystemExit) as raised, redirect_stderr(io.StringIO()):
