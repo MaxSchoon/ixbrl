@@ -324,7 +324,7 @@ Per-regulator policy (validate against the current Reporting Manual /
 Filer Manual at filing time, since policy here is precise and changes
 by manual revision):
 
-- **SBR (Dutch)** forbids `xsi:nil="true"` on facts (rule `FR-NL-5.07`).
+- **SBR (Dutch)** forbids `xsi:nil` on facts, both `true` and the default `false` (rule `FR-NL-2.07`, SBR Filing Rules NT20 v1.1, 19 November 2025). Omit the fact. The prohibition holds where an IFRS concept is declared nillable.
 - **ESEF** permits `xsi:nil` for empty cells in tagged tables under conditions in the ESEF Reporting Manual §2.2.5.
 - **SEC EDGAR** discourages `xsi:nil` and EFM rejects nil values on most tagged facts.
 
@@ -365,7 +365,12 @@ the equivalents in a standalone xBRL-XML instance.
 > Items not freshly fetched in this run, mentioned because they are
 > part of the asked-for scope; re-verify against the current regulator
 > manual before relying on them: ESEF rule
-> `ESEF.2.4.1.tupleElementUsed`; SBR rules `FR-NL-5.07` and
-> `FR-NL-6.01`; ESEF Reporting Manual §2.2.5 nil-value policy; LRR
-> negated-label roles. The `ESEF.*` codes are also separately verified
-> in `references/validation.md` against the Arelle source.
+> `ESEF.2.4.1.tupleElementUsed`; ESEF Reporting Manual §2.2.5 nil-value
+> policy; LRR negated-label roles. The `ESEF.*` codes are also
+> separately verified in `references/validation.md` against the Arelle
+> source. Read in SBR Filing Rules NT20 v1.1 (19 November 2025) on
+> 2026-11-09: `FR-NL-2.07` forbids `xsi:nil` (true and the default
+> false), `FR-NL-3.02` forbids `xbrli:forever`, `FR-NL-5.06` forbids
+> `precision`, `FR-NL-5.07` requires percentages as decimals, and
+> `FR-NL-6.01` forbids footnotes in an XBRL instance. `FR-NL-3.04`
+> forbids duplicate contexts.

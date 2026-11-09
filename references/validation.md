@@ -275,10 +275,12 @@ applies across SBR channels (KvK, Belastingdienst, DNB).
 | `FR-NL-1.01` / `1.05` | Encoding violation | Non-UTF-8 source, BOM, or wrong XML declaration | Re-serialise as UTF-8 without BOM |
 | `FR-NL-2.03` | Non-numeric fact missing `xml:lang` | Translation block emitted without lang | Add `xml:lang="nl"` (or the report language) |
 | `FR-NL-2.04` | `link:schemaRef` placement / count violation | Multiple or mis-placed `schemaRef` elements | Single `schemaRef` in the operative location |
-| `FR-NL-3.04` | `xbrli:forever` period used | Forever periods are forbidden in SBR | Use bounded `xbrli:duration` or `xbrli:instant` |
+| `FR-NL-2.07` | `xsi:nil` on a reported fact, `true` or the default `false` | Generator nilled a fact, including where an IFRS concept is nillable | Omit the fact. SBR Filing Rules NT20 v1.1 (19 November 2025) |
+| `FR-NL-3.02` | `xbrli:forever` period used | Forever periods are forbidden in SBR | Use bounded `xbrli:duration` or `xbrli:instant` |
+| `FR-NL-3.04` | Duplicate `xbrli:context` elements, s-equal apart from `id` | Context assignment minted one context per fact | Keep one context and repoint every contextRef. SBR Filing Rules NT20 v1.1 (19 November 2025) |
 | `FR-NL-5.06` | `precision` attribute on a numeric fact | Carried over from non-SBR templates | Replace with `decimals` |
-| `FR-NL-5.07` | `xsi:nil="true"` on a reported fact | Generator nilled a fact instead of omitting it | Omit the fact entirely |
-| `FR-NL-6.01` | Footnote model / arcrole violation | Visual footnote not wired as `ix:footnote` | Use the iXBRL footnote model with fact-footnote arc |
+| `FR-NL-5.07` | A percentage not reported as a decimal (35% is 0.35, 145% is 1.45) | A percent item was left as a percentage figure | Report the decimal. The number alone cannot decide which reading 1.45 is. SBR Filing Rules NT20 v1.1 (19 November 2025) |
+| `FR-NL-6.01` | Footnotes in an XBRL instance | Data reported as a footnote | Omit them. The rule forbids footnotes in the instance and binds the Chapter 3 XBRL instance route; the Chapter 2 iXBRL articles do not name it. SBR Filing Rules NT20 v1.1 (19 November 2025) |
 
 For **SBR Dutch GAAP 2025 review work, prefer Calc 1.1** (`--calc
 c11r`). It handles iXBRL duplicate facts and dimensional alignment
@@ -376,4 +378,5 @@ order. Skipping a step is how filings reach the regulator broken.
 - https://www.esma.europa.eu/document/esef-reporting-manual
 - https://www.sec.gov/files/edgar/filer-information/specifications/xbrl-guide.pdf
 - https://www.sbr-nl.nl/
+- SBR Filing Rules NT20 v1.1 (19 November 2025), read 2026-11-09: https://www.sbr-nl.nl/sites/default/files/bestanden/taxonomie/20251119%20SBR%20Filing%20Rules%20NT20_v1_1.pdf
 - https://www.eba.europa.eu/risk-and-data-analysis/reporting-frameworks/dpm-data-dictionary
