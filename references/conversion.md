@@ -388,8 +388,9 @@ validation report says.
 
 ## Sources
 
-- Inline XBRL 1.1, REC 2013-11-18 (errata 2024-12-17):
-  https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18/
+- Inline XBRL 1.1, REC 2013-11-18, corrected errata 2026-07-14 (the
+  URL returned HTTP 200 on 2026-11-09; the errata were not diffed):
+  https://www.xbrl.org/Specification/inlineXBRL-part1/REC-2013-11-18+errata-2026-07-14/inlineXBRL-part1-REC-2013-11-18+corrected-errata-2026-07-14.html
 - XBRL 2.1, REC 2003-12-31 (errata 2013-02-20), §5.1.1.2 (balance) and
   §5.2.4–§5.2.5 (presentation and calculation linkbases):
   https://www.xbrl.org/Specification/XBRL-2.1/REC-2003-12-31/XBRL-2.1-REC-2003-12-31+corrected-errata-2013-02-20.html

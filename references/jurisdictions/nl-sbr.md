@@ -253,17 +253,20 @@ beginning on or after 1 January 2026, and may be applied to earlier
 years. Article numbering and the Annex I–VI layout are unchanged
 between them. **Article 4 itself did not change**: its text is
 identical in both RTS, so the ESEF-direct deposit route of art. 4(5) is
-a standing rule rather than an FY2026 delta. The substantive deltas sit
-in the Annexes: the LEI identifier and the `esef_cor` notes start point
-for ESEF reports (Annex IV pt 2 and Table 7); in Annex II pt 2 the
-widened block-tagging lag, a new scope qualifier on the prohibition of
-voluntary block-tagging ("in de jaarrekening", absent from RTS 2025)
-and that prohibition's end date, moved from a fixed 1 januari 2026 to
-the same open placeholder as the mandate (*Bi-temporal cheatsheet
-(which rule applied when)*, checked 2026-09-03); in Annex II pt 1 the
-nil-value sentence, reworded from "streepjes en lege cellen" to
-"streepjes of andere karakters en bewoordingen"; and the rolled
-base-taxonomy set (Annex VI).
+a standing rule rather than an FY2026 delta. Annex IV did not change
+either. Point 2's LEI scheme and Table 7's
+`esef_cor:NotesAccountingPoliciesAndMandatoryTags` are already in the
+English RTS 2025 Annex IV; the English RTS 2026 compare edition prints
+the same sentences. Both PDFs were read on 2026-11-09. The substantive
+deltas sit in the Annexes: in Annex II pt 2 the widened block-tagging
+lag, a new scope qualifier on the prohibition of voluntary
+block-tagging ("in de jaarrekening", absent from RTS 2025) and that
+prohibition's end date, moved from a fixed 1 januari 2026 to the same
+open placeholder as the mandate (*Bi-temporal cheatsheet (which rule
+applied when)*, checked 2026-09-03); in Annex II pt 1 the nil-value
+sentence, reworded from "streepjes en lege cellen" to "streepjes of
+andere karakters en bewoordingen"; and the rolled base-taxonomy set
+(Annex VI).
 
 The RTS is not the same thing as the Reporting Manual (RM):
 
@@ -459,7 +462,15 @@ defect.
 
 The size class is a property of the entity, derived from balance-sheet
 total, net turnover, and average headcount over the prior two
-financial years. In the FY2025 KvK taxonomy, size class is reported as
+financial years. An exception: when the financial statements are
+prepared under IFRS as adopted by the European Union, Afdeling 11 of
+Title 9 Book 2 BW does not apply, and the annual report is deemed to
+belong to a large legal entity regardless of those three measures.
+Report `kvk:LegalEntitySizeLargeMember`. Do not derive Micro, Klein or
+Middelgroot for that filer. The rule is footnote 4 under section 1.2
+of the Dutch RTS 2026 (final 10 July 2026) and, in the same words,
+footnote 3 of the English RTS 2025 (final 31 October 2025); both were
+read on 2026-11-09. In the FY2025 KvK taxonomy, size class is reported as
 the mandatory metadata fact `kvk:LegalEntitySize`, an
 extensible-enumeration fact. Its value is one of the KvK size members
 (`kvk:LegalEntitySize{Micro,Small,Medium,Large}Member`), reported as a
@@ -1433,9 +1444,9 @@ and across SBR channels: KvK, Belastingdienst, DNB). The high-frequency
 | Language | Non-numeric facts carry `xml:lang` for the report language |
 | `link:schemaRef` | Placement and count |
 | Period | `xbrli:forever` periods forbidden; times stripped from instant periods |
-| Numeric attributes | `precision` forbidden. Use `decimals`; `decimals="INF"` not allowed for rounded values |
-| `xsi:nil` | `xsi:nil="true"` on a reported fact forbidden. Omit the fact instead |
-| Footnotes | Specific model and arcroles |
+| Numeric attributes | `precision` forbidden. Use `decimals`; `decimals="INF"` not allowed for rounded values. A percentage is a decimal (35% is 0.35, 145% is 1.45) |
+| `xsi:nil` | `xsi:nil` forbidden on a reported fact, both `true` and the default `false`. Omit the fact instead |
+| Footnotes | Forbidden in an XBRL instance. Do not report data as footnotes |
 
 The exact code numbers (`FR-NL-x.xx`, `FG-NL-x.xx`) and the rule prose
 live in the operative Filing Rules / Filing Guidelines PDF on
@@ -1762,7 +1773,9 @@ Defer to and cite:
   rule 5.04" (a tuple rule, Vervaldatum 31 October 2025). Neither
   text mentions text blocks, textBlockItemType or Inline XBRL, and
   the Voorwoord's enforcement clause covers "XBRL instance
-  documenten" checked in Digipoort (read 2026-09-03):
+  documenten" checked in Digipoort (read 2026-09-03; FR-NL-2.07,
+  FR-NL-3.02, FR-NL-3.04, FR-NL-5.06, FR-NL-5.07 and FR-NL-6.01 re-read
+  in v1.1 on 2026-11-09):
   <https://www.sbr-nl.nl/sites/default/files/bestanden/taxonomie/20250602%20SBR%20Filing%20Rules%20NT20.pdf>,
   <https://www.sbr-nl.nl/sites/default/files/bestanden/taxonomie/20251119%20SBR%20Filing%20Rules%20NT20_v1_1.pdf>.
 - **KvK Filing Rules NT20** v1.0 (2 June 2025, "géén wijzigingen
@@ -1825,6 +1838,11 @@ Defer to and cite:
   art. 4-8 and Annex I Table 2 define the separate auditor's-report
   instance, the NBA taxonomy and the XAdES-EPES signature:
   <https://www.sbr-nl.nl/sites/default/files/2025-11/20251031_RTS_2025_EN_SBR-domein_Handelsregister.pdf>.
+  Footnote 3 of that English edition deems an EU-IFRS annual report a
+  large legal entity regardless of actual size. Annex IV point 2 (the
+  LEI scheme) and Table 7
+  (`esef_cor:NotesAccountingPoliciesAndMandatoryTags`) were read in it
+  on 2026-11-09.
 - **Reporting Manual 2025 SBR-domein Handelsregister** (31 October 2025,
   errata to 12 February 2026). § 2.10 states the auditor's report is
   mandatory as part of the annual report under Other information and is
@@ -1860,9 +1878,13 @@ Defer to and cite:
   jaarrekening-scoped prohibition on voluntary block-tagging. Dutch
   final text (prevails):
   <https://www.sbr-nl.nl/sites/default/files/2026-07/20260710_RTS_2026_NL_SBR-domein_Handelsregister.pdf>.
-  The publisher's English track-changes edition against RTS 2025 is
-  the primary source for that qualifier being new in 2026 (checked
-  2026-09-03):
+  Footnote 4 under section 1.2 of that Dutch text states the same
+  deemed-large rule (read 2026-11-09). The publisher's English
+  track-changes edition against RTS 2025 is the primary source for
+  that qualifier being new in 2026 (checked 2026-09-03). Annex IV
+  point 2 and Table 7 of the compare edition print the same LEI scheme
+  and `esef_cor` sentences as the 2025 English edition (read
+  2026-11-09):
   <https://www.sbr-nl.nl/sites/default/files/2026-07/20260710_RTS_2026_EN_SBR-domein_Handelsregister_compare_RTS2025.pdf>.
 - **Reporting Manual 2026 SBR-domein Handelsregister** (10 July 2026,
   for financial years beginning on or after 1 January 2026). RM 2026
