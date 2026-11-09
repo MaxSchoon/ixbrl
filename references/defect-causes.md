@@ -248,7 +248,7 @@ Specifications and regulator publications the rules themselves live in, taken fr
 - SEC EDGAR XBRL validation errors: https://www.sec.gov/data-research/xbrl-validation-rendering/edgar-xbrl-validation-errors
 - SEC EDGAR XBRL validation warnings: https://www.sec.gov/data-research/xbrl-validation-rendering/edgar-xbrl-validation-warnings
 - SBR Netherlands, Filing Rules and the KvK Business Rules: https://www.sbr-nl.nl/
-- SBR Filing Rules NT20 v1.1 (19 November 2025), read 2026-11-09 for FR-NL-2.07, FR-NL-3.02, FR-NL-3.04, FR-NL-5.06, FR-NL-5.07 and FR-NL-6.01: https://www.sbr-nl.nl/sites/default/files/bestanden/taxonomie/20251119%20SBR%20Filing%20Rules%20NT20_v1_1.pdf
+- SBR Filing Rules NT20 v1.1 (19 November 2025), the PDF the Dutch SBR rows above were read against on 2026-11-09: https://www.sbr-nl.nl/sites/default/files/bestanden/taxonomie/20251119%20SBR%20Filing%20Rules%20NT20_v1_1.pdf
 - Joint Filing Common Validation Checks v4.4a: https://assets.publishing.service.gov.uk/media/6a06d6545f39105e0848a2f6/Joint-Filing-Common-Validation-Checks-v4.4a.odt
 - HMRC generic dimension validations 4.91a: https://assets.publishing.service.gov.uk/media/6a06d61ac0cc74b4523e4e71/Generic-Dimension-Validations-4.91a.odt
 - Erhvervsstyrelsen, Teknisk vejledning og dokumentation for Regnskab Indberet: Kontroller: https://erhvervsstyrelsen.dk/vejledning-teknisk-vejledning-og-dokumentation-regnskab-20-kontroller
