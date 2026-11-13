@@ -324,7 +324,7 @@ Per-regulator policy (validate against the current Reporting Manual /
 Filer Manual at filing time, since policy here is precise and changes
 by manual revision):
 
-- **SBR (Dutch)** forbids `xsi:nil` on facts, both `true` and the default `false` (rule `FR-NL-2.07`, SBR Filing Rules NT20 v1.1, 19 November 2025). Omit the fact. The prohibition holds where an IFRS concept is declared nillable.
+- **SBR (Dutch)** forbids `xsi:nil` on facts, both `true` and the default `false` (rule `FR-NL-2.07`, SBR Filing Rules NT20 v1.1, 19 November 2025). The rule forbids the attribute, so the repair depends on its value: a fact nilled with `true` is omitted, or carries the value the document shows; on `false` the fact holds a value, so drop the attribute and keep the fact. The prohibition holds where an IFRS concept is declared nillable.
 - **ESEF** permits `xsi:nil` for empty cells in tagged tables under conditions in the ESEF Reporting Manual §2.2.5.
 - **SEC EDGAR** discourages `xsi:nil` and EFM rejects nil values on most tagged facts.
 
