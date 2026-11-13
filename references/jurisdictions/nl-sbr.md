@@ -273,7 +273,7 @@ applied when)*, checked 2026-09-03); in Annex II pt 1 the nil-value
 sentence, reworded from "streepjes en lege cellen" to "streepjes of
 andere karakters en bewoordingen"; and the rolled base-taxonomy set
 (Annex VI: KVK taxonomy 2026 in, 2024 out). Outside the Annexes the
-compare edition marks only the governance prose of § 1.2 (who sits in
+compare edition marks only the governance prose of RTS section 1.2 (who sits in
 the domain governance, no filing rule), the year in art. 9 of both
 chapters (2025 to 2026), and Chapter 3 Annex I Table 1, where NT21 comes
 in and NT18 goes out of the supported versions of the legacy XBRL route.
@@ -370,7 +370,7 @@ re-checked 2026-09-03; delta list completed 2026-11-13).** The RTS 2026
 delta list above was first drawn from a comparison of the two final
 texts. On 2026-11-13 every change-marked span (the compare edition's
 red, `#d13438`) of the publisher's English track-changes edition was
-counted page by page: they sit on the cover and contents, § 1.2, art. 9
+counted page by page: they sit on the cover and contents, RTS section 1.2, art. 9
 of both chapters, Annex II points 1 and 2, the Annex VI table and the
 Chapter 3 Annex I table, and nowhere else. Articles 1 to 8 and Annexes
 I, III, IV and V carry none. The count covers the English edition; the
@@ -795,8 +795,8 @@ iXBRL package is optional: run it as a compatibility diagnostic, for
 example to compare with an older pipeline, and never report its result
 as the deposit-acceptance verdict. Neither log is a pass/fail gate on
 its own. XBRL Calculations 1.1 §3.1 states that
-calculation inconsistency errors do not render a report invalid. §4.1
-keeps the two networks apart rather than extending that rule: "XBRL v2.1
+calculation inconsistency errors do not render a report invalid.
+Calculations 1.1 section 4.1 keeps the two networks apart rather than extending that rule: "XBRL v2.1
 prescribes no behaviour for Calculations v1.1 relationships and XBRL v2.1
 calculation consistency checking MUST NOT be applied to them", and errors
 raised under either "do not invalidate an XBRL Report". Clear every in-scope inconsistency and document
