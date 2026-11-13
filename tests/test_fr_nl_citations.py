@@ -74,6 +74,23 @@ class FrNlCitations(unittest.TestCase):
         for rel, n, line in hits:
             self.assertIn("keep the fact", line.lower(), f"{rel}:{n}")
 
+    def test_nil_detection_counts_the_attribute(self) -> None:
+        """scripts/check_facts.py accepts a well-formed nilled fact.
+
+        It checks that a nonFraction carries exactly one of decimals,
+        precision or xsi:nil, so a fact with xsi:nil="true" and nothing else
+        passes. The FR-NL-2.07 row must not send a reviewer to it, and must
+        count the attribute itself, both values, with an XML-aware query.
+        """
+        rows = [
+            line
+            for line in lines_of("references/defect-causes.md")
+            if line.startswith("| `FR-NL-2.07`")
+        ]
+        self.assertEqual(len(rows), 1)
+        self.assertNotIn("check_facts.py", rows[0])
+        self.assertIn("XMLSchema-instance", rows[0])
+
     def test_percentages_are_fr_nl_5_07(self) -> None:
         hits = [
             (rel, n, line)
