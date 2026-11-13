@@ -149,8 +149,14 @@ tree: see *Entry point: financial year and accounting basis*.
 Two citation traps in the RTS itself: "Annex I" exists in **both** chapters
 (Chapter 2 iXBRL: a legend; Chapter 3 XBRL: the supported-version table),
 so cite "RTS 2026 Chapter 3 Annex I"; and Annex VI prints two namespaces
-wrongly (`…/bw2/…` for `bw2-titel9`, `…/ncgc/…/wnt-cor` for `wnt`). The
-schema's own `targetNamespace` is the authority.
+wrongly (`…/bw2/…` for `bw2-titel9`, `…/ncgc/…/wnt-cor` for `wnt`). A
+third misprint is in the Dutch text only: RTS 2026 NL Chapter 3 Annex I
+Table 1 gives the NT21 namespace as `http://www.nltaxonomie.nl/nt20/kvk/20261209/`,
+where the English edition prints `http://www.nltaxonomie.nl/nt21/kvk/20261209/`.
+The `nt20` form answers 404 and the `nt21` entry points answer 200 (read
+2026-11-13), so this is one place where the Dutch text, which otherwise
+prevails, is not the one to copy. The schema's own `targetNamespace` is
+the authority.
 
 ### Two taxonomy trees, same prefix family
 
@@ -266,7 +272,11 @@ open placeholder as the mandate (*Bi-temporal cheatsheet (which rule
 applied when)*, checked 2026-09-03); in Annex II pt 1 the nil-value
 sentence, reworded from "streepjes en lege cellen" to "streepjes of
 andere karakters en bewoordingen"; and the rolled base-taxonomy set
-(Annex VI).
+(Annex VI: KVK taxonomy 2026 in, 2024 out). Outside the Annexes the
+compare edition marks only the governance prose of § 1.2 (who sits in
+the domain governance, no filing rule), the year in art. 9 of both
+chapters (2025 to 2026), and Chapter 3 Annex I Table 1, where NT21 comes
+in and NT18 goes out of the supported versions of the legacy XBRL route.
 
 The RTS is not the same thing as the Reporting Manual (RM):
 
@@ -290,7 +300,12 @@ RTS points that matter in review:
   announced on 22 October 2026 that the Reporting Manual and RTS will cut the
   maximum to **50 MB** ("van 100MB naar 50MB. Hier wordt momenteel aan
   gewerkt"); the documents of 10 July 2026 still say 100 MB, so read the
-  definitive FY2026 edition before relying on either figure.
+  definitive FY2026 edition before relying on either figure. A second
+  limit applies on the Digipoort route: the package is Base64-encoded
+  into the message content of the supply request, and that request,
+  encoded package included, must not exceed 150 MB (RM 2026 Guidance
+  8.2.2, "last updated: February 2025"). Base64 grows a file by a
+  third, so a package near 100 MB sits near the 150 MB request limit too.
 - The RTS treats iXBRL as the recommended standard where presentation
   matters. A legal entity that uses entity-specific line items, changes
   the standard format / presentation, reports sustainability
@@ -351,11 +366,16 @@ RTS points that matter in review:
   concepts where required.
 
 **Honest gaps in this section (checked 2026-08-15; Annex II
-re-checked 2026-09-03).** The RTS 2026 delta list above was first
-drawn from a comparison of the two final texts; on 2026-09-03 the
-Annex II point 1 and point 2 deltas were confirmed against the
-publisher's English track-changes edition, but the rest of the list
-was not, so small Annex IV wording changes may be missing. The
+re-checked 2026-09-03; delta list completed 2026-11-13).** The RTS 2026
+delta list above was first drawn from a comparison of the two final
+texts. On 2026-11-13 every change-marked span (the compare edition's
+red, `#d13438`) of the publisher's English track-changes edition was
+counted page by page: they sit on the cover and contents, § 1.2, art. 9
+of both chapters, Annex II points 1 and 2, the Annex VI table and the
+Chapter 3 Annex I table, and nowhere else. Articles 1 to 8 and Annexes
+I, III, IV and V carry none. The count covers the English edition; the
+Dutch final text prevails, and its Chapter 3 Annex I differs from the
+English one by the namespace misprint noted above. The
 Reporting Manual 2026 (10 July 2026, for financial years beginning on
 or after 1 January 2026 per its cover; RM 2026 § 1.2 still asks
 stakeholders to follow it "no later than for financial reporting
@@ -775,9 +795,11 @@ iXBRL package is optional: run it as a compatibility diagnostic, for
 example to compare with an older pipeline, and never report its result
 as the deposit-acceptance verdict. Neither log is a pass/fail gate on
 its own. XBRL Calculations 1.1 §3.1 states that
-calculation inconsistency errors do not render a report invalid, and
-the note in XBRL Calculations 1.1 §4.1 extends that to XBRL 2.1
-consistency checking. Clear every in-scope inconsistency and document
+calculation inconsistency errors do not render a report invalid. §4.1
+keeps the two networks apart rather than extending that rule: "XBRL v2.1
+prescribes no behaviour for Calculations v1.1 relationships and XBRL v2.1
+calculation consistency checking MUST NOT be applied to them", and errors
+raised under either "do not invalidate an XBRL Report". Clear every in-scope inconsistency and document
 each cross-scope one; a non-empty calc log is not by itself a
 rejection. Do not let a Calc 1.0 result override the Calc 1.1 verdict
 on an iXBRL package. **Not re-verified against RTS 2027 or the NT21
@@ -848,8 +870,15 @@ exact rule code) are:
 
 For the exact rule code that fired (the
 `NL-KVK.<n>.<n>.<n>...` identifier), quote the validator log line
-verbatim and look the code up in the operative Filing Rules /
-Business Rules PDF. Do not paraphrase from memory.
+verbatim. The number is Arelle's, not a publisher's: `validate/NL`
+numbers its KvK checks after the Reporting Manual guidance they
+implement, so `NL-KVK.3.6.3.4` is Guidance 3.6.3 rule G3-6-3_4, and some
+messages print the source outright
+(`NL.NL-KVK-RTS_Annex_IV_Par_2_G3-1-1_1.invalidIdentifierFormat` is RTS
+Annex IV point 2 and rule G3-1-1_1; `rules/nl_kvk.py`, read 2026-11-13).
+Look the rule up in the RTS and the Reporting Manual it names, not in
+the Filing Rules or Business Rules PDFs, which use the `FR-NL`,
+`FR-KVK` and `BR-KVK` numbering. Do not paraphrase from memory.
 
 Two non-Filing-Rule signals routinely surface in NL reviews:
 
@@ -946,7 +975,16 @@ prints the pattern as `kvk-{date}-{lang}.{extension}` (in effect
 reason: "This naming convention is implemented to ensure that this
 document is excluded from the auditor's hash calculation." The auditor
 hashes the annual report they consented to; the filing metadata is not
-part of it.
+part of it. The same RM 2026 guidance (3.6.3) bounds the sidecar's
+content, three constraints a converter can check mechanically: it "can
+only reference the mandatory elements listed in Annex II point 3" of the
+RTS, it holds no more than a single non-dimensional context, and it
+"must not contain any units of measurement". So no amount, no dimension
+and no second period belong in it. Arelle's `validate/NL` checks all
+three, as `NL-KVK.3.6.3.5` (`elementsReferencedInKvkFilingDocumentNotLimitedToMandatoryElements`),
+`NL-KVK.3.6.3.6` (`dimensionalContextOrMultipleNonDimensionalContextsReportedInKvkFilingDocument`)
+and `NL-KVK.3.6.3.7` (`unitsReportedInKvkFilingDocument`), beside the
+filename rule `NL-KVK.3.6.3.4` (`rules/nl_kvk.py`, read 2026-11-13).
 
 **The `bw2-titel9:AuditorsReportFinancialStatements` concept: declared,
 unused.** It is real. It is declared in `bw2-titel9-cor.xsd` as
@@ -1444,9 +1482,20 @@ and across SBR channels: KvK, Belastingdienst, DNB). The high-frequency
 | Language | Non-numeric facts carry `xml:lang` for the report language |
 | `link:schemaRef` | Placement and count |
 | Period | `xbrli:forever` periods forbidden; times stripped from instant periods |
-| Numeric attributes | `precision` forbidden. Use `decimals`; `decimals="INF"` not allowed for rounded values. A percentage is a decimal (35% is 0.35, 145% is 1.45) |
+| Numeric attributes | `precision` forbidden. Use `decimals`. A percentage is a decimal (35% is 0.35, 145% is 1.45) |
 | `xsi:nil` | `xsi:nil` forbidden on a reported fact, both `true` and the default `false`. Omit the fact instead |
 | Footnotes | Forbidden in an XBRL instance. Do not report data as footnotes |
+
+The `decimals` values themselves are not an FR-NL rule: none of the
+NT20 v1.1 SBR Filing Rules names `INF`. They are the KvK Filing Rules
+NT20 v1.0 (2 June 2025): FR-KVK-5.01 lists the permitted `decimals` of a
+monetary fact (`INF` for an exact amount, then -9, -6, -3, 0 and 2 for
+amounts accurate to billions, millions, thousands, units and cents), and
+FR-KVK-5.02 requires `INF` on every non-monetary numeric fact. Like the
+SBR Filing Rules they govern "XBRL instance documenten", the Chapter 3
+route. That `INF` on a rounded amount is wrong follows from FR-KVK-5.01's
+table, which reserves `INF` for an exact amount, not from a rule that
+names the case.
 
 The exact code numbers (`FR-NL-x.xx`, `FG-NL-x.xx`) and the rule prose
 live in the operative Filing Rules / Filing Guidelines PDF on
@@ -1609,7 +1658,14 @@ Earlier editions of this
 file cited `nl-fr-nt20-kvk-ifrs-2025`; that name is **not** registered
 in Arelle: the `validate/NL` `config.xml` declares the
 `NL-INLINE-2025*` names above (and their lowercase aliases), so the
-old name silently falls back to no disclosure system. Confirm the
+old name silently falls back to no disclosure system. The same file
+registers the FY2024 pair `NL-INLINE-2024` and `NL-INLINE-2024-GAAP-OTHER`,
+`NL-INLINE-MULTI-TARGET` (an ESEF report filed with the Business
+Register, RM chapter 6, whose KvK filing facts carry the Inline XBRL
+target `filing-information`; Arelle checks that case as
+`NL-KVK.6.1.3.x`), and `NT16` to `NT20` for the legacy XBRL instance
+route of RTS Chapter 3 (`master`, read 2026-11-13; Arelle 2.47.5 of 2026-11-12 is
+the newest release). Confirm the
 operative name in your build with `arelleCmdLine --plugins validate/NL
 --showEnvironment`. A second pass with `--calc c10` is an optional
 compatibility diagnostic, not the acceptance verdict
@@ -1878,10 +1934,12 @@ Defer to and cite:
   jaarrekening-scoped prohibition on voluntary block-tagging. Dutch
   final text (prevails):
   <https://www.sbr-nl.nl/sites/default/files/2026-07/20260710_RTS_2026_NL_SBR-domein_Handelsregister.pdf>.
-  Footnote 4 under section 1.2 of that Dutch text states the same
-  deemed-large rule (read 2026-11-09). The publisher's English
-  track-changes edition against RTS 2025 is the primary source for
-  that qualifier being new in 2026 (checked 2026-09-03). Annex IV
+  The publisher's English track-changes edition against RTS 2025 is
+  the primary source for the jaarrekening scope qualifier being new in
+  2026 (checked 2026-09-03). Footnote 4 under section 1.2 of the Dutch
+  text states the deemed-large rule for EU-IFRS filers (read
+  2026-11-09); it is not new, since the compare edition marks no change
+  in it and RTS 2025 carries it as footnote 3. Annex IV
   point 2 and Table 7 of the compare edition print the same LEI scheme
   and `esef_cor` sentences as the 2025 English edition (read
   2026-11-09):
