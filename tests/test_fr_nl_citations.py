@@ -55,6 +55,25 @@ class FrNlCitations(unittest.TestCase):
             self.assertIn("FR-NL-2.07", line, f"{rel}:{n}")
             self.assertNotIn("FR-NL-5.07", line, f"{rel}:{n}")
 
+    def test_nil_false_repair_keeps_the_fact(self) -> None:
+        """FR-NL-2.07 forbids the attribute, not the value it sits on.
+
+        `xsi:nil="false"` marks a fact that carries a value; the repair is to
+        drop the attribute and keep the fact. Omitting it would delete a
+        reported amount. Every line that states the rule for `false` must
+        give that repair.
+        """
+        files = (*CODED, "references/jurisdictions/nl-sbr.md")
+        hits = [
+            (rel, n, line)
+            for rel in files
+            for n, line in enumerate(lines_of(rel), 1)
+            if "xsi:nil" in line and "`false`" in line
+        ]
+        self.assertTrue(hits)
+        for rel, n, line in hits:
+            self.assertIn("keep the fact", line.lower(), f"{rel}:{n}")
+
     def test_percentages_are_fr_nl_5_07(self) -> None:
         hits = [
             (rel, n, line)

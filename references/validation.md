@@ -275,7 +275,7 @@ applies across SBR channels (KvK, Belastingdienst, DNB).
 | `FR-NL-1.01` / `1.05` | Encoding violation | Non-UTF-8 source, BOM, or wrong XML declaration | Re-serialise as UTF-8 without BOM |
 | `FR-NL-2.03` | Non-numeric fact missing `xml:lang` | Translation block emitted without lang | Add `xml:lang="nl"` (or the report language) |
 | `FR-NL-2.04` | `link:schemaRef` placement / count violation | Multiple or mis-placed `schemaRef` elements | Single `schemaRef` in the operative location |
-| `FR-NL-2.07` | `xsi:nil` on a reported fact, `true` or the default `false` | Generator nilled a fact, including where an IFRS concept is nillable | Omit the fact. SBR Filing Rules NT20 v1.1 (19 November 2025) |
+| `FR-NL-2.07` | `xsi:nil` on a reported fact, `true` or the default `false` | Generator nilled a fact, including where an IFRS concept is nillable, or wrote the default `false` on a fact with a value | For `true`, omit the fact, or report the value the document shows (a dash for zero is `0`); for `false`, drop the attribute and keep the fact and its value. SBR Filing Rules NT20 v1.1 (19 November 2025) |
 | `FR-NL-3.02` | `xbrli:forever` period used | Forever periods are forbidden in SBR | Use bounded `xbrli:duration` or `xbrli:instant` |
 | `FR-NL-3.04` | Duplicate `xbrli:context` elements, s-equal apart from `id` | Context assignment minted one context per fact | Keep one context and repoint every contextRef. SBR Filing Rules NT20 v1.1 (19 November 2025) |
 | `FR-NL-5.06` | `precision` attribute on a numeric fact | Carried over from non-SBR templates | Replace with `decimals` |

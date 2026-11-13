@@ -1483,7 +1483,7 @@ and across SBR channels: KvK, Belastingdienst, DNB). The high-frequency
 | `link:schemaRef` | Placement and count |
 | Period | `xbrli:forever` periods forbidden; times stripped from instant periods |
 | Numeric attributes | `precision` forbidden. Use `decimals`. A percentage is a decimal (35% is 0.35, 145% is 1.45) |
-| `xsi:nil` | `xsi:nil` forbidden on a reported fact, both `true` and the default `false`. Omit the fact instead |
+| `xsi:nil` | `xsi:nil` forbidden on a reported fact, both `true` and the default `false`. A nilled fact (`true`) is omitted, or carries the value the document shows; on `false`, drop the attribute and keep the fact |
 | Footnotes | Forbidden in an XBRL instance. Do not report data as footnotes |
 
 The `decimals` values themselves are not an FR-NL rule: none of the
