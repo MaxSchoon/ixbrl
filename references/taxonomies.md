@@ -79,7 +79,8 @@ and architecture.
 **Current version:** **ESEF Taxonomy 2024** (namespace date 2024-03-27),
 mandated by Delegated Regulation (EU) 2025/19 for financial years
 beginning on or after 1 January 2025, and **ESEF Taxonomy 2025**
-(namespace date 2025-03-27, files published 21 April 2026), mandated by
+(namespace date 2025-03-27, files published 21 April 2026, ESMA's news
+item of that day, read 2026-11-13), mandated by
 **Delegated Regulation (EU) 2026/283** (adopted 12 December 2025, OJ 18
 March 2026) for financial years beginning on or after **1 January 2026**,
 with early application for FY2025 permitted. The 2025 taxonomy reflects
@@ -206,8 +207,17 @@ House, HMRC, the Charity Commission, the FCA (UKSEF), and Irish Revenue
 
 **Current version:** **2026 FRC Taxonomy Suite v1.0.0**, released
 **18 November 2025**. Prior **2025 FRC Taxonomy Suite v1.0.0** was
-released 18 October 2024. FRC guidance: only the latest and penultimate
-versions should be in active use simultaneously.
+released 18 October 2024 (the FRC's suite pages, read 2026-11-13). FRC
+guidance: "In principle only two versions of the taxonomies should be in
+use by preparers and developers: the latest version and the penultimate
+version", so that preparers meet HMRC's full-tagging requirement (XBRL
+Tagging Guide, FRC Taxonomies 2026, §6.6 "Taxonomy versioning"). That is
+the FRC's *use* policy, not an acceptance window: which versions a
+receiver takes "are governed by the requirements and guidance of the
+relevant data collectors" (FRC, *Current UK and Irish digital reporting
+taxonomies*), and from April 2026 Companies House accepts the 2026,
+2025, 2024, 2023 and 2022 suites, aligned with HMRC (Companies House XML
+Gateway forum, 22 December 2025).
 
 **Taxonomies in the Suite:**
 
